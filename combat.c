@@ -1,7 +1,7 @@
 /*******************************************************************************
 filename    combat.c
-author      David C. Drake (www.davidcdrake.com)
-email       dcdrake42@gmail.com
+author      David C. Drake
+email       david[at]davidcdrake[dot]com
 
 Brief Description:
   Functions governing enemies and combat for the fantasy RPG "Words of Power."

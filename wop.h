@@ -1,7 +1,7 @@
 /******************************************************************************
 filename    wop.h
-author      David C. Drake (www.davidcdrake.com)
-email       dcdrake42@gmail.com
+author      David C. Drake
+email       david[at]davidcdrake[dot]com
 
 Brief Description:
   Header file for the fantasy RPG "Words of Power."

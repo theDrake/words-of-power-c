@@ -1,7 +1,7 @@
 /*******************************************************************************
 filename    main.c
-author      David C. Drake (www.davidcdrake.com)
-email       dcdrake42@gmail.com
+author      David C. Drake
+email       david[at]davidcdrake[dot]com
 
 Brief Description:
   Main C file for "Words of Power": a text-based fantasy RPG emphasizing verbal
