@@ -1,7 +1,6 @@
 /*******************************************************************************
 filename    items.c
-author      David C. Drake
-email       david[at]davidcdrake[dot]com
+author      David C. Drake (www.davidcdrake.com)
 
 Brief Description:
   Functions governing items for the fantasy RPG "Words of Power."

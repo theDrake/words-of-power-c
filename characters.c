@@ -1,7 +1,6 @@
 /*******************************************************************************
 filename    characters.c
-author      David C. Drake
-email       david[at]davidcdrake[dot]com
+author      David C. Drake (www.davidcdrake.com)
 
 Brief Description:
   Functions governing the creation, initialization, and basic analysis of game

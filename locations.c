@@ -1,7 +1,6 @@
 /*******************************************************************************
 filename    locations.c
-author      David C. Drake
-email       david[at]davidcdrake[dot]com
+author      David C. Drake (www.davidcdrake.com)
 
 Brief Description:
   Functions governing locations, their inhabitants, and movement between
