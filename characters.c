@@ -1,16 +1,16 @@
-/*******************************************************************************
-filename    characters.c
-author      David C. Drake (www.davidcdrake.com)
+/******************************************************************************
+   Filename: characters.c
 
-Brief Description:
-  Functions governing the creation, initialization, and basic analysis of game
-  characters for the fantasy RPG "Words of Power."
+     Author: David C. Drake (www.davidcdrake.com)
 
-*******************************************************************************/
+Description: Functions governing the creation, initialization, and basic
+             analysis of game characters for the text-based fantasy RPG "Words
+             of Power."
+******************************************************************************/
 
 #include "wop.h"
 
-/*******************************************************************************
+/******************************************************************************
    Function: InitializeCharacter
 
 Description: Initializes a given GameCharacter struct to its default starting
@@ -21,14 +21,14 @@ Description: Initializes a given GameCharacter struct to its default starting
              location - The game character's starting location.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
 {
   int i; /* for loop variable */
   char cInput;
   BOOL repeatOptions;
 
-    /* Default stats, representative of an average adult human.               */
+    /* Default stats, representative of an average adult human.              */
   pGC->ID = idNum;
   strcpy(pGC->name, "");
   strcpy(pGC->descriptor, "");
@@ -69,7 +69,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
   pGC->summonedCreature = NULL;
   pGC->next = NULL;
 
-    /* Character-specific stats.                                              */
+    /* Character-specific stats.                                             */
   switch (pGC->ID)
   {
     case PLAYER:
@@ -1480,7 +1480,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: AddCompanion
 
 Description: Removes a game character from the current location's list of
@@ -1490,10 +1490,10 @@ Description: Removes a game character from the current location's list of
      Inputs: companion - Pointer to the player's new companion.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int AddCompanion(GameCharacter *companion)
 {
-  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                  */
+  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                 */
 
   if (companion == NULL)
   {
@@ -1503,7 +1503,7 @@ int AddCompanion(GameCharacter *companion)
     return FAILURE;
   }
 
-    /* Add "companion" to the player's list of companions.                    */
+    /* Add "companion" to the player's list of companions.                   */
   if (player.next == NULL)
   {
     player.next = companion;
@@ -1517,7 +1517,7 @@ int AddCompanion(GameCharacter *companion)
     pGC1->next = companion;
   }
 
-    /* Remove "companion" from the current location's list of inhabitants.    */
+    /* Remove "companion" from the current location's list of inhabitants.   */
   for (pGC1 = world[player.locationID]->inhabitants;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next)
@@ -1538,7 +1538,7 @@ int AddCompanion(GameCharacter *companion)
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) /* If true, "companion" was not at the current location.  */
+  if (pGC1 == NULL) /* If true, "companion" was not at the current location. */
   {
     #ifdef DEBUG
     ERROR_MESSAGE
@@ -1549,7 +1549,7 @@ int AddCompanion(GameCharacter *companion)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: RemoveCompanion
 
 Description: Removes a game character from the player's list of companions and
@@ -1558,10 +1558,10 @@ Description: Removes a game character from the player's list of companions and
      Inputs: companion - Pointer to the companion to be removed.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int RemoveCompanion(GameCharacter *companion)
 {
-  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                  */
+  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                 */
 
   if (companion == NULL)
   {
@@ -1571,7 +1571,7 @@ int RemoveCompanion(GameCharacter *companion)
     return FAILURE;
   }
 
-    /* Add "companion" to the current location's list of inhabitants.         */
+    /* Add "companion" to the current location's list of inhabitants.        */
   if (world[player.locationID]->inhabitants == NULL)
   {
     world[player.locationID]->inhabitants = companion;
@@ -1585,7 +1585,7 @@ int RemoveCompanion(GameCharacter *companion)
     pGC1->next = companion;
   }
 
-    /* Remove "companion" from the player's list of companions.               */
+    /* Remove "companion" from the player's list of companions.              */
   for (pGC1 = player.next;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next)
@@ -1606,7 +1606,7 @@ int RemoveCompanion(GameCharacter *companion)
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) /* If true, "companion" was not the player's companion.   */
+  if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
   {
     #ifdef DEBUG
     ERROR_MESSAGE
@@ -1617,7 +1617,7 @@ int RemoveCompanion(GameCharacter *companion)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: DeleteCompanion
 
 Description: Removes a game character from the player's list of companions and
@@ -1626,10 +1626,10 @@ Description: Removes a game character from the player's list of companions and
      Inputs: companion - Pointer to the companion to be removed.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int DeleteCompanion(GameCharacter *companion)
 {
-  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                  */
+  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                 */
 
   if (companion == NULL)
   {
@@ -1639,7 +1639,7 @@ int DeleteCompanion(GameCharacter *companion)
     return FAILURE;
   }
 
-    /* Remove "companion" from the player's list of companions.               */
+    /* Remove "companion" from the player's list of companions.              */
   for (pGC1 = player.next;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next)
@@ -1657,7 +1657,7 @@ int DeleteCompanion(GameCharacter *companion)
       break;
     }
   }
-  if (pGC1 == NULL) /* If true, "companion" was not the player's companion.   */
+  if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
   {
     #ifdef DEBUG
     ERROR_MESSAGE
@@ -1665,7 +1665,7 @@ int DeleteCompanion(GameCharacter *companion)
     return FAILURE;
   }
 
-    /* Deallocate associated memory.                                          */
+    /* Deallocate associated memory.                                         */
   if (companion->summonedCreature != NULL)
   {
     DeleteCreatureSummonedBy(companion);
@@ -1675,7 +1675,7 @@ int DeleteCompanion(GameCharacter *companion)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: AddSummonedCreature
 
 Description: Creates a new, summoned game character and associates it with its
@@ -1686,11 +1686,11 @@ Description: Creates a new, summoned game character and associates it with its
              idNum    - ID of the summoned creature.
 
     Outputs: Pointer to the summoned creature.
-*******************************************************************************/
+******************************************************************************/
 GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
 {
-  GameCharacter *newGC = NULL;  /* To point to the new character.             */
-  GameCharacter *temp;          /* To scan the location's inhabitant list.    */
+  GameCharacter *newGC = NULL;  /* To point to the new character.            */
+  GameCharacter *temp;          /* To scan the location's inhabitant list.   */
 
   if (summoner == NULL)
   {
@@ -1721,17 +1721,17 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
   return newGC;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: DeleteCreatureSummonedBy
 
 Description: Removes a summoned creature from its summoner's struct and
              deallocates its associated memory.
 
-     Inputs: summoner - Pointer to the character who summoned the creature to be
-                        deleted.
+     Inputs: summoner - Pointer to the character who summoned the creature to
+                        be deleted.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int DeleteCreatureSummonedBy(GameCharacter *summoner)
 {
   GameCharacter *creature;
@@ -1751,16 +1751,16 @@ int DeleteCreatureSummonedBy(GameCharacter *summoner)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: DisplayCharacterData
 
-Description: Displays detailed information about a given game character (and the
-             game character's summoned creature and/or companions, if any).
+Description: Displays detailed information about a given game character (and
+             the game character's summoned creature and/or companions, if any).
 
      Inputs: pGC - Game character of interest.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int DisplayCharacterData(GameCharacter *pGC)
 {
   if (pGC == NULL)
@@ -1804,7 +1804,7 @@ int DisplayCharacterData(GameCharacter *pGC)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintSoulDescription
 
 Description: Prints one or two words describing the general state of a given
@@ -1813,7 +1813,7 @@ Description: Prints one or two words describing the general state of a given
      Inputs: pGC - Game character of interest.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int PrintSoulDescription(GameCharacter *pGC)
 {
   if (pGC == NULL)
@@ -1855,7 +1855,7 @@ int PrintSoulDescription(GameCharacter *pGC)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: IsGood
 
 Description: Returns TRUE if a given game character has a good soul.
@@ -1863,13 +1863,13 @@ Description: Returns TRUE if a given game character has a good soul.
      Inputs: pGC - Game character of interest.
 
     Outputs: TRUE or FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL IsGood(GameCharacter *pGC)
 {
   return (pGC != NULL && pGC->soul >= GOOD);
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: IsEvil
 
 Description: Returns TRUE if a given game character has an evil soul.
@@ -1877,13 +1877,13 @@ Description: Returns TRUE if a given game character has an evil soul.
      Inputs: pGC - Game character of interest.
 
     Outputs: TRUE or FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL IsEvil(GameCharacter *pGC)
 {
   return (pGC != NULL && pGC->soul <= EVIL);
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: IsNeutral
 
 Description: Returns TRUE if a given game character has a neutral soul (neither
@@ -1892,13 +1892,13 @@ Description: Returns TRUE if a given game character has a neutral soul (neither
      Inputs: pGC - Game character of interest.
 
     Outputs: TRUE or FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL IsNeutral(GameCharacter *pGC)
 {
   return (pGC != NULL && (pGC->soul > EVIL && pGC->soul < GOOD));
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: NumberOfLanguagesKnown
 
 Description: Returns the number of languages a given game character knows.
@@ -1907,7 +1907,7 @@ Description: Returns the number of languages a given game character knows.
 
     Outputs: Number of languages the game character knows (or -1 if an error is
              encountered).
-*******************************************************************************/
+******************************************************************************/
 int NumberOfLanguagesKnown(GameCharacter *pGC)
 {
   int i;  /* for loop variable */
@@ -1932,7 +1932,7 @@ int NumberOfLanguagesKnown(GameCharacter *pGC)
   return numLanguages;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: NumberOfWordsKnown
 
 Description: Returns the number of Words of Power a given game character knows.
@@ -1941,7 +1941,7 @@ Description: Returns the number of Words of Power a given game character knows.
 
     Outputs: Number of Words the game character knows (or -1 if an error is
              encountered).
-*******************************************************************************/
+******************************************************************************/
 int NumberOfWordsKnown(GameCharacter *pGC)
 {
   int i;  /* for loop variable */
@@ -1966,7 +1966,7 @@ int NumberOfWordsKnown(GameCharacter *pGC)
   return numWords;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintNameDefinite
 
 Description: Prints either a name or a generic descriptor preceded by "the" for
@@ -1976,7 +1976,7 @@ Description: Prints either a name or a generic descriptor preceded by "the" for
              capitalize - Indicates whether or not to capitalize (e.g., "The").
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int PrintNameDefinite(GameCharacter *pGC, BOOL capitalize)
 {
   if (pGC == NULL)
@@ -2006,7 +2006,7 @@ int PrintNameDefinite(GameCharacter *pGC, BOOL capitalize)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintNameIndefinite
 
 Description: Prints either a name or a generic descriptor preceded by "a" or
@@ -2016,7 +2016,7 @@ Description: Prints either a name or a generic descriptor preceded by "a" or
              capitalize - Indicates whether or not to capitalize (e.g., "An").
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
 {
   if (pGC == NULL)
@@ -2066,7 +2066,7 @@ int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintNamePlural
 
 Description: Prints the plural form of a given game character's generic
@@ -2076,7 +2076,7 @@ Description: Prints the plural form of a given game character's generic
              cap - Indicates whether or not to capitalize.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int PrintNamePlural(GameCharacter *pGC, Capitalization cap)
 {
   int nameLength;
@@ -2119,10 +2119,10 @@ int PrintNamePlural(GameCharacter *pGC, Capitalization cap)
     case DUMMY:
       strcpy(gcName, "stuffed dummies");
       break;
-    default: /* Simply adds "s" to the end of a game character's descriptor.  */
+    default: /* Simply adds "s" to the end of a game character's descriptor. */
       strcpy(gcName, pGC->descriptor);
       nameLength = strlen(gcName);
-      if (nameLength >= STR_LEN - 1) /* Must have room for 's'.               */
+      if (nameLength >= STR_LEN - 1) /* Must have room for 's'.              */
       {
         #ifdef DEBUG
         ERROR_MESSAGE
@@ -2142,7 +2142,7 @@ int PrintNamePlural(GameCharacter *pGC, Capitalization cap)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: StatusCheck
 
 Description: Checks player's HP and status to see if anything needs to be
@@ -2151,7 +2151,7 @@ Description: Checks player's HP and status to see if anything needs to be
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void StatusCheck(void)
 {
   int i;  /* for loop variable */
@@ -2174,25 +2174,25 @@ void StatusCheck(void)
         FlushInput();
         kills[enemyNPCs[i]->ID]++;
         DeleteEnemy(enemyNPCs[i]);
-        i--;  /* Because the "enemyNPCs" array has now been left-shifted.     */
+        i--;  /* Because the "enemyNPCs" array has now been left-shifted.    */
       }
     }
   }
   if (player.currentHP <= 0)
   {
-    if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY)  /* Tutorial mode. */
+    if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) /* Tutorial mode. */
     {
       printf(
 "%s: \"You have fallen due to severe backlash from your spell! \n"
-"This is often caused by speaking the same elemental Word more than once, or \n"
-"by combining three or more elemental Words in a single spell. We will bring \n"
-"you back to full health for now, but you must be more cautious in the \n"
-"future.\"\n",
+"This is often caused by speaking the same elemental Word more than once, \n"
+"or by combining three or more elemental Words in a single spell. We will \n"
+"bring you back to full health for now, but you must be more cautious in \n"
+"the future.\"\n",
             FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
       FlushInput();
       player.currentHP = player.maxHP;
     }
-    else /* Not in tutorial mode: death is permanent.                         */
+    else /* Not in tutorial mode: death is permanent.                        */
     {
       printf("Alas, %s has perished!\n", player.name);
       FlushInput();
@@ -2201,7 +2201,7 @@ void StatusCheck(void)
   }
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: UpdateVisibleGameCharCounter
 
 Description: Updates the GameCharacter counter to accurately reflect the number
@@ -2212,17 +2212,17 @@ Description: Updates the GameCharacter counter to accurately reflect the number
      Inputs: None.
 
     Outputs: None. (Modifies the global "visibleGameCharCounter" array.)
-*******************************************************************************/
+******************************************************************************/
 void UpdateVisibleGameCharCounter(void)
 {
   int i;              /* for loop variable                  */
   GameCharacter *pGC; /* To scan the local inhabitant list. */
 
-  for (i = 0; i < TOTAL_GC_IDS; i++)  /* Clear the visible GC counter.        */
+  for (i = 0; i < TOTAL_GC_IDS; i++)  /* Clear the visible GC counter.       */
   {
     visibleGameCharCounter[i] = 0;
   }
-  if (player.status[IN_COMBAT]) /* Combat mode: only count enemies.           */
+  if (player.status[IN_COMBAT]) /* Combat mode: only count enemies.          */
   {
     for (i = 0; i < NumberOfEnemies(); i++)
     {
@@ -2233,7 +2233,7 @@ void UpdateVisibleGameCharCounter(void)
       }
     }
   }
-  else  /* Not in combat mode: count all local inhabitants.                   */
+  else  /* Not in combat mode: count all local inhabitants.                  */
   {
     for (pGC = world[player.locationID]->inhabitants;
          pGC != NULL;
@@ -2251,7 +2251,7 @@ void UpdateVisibleGameCharCounter(void)
   }
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GetTarget
 
 Description: Takes the player through the process of selecting a target.
@@ -2259,7 +2259,7 @@ Description: Takes the player through the process of selecting a target.
      Inputs: None.
 
     Outputs: Pointer to the targeted game character.
-*******************************************************************************/
+******************************************************************************/
 GameCharacter *GetTarget(void)
 {
   GameCharacter *target = NULL;
@@ -2267,7 +2267,7 @@ GameCharacter *GetTarget(void)
   return target;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: IsTargeted
 
 Description: Determines whether a given game character is currently being
@@ -2278,7 +2278,7 @@ Description: Determines whether a given game character is currently being
              targets - Array of pointers to targeted game characters.
 
     Outputs: TRUE if "pGC" is being targeted, otherwise FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL IsTargeted(GameCharacter *pGC, GameCharacter *targets[])
 {
   int i; /* for loop variable */
@@ -2294,7 +2294,7 @@ BOOL IsTargeted(GameCharacter *pGC, GameCharacter *targets[])
   return FALSE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: HealGameCharacter
 
 Description: Causes a given game character to regain a certain number of hit
@@ -2302,11 +2302,11 @@ Description: Causes a given game character to regain a certain number of hit
              maximum HP.
 
      Inputs: pGC    - Pointer to the game character to be healed.
-             amount - Number of hit points to be recovered. If zero or negative,
-                      it will be converted to 1.
+             amount - Number of hit points to be recovered. If zero or
+                      negative, it will be converted to 1.
 
     Outputs: Number of hit points regained (or -1 if an error is encountered).
-*******************************************************************************/
+******************************************************************************/
 int HealGameCharacter(GameCharacter *pGC, int amount)
 {
   if (pGC == NULL)
@@ -2319,10 +2319,10 @@ int HealGameCharacter(GameCharacter *pGC, int amount)
 
   if (amount <= 0)
   {
-    amount = 1;                    /* At least 1 HP should be regained.       */
+    amount = 1;                    /* At least 1 HP should be regained.      */
   }
   pGC->currentHP += amount;
-  if (pGC->currentHP > pGC->maxHP) /* Current HP may not exceed maximum HP.   */
+  if (pGC->currentHP > pGC->maxHP) /* Current HP may not exceed maximum HP.  */
   {
     pGC->currentHP = pGC->maxHP;
   }
@@ -2330,7 +2330,7 @@ int HealGameCharacter(GameCharacter *pGC, int amount)
   return amount;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: DamageGameCharacter
 
 Description: Causes a given game character to lose a certain number of hit
@@ -2341,7 +2341,7 @@ Description: Causes a given game character to lose a certain number of hit
                       will be converted to 1.
 
     Outputs: Number of hit points lost (or -1 if an error is encountered).
-*******************************************************************************/
+******************************************************************************/
 int DamageGameCharacter(GameCharacter *pGC, int amount)
 {
   if (pGC == NULL)
@@ -2354,18 +2354,18 @@ int DamageGameCharacter(GameCharacter *pGC, int amount)
 
   if (amount <= 0)
   {
-    amount = 1;         /* At least 1 HP should be lost.                      */
+    amount = 1;         /* At least 1 HP should be lost.                     */
   }
   pGC->currentHP -= amount;
   if (pGC->currentHP < 0)
   {
-    pGC->currentHP = 0; /* Game characters may not have negative HP.          */
+    pGC->currentHP = 0; /* Game characters may not have negative HP.         */
   }
 
   return amount;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GainExperience
 
 Description: Increases the player's experience by a specified amount and checks
@@ -2374,7 +2374,7 @@ Description: Increases the player's experience by a specified amount and checks
      Inputs: amount - Number of experience points to be gained.
 
     Outputs: Number of level-ups.
-*******************************************************************************/
+******************************************************************************/
 int GainExperience(int amount)
 {
   int i; /* for loop variable */
@@ -2395,7 +2395,7 @@ int GainExperience(int amount)
   return levelUpCounter;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: LevelUp
 
 Description: Increases the player's level and relevant stats.
@@ -2403,7 +2403,7 @@ Description: Increases the player's level and relevant stats.
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void LevelUp(void)
 {
   int temp;
@@ -2456,7 +2456,7 @@ void LevelUp(void)
   }
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: LearnLanguage
 
 Description: Sets one of the player's languages to KNOWN.
@@ -2464,7 +2464,7 @@ Description: Sets one of the player's languages to KNOWN.
      Inputs: langID - ID number of the language learned.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void LearnLanguage(int langID)
 {
   player.languages[landID] = KNOWN;
@@ -2474,7 +2474,7 @@ void LearnLanguage(int langID)
   FlushInput();
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: LearnWord
 
 Description: Sets one of the player's Words of Power to KNOWN.
@@ -2482,7 +2482,7 @@ Description: Sets one of the player's Words of Power to KNOWN.
      Inputs: wordID - ID number of the language learned.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void LearnWord(int wordID)
 {
   player.words[wordID] = KNOWN;

@@ -1,15 +1,15 @@
-/*******************************************************************************
-filename    items.c
-author      David C. Drake (www.davidcdrake.com)
+/******************************************************************************
+   Filename: items.c
 
-Brief Description:
-  Functions governing items for the fantasy RPG "Words of Power."
+     Author: David C. Drake (www.davidcdrake.com)
 
-*******************************************************************************/
+Description: Functions governing items for the text-based fantasy RPG "Words of
+             Power."
+******************************************************************************/
 
 #include "wop.h"
 
-/*******************************************************************************
+/******************************************************************************
    Function: ItemMenu
 
 Description: Displays the player's inventory and prompts the player to choose
@@ -18,7 +18,7 @@ Description: Displays the player's inventory and prompts the player to choose
      Inputs: None.
 
     Outputs: SUCCESS if an item is used, FAILURE otherwise.
-*******************************************************************************/
+******************************************************************************/
 int ItemMenu(void)
 {
   int i;  /* for loop variable */
@@ -61,10 +61,10 @@ int ItemMenu(void)
     }
   }
 
-  return FAILURE; /* No item was used: the player changed his/her mind.       */
+  return FAILURE; /* No item was used: the player changed his/her mind.      */
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: UseItem
 
 Description: Executes the use of an item by a given game character (the player
@@ -74,7 +74,7 @@ Description: Executes the use of an item by a given game character (the player
              idNum - ID number of the item to be used.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int UseItem(GameCharacter *pGC, int idNum)
 {
   if (pGC->inventory[idNum] < 1)
@@ -95,7 +95,8 @@ int UseItem(GameCharacter *pGC, int idNum)
     case FOOD:
       PrintNameDefinite(pGC, TRUE);
       printf(" eats some food and regains %d hit points.\n",
-             HealGameCharacter(pGC, RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
+             HealGameCharacter(pGC,
+                               RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;
     default:
       #ifdef DEBUG
@@ -109,7 +110,7 @@ int UseItem(GameCharacter *pGC, int idNum)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintInventory
 
 Description: Prints the name and quantity of each item owned by a given game
@@ -118,7 +119,7 @@ Description: Prints the name and quantity of each item owned by a given game
      Inputs: pGC - Pointer to the game character of interest.
 
     Outputs: Number of item types described (or -1 if an error is encountered).
-*******************************************************************************/
+******************************************************************************/
 int PrintInventory(GameCharacter *pGC)
 {
   int i; /* for loop variable */
@@ -173,7 +174,7 @@ int PrintInventory(GameCharacter *pGC)
   return itemTypesDescribed;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintItemName
 
 Description: Given an item ID, prints the name of that item.
@@ -181,7 +182,7 @@ Description: Given an item ID, prints the name of that item.
      Inputs: idNum - ID number of an item.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int PrintItemName(int idNum)
 {
   switch (idNum)
@@ -206,7 +207,7 @@ int PrintItemName(int idNum)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintItemNamePlural
 
 Description: Given an item ID, prints the plural name of that item.
@@ -214,7 +215,7 @@ Description: Given an item ID, prints the plural name of that item.
      Inputs: idNum - ID number of an item.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int PrintItemNamePlural(int idNum)
 {
   BOOL errorFound = FALSE;
@@ -226,7 +227,7 @@ int PrintItemNamePlural(int idNum)
       {
         errorFound = TRUE;
       }
-      printf("s");  /* The default is to simply add an 's' to the item name.  */
+      printf("s");  /* The default is to simply add an 's' to the item name. */
       break;
   }
   if (errorFound)
@@ -237,7 +238,7 @@ int PrintItemNamePlural(int idNum)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GiveGold
 
 Description: Transfers gold from one game character to another.
@@ -247,7 +248,7 @@ Description: Transfers gold from one game character to another.
              amount   - Amount of gold to be transferred.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount)
 {
   if (giver == NULL || receiver == NULL || giver->gold < amount)
@@ -269,7 +270,7 @@ int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GiveItem
 
 Description: Transfers an item from one game character to another.
@@ -279,7 +280,7 @@ Description: Transfers an item from one game character to another.
              itemID   - ID of the item to be transferred.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID)
 {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] <= 0)
@@ -304,7 +305,7 @@ int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GiveItems
 
 Description: Transfers a specified amount of a given item from one game
@@ -316,7 +317,7 @@ Description: Transfers a specified amount of a given item from one game
              amount   - Quantity of the item to be transferred.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int GiveItems(GameCharacter *giver,
               GameCharacter *receiver,
               int itemID,
@@ -344,7 +345,7 @@ int GiveItems(GameCharacter *giver,
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: ItemValue
 
 Description: Returns the standard market value of a given item.
@@ -353,7 +354,7 @@ Description: Returns the standard market value of a given item.
 
     Outputs: The standard market value of the item of interest (or -1 if an
              error is encountered).
-*******************************************************************************/
+******************************************************************************/
 int ItemValue(int idNum)
 {
   switch (idNum)

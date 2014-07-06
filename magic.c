@@ -1,15 +1,15 @@
-/*******************************************************************************
-filename    magic.c
-author      David C. Drake (www.davidcdrake.com)
+/******************************************************************************
+   Filename: magic.c
 
-Brief Description:
-  Functions governing magic for the fantasy RPG "Words of Power."
+     Author: David C. Drake (www.davidcdrake.com)
 
-*******************************************************************************/
+Description: Functions governing magic for the text-based fantasy RPG "Words of
+             Power."
+******************************************************************************/
 
 #include "wop.h"
 
-/*******************************************************************************
+/******************************************************************************
    Function: SpellMenu
 
 Description: Takes the player through the process of selecting targets and
@@ -19,18 +19,18 @@ Description: Takes the player through the process of selecting targets and
      Inputs: None.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int SpellMenu(void)
 {
-  int i;                          /* for loop variable                        */
+  int i;                         /* for loop variable                        */
   int iInput;
   BOOL repeatOptions;
   int temp;
-  int spellLength;                /* Number of Words of Power in the spell.   */
-  int numTargets = 0;             /* Number of targets selected.              */
-  char spell[MAX_SPELL_LEN + 1];  /* Spell sequence (first letters of Words). */
-  GameCharacter *pGC;             /* To search through linked lists of GCs.   */
-  GameCharacter *gcTargets[MAX_TARGETS]; /* GC targets (if any).              */
+  int spellLength;               /* Number of Words of Power in the spell.   */
+  int numTargets = 0;            /* Number of targets selected.              */
+  char spell[MAX_SPELL_LEN + 1]; /* Spell sequence (first letters of Words). */
+  GameCharacter *pGC;            /* To search through linked lists of GCs.   */
+  GameCharacter *gcTargets[MAX_TARGETS]; /* GC targets (if any).             */
 
     /* --STATUS CHECK -- */
 
@@ -80,7 +80,7 @@ int SpellMenu(void)
         printf("\n");
       }
     }
-    if (player.status[IN_COMBAT]) /* Combat mode: display enemies.            */
+    if (player.status[IN_COMBAT]) /* Combat mode: display enemies.           */
     {
       for (i = 0; i < NumberOfEnemies(); i++)
       {
@@ -103,7 +103,7 @@ int SpellMenu(void)
         }
       }
     }
-    else /* Not in combat mode: display local inhabitants.                    */
+    else /* Not in combat mode: display local inhabitants.                   */
     {
       for (pGC = world[player.locationID]->inhabitants;
            pGC != NULL;
@@ -135,10 +135,10 @@ int SpellMenu(void)
       return FAILURE;
     }
 
-      /* Player chooses a target by number.                                   */
+      /* Player chooses a target by number.                                  */
     GetIntInput(&iInput, 1, temp);
 
-      /* The target is now found by matching it with the input.               */
+      /* The target is now found by matching it with the input.              */
     temp = 0;
     for (i = 0; i < TOTAL_GC_IDS; i++)
     {
@@ -177,7 +177,7 @@ int SpellMenu(void)
         }
       }
     }
-    if (player.status[IN_COMBAT]) /* Combat mode: search through enemies.     */
+    if (player.status[IN_COMBAT]) /* Combat mode: search through enemies.    */
     {
       for (i = 0; i < NumberOfEnemies(); i++)
       {
@@ -189,14 +189,14 @@ int SpellMenu(void)
           if (temp == iInput)
           {
             gcTargets[numTargets] = enemyNPCs[i];
-            visibleGameCharCounter[enemyNPCs[i]->ID]--; /* For counting.      */
+            visibleGameCharCounter[enemyNPCs[i]->ID]--; /* For counting.     */
             goto TargetFound;
           }
           gcDescribed[enemyNPCs[i]->ID] = TRUE;
         }
       }
     }
-    else /* Not in combat mode: search through local inhabitants.             */
+    else /* Not in combat mode: search through local inhabitants.            */
     {
       for (pGC = world[player.locationID]->inhabitants;
            pGC != NULL;
@@ -211,23 +211,23 @@ int SpellMenu(void)
           if (temp == iInput)
           {
             gcTargets[numTargets] = pGC;
-            visibleGameCharCounter[pGC->ID]--; /* For counting purposes.      */
+            visibleGameCharCounter[pGC->ID]--; /* For counting purposes.     */
             goto TargetFound;
           }
           gcDescribed[pGC->ID] = TRUE;
         }
       }
     }
-      /* If we reach this point, the target was not found.                    */
+      /* If we reach this point, the target was not found.                   */
     #ifdef DEBUG
     ERROR_MESSAGE
     #endif
     return FAILURE;
-      /* If the target was found, we will have jumped to the following line.  */
+      /* If the target was found, we will have jumped to the following line. */
     TargetFound:
     numTargets++;
 
-      /* Check for remaining legal targets.                                   */
+      /* Check for remaining legal targets.                                  */
     /*temp = 0;
     for (i = 0; i < TOTAL_GC_IDS; i++)
     {
@@ -255,7 +255,7 @@ int SpellMenu(void)
         repeatOptions = TRUE;
       }
     }*/
-  }while (repeatOptions); /* Until the player is finished selecting targets.  */
+  }while (repeatOptions); /* Until the player is finished selecting targets. */
   UpdateVisibleGameCharCounter();
 
     /* --CREATION OF SPELL SEQUENCE-- */
@@ -287,19 +287,20 @@ int SpellMenu(void)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: CastSpell
 
 Description: Carries out a spell's effects (if any) and reports them to the
              player.
 
      Inputs: spellcaster - Pointer to the caster of the spell.
-             spell       - String of letters, each representing a Word of Power.
+             spell       - String of letters, each representing a Word of
+                           Power.
              gcTargets   - Array of pointers to targeted game characters.
              location    - Pointer to targeted location.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int CastSpell(GameCharacter *spellcaster,
               char *spell,
               GameCharacter *gcTargets[])
@@ -309,7 +310,7 @@ int CastSpell(GameCharacter *spellcaster,
        death = FALSE, shield = FALSE, counter = FALSE, balance = FALSE;
   int i, numTargets, spellLength, fireValue = 0, waterValue = 0, airValue = 0,
       earthValue = 0, damage = 0, backlashValue = 0;
-  GameCharacter *pGC; /* To search through linked lists of game characters.   */
+  GameCharacter *pGC; /* To search through linked lists of game characters.  */
 
   for (numTargets = 0;
        numTargets < MAX_TARGETS && gcTargets[numTargets] != NULL;
@@ -353,7 +354,8 @@ int CastSpell(GameCharacter *spellcaster,
   else if (strcmp(spell, "BBB") == 0)
   {
     printf("Fire bursts forth from your outstretched hand!\n");
-    fireValue = RandomInt(spellcaster->mentalPower * 0.5, spellcaster->mentalPower * 0.75);
+    fireValue = RandomInt(spellcaster->mentalPower * 0.5,
+                          spellcaster->mentalPower * 0.75);
     backlashValue = RandomInt(0, spellcaster->mentalPower * 0.2);
   }
   else if (strcmp(spell, "BBBB") == 0)
@@ -633,7 +635,7 @@ int CastSpell(GameCharacter *spellcaster,
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: CanCastBeneficialSpells
 
 Description: Determines whether a given game character is capable of casting
@@ -643,7 +645,7 @@ Description: Determines whether a given game character is capable of casting
      Inputs: pGC - Pointer to the game character of interest.
 
     Outputs: TRUE if "pGC" is being targeted, otherwise FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL CanCastBeneficialSpells(GameCharacter *pGC)
 {
   if (pGC->words[WORD_OF_BODY] == KNOWN ||
@@ -668,7 +670,7 @@ BOOL CanCastBeneficialSpells(GameCharacter *pGC)
   return FALSE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintKnownWords
 
 Description: Displays each Word of Power the player knows in the following
@@ -677,13 +679,13 @@ Description: Displays each Word of Power the player knows in the following
      Inputs: None.
 
     Outputs: Returns the number of Words displayed.
-*******************************************************************************/
+******************************************************************************/
 int PrintKnownWords(void)
 {
-  int i, j;               /* for loop variables                               */
-  int wordsDisplayed = 0; /* Number of Words displayed.                       */
-  int wordLength;         /* To store the length of each unformatted Word.    */
-  char word[STR_LEN + 1]; /* To store, format, and print each Word.           */
+  int i, j;               /* for loop variables                              */
+  int wordsDisplayed = 0; /* Number of Words displayed.                      */
+  int wordLength;         /* To store the length of each unformatted Word.   */
+  char word[STR_LEN + 1]; /* To store, format, and print each Word.          */
 
   for (i = 0; i < TOTAL_WORD_IDS; i++)
   {
@@ -692,7 +694,7 @@ int PrintKnownWords(void)
       strcpy(word, Word(i));
       wordLength = strlen(word);
 
-        /* The word must have room for 2 more characters: '(' and ')'.        */
+        /* The word must have room for 2 more characters: '(' and ')'.       */
       if (wordLength >= (STR_LEN - 2))
       {
         #ifdef DEBUG
@@ -700,7 +702,7 @@ int PrintKnownWords(void)
         #endif
         return wordsDisplayed;
       }
-        /* Format the string, beginning at its end and working backwards.     */
+        /* Format the string, beginning at its end and working backwards.    */
       for (j = wordLength; j >= 0; j--)
       {
         switch (j)
@@ -736,7 +738,7 @@ int PrintKnownWords(void)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: Word
 
 Description: Given the ID number of a Word of Power, returns that Word as a
@@ -745,7 +747,7 @@ Description: Given the ID number of a Word of Power, returns that Word as a
      Inputs: idNum - ID of the desired Word.
 
     Outputs: Pointer to the desired string.
-*******************************************************************************/
+******************************************************************************/
 char *Word(int idNum)
 {
   switch (idNum)
@@ -812,7 +814,7 @@ char *Word(int idNum)
   return NULL;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: WordStartingWith
 
 Description: Given the first letter of a Word of Power, returns the entire Word
@@ -821,22 +823,22 @@ Description: Given the first letter of a Word of Power, returns the entire Word
      Inputs: firstLetter - First letter of the desired Word.
 
     Outputs: Pointer to the desired string.
-*******************************************************************************/
+******************************************************************************/
 char *WordStartingWith(char firstLetter)
 {
   return Word(WordID(firstLetter));
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: WordName
 
-Description: Returns the English name of a given Word of Power as a string (such
-             as "Fire", "Water", etc.).
+Description: Returns the English name of a given Word of Power as a string
+             (such as "Fire", "Water", etc.).
 
      Inputs: idNum - ID of the desired Word.
 
     Outputs: Pointer to the desired string.
-*******************************************************************************/
+******************************************************************************/
 char *WordName(int idNum)
 {
   switch (idNum)
@@ -903,7 +905,7 @@ char *WordName(int idNum)
   return NULL;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: WordID
 
 Description: Given the first letter of a Word of Power, returns the ID number
@@ -914,7 +916,7 @@ Description: Given the first letter of a Word of Power, returns the ID number
 
     Outputs: ID number for the Word associated with the given letter (or -1 if
              a corresponding ID is not found).
-*******************************************************************************/
+******************************************************************************/
 int WordID(char firstLetter)
 {
   int i;      /* for loop variable                       */
@@ -936,7 +938,7 @@ int WordID(char firstLetter)
   return -1;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: IsSpellcaster
 
 Description: Determines whether a given game character can cast spells.
@@ -944,7 +946,7 @@ Description: Determines whether a given game character can cast spells.
      Inputs: pGC - The game character of interest.
 
     Outputs: TRUE if the GC knows at least one Word, otherwise FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL IsSpellcaster(GameCharacter *pGC)
 {
   int i;  /* for loop variable */

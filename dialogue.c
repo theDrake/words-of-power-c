@@ -1,15 +1,15 @@
-/*******************************************************************************
-filename    dialogue.c
-author      David C. Drake (www.davidcdrake.com)
+/******************************************************************************
+   Filename: dialogue.c
 
-Brief Description:
-  Functions governing dialogue for the fantasy RPG "Words of Power."
+     Author: David C. Drake (www.davidcdrake.com)
 
-*******************************************************************************/
+Description: Functions governing dialogue for the text-based fantasy RPG "Words
+             of Power."
+******************************************************************************/
 
 #include "wop.h"
 
-/*******************************************************************************
+/******************************************************************************
    Function: TalkMenu
 
 Description: Takes the player through the process of selecting a game character
@@ -18,14 +18,14 @@ Description: Takes the player through the process of selecting a game character
      Inputs: None.
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int TalkMenu(void)
 {
-  int i;                 /* for loop variable                                 */
+  int i;                 /* for loop variable                                */
   int iInput;
   BOOL repeatOptions;
   int temp;
-  GameCharacter *target; /* To select a target from a list of inhabitants.    */
+  GameCharacter *target; /* To select a target from a list of inhabitants.   */
 
   UpdateVisibleGameCharCounter();
   temp = 0;
@@ -34,7 +34,7 @@ int TalkMenu(void)
     gcDescribed[i] = FALSE;
   }
 
-    /* Potential targets are displayed (unless only one is available).        */
+    /* Potential targets are displayed (unless only one is available).       */
   if (VisibleInhabitants(world[player.locationID]) == 0)
   {
     printf("There is no one to speak with here.\n");
@@ -53,7 +53,7 @@ int TalkMenu(void)
       }
     }
   }
-  else  /* Multiple visible inhabitants to choose from.                       */
+  else  /* Multiple visible inhabitants to choose from.                      */
   {
     printf("With whom do you wish to speak?\n");
     for (target = world[player.locationID]->inhabitants;
@@ -76,10 +76,10 @@ int TalkMenu(void)
     }
   }
 
-    /* Player chooses a target by number.                                     */
+    /* Player chooses a target by number.                                    */
   GetIntInput(&iInput, 1, temp);
 
-    /* The target is now found by matching it with the input.                 */
+    /* The target is now found by matching it with the input.                */
   temp = 0;
   for (i = 0; i < TOTAL_GC_IDS; i++)
   {
@@ -108,23 +108,23 @@ int TalkMenu(void)
   return FAILURE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: Dialogue
 
-Description: Presents dialogue text and options when the player interacts with a
-             particular NPC.
+Description: Presents dialogue text and options when the player interacts with
+             a particular NPC.
 
      Inputs: pGC - A pointer to the GameCharacter struct of the NPC the player
                    is speaking with (or, in group dialogue, the main NPC).
 
     Outputs: SUCCESS or FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int Dialogue(GameCharacter *pGC)
 {
-  int i;                /* for loop variable                                  */
+  int i;                /* for loop variable                                 */
   int iInput;
   BOOL repeatOptions;
-  BOOL canCommunicate;  /* TRUE if a shared language can be found.            */
+  BOOL canCommunicate;  /* TRUE if a shared language can be found.           */
 
   if (pGC == NULL)
   {
@@ -134,7 +134,7 @@ int Dialogue(GameCharacter *pGC)
     return FAILURE;
   }
 
-    /* Check for language compatibility.                                      */
+    /* Check for language compatibility.                                     */
   canCommunicate = FALSE;
   for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
   {
@@ -152,7 +152,7 @@ int Dialogue(GameCharacter *pGC)
     PrintNameDefinite(pGC, FALSE);
     printf(" do not share a common language.\n");
     FlushInput();
-    return SUCCESS; /* Although they can't talk, no error has occurred.       */
+    return SUCCESS; /* Although they can't talk, no error has occurred.      */
   }
 
   pGC->conversations++;
@@ -163,7 +163,7 @@ int Dialogue(GameCharacter *pGC)
   switch (pGC->ID)
   {
     case ARCHWIZARD_OF_ELEMENTS:
-      if (pGC->conversations == 1)  /* Indicates a new game: offer tutorial.  */
+      if (pGC->conversations == 1)  /* Indicates a new game: offer tutorial. */
       {
         printf(
 "%s: \"Good morning, %s, and congratulations!\"\n"
@@ -204,7 +204,7 @@ int Dialogue(GameCharacter *pGC)
 "bit more bold by speaking two or more Words of Power in succession. \n"
 "Remember, this can be harmful to the spellcaster when elemental Words are \n"
 "involved, so be cautious! We will heal you if necessary while you are \n"
-"practicing in our school, but elsewhere you will have no such protection.\"\n",
+"practicing in our school, but elsewhere you'll have no such protection.\"\n",
                   pGC->name);
             FlushInput();
             AddEnemy(AddInhabitant(world[player.locationID], DUMMY));
@@ -223,7 +223,8 @@ int Dialogue(GameCharacter *pGC)
             FlushInput();
             while (FindInhabitant(DUMMY) != NULL)
             {
-              DeleteInhabitant(world[player.locationID], FindInhabitant(DUMMY));
+              DeleteInhabitant(world[player.locationID],
+                               FindInhabitant(DUMMY));
             }
             player.currentHP = player.maxHP;
             /* Fall through. */
@@ -347,10 +348,10 @@ int Dialogue(GameCharacter *pGC)
             break;
           default:
             printf("%s: \"I see. I hope the shipment will not be delayed much "
-                   "longer. We are usually able to live off the land, but this "
-                   "year has proven extraordinarily difficult. If you get a "
-                   "chance, please remind the Archwizard of our predicament.\""
-                   "\n", pGC->name);
+                   "longer. We are usually able to live off the land, but "
+                   "this year has proven extraordinarily difficult. If you "
+                   "get a chance, please remind the Archwizard of our "
+                   "predicament.\"\n", pGC->name);
             FlushInput();
             break;
         }
@@ -365,11 +366,11 @@ int Dialogue(GameCharacter *pGC)
       switch (RandomInt(1, 14))
       {
         case 1:
-          printf("%s: \"Ever heard of the Lonely Fisherman, otherwise known as "
-                 "the Angler? They say he frequents the docks at Brill, just "
-                 "fishing and staring at the sea. You wouldn't know it to look "
-                 "at him, but he's one of the most powerful wizards in the "
-                 "world!\"\n", pGC->name);
+          printf("%s: \"Ever heard of the Lonely Fisherman, otherwise known "
+                 "as the Angler? They say he frequents the docks at Brill, "
+                 "just fishing and staring at the sea. You wouldn't know it "
+                 "to look at him, but he's one of the most powerful wizards "
+                 "in the world!\"\n", pGC->name);
           break;
         case 2:
           printf("%s: \"You want my advice? Stay away from the southwestern "
@@ -398,22 +399,23 @@ int Dialogue(GameCharacter *pGC)
                  "world!\"\n", pGC->name);
           break;
         case 6:
-          printf("%s: \"The elves live in a place called Wynnfaer, deep within "
-                 "the western woods. Don't bother trying to find it on your "
-                 "own: the elves' magic will prevent you from ever getting "
-                 "close. If you want to talk with the elves, I suggest getting "
-                 "to know the druids of the forest. They can guide you to "
-                 "Wynnfaer...if they trust you, that is.\"\n", pGC->name);
+          printf("%s: \"The elves live in a place called Wynnfaer, deep "
+                 "within the western woods. Don't bother trying to find it on "
+                 "your own: the elves' magic will prevent you from ever "
+                 "getting close. If you want to talk with the elves, I "
+                 "suggest getting to know the druids of the forest. They can "
+                 "guide you to Wynnfaer...if they trust you, that is.\"\n",
+                 pGC->name);
           break;
         case 7:
           printf("%s: \"I hear the gnomes in the northern mountains are being "
                  "harassed by a dragon.\"\n", pGC->name);
           break;
         case 8:
-          printf("%s: \"Have you visited Gesh'tal? It's a barbarian village in "
-                 "the northern mountains. Their chieftain is said to have such "
-                 "a frightening battle cry that orcs and goblins fall dead at "
-                 "his feet when they hear it!\"\n", pGC->name);
+          printf("%s: \"Have you visited Gesh'tal? It's a barbarian village "
+                 "in the northern mountains. Their chieftain is said to have "
+                 "such a frightening battle cry that orcs and goblins fall "
+                 "dead at his feet when they hear it!\"\n", pGC->name);
           break;
         case 9:
           printf("%s: \"The dwarves have a stronghold up in the northern "
@@ -431,17 +433,17 @@ int Dialogue(GameCharacter *pGC)
         case 11:
           printf("%s: \"Make no mistake: both of the Archwizards in this "
                  "region have strong political ambitions, and neither of them "
-                 "would make for a very benevelont ruler. My advice? Don't get "
-                 "involved, or if you do, make sure you're on the winning "
+                 "would make for a very benevelont ruler. My advice? Don't "
+                 "get involved, or if you do, make sure you're on the winning "
                  "side.\"\n", pGC->name);
           break;
         case 12:
           printf("%s: \"It's well known that the king of Ventarris wants to "
-                 "conquer Illarum and expand his power throughout this region. "
-                 "But did you know that the lich of the southern swamp was "
-                 "himself once a king of Ventarris? He also hopes to dominate "
-                 "this region and once again be recognized as king.\"\n",
-                 pGC->name);
+                 "conquer Illarum and expand his power throughout this "
+                 "region. But did you know that the lich of the southern "
+                 "swamp was himself once a king of Ventarris? He also hopes "
+                 "to dominate this region and once again be recognized as "
+                 "king.\"\n", pGC->name);
           break;
         default:
           printf("%s:\n\"Sorry, I'm too busy to talk right now.\"\n",
@@ -455,7 +457,7 @@ int Dialogue(GameCharacter *pGC)
   return SUCCESS;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: LanguageLearningDialogue
 
 Description: Presents dialogue and options relevant to learning a language.
@@ -463,13 +465,13 @@ Description: Presents dialogue and options relevant to learning a language.
      Inputs: pGC - A pointer to the game character the player is speaking with.
 
     Outputs: SUCCESS if a language is learned, otherwise FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int LanguageLearningDialogue(GameCharacter *pGC)
 {
-  int i;                /* for loop variable                                  */
-  int count = 0;        /* Number of languages available to be learned.       */
+  int i;                /* for loop variable                                 */
+  int count = 0;        /* Number of languages available to be learned.      */
   int iInput;
-  double modifier = 1;  /* To modify the merchant's prices.                   */
+  double modifier = 1;  /* To modify the merchant's prices.                  */
 
   if (pGC == NULL)
   {
@@ -479,7 +481,7 @@ int LanguageLearningDialogue(GameCharacter *pGC)
     return FAILURE;
   }
 
-    /* Check for a price-modifying relationship.                              */
+    /* Check for a price-modifying relationship.                             */
   if (IsFriend(pGC))
   {
     modifier = FRIEND_MODIFIER;
@@ -539,21 +541,22 @@ int LanguageLearningDialogue(GameCharacter *pGC)
   return FAILURE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: WordLearningDialogue
 
-Description: Presents dialogue and options relevant to learning a Word of Power.
+Description: Presents dialogue and options relevant to learning a Word of
+             Power.
 
      Inputs: pGC - A pointer to the game character the player is speaking with.
 
     Outputs: SUCCESS if a Word is learned, otherwise FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int WordLearningDialogue(GameCharacter *pGC)
 {
-  int i;                /* for loop variable                                  */
-  int count = 0;        /* Number of Words available to be learned.           */
+  int i;                /* for loop variable                                 */
+  int count = 0;        /* Number of Words available to be learned.          */
   int iInput;
-  double modifier = 1;  /* To modify the merchant's prices.                   */
+  double modifier = 1;  /* To modify the merchant's prices.                  */
 
   if (pGC == NULL)
   {
@@ -563,7 +566,7 @@ int WordLearningDialogue(GameCharacter *pGC)
     return FAILURE;
   }
 
-    /* Check for a price-modifying relationship.                              */
+    /* Check for a price-modifying relationship.                             */
   if (IsFriend(pGC))
   {
     modifier = FRIEND_MODIFIER;
@@ -624,7 +627,7 @@ int WordLearningDialogue(GameCharacter *pGC)
   return FAILURE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: MerchantDialogue
 
 Description: Presents dialogue and options relevant to buying and selling.
@@ -632,13 +635,13 @@ Description: Presents dialogue and options relevant to buying and selling.
      Inputs: merchant - Pointer to the merchant NPC.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int MerchantDialogue(GameCharacter *merchant)
 {
-  int i;                /* for loop variable                                  */
+  int i;                /* for loop variable                                 */
   int iInput;
-  int count = 0;        /* Number of item types and other options available.  */
-  double modifier = 1;  /* To modify the merchant's prices.                   */
+  int count = 0;        /* Number of item types and other options available. */
+  double modifier = 1;  /* To modify the merchant's prices.                  */
 
   if (merchant == NULL)
   {
@@ -648,7 +651,7 @@ int MerchantDialogue(GameCharacter *merchant)
     return FAILURE;
   }
 
-    /* Check for a price-modifying relationship.                              */
+    /* Check for a price-modifying relationship.                             */
   if (IsFriend(merchant))
   {
     modifier = FRIEND_MODIFIER;
@@ -658,7 +661,7 @@ int MerchantDialogue(GameCharacter *merchant)
     modifier = ENEMY_MODIFIER;
   }
 
-    /* Present the merchant's inventory and other options to the player.      */
+    /* Present the merchant's inventory and other options to the player.     */
   printf("%s:\n\"What would you like to buy?\"\n"
          merchant->name);
   for (i = 0; i < TOTAL_ITEM_IDS; i++)
@@ -681,7 +684,7 @@ int MerchantDialogue(GameCharacter *merchant)
   printf("[%d] \"Actually, I would like to sell something.\"\n", ++count);
   printf("[%d] \"Nothing for now, thank you.\"\n", ++count);
 
-    /* Get input and determine what selection the player made.                */
+    /* Get input and determine what selection the player made.               */
   GetIntInput(&iInput, 1, count);
   for (i = 0; i < TOTAL_ITEM_IDS; i++)
   {
@@ -693,7 +696,7 @@ int MerchantDialogue(GameCharacter *merchant)
         if (Transaction(merchant, ItemValue(i) * modifier) == SUCCESS)
         {
           GiveItem(merchant, &player, i);
-          merchant.inventory[i]++;        /* Merchant's supply is infinite.   */
+          merchant.inventory[i]++;        /* Merchant's supply is infinite.  */
           return SUCCESS;
         }
       }
@@ -705,7 +708,7 @@ int MerchantDialogue(GameCharacter *merchant)
           if (Transaction(merchant, 10 * (ItemValue(i) * modifier)) == SUCCESS)
           {
             GiveItem(merchant, &player, i, 10);
-            merchant.inventory[i] += 10;  /* Merchant's supply is infinite.   */
+            merchant.inventory[i] += 10;  /* Merchant's supply is infinite.  */
             return SUCCESS;
           }
         }
@@ -720,7 +723,7 @@ int MerchantDialogue(GameCharacter *merchant)
   return FAILURE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: Transaction
 
 Description: Presents dialogue and options relevant to completing a purchase.
@@ -729,7 +732,7 @@ Description: Presents dialogue and options relevant to completing a purchase.
              price    - Amount of gold required to complete the transaction.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
-*******************************************************************************/
+******************************************************************************/
 int Transaction(GameCharacter *merchant, int price)
 {
   int iInput;
@@ -767,7 +770,7 @@ int Transaction(GameCharacter *merchant, int price)
   return FAILURE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: LanguageName
 
 Description: Returns the name of a given language as a string (e.g., "Elvish").
@@ -775,7 +778,7 @@ Description: Returns the name of a given language as a string (e.g., "Elvish").
      Inputs: idNum - ID of the desired language.
 
     Outputs: Pointer to the desired string.
-*******************************************************************************/
+******************************************************************************/
 char *LanguageName(int idNum)
 {
   switch (idNum)

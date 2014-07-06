@@ -1,17 +1,15 @@
-/*******************************************************************************
-filename    main.c
-author      David C. Drake (www.davidcdrake.com)
+/******************************************************************************
+   Filename: main.c
 
-Brief Description:
-  Main C file for "Words of Power": a text-based fantasy RPG emphasizing verbal
-  spell-casting through the use of magic words.
+     Author: David C. Drake (www.davidcdrake.com)
 
-Functions Defined:
-  main, Print, MainMenu, PrintStandardOptions, CreateWorld, DestroyWorld,
-  QuitMenu, HelpMenu, RandomInt, RandomBool, GetCharInput, GetIntInput,
-  GetStrInput, StrContains, FlushInput
+Description: Main C file for "Words of Power": a text-based fantasy RPG
+             emphasizing verbal spell-casting through the use of magic words.
 
-*******************************************************************************/
+  Functions: main, Print, MainMenu, PrintStandardOptions, CreateWorld,
+             DestroyWorld, QuitMenu, HelpMenu, RandomInt, RandomBool,
+             GetCharInput, GetIntInput, GetStrInput, StrContains, FlushInput
+******************************************************************************/
 
 #include "wop.h"
 
@@ -21,7 +19,8 @@ int main(void)
   worldExists = FALSE;
 
   printf(
-"\nWelcome to \"Words of Power\": a fantasy RPG developed by David C. Drake (www.davidcdrake.com)\n"
+"\nWelcome to \"Words of Power\": a fantasy RPG developed by David C. Drake "
+"(www.davidcdrake.com)\n"
         );
   FlushInput();
 
@@ -45,7 +44,7 @@ int main(void)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: Print
 
 Description: Prints a given string.
@@ -53,13 +52,13 @@ Description: Prints a given string.
      Inputs: outputString - The string to be printed.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void Print(char *outputString)
 {
-  
+
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: MainMenu
 
 Description: Displays main menu options and does some handling of input.
@@ -67,7 +66,7 @@ Description: Displays main menu options and does some handling of input.
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void MainMenu(void)
 {
   char cInput;
@@ -111,16 +110,16 @@ void MainMenu(void)
   }while(repeatOptions);
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: PrintStandardOptions
 
-Description: Prints the standard (i.e., non-combat) player options and processes
-             corresponding player input.
+Description: Prints the standard (i.e., non-combat) player options and
+             processes corresponding player input.
 
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void PrintStandardOptions(void)
 {
   int i;              /* for loop variable                        */
@@ -210,28 +209,28 @@ void PrintStandardOptions(void)
   }while (repeatOptions);
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: CreateWorld
 
 Description: Allocates memory for, and initializes, Location structs for all
-             game locations as well as GameCharacter structs for each location's
-             default inhabitants. Also sets other global variables to their
-             default starting values.
+             game locations as well as GameCharacter structs for each
+             location's default inhabitants. Also sets other global variables
+             to their default starting values.
 
      Inputs: None.
 
     Outputs: The number of failed location initializations.
-*******************************************************************************/
+******************************************************************************/
 int CreateWorld(void)
 {
-  int i;          /* for loop variable                                        */
-  int errors = 0; /* The number of failed location initializations.           */
+  int i;          /* for loop variable                                       */
+  int errors = 0; /* The number of failed location initializations.          */
 
   #ifdef DEBUG
   printf("Creating world...\n\n");
   #endif
 
-    /* If a game world already exists in memory, destroy it.                  */
+    /* If a game world already exists in memory, destroy it.                 */
   if (worldExists)
   {
     #ifdef DEBUG
@@ -241,7 +240,7 @@ int CreateWorld(void)
     DestroyWorld();
   }
 
-    /* Initialize each location (including its inhabitants).                  */
+    /* Initialize each location (including its inhabitants).                 */
   for (i = 0; i < TOTAL_LOCATION_IDS; i++)
   {
     world[i] = malloc(sizeof(Location));
@@ -258,25 +257,25 @@ int CreateWorld(void)
     }
   }
 
-    /* Set the status of all missions to CLOSED.                              */
+    /* Set the status of all missions to CLOSED.                             */
   for (i = 0; i < TOTAL_MISSION_IDS; i++)
   {
     missions[i] = CLOSED;
   }
 
-    /* Initialize the player's allegiances.                                   */
+    /* Initialize the player's allegiances.                                  */
   for (i = 0; i < TOTAL_GROUP_IDS; i++)
   {
     allegiances[i] = INDIFFERENT;
   }
 
-    /* Initialize the player's "kill" history.                                */
+    /* Initialize the player's "kill" history.                               */
   for (i = 0; i < TOTAL_GC_IDS; i++)
   {
     kills[i] = 0;
   }
 
-    /* Initialize remaining global variables.                                 */
+    /* Initialize remaining global variables.                                */
   secretsFound = 0;
   quit = FALSE;
   worldExists = TRUE;
@@ -284,7 +283,7 @@ int CreateWorld(void)
   return errors;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: DestroyWorld
 
 Description: Deallocates all memory set aside for Location structs and their
@@ -293,12 +292,12 @@ Description: Deallocates all memory set aside for Location structs and their
      Inputs: None.
 
     Outputs: The number of errors detected.
-*******************************************************************************/
+******************************************************************************/
 int DestroyWorld(void)
 {
-  int i;               /* for loop variable                                   */
-  int errors = 0;      /* The number of errors detected.                      */
-  GameCharacter *temp; /* To search for and deallocate game characters.       */
+  int i;               /* for loop variable                                  */
+  int errors = 0;      /* The number of errors detected.                     */
+  GameCharacter *temp; /* To search for and deallocate game characters.      */
 
   if (worldExists == FALSE)
   {
@@ -353,7 +352,7 @@ int DestroyWorld(void)
   return errors;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: QuitMenu
 
 Description: Asks for confirmation of intent to quit. If confirmed, memory is
@@ -363,7 +362,7 @@ Description: Asks for confirmation of intent to quit. If confirmed, memory is
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void QuitMenu(void)
 {
   char cInput;
@@ -385,7 +384,7 @@ void QuitMenu(void)
   }while (cInput != 'N');
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: HelpMenu
 
 Description: Provides information about how to play the game.
@@ -393,14 +392,14 @@ Description: Provides information about how to play the game.
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void HelpMenu(void)
 {
   printf("Sorry, I can't help you right now! :)\n");
   FlushInput();
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: RandomInt
 
 Description: Returns a pseudo-random integer between specified values
@@ -410,12 +409,12 @@ Description: Returns a pseudo-random integer between specified values
              high - Highest possible return value.
 
     Outputs: A randomly generated integer between "low" and "high" (inclusive).
-*******************************************************************************/
+******************************************************************************/
 int RandomInt(int low, int high)
 {
   int temp;
 
-    /* If the arguments were passed in the wrong order, switch them.          */
+    /* If the arguments were passed in the wrong order, switch them.         */
   if (low > high)
   {
     temp = low;
@@ -429,7 +428,7 @@ int RandomInt(int low, int high)
   return rand() % (high - low + 1) + low;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: RandomBool
 
 Description: Randomly returns a boolean value.
@@ -437,13 +436,13 @@ Description: Randomly returns a boolean value.
      Inputs: None.
 
     Outputs: TRUE or FALSE.
-*******************************************************************************/
+******************************************************************************/
 int RandomBool(void)
 {
   return RandomInt(FALSE, TRUE);
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GetCharInput
 
 Description: Takes in one character entered by the user, converts it to
@@ -453,7 +452,7 @@ Description: Takes in one character entered by the user, converts it to
 
     Outputs: Returns the character read in from the user, converted to
              uppercase.
-*******************************************************************************/
+******************************************************************************/
 char GetCharInput(char *c)
 {
   scanf(" %c", c);
@@ -464,7 +463,7 @@ char GetCharInput(char *c)
   return *c;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GetIntInput
 
 Description: Reads in one integer, then repeats until an integer within given
@@ -476,13 +475,13 @@ Description: Reads in one integer, then repeats until an integer within given
 
 
     Outputs: Returns the input value stored in "*i".
-*******************************************************************************/
+******************************************************************************/
 int GetIntInput(int *i, int low, int high)
 {
   int temp;
   BOOL repeat;
 
-    /* If "low" and "high" were passed in the wrong order, switch them.       */
+    /* If "low" and "high" were passed in the wrong order, switch them.      */
   if (low > high)
   {
     temp = low;
@@ -500,7 +499,9 @@ int GetIntInput(int *i, int low, int high)
     FlushInput();
     if (*i < low || *i > high)
     {
-      printf("Invalid response. Enter a number between %d and %d: ", low, high);
+      printf("Invalid response. Enter a number between %d and %d: ",
+             low,
+             high);
       repeat = TRUE;
     }
   }while (repeat);
@@ -509,7 +510,7 @@ int GetIntInput(int *i, int low, int high)
   return *i;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: GetStrInput
 
 Description: Takes in a string of one or more characters entered by the user.
@@ -519,10 +520,10 @@ Description: Takes in a string of one or more characters entered by the user.
                       STR_LEN or negative, it will be set to STR_LEN).
 
     Outputs: Returns a pointer to string where the input is stored.
-*******************************************************************************/
+******************************************************************************/
 char *GetStrInput(char *string, int n)
 {
-  int length;  /* To store the input string's length.                         */
+  int length;  /* To store the input string's length.                        */
 
   if (n < 0 || n > (STR_LEN + 1))
   {
@@ -545,7 +546,7 @@ char *GetStrInput(char *string, int n)
   return string;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: StrContains
 
 Description: Determines whether a given string contains a given character.
@@ -554,7 +555,7 @@ Description: Determines whether a given string contains a given character.
              c      - Character to search for in the string.
 
     Outputs: TRUE if the string contains "c", otherwise FALSE.
-*******************************************************************************/
+******************************************************************************/
 BOOL StrContains(char string[], char c)
 {
   int i;  /* for loop variable */
@@ -571,7 +572,7 @@ BOOL StrContains(char string[], char c)
   return FALSE;
 }
 
-/*******************************************************************************
+/******************************************************************************
    Function: FlushInput
 
 Description: Removes remaining input up to and including an end of line or end
@@ -581,7 +582,7 @@ Description: Removes remaining input up to and including an end of line or end
      Inputs: None.
 
     Outputs: None.
-*******************************************************************************/
+******************************************************************************/
 void FlushInput(void)
 {
   int c;
