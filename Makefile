@@ -1,7 +1,3 @@
-all: wop
+wop: main.c characters.c combat.c dialogue.c items.c locations.c magic.c
+	gcc -o wop main.c characters.c combat.c dialogue.c items.c locations.c magic.c -I.
 
-wop: wop.o
-	g++ -o wop wop.o
-
-wop.o:
-	g++ -c main.c
