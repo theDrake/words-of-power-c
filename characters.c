@@ -1471,9 +1471,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->gold = RandomInt(1, 10);
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       return FAILURE;
   }
 
@@ -1497,9 +1497,9 @@ int AddCompanion(GameCharacter *companion)
 
   if (companion == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1540,9 +1540,9 @@ int AddCompanion(GameCharacter *companion)
 
   if (pGC1 == NULL) /* If true, "companion" was not at the current location. */
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1565,9 +1565,9 @@ int RemoveCompanion(GameCharacter *companion)
 
   if (companion == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1608,9 +1608,9 @@ int RemoveCompanion(GameCharacter *companion)
 
   if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1633,9 +1633,9 @@ int DeleteCompanion(GameCharacter *companion)
 
   if (companion == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1659,9 +1659,9 @@ int DeleteCompanion(GameCharacter *companion)
   }
   if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1694,9 +1694,9 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
 
   if (summoner == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
   }
   else
   {
@@ -1711,9 +1711,9 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
     }
     else
     {
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       exit(1);
     }
   }
@@ -1738,9 +1738,9 @@ int DeleteCreatureSummonedBy(GameCharacter *summoner)
 
   if (summoner == NULL || summoner->summonedCreature == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1765,9 +1765,9 @@ int DisplayCharacterData(GameCharacter *pGC)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1818,9 +1818,9 @@ int PrintSoulDescription(GameCharacter *pGC)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
   else if (pGC->soul <= EXTREMELY_EVIL)
@@ -1915,9 +1915,9 @@ int NumberOfLanguagesKnown(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return -1;
   }
 
@@ -1949,9 +1949,9 @@ int NumberOfWordsKnown(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return -1;
   }
 
@@ -1981,9 +1981,9 @@ int PrintNameDefinite(GameCharacter *pGC, BOOL capitalize)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -2021,9 +2021,9 @@ int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -2072,21 +2072,22 @@ int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
 Description: Prints the plural form of a given game character's generic
              descriptor.
 
-     Inputs: pGC - Game character whose name/description is to be made plural.
-             cap - Indicates whether or not to capitalize.
+     Inputs: pGC        - Game character whose name/description is to be made
+                          plural.
+             capitalize - If TRUE, capitalize.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int PrintNamePlural(GameCharacter *pGC, Capitalization cap)
+int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
 {
   int nameLength;
   char gcName[STR_LEN + 1];
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -2124,16 +2125,16 @@ int PrintNamePlural(GameCharacter *pGC, Capitalization cap)
       nameLength = strlen(gcName);
       if (nameLength >= STR_LEN - 1) /* Must have room for 's'.              */
       {
-        #ifdef DEBUG
+#ifdef DEBUG
         ERROR_MESSAGE
-        #endif
+#endif
         return FAILURE;
       }
       gcName[nameLength] = 's';
       gcName[nameLength + 1] = '\0';
       break;
   }
-  if (cap == UPPERCASE)
+  if (capitalize)
   {
     gcName[0] = toupper(gcName[0]);
   }
@@ -2311,9 +2312,9 @@ int HealGameCharacter(GameCharacter *pGC, int amount)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return -1;
   }
 
@@ -2346,9 +2347,9 @@ int DamageGameCharacter(GameCharacter *pGC, int amount)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return -1;
   }
 
@@ -2467,7 +2468,7 @@ Description: Sets one of the player's languages to KNOWN.
 ******************************************************************************/
 void LearnLanguage(int langID)
 {
-  player.languages[landID] = KNOWN;
+  player.languages[langID] = KNOWN;
   printf("%s has learned the %s  language!\n",
          player.name,
          LanguageName(langID));

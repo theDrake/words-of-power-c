@@ -102,9 +102,9 @@ int TalkMenu(void)
     }
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return FAILURE;
 }
 
@@ -128,9 +128,9 @@ int Dialogue(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -166,8 +166,9 @@ int Dialogue(GameCharacter *pGC)
       if (pGC->conversations == 1)  /* Indicates a new game: offer tutorial. */
       {
         printf(
-"%s: \"Good morning, %s, and congratulations!\"\n"
-              pGC->name, player.name);
+"%s: \"Good morning, %s, and congratulations!\"\n",
+               pGC->name,
+               player.name);
         FlushInput();
         printf(
 "%s: \"You have finally mastered the subtle art of projecting \n"
@@ -240,52 +241,50 @@ int Dialogue(GameCharacter *pGC)
             break;
         }
       }
-      else
+      else if (missions[ELEMENTS1] == OPEN)
       {
-        if (missions[ELEMENTS1] == OPEN)
-        {
-          printf(
+        printf(
 "%s: \"Do you have those mushroom samples I asked for?\"\n",
-          pGC->name);
-          printf("[1] \"Yes.\"\n"
-                 "[2] \"No.\"\n");
-          GetIntInput(&iInput, 1, 2);
-          switch (iInput)
-          {
-            case 1:
-              if (player.inventory[GLOWING_MUSHROOM] >= 10)
-              {
-                printf(
+        pGC->name);
+        printf("[1] \"Yes.\"\n"
+               "[2] \"No.\"\n");
+        GetIntInput(&iInput, 1, 2);
+        switch (iInput)
+        {
+          case 1:
+            if (player.inventory[GLOWING_MUSHROOM] >= 10)
+            {
+              printf(
 "%s: \"Excellent! I knew I could count on you. Here's 20 gold to compensate \n"
 "you for your time.\"\n",
-                      pGC->name);
-                FlushInput();
-                missions[ELEMENTS1] = COMPLETED;
-                TransferGold(pGC, &player, 20);
-                GainExperience(STD_MISSION_EXP);
-              }
-              break;
-            case 2:
-
-          printf("%s: \"I don't have any more work for you right now, I'm "
-                 "afraid, but I will in the near future. Please check in with "
-                 "me again soon.\"\n",
-                 pGC->name);
-          FlushInput();
+                    pGC->name);
+              FlushInput();
+              missions[ELEMENTS1] = COMPLETED;
+              GiveGold(pGC, &player, 20);
+              GainExperience(STD_MISSION_EXP);
+            }
+            break;
+          default:
+            printf("%s: \"I don't have any more work for you right now, I'm "
+                   "afraid, but I will in the near future. Please check in "
+                   "with me again soon.\"\n",
+                   pGC->name);
+            FlushInput();
+            break;
         }
-        else if (missions[ELEMENTS1] == OPEN)
-        {
-          printf("%s: \"Have you delivered those goods to the druids yet, %s? "
-                 "Why not? Please hurry or I will not trust you with any more "
-                 "errands.\"\n", pGC->name, player.name);
-          FlushInput();
-        }
-        else
-        {
-          printf("%s: \"Welcome back, %s! Tell me of your travels...\"\n",
-                 pGC->name, player.name);
-          FlushInput();
-        }
+      }
+      else if (missions[ELEMENTS1] == OPEN)
+      {
+        printf("%s: \"Have you delivered those goods to the druids yet, %s? "
+               "Why not? Please hurry or I will not trust you with any more "
+               "errands.\"\n", pGC->name, player.name);
+        FlushInput();
+      }
+      else
+      {
+        printf("%s: \"Welcome back, %s! Tell me of your travels...\"\n",
+               pGC->name, player.name);
+        FlushInput();
       }
       break;
     case DRUID:
@@ -471,24 +470,13 @@ int LanguageLearningDialogue(GameCharacter *pGC)
   int i;                /* for loop variable                                 */
   int count = 0;        /* Number of languages available to be learned.      */
   int iInput;
-  double modifier = 1;  /* To modify the merchant's prices.                  */
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
-  }
-
-    /* Check for a price-modifying relationship.                             */
-  if (IsFriend(pGC))
-  {
-    modifier = FRIEND_MODIFIER;
-  }
-  else if (IsEnemy(pGC))
-  {
-    modifier = ENEMY_MODIFIER;
   }
 
   for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
@@ -498,7 +486,7 @@ int LanguageLearningDialogue(GameCharacter *pGC)
       count++;
       if (count == 1)
       {
-        printf("%s:\n
+        printf("%s:\n"
                "\"What language do you want to learn?\"\n",
                pGC->name);
       }
@@ -518,7 +506,8 @@ int LanguageLearningDialogue(GameCharacter *pGC)
         count++;
         if (iInput == count)
         {
-          if (Transaction(pGC, STD_LANG_FEE * modifier) == SUCCESS)
+          if (Transaction(pGC,
+                          STD_LANG_FEE * GetPriceModifier(pGC)) == SUCCESS)
           {
             LearnLanguage(i);
             return SUCCESS;
@@ -556,24 +545,13 @@ int WordLearningDialogue(GameCharacter *pGC)
   int i;                /* for loop variable                                 */
   int count = 0;        /* Number of Words available to be learned.          */
   int iInput;
-  double modifier = 1;  /* To modify the merchant's prices.                  */
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
-  }
-
-    /* Check for a price-modifying relationship.                             */
-  if (IsFriend(pGC))
-  {
-    modifier = FRIEND_MODIFIER;
-  }
-  else if (IsEnemy(pGC))
-  {
-    modifier = ENEMY_MODIFIER;
   }
 
   for (i = 0; i < TOTAL_WORD_IDS; i++)
@@ -583,7 +561,7 @@ int WordLearningDialogue(GameCharacter *pGC)
       count++;
       if (count == 1)
       {
-        printf("%s:\n
+        printf("%s:\n"
 "\"I am willing to teach the following Words. Which one interests you?\"\n",
                pGC->name);
       }
@@ -603,7 +581,8 @@ int WordLearningDialogue(GameCharacter *pGC)
         count++;
         if (iInput == count)
         {
-          if (Transaction(pGC, STD_WORD_FEE * modifier) == SUCCESS)
+          if (Transaction(pGC,
+                          STD_WORD_FEE * GetPriceModifier(pGC)) == SUCCESS)
           {
             LearnWord(i);
             return SUCCESS;
@@ -641,28 +620,17 @@ int MerchantDialogue(GameCharacter *merchant)
   int i;                /* for loop variable                                 */
   int iInput;
   int count = 0;        /* Number of item types and other options available. */
-  double modifier = 1;  /* To modify the merchant's prices.                  */
 
   if (merchant == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
-    /* Check for a price-modifying relationship.                             */
-  if (IsFriend(merchant))
-  {
-    modifier = FRIEND_MODIFIER;
-  }
-  else if (IsEnemy(merchant))
-  {
-    modifier = ENEMY_MODIFIER;
-  }
-
     /* Present the merchant's inventory and other options to the player.     */
-  printf("%s:\n\"What would you like to buy?\"\n"
+  printf("%s:\n\"What would you like to buy?\"\n",
          merchant->name);
   for (i = 0; i < TOTAL_ITEM_IDS; i++)
   {
@@ -671,13 +639,14 @@ int MerchantDialogue(GameCharacter *merchant)
       count++;
       printf("[%d] ", count);
       PrintItemName(i);
-      printf(" (%d gold)\n", ItemValue(i) * modifier);
+      printf(" (%d gold)\n", ItemValue(i) * GetPriceModifier(merchant));
       if (merchant->inventory[i] >= 10)
       {
         count++;
         printf("[%d] Ten ", count);
         PrintItemNamePlural(i);
-        printf(" (%d gold)\n", 10 * (ItemValue(i) * modifier));
+        printf(" (%d gold)\n",
+               10 * (ItemValue(i) * GetPriceModifier(merchant)));
       }
     }
   }
@@ -693,10 +662,11 @@ int MerchantDialogue(GameCharacter *merchant)
       count++;
       if (count == iInput)
       {
-        if (Transaction(merchant, ItemValue(i) * modifier) == SUCCESS)
+        if (Transaction(merchant,
+                        ItemValue(i) * GetPriceModifier(merchant)) == SUCCESS)
         {
           GiveItem(merchant, &player, i);
-          merchant.inventory[i]++;        /* Merchant's supply is infinite.  */
+          merchant->inventory[i]++;        /* Merchant's supply is infinite. */
           return SUCCESS;
         }
       }
@@ -705,10 +675,12 @@ int MerchantDialogue(GameCharacter *merchant)
         count++;
         if (count == iInput)
         {
-          if (Transaction(merchant, 10 * (ItemValue(i) * modifier)) == SUCCESS)
+          if (Transaction(merchant,
+                          10 * (ItemValue(i) *
+                                GetPriceModifier(merchant))) == SUCCESS)
           {
-            GiveItem(merchant, &player, i, 10);
-            merchant.inventory[i] += 10;  /* Merchant's supply is infinite.  */
+            GiveItems(merchant, &player, i, 10);
+            merchant->inventory[i] += 10;  /* Merchant's supply is infinite. */
             return SUCCESS;
           }
         }
@@ -721,6 +693,31 @@ int MerchantDialogue(GameCharacter *merchant)
   }
 
   return FAILURE;
+}
+
+/******************************************************************************
+   Function: GetPriceModifier
+
+Description: Returns a floating point value for adjusting a price up or down
+             based on the given merchant's relationship with the player.
+
+     Inputs: merchant - Pointer to the seller of goods or services.
+
+    Outputs: Floating point value that may be multiplied by a price to adjust
+             the price up or down.
+******************************************************************************/
+double GetPriceModifier(GameCharacter *merchant)
+{
+  if (merchant->relationship > INDIFFERENT)
+  {
+    return FRIEND_MODIFIER;
+  }
+  else if (merchant->relationship < INDIFFERENT)
+  {
+    return ENEMY_MODIFIER;
+  }
+
+  return 1.0;
 }
 
 /******************************************************************************
@@ -739,9 +736,9 @@ int Transaction(GameCharacter *merchant, int price)
 
   if (merchant == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -813,8 +810,8 @@ char *LanguageName(int idNum)
       break;
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return NULL;
 }

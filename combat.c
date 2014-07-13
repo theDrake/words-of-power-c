@@ -25,9 +25,9 @@ int AddEnemy(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -42,9 +42,9 @@ int AddEnemy(GameCharacter *pGC)
   }
 
     /* If we reach this point, "enemyNPCs" was full and the add failed.      */
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return FAILURE;
 }
 
@@ -66,9 +66,9 @@ int AddRandomEnemy(Location *location)
 
   if (location == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -290,9 +290,9 @@ int AddRandomEnemy(Location *location)
       newEnemy = AddInhabitant(location, MERFOLK_SOLDIER);
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       break;
   }
   if (newEnemy != NULL)
@@ -321,9 +321,9 @@ int RemoveEnemy(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -347,9 +347,9 @@ int RemoveEnemy(GameCharacter *pGC)
   }
 
     /* If we reach this point, "pGC" was not found.                          */
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return FAILURE;
 }
 
@@ -372,9 +372,9 @@ int DeleteEnemy(GameCharacter *pGC)
   }
   else
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -415,9 +415,9 @@ int VisibleEnemies(void)
 
   if (player.status[IN_COMBAT] == FALSE)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return count;
   }
   else
@@ -455,9 +455,9 @@ int Combat(void)
 
   if (NumberOfEnemies() == 0)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return 0;
   }
 
@@ -608,9 +608,9 @@ void PrintCombatStatus(GameCharacter *pGC)
 {
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return;
   }
 
@@ -637,9 +637,9 @@ int EnemyAI(int index)
 
   if (enemyNPCs[index] == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -901,9 +901,9 @@ int AttackMenu(void)
     }
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return FAILURE;
 }
 
@@ -923,9 +923,9 @@ int Attack(GameCharacter *attacker, GameCharacter *defender)
 
   if (attacker == NULL || defender == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -999,23 +999,33 @@ Description: Determines whether a given NPC will flee when losing a fight.
 ******************************************************************************/
 BOOL WillingToFlee(GameCharacter *pGC)
 {
-  if (pGC->ID == PEASANT || pGC->ID == SOLDIER || pGC->ID == WIZARD ||
-      pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
-      pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||
-      pGC->ID == ILLARUM_HIGH_PRIEST || pGC->ID == ARCHWIZARD_OF_ELEMENTS ||
-      pGC->ID == COURT_WIZARD || pGC->ID == WIZARD_OF_ELEMENTS ||
-      pGC->ID == WIZARD_OF_MIND || pGC->ID == ARCHWIZARD_OF_MIND ||
-      pGC->ID == VENTARRIS_PRIEST || pGC->ID == VENTARRIS_HIGH_PRIEST ||
-      pGC->ID == ELF || pGC->ID == DWARF_MERCHANT || pGC->ID == DWARF_PRIEST ||
-      pGC->ID == ELF_LOREMASTER || pGC->ID == GNOME ||
-      pGC->ID == GNOME_MINER || pGC->ID == DRUID || pGC->ID == ARCHDRUID ||
-      pGC->ID == VENTARRIS_KING || pGC->ID == NECROMANCER ||
-      pGC->ID == ARCHNECROMANCER)
-  {
-    return TRUE;
-  }
-
-  return FALSE;
+  return pGC->ID == PEASANT ||
+         pGC->ID == SOLDIER ||
+         pGC->ID == WIZARD ||
+         pGC->ID == INNKEEPER ||
+         pGC->ID == FISHERMAN ||
+         pGC->ID == SAILOR ||
+         pGC->ID == FARMER ||
+         pGC->ID == ILLARUM_PRIEST ||
+         pGC->ID == ILLARUM_HIGH_PRIEST ||
+         pGC->ID == ARCHWIZARD_OF_ELEMENTS ||
+         pGC->ID == COURT_WIZARD ||
+         pGC->ID == WIZARD_OF_ELEMENTS ||
+         pGC->ID == WIZARD_OF_MIND ||
+         pGC->ID == ARCHWIZARD_OF_MIND ||
+         pGC->ID == VENTARRIS_PRIEST ||
+         pGC->ID == VENTARRIS_HIGH_PRIEST ||
+         pGC->ID == ELF ||
+         pGC->ID == DWARF_MERCHANT ||
+         pGC->ID == DWARF_PRIEST ||
+         pGC->ID == ELF_LOREMASTER ||
+         pGC->ID == GNOME ||
+         pGC->ID == GNOME_MINER ||
+         pGC->ID == DRUID ||
+         pGC->ID == ARCHDRUID ||
+         pGC->ID == VENTARRIS_KING ||
+         pGC->ID == NECROMANCER ||
+         pGC->ID == ARCHNECROMANCER;
 }
 
 /******************************************************************************

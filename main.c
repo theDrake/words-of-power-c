@@ -13,6 +13,15 @@ Description: Main C file for "Words of Power": a text-based fantasy RPG
 
 #include "wop.h"
 
+/******************************************************************************
+   Function: main
+
+Description: Main function for the "Words of Power" RPG.
+
+     Inputs: None.
+
+    Outputs: Number of errors encountered.
+******************************************************************************/
 int main(void)
 {
   srand(time(0));
@@ -32,9 +41,9 @@ int main(void)
     PrintStandardOptions();
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   printf("End of main reached.\n\n");
-  #endif
+#endif
   if (worldExists)
   {
     DestroyWorld();
@@ -139,11 +148,8 @@ void PrintStandardOptions(void)
            "[U]se an Item\n"
            "[A]ttack\n"
            "[V]iew My Status\n"
-           "[M]ove to Another Location\n");
-    #ifdef DEBUG
-    printf("[E]nter Cheat Menu...\n");
-    #endif
-    printf("[Q]uit\n");
+           "[M]ove to Another Location\n"
+           "[Q]uit\n");
     GetCharInput(&cInput);
     switch (cInput)
     {
@@ -195,12 +201,6 @@ void PrintStandardOptions(void)
         QuitMenu();
         repeatOptions = TRUE;
         break;
-      case 'E': /* Enter Cheat Menu... */
-        #ifdef DEBUG
-        /* CheatMenu(); */
-        break;
-        #endif
-        /* If DEBUG is not defined, fall through. */
       default:
         printf("Invalid response.\n\n");
         repeatOptions = TRUE;
@@ -226,16 +226,16 @@ int CreateWorld(void)
   int i;          /* for loop variable                                       */
   int errors = 0; /* The number of failed location initializations.          */
 
-  #ifdef DEBUG
+#ifdef DEBUG
   printf("Creating world...\n\n");
-  #endif
+#endif
 
     /* If a game world already exists in memory, destroy it.                 */
   if (worldExists)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     errors++;
     DestroyWorld();
   }
@@ -250,9 +250,9 @@ int CreateWorld(void)
     }
     else
     {
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       exit(1);
     }
   }
@@ -301,15 +301,15 @@ int DestroyWorld(void)
 
   if (worldExists == FALSE)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     errors++;
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   printf("Destroying world...\n\n");
-  #endif
+#endif
 
   for (i = 0; i < TOTAL_LOCATION_IDS; i++)
   {
@@ -420,9 +420,9 @@ int RandomInt(int low, int high)
     temp = low;
     low = high;
     high = temp;
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
   }
 
   return rand() % (high - low + 1) + low;
@@ -487,9 +487,9 @@ int GetIntInput(int *i, int low, int high)
     temp = low;
     low = high;
     high = temp;
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
   }
 
   do
@@ -527,9 +527,9 @@ char *GetStrInput(char *string, int n)
 
   if (n < 0 || n > (STR_LEN + 1))
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     if (n > STR_LEN)
     {
       n = STR_LEN;

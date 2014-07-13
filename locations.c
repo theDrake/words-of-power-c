@@ -342,9 +342,9 @@ int InitializeLocation(Location *location, int idNum)
       AddInhabitants(location, MERFOLK_SOLDIER, RandomInt(3, 6));
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       return FAILURE;
   }
 
@@ -406,9 +406,9 @@ GameCharacter *AddInhabitant(Location *location, int idNum)
 
   if (location == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
   }
   else
   {
@@ -432,9 +432,9 @@ GameCharacter *AddInhabitant(Location *location, int idNum)
     }
     else
     {
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       exit(1);
     }
   }
@@ -514,9 +514,9 @@ int MoveInhabitant(GameCharacter *inhabitant, int destinationID)
       destinationID < 0 ||
       destinationID >= TOTAL_LOCATION_IDS)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -580,9 +580,9 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant)
 
   if (location == NULL || inhabitant == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -605,9 +605,9 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant)
   }
   if (pGC1 == NULL) /* If true, "inhabitant" was not found.                  */
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -631,9 +631,9 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
 
   if (location == NULL || inhabitant == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -678,9 +678,9 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
   }while (pGC1 != NULL);
 
     /* If we reach this point, "inhabitant" was not found.                   */
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return FAILURE;
 }
 
@@ -700,9 +700,9 @@ int VisibleInhabitants(Location *location)
 
   if (location == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
   }
   else
   {
@@ -1174,9 +1174,9 @@ int MovementMenu(void)
       destinations[2] = world[QUELACENTUS_TEMPLE];
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       break;
   }
 
@@ -1207,9 +1207,9 @@ int MovePlayer(int destinationID)
 
   if (destinationID < 0 || destinationID >= TOTAL_LOCATION_IDS)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1244,9 +1244,9 @@ int SearchLocation(Location *location)
 
   if (location == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -1267,7 +1267,7 @@ int SearchLocation(Location *location)
       }
       else
       {
-        RandomEnemyEncounter();
+        AddRandomEnemy(world[player.locationID]);
       }
       break;
     default:
@@ -1530,9 +1530,9 @@ void DescribeSituation(void)
       printf("You are in the palace of the queen of Quelacentus. ");
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       break;
   }
 

@@ -79,9 +79,9 @@ int UseItem(GameCharacter *pGC, int idNum)
 {
   if (pGC->inventory[idNum] < 1)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -99,9 +99,9 @@ int UseItem(GameCharacter *pGC, int idNum)
                                RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       return FAILURE;
   }
   pGC->inventory[idNum]--;
@@ -127,9 +127,9 @@ int PrintInventory(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return -1;
   }
 
@@ -197,9 +197,9 @@ int PrintItemName(int idNum)
       printf("Glowing Mushroom");
       break;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       printf("???");
       return FAILURE;
   }
@@ -253,9 +253,9 @@ int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount)
 {
   if (giver == NULL || receiver == NULL || giver->gold < amount)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -266,6 +266,38 @@ int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount)
          amount,
          receiver->name);
   FlushInput();
+
+  return SUCCESS;
+}
+
+/******************************************************************************
+   Function: AddItem
+
+Description: Adds a given item to a given game character's inventory.
+
+     Inputs: receiver - Pointer to the GC receiving the item.
+             itemID   - ID of the item to be added.
+
+    Outputs: SUCCESS or FAILURE.
+******************************************************************************/
+int AddItem(GameCharacter *receiver, int itemID)
+{
+  if (receiver == NULL)
+  {
+#ifdef DEBUG
+    ERROR_MESSAGE
+#endif
+    return FAILURE;
+  }
+
+  receiver->inventory[itemID]++;
+  if (receiver->ID == PLAYER)
+  {
+    printf("You discover: ");
+    PrintItemName(itemID);
+    printf("\n");
+    FlushInput();
+  }
 
   return SUCCESS;
 }
@@ -285,9 +317,9 @@ int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID)
 {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] <= 0)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -325,9 +357,9 @@ int GiveItems(GameCharacter *giver,
 {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] < amount)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -366,9 +398,9 @@ int ItemValue(int idNum)
     case GLOWING_MUSHROOM:
       return 20;
     default:
-      #ifdef DEBUG
+#ifdef DEBUG
       ERROR_MESSAGE
-      #endif
+#endif
       break;
   }
 

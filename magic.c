@@ -219,9 +219,9 @@ int SpellMenu(void)
       }
     }
       /* If we reach this point, the target was not found.                   */
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
       /* If the target was found, we will have jumped to the following line. */
     TargetFound:
@@ -319,9 +319,9 @@ int CastSpell(GameCharacter *spellcaster,
   spellLength = strlen(spell);
   if (spellcaster == NULL || numTargets == 0 || spellLength == 0)
   {
-    #ifdef DEBUG
+#ifdef DEBUG
     ERROR_MESSAGE
-    #endif
+#endif
     return FAILURE;
   }
 
@@ -636,6 +636,33 @@ int CastSpell(GameCharacter *spellcaster,
 }
 
 /******************************************************************************
+   Function: Targeted
+
+Description: Determines whether a given game character is contained within a
+             given array of targeted game characters.
+
+     Inputs: pGC       - Pointer to the game character of interest.
+             gcTargets - Array of pointers to targeted game characters (assumed
+                         to be of length MAX_TARGETS).
+
+    Outputs: TRUE or FALSE.
+******************************************************************************/
+int Targeted(GameCharacter *pGC, GameCharacter *gcTargets[])
+{
+  int i; /* for loop variable */
+
+  for (i = 0; i < MAX_TARGETS && gcTargets[i] != NULL; i++)
+  {
+    if (gcTargets[i] == pGC)
+    {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+/******************************************************************************
    Function: CanCastBeneficialSpells
 
 Description: Determines whether a given game character is capable of casting
@@ -648,21 +675,21 @@ Description: Determines whether a given game character is capable of casting
 ******************************************************************************/
 BOOL CanCastBeneficialSpells(GameCharacter *pGC)
 {
-  if (pGC->words[WORD_OF_BODY] == KNOWN ||
-      pGC->words[WORD_OF_MIND] == KNOWN ||
-      pGC->words[WORD_OF_FLORA] == KNOWN ||
-      pGC->words[WORD_OF_FAUNA] == KNOWN ||
-      pGC->words[WORD_OF_LIGHT] == KNOWN ||
-      pGC->words[WORD_OF_DARKNESS] == KNOWN ||
-      pGC->words[WORD_OF_HEALTH] == KNOWN ||
-      pGC->words[WORD_OF_LIFE] == KNOWN ||
-      pGC->words[WORD_OF_HOLINESS] == KNOWN ||
-      pGC->words[WORD_OF_EVIL] == KNOWN ||
-      pGC->words[WORD_OF_INCREASE] == KNOWN ||
-      pGC->words[WORD_OF_DECREASE] == KNOWN ||
+  if (pGC->words[WORD_OF_BODY]      == KNOWN ||
+      pGC->words[WORD_OF_MIND]      == KNOWN ||
+      pGC->words[WORD_OF_FLORA]     == KNOWN ||
+      pGC->words[WORD_OF_FAUNA]     == KNOWN ||
+      pGC->words[WORD_OF_LIGHT]     == KNOWN ||
+      pGC->words[WORD_OF_DARKNESS]  == KNOWN ||
+      pGC->words[WORD_OF_HEALTH]    == KNOWN ||
+      pGC->words[WORD_OF_LIFE]      == KNOWN ||
+      pGC->words[WORD_OF_HOLINESS]  == KNOWN ||
+      pGC->words[WORD_OF_EVIL]      == KNOWN ||
+      pGC->words[WORD_OF_INCREASE]  == KNOWN ||
+      pGC->words[WORD_OF_DECREASE]  == KNOWN ||
       pGC->words[WORD_OF_SHIELDING] == KNOWN ||
-      pGC->words[WORD_OF_TIME] == KNOWN ||
-      pGC->words[WORD_OF_VOID] == KNOWN)
+      pGC->words[WORD_OF_TIME]      == KNOWN ||
+      pGC->words[WORD_OF_VOID]      == KNOWN)
   {
     return TRUE;
   }
@@ -697,9 +724,9 @@ int PrintKnownWords(void)
         /* The word must have room for 2 more characters: '(' and ')'.       */
       if (wordLength >= (STR_LEN - 2))
       {
-        #ifdef DEBUG
+#ifdef DEBUG
         ERROR_MESSAGE
-        #endif
+#endif
         return wordsDisplayed;
       }
         /* Format the string, beginning at its end and working backwards.    */
@@ -808,9 +835,9 @@ char *Word(int idNum)
       break;
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return NULL;
 }
 
@@ -899,9 +926,9 @@ char *WordName(int idNum)
       break;
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return NULL;
 }
 
@@ -932,9 +959,9 @@ int WordID(char firstLetter)
     }
   }
 
-  #ifdef DEBUG
+#ifdef DEBUG
   ERROR_MESSAGE
-  #endif
+#endif
   return -1;
 }
 
