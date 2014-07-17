@@ -44,7 +44,7 @@ int ItemMenu(void)
   else
   {
     temp++;
-    printf("[%d] Cancel (go back to previous menu)\n", temp);
+    printf("[%d] Cancel (return to previous menu)\n", temp);
     GetIntInput(&iInput, 1, temp);
     temp = 0;
     for (i = 0; i < TOTAL_ITEM_IDS; i++)

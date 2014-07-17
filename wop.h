@@ -225,7 +225,9 @@ typedef struct LOCATION
   struct GAME_CHARACTER *inhabitants;  /* Linked list of local NPCs.         */
 }Location;
 
-  /* Function prototypes.                                                    */
+  /* Function prototypes for "main.c"                                        */
+int main(void);
+void PrintParagraph(char *paragraph);
 void MainMenu(void);
 void PrintStandardOptions(void);
 int CreateWorld(void);
@@ -239,6 +241,8 @@ int GetIntInput(int *i, int low, int high);
 char *GetStrInput(char *string, int n);
 BOOL StrContains(char string[], char c);
 void FlushInput(void);
+
+  /* Function prototypes for "locations.c"                                   */
 int InitializeLocation(Location *location, int idNum);
 BOOL InVentarrisTerritory(Location *location);
 GameCharacter *AddInhabitant(Location *location, int idNum);
@@ -252,6 +256,8 @@ int MovementMenu(void);
 int MovePlayer(int destinationID);
 int SearchLocation(Location *location);
 void DescribeSituation(void);
+
+  /* Function prototypes for "characters.c"                                  */
 int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location);
 int AddCompanion(GameCharacter *companion);
 int RemoveCompanion(GameCharacter *companion);
@@ -278,6 +284,8 @@ int GainExperience(int amount);
 void LevelUp(void);
 void LearnLanguage(int langID);
 void LearnWord(int wordID);
+
+  /* Function prototypes for "combat.c"                                      */
 int AddEnemy(GameCharacter *pGC);
 int AddRandomEnemy(Location *location);
 int RemoveEnemy(GameCharacter *pGC);
@@ -292,6 +300,8 @@ int Attack(GameCharacter *attacker, GameCharacter *defender);
 BOOL WillingToFight(GameCharacter *pGC);
 BOOL WillingToFlee(GameCharacter *pGC);
 BOOL WillingToHelp(GameCharacter *pGC);
+
+  /* Function prototypes for "dialogue.c"                                    */
 int TalkMenu(void);
 int Dialogue(GameCharacter *pGC);
 int LanguageLearningDialogue(GameCharacter *pGC);
@@ -299,6 +309,8 @@ int WordLearningDialogue(GameCharacter *pGC);
 double GetPriceModifier(GameCharacter *merchant);
 int Transaction(GameCharacter *merchant, int price);
 char *LanguageName(int idNum);
+
+  /* Function prototypes for "magic.c"                                       */
 int SpellMenu(void);
 int CastSpell(GameCharacter *spellcaster,
               char *spell,
@@ -311,6 +323,8 @@ char *WordStartingWith(char firstLetter);
 char *WordName(int idNum);
 int WordID(char firstLetter);
 BOOL IsSpellcaster(GameCharacter *pGC);
+
+  /* Function prototypes for "item.c"                                        */
 int ItemMenu(void);
 int UseItem(GameCharacter *pGC, int idNum);
 int PrintInventory(GameCharacter *pGC);
@@ -322,6 +336,7 @@ int GiveItems(GameCharacter *giver,
               GameCharacter *receiver,
               int itemID,
               int amount);
+int ItemValue(int idNum);
 
   /* Global variables.                                                       */
 Location *world[TOTAL_LOCATION_IDS];      /* Pointers to all game locations. */

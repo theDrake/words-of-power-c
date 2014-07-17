@@ -54,15 +54,16 @@ int main(void)
 }
 
 /******************************************************************************
-   Function: Print
+   Function: PrintParagraph
 
-Description: Prints a given string.
+Description: Prints a given string according to the maximum characters per
+             line, then prints two new line characters to provide spacing.
 
-     Inputs: outputString - The string to be printed.
+     Inputs: paragraph - The string to be printed.
 
     Outputs: None.
 ******************************************************************************/
-void Print(char *outputString)
+void PrintParagraph(char *paragraph)
 {
 
 }
@@ -439,7 +440,7 @@ Description: Randomly returns a boolean value.
 ******************************************************************************/
 int RandomBool(void)
 {
-  return RandomInt(FALSE, TRUE);
+  return rand() % 2;
 }
 
 /******************************************************************************
