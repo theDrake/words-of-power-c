@@ -32,11 +32,11 @@ int SpellMenu(void)
   GameCharacter *pGC;            /* To search through linked lists of GCs.   */
   GameCharacter *gcTargets[MAX_TARGETS]; /* GC targets (if any).             */
 
-    /* --STATUS CHECK -- */
+    /* --STATUS CHECK-- */
 
   if (player.status[SILENCED])
   {
-    printf("You have been silenced and thus cannot cast spells at this time."
+    printf("You have been silenced and cannot cast spells at this time."
            "\n");
     FlushInput();
     return FAILURE;
@@ -226,6 +226,7 @@ int SpellMenu(void)
       /* If the target was found, we will have jumped to the following line. */
     TargetFound:
     numTargets++;
+    repeatOptions = FALSE;
 
       /* Check for remaining legal targets.                                  */
     /*temp = 0;
