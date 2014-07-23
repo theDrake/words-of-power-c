@@ -103,26 +103,6 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
           printf("Invalid name.\n\n");
           repeatOptions = TRUE;
         }
-        else
-        {
-          do
-          {
-            repeatOptions = FALSE;
-            printf("You have chosen the name %s.\n"
-                   "[S]tart playing\n"
-                   "[C]hoose a different name\n", pGC->name);
-            GetCharInput(&cInput);
-            if (cInput != 'C' && cInput != 'S')
-            {
-              printf("Invalid response.\n\n");
-              repeatOptions = TRUE;
-            }
-          }while (repeatOptions);
-          if (cInput == 'C')
-          {
-            repeatOptions = TRUE;
-          }
-        }
       }while (repeatOptions);
       break;
     case ARCHWIZARD_OF_ELEMENTS:

@@ -1603,6 +1603,9 @@ void DescribeSituation(void)
     printf("You are being attacked!\n");
     FlushInput();
     Combat();
-    DescribeSituation();
+    if (worldExists)
+    {
+      DescribeSituation();
+    }
   }
 }
