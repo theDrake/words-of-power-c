@@ -508,7 +508,7 @@ int Combat(void)
                "[C]ast a Spell\n"
                "[U]se an Item\n"
                "[F]lee\n"
-               "[Q]uit\n");
+               "[Q]uit (Return to Main Menu)\n");
         GetCharInput(&cInput);
         switch (cInput)
         {
@@ -557,8 +557,14 @@ int Combat(void)
             }
             break;
           case 'Q': /* Quit */
-            QuitMenu();
-            repeatOptions = TRUE;
+            if (GetExitConfirmation())
+            {
+              return 0;
+            }
+            else
+            {
+              repeatOptions = TRUE;
+            }
             break;
           default:
             printf("Invalid response.\n\n");
@@ -566,7 +572,7 @@ int Combat(void)
             break;
         }
       }while (repeatOptions);
-      StatusCheck();
+      CheckStatus();
 
         /* Increment "round" here if the NPCs had the initiative.            */
       if (!playerFirst)
@@ -581,7 +587,7 @@ int Combat(void)
       EnemyAI(i);
     }
     printf("\n");
-    StatusCheck();
+    CheckStatus();
 
       /* Increment "round" here if the player had the initiative.            */
     if (playerFirst)

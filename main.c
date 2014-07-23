@@ -6,8 +6,8 @@
 Description: Main C file for "Words of Power": a text-based fantasy RPG
              emphasizing verbal spell-casting through the use of magic words.
 
-  Functions: main, Print, MainMenu, PrintStandardOptions, CreateWorld,
-             DestroyWorld, QuitMenu, HelpMenu, RandomInt, RandomBool,
+  Functions: main, PrintParagraph, MainMenu, PrintStandardOptions, CreateWorld,
+             DestroyWorld, GetExitConfirmation, RandomInt, RandomBool,
              GetCharInput, GetIntInput, GetStrInput, StrContains, FlushInput
 ******************************************************************************/
 
@@ -26,29 +26,34 @@ int main(void)
 {
   srand(time(0));
   worldExists = FALSE;
+  quit = FALSE;
 
   printf(
-"\nWelcome to \"Words of Power\": a fantasy RPG developed by David C. Drake "
-"(www.davidcdrake.com)\n"
+"\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed and programmed"
+" by \nDavid C. Drake (www.davidcdrake.com)!\n\n"
         );
-  FlushInput();
 
-  MainMenu();
-  while (worldExists && !quit)
+  while (!quit)
   {
-    StatusCheck();
-    DescribeSituation();
-    PrintStandardOptions();
+    if (!worldExists)
+    {
+      MainMenu();
+    }
+    else
+    {
+      CheckStatus();
+      DescribeSituation();
+      PrintStandardOptions();
+    }
   }
-
-#ifdef DEBUG
-  printf("End of main reached.\n\n");
-#endif
   if (worldExists)
   {
     DestroyWorld();
   }
   printf("Farewell!\n");
+#ifdef DEBUG
+  printf("End of main reached.\n");
+#endif
 
   return 0;
 }
@@ -65,7 +70,7 @@ Description: Prints a given string according to the maximum characters per
 ******************************************************************************/
 void PrintParagraph(char *paragraph)
 {
-
+  printf(paragraph);
 }
 
 /******************************************************************************
@@ -87,7 +92,7 @@ void MainMenu(void)
     repeatOptions = FALSE;
     printf("Main Menu:\n"
            "[N]ew Game\n"
-           "[A]bout Words of Power...\n"
+           "[L]oad Game\n"
            "[Q]uit\n");
     GetCharInput(&cInput);
     switch (cInput)
@@ -100,17 +105,20 @@ void MainMenu(void)
         CreateWorld();
         InitializeCharacter(&player, PLAYER, world[ILLARUM_SCHOOL]);
         break;
-      case 'A':
-        /*AboutWordsOfPower();*/
-        repeatOptions = TRUE;
+      case 'L': /* Load Game */
+        if (worldExists)
+        {
+          DestroyWorld();
+        }
+        /*LoadGame();*/
+        printf("Sorry, no save files found.\n\n");
         break;
       case 'Q': /* Quit */
         if (worldExists)
         {
           DestroyWorld();
         }
-        printf("Farewell!\n");
-        exit(0);
+        quit = TRUE;
         break;
       default:
         printf("Invalid response.\n\n");
@@ -145,12 +153,12 @@ void PrintStandardOptions(void)
     printf("What do you want to do?\n"
            "[T]alk\n"
            "[S]earch\n"
-           "[C]ast a Spell\n"
            "[U]se an Item\n"
+           "[C]ast a Spell\n"
            "[A]ttack\n"
-           "[V]iew My Status\n"
+           "[V]iew Inventory and Status\n"
            "[M]ove to Another Location\n"
-           "[Q]uit\n");
+           "[Q]uit (Return to Main Menu)\n");
     GetCharInput(&cInput);
     switch (cInput)
     {
@@ -166,14 +174,14 @@ void PrintStandardOptions(void)
           repeatOptions = TRUE;
         }
         break;
-      case 'C': /* Cast a Spell */
-        if (SpellMenu() == FAILURE)
+      case 'U': /* Use an Item */
+        if (ItemMenu() == FAILURE)
         {
           repeatOptions = TRUE;
         }
         break;
-      case 'U': /* Use an Item */
-        if (ItemMenu() == FAILURE)
+      case 'C': /* Cast a Spell */
+        if (SpellMenu() == FAILURE)
         {
           repeatOptions = TRUE;
         }
@@ -190,17 +198,15 @@ void PrintStandardOptions(void)
           repeatOptions = TRUE;
         }
         break;
-      case 'V': /* View Character Data */
+      case 'V': /* View Inventory and Status */
         DisplayCharacterData(&player);
         repeatOptions = TRUE;
         break;
-      /*case 'H': /* Help *//*
-        HelpMenu();
-        repeatOptions = TRUE;
-        break;*/
       case 'Q': /* Quit */
-        QuitMenu();
-        repeatOptions = TRUE;
+        if (GetExitConfirmation() == FALSE)
+        {
+          repeatOptions = TRUE;
+        }
         break;
       default:
         printf("Invalid response.\n\n");
@@ -278,7 +284,6 @@ int CreateWorld(void)
 
     /* Initialize remaining global variables.                                */
   secretsFound = 0;
-  quit = FALSE;
   worldExists = TRUE;
 
   return errors;
@@ -354,50 +359,38 @@ int DestroyWorld(void)
 }
 
 /******************************************************************************
-   Function: QuitMenu
+   Function: GetExitConfirmation
 
-Description: Asks for confirmation of intent to quit. If confirmed, memory is
-             deallocated as needed via "DestroyWorld()", then the program is
-             terminated.
+Description: Asks for confirmation of intent to exit to the main menu. If
+             confirmed, memory is freed via DestroyWorld.
 
      Inputs: None.
 
-    Outputs: None.
+    Outputs: TRUE if the player confirms they want to exit to the main menu.
 ******************************************************************************/
-void QuitMenu(void)
+BOOL GetExitConfirmation(void)
 {
   char cInput;
 
   do
   {
-    printf("Are you sure you want to quit? (Y/N) ");
+    printf(
+"Are you sure you want to exit to the main menu (and lose any unsaved data)? "
+"\n(Y/N) "
+          );
     GetCharInput(&cInput);
     if (cInput == 'Y')
     {
       DestroyWorld();
-      printf("\nThanks for playing!\n");
-      exit(0);
+      return TRUE;
     }
     else if (cInput != 'N')
     {
       printf("Invalid response.\n\n");
     }
-  }while (cInput != 'N');
-}
+  }while (cInput != 'N' && cInput != 'Y');
 
-/******************************************************************************
-   Function: HelpMenu
-
-Description: Provides information about how to play the game.
-
-     Inputs: None.
-
-    Outputs: None.
-******************************************************************************/
-void HelpMenu(void)
-{
-  printf("Sorry, I can't help you right now! :)\n");
-  FlushInput();
+  return FALSE;
 }
 
 /******************************************************************************

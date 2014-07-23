@@ -2144,7 +2144,7 @@ int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
 }
 
 /******************************************************************************
-   Function: StatusCheck
+   Function: CheckStatus
 
 Description: Checks player's HP and status to see if anything needs to be
              adjusted or reported.
@@ -2153,7 +2153,7 @@ Description: Checks player's HP and status to see if anything needs to be
 
     Outputs: None.
 ******************************************************************************/
-void StatusCheck(void)
+void CheckStatus(void)
 {
   int i;  /* for loop variable */
 
