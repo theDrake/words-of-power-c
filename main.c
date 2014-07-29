@@ -6,7 +6,7 @@
 Description: Main C file for "Words of Power": a text-based fantasy RPG
              emphasizing verbal spell-casting through the use of magic words.
 
-  Functions: main, PrintParagraph, MainMenu, PrintStandardOptions, CreateWorld,
+  Functions: main, PrintString, MainMenu, PrintStandardOptions, CreateWorld,
              DestroyWorld, GetExitConfirmation, RandomInt, RandomBool,
              GetCharInput, GetIntInput, GetStrInput, StrContains, FlushInput
 ******************************************************************************/
@@ -59,18 +59,30 @@ int main(void)
 }
 
 /******************************************************************************
-   Function: PrintParagraph
+   Function: PrintString
 
 Description: Prints a given string according to the maximum characters per
              line, then prints two new line characters to provide spacing.
 
-     Inputs: paragraph - The string to be printed.
+     Inputs: str - The string to be printed.
 
     Outputs: None.
 ******************************************************************************/
-void PrintParagraph(char *paragraph)
+void PrintString(char *str)
 {
-  printf(paragraph);
+  int i, current_line_length = 0;
+
+  for (i = 0; str[i] != '\0'; i++)
+  {
+    if (current_line_length == MAX_LINE_LENGTH)
+    {
+      printf('\n');
+      current_line_length = 0;
+    }
+    printf(str[i]);
+    current_line_length++;
+  }
+  printf("\n\n");
 }
 
 /******************************************************************************

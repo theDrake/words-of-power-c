@@ -227,7 +227,7 @@ typedef struct LOCATION
 
   /* Function prototypes for "main.c"                                        */
 int main(void);
-void PrintParagraph(char *paragraph);
+void PrintString(char *str);
 void MainMenu(void);
 void PrintStandardOptions(void);
 int CreateWorld(void);
