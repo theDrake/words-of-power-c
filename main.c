@@ -29,7 +29,7 @@ int main(void)
   quit = FALSE;
 
   PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
-              "and programmed by David C. Drake (www.davidcdrake.com)!\n\n\0");
+              "and programmed by David C. Drake (www.davidcdrake.com)!\0");
 
   while (!quit)
   {
@@ -60,7 +60,8 @@ int main(void)
    Function: PrintString
 
 Description: Prints a given string according to the maximum characters per
-             line. Assumes the string is NULL-terminated and contains no tabs.
+             line, followed by two new line characters for spacing. (Assumes
+             the string is NULL-terminated and contains no tabs.)
 
      Inputs: str - The string to be printed, which must be NULL-terminated.
 
@@ -68,42 +69,59 @@ Description: Prints a given string according to the maximum characters per
 ******************************************************************************/
 void PrintString(char *str)
 {
-  int i, last_whitespace_index = 0, current_line_length = 0;
+  int i, last_blank_space_index = 0, current_line_length = 0;
   char current_line[MAX_LINE_LENGTH + 1];
 
   for (i = 0; str[i] != '\0'; i++)
   {
     current_line[current_line_length] = str[i];
+    current_line[current_line_length + 1] = '\0';
     current_line_length++;
 
-    /* Check for relevant whitespace.                                        */
-    if (str[i] == ' ' || str[i] == '\n')
+    /* Check for a blank space.                                              */
+    if (str[i] == ' ')
     {
-      last_whitespace_index = i;
+      last_blank_space_index = i;
     }
 
-    /* Check for the end of a line or the end of the input string.           */
-    if (current_line_length == MAX_LINE_LENGTH ||
-        str[i] == '\n'                         ||
-        str[i + 1] == '\0')
+    /* If a new line character is encountered, print the current line.       */
+    if (str[i] == '\n')
     {
-      /*
-       * Add a new line character at the most recent whitespace, followed by a
-       * NULL-terminator.
-       */
-      current_line_length -= i - last_whitespace_index + 1;
-      current_line[current_line_length] = '\n';
-      current_line[current_line_length + 1] = '\0';
-
-      /* Print the current line.                                             */
       printf("%s", current_line);
-
-      /* Reset relevant variables.                                           */
-      i = last_whitespace_index;
-      last_whitespace_index = 0;
+      last_blank_space_index = 0;
       current_line_length = 0;
     }
+
+    /* Check for maximum line length.                                        */
+    else if (current_line_length == MAX_LINE_LENGTH - 1)
+    {
+      /* Check for a line with no blank spaces.                              */
+      if (last_blank_space_index == 0)
+      {
+        printf("%s\n", current_line);
+      }
+
+      /* If there was a space, trim the line to the most recent blank space. */
+      else
+      {
+        current_line[current_line_length - i - last_blank_space_index] = '\0';
+        printf("%s\n", current_line);
+        i = last_blank_space_index;
+        last_blank_space_index = 0;
+      }
+
+      current_line_length = 0;
+    }
+
+    /* If we're at the end of the input string, print the line plus a '\n'.  */
+    else if (str[i + 1] == '\0')
+    {
+      printf("%s\n", current_line);
+    }
   }
+
+  /* Print another new line character for spacing.                           */
+  printf("\n");
 }
 
 /******************************************************************************
