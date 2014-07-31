@@ -97,7 +97,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       {
         repeatOptions = FALSE;
         printf("Choose a name for your character: ");
-        GetStrInput(pGC->name, STR_LEN + 1);
+        GetStrInput(pGC->name, SHORT_STR_LEN + 1);
         if (strlen(pGC->name) < 1 || isalnum(pGC->name[0]) == FALSE)
         {
           printf("Invalid name.\n\n");
@@ -2061,7 +2061,7 @@ Description: Prints the plural form of a given game character's generic
 int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
 {
   int nameLength;
-  char gcName[STR_LEN + 1];
+  char gcName[SHORT_STR_LEN + 1];
 
   if (pGC == NULL)
   {
@@ -2103,7 +2103,7 @@ int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
     default: /* Simply adds "s" to the end of a game character's descriptor. */
       strcpy(gcName, pGC->descriptor);
       nameLength = strlen(gcName);
-      if (nameLength >= STR_LEN - 1) /* Must have room for 's'.              */
+      if (nameLength >= SHORT_STR_LEN - 1) /* Must have room for 's'.        */
       {
 #ifdef DEBUG
         ERROR_MESSAGE

@@ -28,10 +28,8 @@ int main(void)
   worldExists = FALSE;
   quit = FALSE;
 
-  printf(
-"\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed and programmed"
-" by \nDavid C. Drake (www.davidcdrake.com)!\n\n"
-        );
+  PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
+              "and programmed by David C. Drake (www.davidcdrake.com)!\n\n\0");
 
   while (!quit)
   {
@@ -62,27 +60,50 @@ int main(void)
    Function: PrintString
 
 Description: Prints a given string according to the maximum characters per
-             line, then prints two new line characters to provide spacing.
+             line. Assumes the string is NULL-terminated and contains no tabs.
 
-     Inputs: str - The string to be printed.
+     Inputs: str - The string to be printed, which must be NULL-terminated.
 
     Outputs: None.
 ******************************************************************************/
 void PrintString(char *str)
 {
-  int i, current_line_length = 0;
+  int i, last_whitespace_index = 0, current_line_length = 0;
+  char current_line[MAX_LINE_LENGTH + 1];
 
   for (i = 0; str[i] != '\0'; i++)
   {
-    if (current_line_length == MAX_LINE_LENGTH)
+    current_line[current_line_length] = str[i];
+    current_line_length++;
+
+    /* Check for relevant whitespace.                                        */
+    if (str[i] == ' ' || str[i] == '\n')
     {
-      printf('\n');
+      last_whitespace_index = i;
+    }
+
+    /* Check for the end of a line or the end of the input string.           */
+    if (current_line_length == MAX_LINE_LENGTH ||
+        str[i] == '\n'                         ||
+        str[i + 1] == '\0')
+    {
+      /*
+       * Add a new line character at the most recent whitespace, followed by a
+       * NULL-terminator.
+       */
+      current_line_length -= i - last_whitespace_index + 1;
+      current_line[current_line_length] = '\n';
+      current_line[current_line_length + 1] = '\0';
+
+      /* Print the current line.                                             */
+      printf("%s", current_line);
+
+      /* Reset relevant variables.                                           */
+      i = last_whitespace_index;
+      last_whitespace_index = 0;
       current_line_length = 0;
     }
-    printf(str[i]);
-    current_line_length++;
   }
-  printf("\n\n");
 }
 
 /******************************************************************************
@@ -523,7 +544,8 @@ Description: Takes in a string of one or more characters entered by the user.
 
      Inputs: string - Pointer to the array of characters that will store input.
              n      - Maximum number of characters to read in (if greater than
-                      STR_LEN or negative, it will be set to STR_LEN).
+                      SHORT_STR_LEN or negative, it will be set to
+                      SHORT_STR_LEN).
 
     Outputs: Returns a pointer to string where the input is stored.
 ******************************************************************************/
@@ -531,14 +553,14 @@ char *GetStrInput(char *string, int n)
 {
   int length;  /* To store the input string's length.                        */
 
-  if (n < 0 || n > (STR_LEN + 1))
+  if (n < 0 || n > (SHORT_STR_LEN + 1))
   {
 #ifdef DEBUG
     ERROR_MESSAGE
 #endif
-    if (n > STR_LEN)
+    if (n > SHORT_STR_LEN)
     {
-      n = STR_LEN;
+      n = SHORT_STR_LEN;
     }
   }
   fgets(string, n, stdin);

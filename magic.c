@@ -710,10 +710,10 @@ Description: Displays each Word of Power the player knows in the following
 ******************************************************************************/
 int PrintKnownWords(void)
 {
-  int i, j;               /* for loop variables                              */
-  int wordsDisplayed = 0; /* Number of Words displayed.                      */
-  int wordLength;         /* To store the length of each unformatted Word.   */
-  char word[STR_LEN + 1]; /* To store, format, and print each Word.          */
+  int i, j;                     /* for loop variables                        */
+  int wordsDisplayed = 0;       /* Number of Words displayed.                */
+  int wordLength;               /* To store the unformatted length of Words. */
+  char word[SHORT_STR_LEN + 1]; /* To store, format, and print each Word.    */
 
   for (i = 0; i < TOTAL_WORD_IDS; i++)
   {
@@ -723,7 +723,7 @@ int PrintKnownWords(void)
       wordLength = strlen(word);
 
         /* The word must have room for 2 more characters: '(' and ')'.       */
-      if (wordLength >= (STR_LEN - 2))
+      if (wordLength >= (SHORT_STR_LEN - 2))
       {
 #ifdef DEBUG
         ERROR_MESSAGE

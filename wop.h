@@ -15,7 +15,7 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #include <ctype.h>  /* toupper, isalnum                                      */
 #include <string.h> /* strlen, strcpy, strcmp                                */
 
-#define DEBUG 1
+//#define DEBUG
 #define ERROR_MESSAGE printf("Error: line %d\n", __LINE__); FlushInput();
 
 #define BOOL  int
@@ -28,7 +28,12 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define UPPERCASE 1
 #define LOWERCASE 0
 
-#define STR_LEN 100
+  /* String length constants.                                                */
+#define SHORT_STR_LEN   50
+#define LONG_STR_LEN    500
+
+  /* Maximum characters per line, including new line character.              */
+#define MAX_LINE_LENGTH 80
 
   /* Maximum number of enemies per battle.                                   */
 #define MAX_ENEMIES 100
@@ -187,9 +192,9 @@ enum Knowledge
 typedef struct GAME_CHARACTER
 {
   int ID;
-  BOOL unique;                  /* FALSE for generic humans, goblins, etc.   */
-  char name[STR_LEN + 1];       /* Capitalized, even for generic characters. */
-  char descriptor[STR_LEN + 1]; /* Brief and generic description.            */
+  BOOL unique;                        /* FALSE for generic NPCs.             */
+  char name[SHORT_STR_LEN + 1];       /* Capitalized, even for generic NPCs. */
+  char descriptor[SHORT_STR_LEN + 1]; /* Brief and generic description.      */
   int level;
   int experience;    /* "Total exp." for player; "exp. obtainable" for NPCs. */
   int maxHP;
@@ -218,7 +223,7 @@ typedef struct GAME_CHARACTER
 typedef struct LOCATION
 {
   int ID;
-  char name[STR_LEN + 1];
+  char name[SHORT_STR_LEN + 1];
   BOOL hidden;  /* If TRUE, special effort is required to find the location. */
   int visits;   /* Number of times player has visited the location.          */
   int searches; /* Number of times player has searched the location.         */
