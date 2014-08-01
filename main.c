@@ -49,7 +49,7 @@ int main(void)
     DestroyWorld();
   }
   printf("Farewell!\n");
-#ifdef DEBUG
+#if DEBUG
   printf("End of main reached.\n");
 #endif
 
@@ -60,8 +60,8 @@ int main(void)
    Function: PrintString
 
 Description: Prints a given string according to the maximum characters per
-             line, followed by two new line characters for spacing. (Assumes
-             the string is NULL-terminated and contains no tabs.)
+             line, followed by a new line character. (Assumes the string is
+             NULL-terminated and contains no tabs.)
 
      Inputs: str - The string to be printed, which must be NULL-terminated.
 
@@ -119,9 +119,6 @@ void PrintString(char *str)
       printf("%s\n", current_line);
     }
   }
-
-  /* Print another new line character for spacing.                           */
-  printf("\n");
 }
 
 /******************************************************************************
@@ -284,14 +281,14 @@ int CreateWorld(void)
   int i;          /* for loop variable                                       */
   int errors = 0; /* The number of failed location initializations.          */
 
-#ifdef DEBUG
+#if DEBUG
   printf("Creating world...\n\n");
 #endif
 
     /* If a game world already exists in memory, destroy it.                 */
   if (worldExists)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     errors++;
@@ -308,7 +305,7 @@ int CreateWorld(void)
     }
     else
     {
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       exit(1);
@@ -358,13 +355,13 @@ int DestroyWorld(void)
 
   if (worldExists == FALSE)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     errors++;
   }
 
-#ifdef DEBUG
+#if DEBUG
   printf("Destroying world...\n\n");
 #endif
 
@@ -465,7 +462,7 @@ int RandomInt(int low, int high)
     temp = low;
     low = high;
     high = temp;
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
   }
@@ -532,7 +529,7 @@ int GetIntInput(int *i, int low, int high)
     temp = low;
     low = high;
     high = temp;
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
   }
@@ -573,7 +570,7 @@ char *GetStrInput(char *string, int n)
 
   if (n < 0 || n > (SHORT_STR_LEN + 1))
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     if (n > SHORT_STR_LEN)

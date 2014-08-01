@@ -37,7 +37,7 @@ int TalkMenu(void)
     /* Potential targets are displayed (unless only one is available).       */
   if (VisibleInhabitants(world[player.locationID]) == 0)
   {
-    printf("There is no one to speak with here.\n");
+    PrintString("There is no one to speak with here.");
     FlushInput();
     return FAILURE;
   }
@@ -55,7 +55,7 @@ int TalkMenu(void)
   }
   else  /* Multiple visible inhabitants to choose from.                      */
   {
-    printf("With whom do you wish to speak?\n");
+    PrintString("With whom do you wish to speak?");
     for (target = world[player.locationID]->inhabitants;
          target != NULL;
          target = target->next)
@@ -102,7 +102,7 @@ int TalkMenu(void)
     }
   }
 
-#ifdef DEBUG
+#if DEBUG
   ERROR_MESSAGE
 #endif
   return FAILURE;
@@ -125,10 +125,11 @@ int Dialogue(GameCharacter *pGC)
   int iInput;
   BOOL repeatOptions;
   BOOL canCommunicate;  /* TRUE if a shared language can be found.           */
+  char output[LONG_STR_LEN] = "";
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -146,11 +147,11 @@ int Dialogue(GameCharacter *pGC)
   }
   if (canCommunicate == FALSE)
   {
-    printf(
-"All your attempts at communication have failed. It appears that you and \n"
-    );
-    PrintNameDefinite(pGC, FALSE);
-    printf(" do not share a common language.\n");
+    sprintf(output,
+            "All your attempts at communication have failed. It appears that "
+            "you and %s do not share a common language.",
+            GetNameDefinite(pGC, FALSE));
+    PrintString(output);
     FlushInput();
     return SUCCESS; /* Although they can't talk, no error has occurred.      */
   }
@@ -165,21 +166,22 @@ int Dialogue(GameCharacter *pGC)
     case ARCHWIZARD_OF_ELEMENTS:
       if (pGC->conversations == 1)  /* Indicates a new game: offer tutorial. */
       {
-        printf(
-"%s: \"Good morning, %s, and congratulations!\"\n",
-               pGC->name,
-               player.name);
+        sprintf(output,
+                "%s: \"Good morning, %s, and congratulations!\"\n",
+                pGC->name,
+                player.name);
+        PrintString(output);
         FlushInput();
-        printf(
-"%s: \"You have finally mastered the subtle art of projecting \n"
-"your will through Words of Power. We have entrusted you with knowledge of \n"
-"the four elemental Words of Power -- the Words of Air, Water, Earth, and \n"
-"Fire -- and through these you have demonstrated the potential to become a \n"
+        sprintf(output,
+                "%s: \"You have mastered the art of projecting your will "
+                "through the four elemental Words of Power: the Words of Air, "
+                "Water, Earth, and Fire. -- and through these you have demonstrated the potential to become a \n"
 "truly great wizard.\"\n",
-              pGC->name);
+                pGC->name);
+        PrintString(output);
         FlushInput();
-        printf(
-"%s: \"As such, I have decided not only to declare you a \n"
+        sprintf(output,
+                "%s: \"As such, I have decided not only to declare you a \n"
 "graduate of the School of the Elements, but also to offer you employment as\n"
 "an agent of the Elemental Wizards' Guild. In fact, I already have a task in\n"
 "mind for you. Before discussing the details, however, would you like an\n"
@@ -473,7 +475,7 @@ int LanguageLearningDialogue(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -548,7 +550,7 @@ int WordLearningDialogue(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -623,7 +625,7 @@ int MerchantDialogue(GameCharacter *merchant)
 
   if (merchant == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -736,7 +738,7 @@ int Transaction(GameCharacter *merchant, int price)
 
   if (merchant == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -810,7 +812,7 @@ char *LanguageName(int idNum)
       break;
   }
 
-#ifdef DEBUG
+#if DEBUG
   ERROR_MESSAGE
 #endif
   return NULL;

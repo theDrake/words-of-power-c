@@ -25,7 +25,7 @@ int AddEnemy(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -42,7 +42,7 @@ int AddEnemy(GameCharacter *pGC)
   }
 
     /* If we reach this point, "enemyNPCs" was full and the add failed.      */
-#ifdef DEBUG
+#if DEBUG
   ERROR_MESSAGE
 #endif
   return FAILURE;
@@ -66,7 +66,7 @@ int AddRandomEnemy(Location *location)
 
   if (location == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -290,7 +290,7 @@ int AddRandomEnemy(Location *location)
       newEnemy = AddInhabitant(location, MERFOLK_SOLDIER);
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       break;
@@ -321,7 +321,7 @@ int RemoveEnemy(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -347,7 +347,7 @@ int RemoveEnemy(GameCharacter *pGC)
   }
 
     /* If we reach this point, "pGC" was not found.                          */
-#ifdef DEBUG
+#if DEBUG
   ERROR_MESSAGE
 #endif
   return FAILURE;
@@ -372,7 +372,7 @@ int DeleteEnemy(GameCharacter *pGC)
   }
   else
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -415,7 +415,7 @@ int VisibleEnemies(void)
 
   if (player.status[IN_COMBAT] == FALSE)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return count;
@@ -455,7 +455,7 @@ int Combat(void)
 
   if (NumberOfEnemies() == 0)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return 0;
@@ -466,10 +466,9 @@ int Combat(void)
 
   do
   {
-    printf(
-"  ____________\n"
-"_/ENEMY STATS \\___________________________________________________________\n"
-    );
+    printf("  ____________\n"
+           "_/ENEMY STATS \\__________________________________________________"
+           "______________\n");
     for (i = 0; i < MAX_ENEMIES; i++)
     {
       if (enemyNPCs[i] == NULL)
@@ -483,10 +482,9 @@ int Combat(void)
         PrintCombatStatus(enemyNPCs[i]->summonedCreature);
       }
     }
-    printf(
-"  ____________\n"
-"_/PLAYER STATS\\___________________________________________________________\n"
-    );
+    printf("  ____________\n"
+           "_/PLAYER STATS\\__________________________________________________"
+           "______________\n");
     for (pGC = &player; pGC != NULL; pGC = pGC->next)
     {
       PrintCombatStatus(pGC);
@@ -533,8 +531,7 @@ int Combat(void)
           case 'F': /* Flee */
             if (enemyNPCs[0]->ID == DUMMY)  /*Indicates tutorial mode.       */
             {
-              printf("%s: \"Um...why are you backing away? Just destroy the "
-                     "dummy already!\"\n",
+              printf("%s: \"Come on, destroy the dummy already!\"\n",
                      FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
               FlushInput();
               repeatOptions = TRUE;
@@ -614,7 +611,7 @@ void PrintCombatStatus(GameCharacter *pGC)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return;
@@ -643,7 +640,7 @@ int EnemyAI(int index)
 
   if (enemyNPCs[index] == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -743,10 +740,8 @@ int AttackMenu(void)
 
   if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY)
   {
-    printf("%s: \"This isn't a training camp for soldiers, %s, and you're a "
-           "wizard, not a warrior. Why rely on physical attacks when you can "
-           "cast spells?\"\n", FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name,
-           player.name);
+    printf("%s: \"You're a wizard, not a warrior. Cast a spell!\"\n",
+           FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
     FlushInput();
     return FAILURE;
   }
@@ -907,7 +902,7 @@ int AttackMenu(void)
     }
   }
 
-#ifdef DEBUG
+#if DEBUG
   ERROR_MESSAGE
 #endif
   return FAILURE;
@@ -929,7 +924,7 @@ int Attack(GameCharacter *attacker, GameCharacter *defender)
 
   if (attacker == NULL || defender == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;

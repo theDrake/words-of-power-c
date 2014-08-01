@@ -342,7 +342,7 @@ int InitializeLocation(Location *location, int idNum)
       AddInhabitants(location, MERFOLK_SOLDIER, RandomInt(3, 6));
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       return FAILURE;
@@ -406,7 +406,7 @@ GameCharacter *AddInhabitant(Location *location, int idNum)
 
   if (location == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
   }
@@ -432,7 +432,7 @@ GameCharacter *AddInhabitant(Location *location, int idNum)
     }
     else
     {
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       exit(1);
@@ -514,7 +514,7 @@ int MoveInhabitant(GameCharacter *inhabitant, int destinationID)
       destinationID < 0 ||
       destinationID >= TOTAL_LOCATION_IDS)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -580,7 +580,7 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant)
 
   if (location == NULL || inhabitant == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -605,7 +605,7 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant)
   }
   if (pGC1 == NULL) /* If true, "inhabitant" was not found.                  */
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -631,7 +631,7 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
 
   if (location == NULL || inhabitant == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -678,7 +678,7 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
   }while (pGC1 != NULL);
 
     /* If we reach this point, "inhabitant" was not found.                   */
-#ifdef DEBUG
+#if DEBUG
   ERROR_MESSAGE
 #endif
   return FAILURE;
@@ -700,7 +700,7 @@ int VisibleInhabitants(Location *location)
 
   if (location == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
   }
@@ -1174,7 +1174,7 @@ int MovementMenu(void)
       destinations[2] = world[QUELACENTUS_TEMPLE];
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       break;
@@ -1207,7 +1207,7 @@ int MovePlayer(int destinationID)
 
   if (destinationID < 0 || destinationID >= TOTAL_LOCATION_IDS)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1244,7 +1244,7 @@ int SearchLocation(Location *location)
 
   if (location == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1530,7 +1530,7 @@ void DescribeSituation(void)
       printf("You are in the palace of the queen of Quelacentus. ");
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       break;

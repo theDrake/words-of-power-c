@@ -15,8 +15,8 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #include <ctype.h>  /* toupper, isalnum                                      */
 #include <string.h> /* strlen, strcpy, strcmp                                */
 
-//#define DEBUG
-#define ERROR_MESSAGE printf("Error: line %d\n", __LINE__); FlushInput();
+#define DEBUG 0
+#define ERROR_MESSAGE printf("ERROR: %s, line %d\n", __FILE__, __LINE__); FlushInput();
 
 #define BOOL  int
 #define TRUE  1

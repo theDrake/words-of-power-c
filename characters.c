@@ -88,21 +88,15 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->words[WORD_OF_AIR] = KNOWN;
       pGC->inventory[HEALING_POTION] = 3;
       pGC->locationID = ILLARUM_SCHOOL;
-      printf(
-"You are a human wizard from a distant land who has traveled to the city of \n"
-"Illarum in order to study at the prestigious School of the Elements.\n"
-            );
+      PrintString("You are a human wizard from a distant land who has traveled"
+                  " to the city of Illarum in order to study at the "
+                  "prestigious School of the Elements.\0");
       FlushInput();
       do
       {
-        repeatOptions = FALSE;
-        printf("Choose a name for your character: ");
+        printf("What is thy name? ");
         GetStrInput(pGC->name, SHORT_STR_LEN + 1);
-        if (strlen(pGC->name) < 1 || isalnum(pGC->name[0]) == FALSE)
-        {
-          printf("Invalid name.\n\n");
-          repeatOptions = TRUE;
-        }
+        repeatOptions = strlen(pGC->name) < 1;
       }while (repeatOptions);
       break;
     case ARCHWIZARD_OF_ELEMENTS:
@@ -1451,7 +1445,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->gold = RandomInt(1, 10);
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       return FAILURE;
@@ -1477,7 +1471,7 @@ int AddCompanion(GameCharacter *companion)
 
   if (companion == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1520,7 +1514,7 @@ int AddCompanion(GameCharacter *companion)
 
   if (pGC1 == NULL) /* If true, "companion" was not at the current location. */
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1545,7 +1539,7 @@ int RemoveCompanion(GameCharacter *companion)
 
   if (companion == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1588,7 +1582,7 @@ int RemoveCompanion(GameCharacter *companion)
 
   if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1613,7 +1607,7 @@ int DeleteCompanion(GameCharacter *companion)
 
   if (companion == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1639,7 +1633,7 @@ int DeleteCompanion(GameCharacter *companion)
   }
   if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1674,7 +1668,7 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
 
   if (summoner == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
   }
@@ -1691,7 +1685,7 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
     }
     else
     {
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       exit(1);
@@ -1718,7 +1712,7 @@ int DeleteCreatureSummonedBy(GameCharacter *summoner)
 
   if (summoner == NULL || summoner->summonedCreature == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1745,7 +1739,7 @@ int DisplayCharacterData(GameCharacter *pGC)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1798,7 +1792,7 @@ int PrintSoulDescription(GameCharacter *pGC)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -1895,7 +1889,7 @@ int NumberOfLanguagesKnown(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
@@ -1929,7 +1923,7 @@ int NumberOfWordsKnown(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
@@ -1961,7 +1955,7 @@ int PrintNameDefinite(GameCharacter *pGC, BOOL capitalize)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -2001,7 +1995,7 @@ int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -2065,7 +2059,7 @@ int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -2105,7 +2099,7 @@ int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
       nameLength = strlen(gcName);
       if (nameLength >= SHORT_STR_LEN - 1) /* Must have room for 's'.        */
       {
-#ifdef DEBUG
+#if DEBUG
         ERROR_MESSAGE
 #endif
         return FAILURE;
@@ -2135,7 +2129,8 @@ Description: Checks player's HP and status to see if anything needs to be
 ******************************************************************************/
 void CheckStatus(void)
 {
-  int i;  /* for loop variable */
+  int i;
+  char output[LONG_STR_LEN + 1] = "";
 
   if (player.status[IN_COMBAT] == TRUE)
   {
@@ -2143,43 +2138,44 @@ void CheckStatus(void)
     {
       if (enemyNPCs[i]->currentHP <= 0)
       {
-        PrintNameDefinite(enemyNPCs[i], TRUE);
+        strcat(output, GetNameDefinite(enemyNPCs[i], TRUE));
         if (enemyNPCs[i]->status[INANIMATE])
         {
-          printf(" has been destroyed.\n");
+          strcat(output, " has been destroyed.\n");
         }
         else
         {
-          printf(" is dead.\n");
+          strcat(output, " is dead.\n");
         }
-        FlushInput();
         kills[enemyNPCs[i]->ID]++;
         DeleteEnemy(enemyNPCs[i]);
         i--;  /* Because the "enemyNPCs" array has now been left-shifted.    */
       }
     }
+    PrintString(output);
+    FlushInput();
   }
   if (player.currentHP <= 0)
   {
     if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) /* Tutorial mode. */
     {
-      printf(
-"%s: \"You have fallen due to severe backlash from your spell! \n"
-"This is often caused by speaking the same elemental Word more than once, \n"
-"or by combining three or more elemental Words in a single spell. We will \n"
-"bring you back to full health for now, but you must be more cautious in \n"
-"the future.\"\n",
-            FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
-      FlushInput();
+      sprintf(output,
+              "%s: \"You have fallen due to severe backlash from your spell! "
+              "This is often caused by speaking the same elemental Word more "
+              "than once, or by combining three or more elemental Words in a "
+              "single spell. We will bring you back to full health for now, "
+              "but you must be more cautious in the future.\"",
+              FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
       player.currentHP = player.maxHP;
     }
     else /* Not in tutorial mode: death is permanent.                        */
     {
-      printf("Alas, %s has perished!\n", player.name);
-      FlushInput();
-      MainMenu();
+      sprintf(output, "Alas, %s has perished!\n", player.name);
+      //MainMenu();
     }
   }
+  PrintString(output);
+  FlushInput();
 }
 
 /******************************************************************************
@@ -2292,7 +2288,7 @@ int HealGameCharacter(GameCharacter *pGC, int amount)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
@@ -2327,7 +2323,7 @@ int DamageGameCharacter(GameCharacter *pGC, int amount)
 {
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
@@ -2398,43 +2394,38 @@ void LevelUp(void)
     player.maxHP += temp;
     HealGameCharacter(&player, temp);
     printf("Maximum hit points increased by %d.\n", temp);
-    FlushInput();
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0)
   {
     player.physicalPower += temp;
     printf("Physical power increased by %d.\n", temp);
-    FlushInput();
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0)
   {
     player.physicalDefense += temp;
     printf("Physical defense increased by %d.\n", temp);
-    FlushInput();
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0)
   {
     player.speed += temp;
     printf("Speed increased by %d.\n", temp);
-    FlushInput();
   }
   temp = MENTAL_LEVEL_UP_VALUE;
   if (temp > 0)
   {
     player.mentalPower += temp;
     printf("Mental power increased by %d.\n", temp);
-    FlushInput();
   }
   temp = MENTAL_LEVEL_UP_VALUE;
   if (temp > 0)
   {
     player.mentalDefense += temp;
     printf("Mental defense increased by %d.\n", temp);
-    FlushInput();
   }
+  FlushInput();
 }
 
 /******************************************************************************

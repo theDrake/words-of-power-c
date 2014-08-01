@@ -79,7 +79,7 @@ int UseItem(GameCharacter *pGC, int idNum)
 {
   if (pGC->inventory[idNum] < 1)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -94,12 +94,12 @@ int UseItem(GameCharacter *pGC, int idNum)
       break;
     case FOOD:
       PrintNameDefinite(pGC, TRUE);
-      printf(" eats some food and regains %d hit points.\n",
+      printf(" eats food and regains %d hit points.\n",
              HealGameCharacter(pGC,
                                RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       return FAILURE;
@@ -127,7 +127,7 @@ int PrintInventory(GameCharacter *pGC)
 
   if (pGC == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
@@ -188,7 +188,7 @@ int PrintItemName(int idNum)
   switch (idNum)
   {
     case FOOD:
-      printf("Food Packet");
+      printf("Food");
       break;
     case HEALING_POTION:
       printf("Healing Potion");
@@ -197,7 +197,7 @@ int PrintItemName(int idNum)
       printf("Glowing Mushroom");
       break;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       printf("???");
@@ -253,7 +253,7 @@ int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount)
 {
   if (giver == NULL || receiver == NULL || giver->gold < amount)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -284,7 +284,7 @@ int AddItem(GameCharacter *receiver, int itemID)
 {
   if (receiver == NULL)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -317,7 +317,7 @@ int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID)
 {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] <= 0)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -357,7 +357,7 @@ int GiveItems(GameCharacter *giver,
 {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] < amount)
   {
-#ifdef DEBUG
+#if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
@@ -398,7 +398,7 @@ int ItemValue(int idNum)
     case GLOWING_MUSHROOM:
       return 20;
     default:
-#ifdef DEBUG
+#if DEBUG
       ERROR_MESSAGE
 #endif
       break;
