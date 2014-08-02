@@ -36,8 +36,7 @@ int SpellMenu(void)
 
   if (player.status[SILENCED])
   {
-    printf("You have been silenced and cannot cast spells at this time."
-           "\n");
+    printf("You have been silenced and cannot cast spells at this time.\n");
     FlushInput();
     return FAILURE;
   }
@@ -75,9 +74,7 @@ int SpellMenu(void)
            pGC = pGC->next)
       {
         temp++;
-        printf("[%d] My companion, ");
-        PrintNameDefinite(pGC, FALSE);
-        printf("\n");
+        printf("[%d] My companion, %s\n", GetNameDefinite(pGC, LOWERCASE));
       }
     }
     if (player.status[IN_COMBAT]) /* Combat mode: display enemies.           */
@@ -596,8 +593,7 @@ int CastSpell(GameCharacter *spellcaster,
         }
         else
         {
-          PrintNameDefinite(gcTargets[i], TRUE);
-          printf(" is dead.\n");
+          printf("%s is dead.\n", GetNameDefinite(gcTargets[i], CAPITALIZED));
           FlushInput();
         }
         for (pGC = world[player.locationID]->inhabitants;

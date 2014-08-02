@@ -1941,69 +1941,76 @@ int NumberOfWordsKnown(GameCharacter *pGC)
 }
 
 /******************************************************************************
-   Function: PrintNameDefinite
+   Function: GetNameDefinite
 
-Description: Prints either a name or a generic descriptor preceded by "the" for
-             a given game character.
+Description: Returns either a name or a generic descriptor preceded by "the"
+             for a given game character.
 
-     Inputs: pGC        - The game character to be named/described.
+     Inputs: pGC        - The game character whose named/descriptor is desired.
              capitalize - Indicates whether or not to capitalize (e.g., "The").
 
-    Outputs: SUCCESS or FAILURE.
+    Outputs: The game character's definite name/descriptor as a pointer to an
+             array of characters.
 ******************************************************************************/
-int PrintNameDefinite(GameCharacter *pGC, BOOL capitalize)
+char *GetNameDefinite(GameCharacter *pGC, BOOL capitalize)
 {
+  static char gcName[SHORT_STR_LEN + 1];
+
   if (pGC == NULL)
   {
 #if DEBUG
     ERROR_MESSAGE
 #endif
-    return FAILURE;
+    return NULL;
   }
 
   if (pGC->unique && pGC->knownToPlayer)
   {
-    printf("%s", pGC->name);
+    return pGC->name;
   }
   else
   {
     if (capitalize)
     {
-      printf("The %s", pGC->descriptor);
+      strcpy(gcName, "The ");
     }
     else
     {
-      printf("the %s", pGC->descriptor);
+      strcpy(gcName, "the ");
     }
   }
+  strcat(gcName, pGC->descriptor);
 
-  return SUCCESS;
+  return gcName;
 }
 
 /******************************************************************************
-   Function: PrintNameIndefinite
+   Function: GetNameIndefinite
 
-Description: Prints either a name or a generic descriptor preceded by "a" or
+Description: Returns either a name or a generic descriptor preceded by "a" or
              "an" for a given game character.
 
-     Inputs: pGC        - The game character to be named/described.
+     Inputs: pGC        - The game character whose name/descriptor is desired.
              capitalize - Indicates whether or not to capitalize (e.g., "An").
 
-    Outputs: SUCCESS or FAILURE.
+    Outputs: The game character's indefinite name/descriptor as a pointer to an
+             array of characters.
 ******************************************************************************/
-int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
+char *GetNameIndefinite(GameCharacter *pGC, BOOL capitalize)
 {
+  static char gcName[SHORT_STR_LEN + 1];
+
   if (pGC == NULL)
   {
 #if DEBUG
     ERROR_MESSAGE
 #endif
-    return FAILURE;
+    return NULL;
   }
 
   if (pGC->unique && pGC->knownToPlayer)
   {
-    printf("%s", pGC->name);
+    return pGC->name;
   }
   else if (pGC->descriptor[0] == 'a' ||
            pGC->descriptor[0] == 'e' ||
@@ -2018,44 +2025,46 @@ int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize)
   {
     if (capitalize)
     {
-      printf("An %s", pGC->descriptor);
+      strcpy(gcName, "An ");
     }
     else
     {
-      printf("an %s", pGC->descriptor);
+      strcpy(gcName, "an ");
     }
   }
   else
   {
     if (capitalize)
     {
-      printf("A %s", pGC->descriptor);
+      strcpy(gcName, "A ");
     }
     else
     {
-      printf("a %s", pGC->descriptor);
+      strcpy(gcName, "a ");
     }
   }
+  strcat(gcName, pGC->descriptor);
 
-  return SUCCESS;
+  return gcName;
 }
 
 /******************************************************************************
-   Function: PrintNamePlural
+   Function: GetNamePlural
 
-Description: Prints the plural form of a given game character's generic
+Description: Returns the plural form of a given game character's generic
              descriptor.
 
      Inputs: pGC        - Game character whose name/description is to be made
                           plural.
              capitalize - If TRUE, capitalize.
 
-    Outputs: SUCCESS or FAILURE.
+    Outputs: The game character's plural name/descriptor as a pointer to an
+             array of characters.
 ******************************************************************************/
-int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
+char *GetNamePlural(GameCharacter *pGC, BOOL capitalize)
 {
   int nameLength;
-  char gcName[SHORT_STR_LEN + 1];
+  static char gcName[SHORT_STR_LEN + 1];
 
   if (pGC == NULL)
   {
@@ -2102,7 +2111,7 @@ int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
 #if DEBUG
         ERROR_MESSAGE
 #endif
-        return FAILURE;
+        return NULL;
       }
       gcName[nameLength] = 's';
       gcName[nameLength + 1] = '\0';
@@ -2112,9 +2121,8 @@ int PrintNamePlural(GameCharacter *pGC, BOOL capitalize)
   {
     gcName[0] = toupper(gcName[0]);
   }
-  printf("%s", gcName);
 
-  return SUCCESS;
+  return gcName;
 }
 
 /******************************************************************************

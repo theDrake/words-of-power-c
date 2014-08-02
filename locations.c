@@ -1285,9 +1285,8 @@ int SearchLocation(Location *location)
         case 3:
           if (AddRandomEnemy(world[player.locationID]) == SUCCESS)
           {
-            printf("While searching, you are attacked by ");
-            PrintNameIndefinite(enemyNPCs[0], FALSE);
-            printf("!\n");
+            printf("While searching, you're attacked by %s!",
+                   GetNameIndefinite(enemyNPCs[0], LOWERCASE));
             FlushInput();
             Combat();
             break;
@@ -1570,12 +1569,13 @@ void DescribeSituation(void)
         }
         if (visibleGameCharCounter[pGC->ID] == 1)
         {
-          PrintNameIndefinite(pGC, FALSE);
+          printf("%s", GetNameIndefinite(pGC, LOWERCASE));
         }
         else
         {
-          printf("%d ", visibleGameCharCounter[pGC->ID]);
-          PrintNamePlural(pGC, FALSE);
+          printf("%d %s",
+                 visibleGameCharCounter[pGC->ID],
+                 GetNamePlural(pGC, LOWERCASE));
         }
         gcTypesDescribed++;
         gcDescribed[pGC->ID] = TRUE;

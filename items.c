@@ -30,9 +30,7 @@ int ItemMenu(void)
     if (player.inventory[i] > 0)
     {
       temp++;
-      printf("[%d] ", temp);
-      PrintItemName(i);
-      printf(" (%d)\n", player.inventory[i]);
+      printf("[%d] %s (%d)\n", temp, GetItemName(i), player.inventory[i]);
     }
   }
   if (temp == 0)
@@ -88,13 +86,13 @@ int UseItem(GameCharacter *pGC, int idNum)
   switch(idNum)
   {
     case HEALING_POTION:
-      PrintNameDefinite(pGC, UPPERCASE);
-      printf(" drinks a healing potion and regains %d hit points.\n",
+      printf("%s drinks a healing potion and regains %d hit points.\n",
+             GetNameDefinite(pGC, CAPITALIZED),
              HealGameCharacter(pGC, RandomInt(DEFAULT_HP / 2, DEFAULT_HP)));
       break;
     case FOOD:
-      PrintNameDefinite(pGC, TRUE);
-      printf(" eats food and regains %d hit points.\n",
+      printf("%s eats food and regains %d hit points.\n",
+             GetNameDefinite(pGC, CAPITALIZED),
              HealGameCharacter(pGC,
                                RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;
@@ -148,12 +146,11 @@ int PrintInventory(GameCharacter *pGC)
       }
       if (pGC->inventory[i] == 1)
       {
-        PrintItemName(i);
+        printf("%s", GetItemName(i));
       }
       else
       {
-        printf("%d ", pGC->inventory[i]);
-        PrintItemNamePlural(i);
+        printf("%d %s", pGC->inventory[i], GetItemNamePlural(i));
       }
       if (pGC->equippedItems[i] > 0)
       {
@@ -175,67 +172,59 @@ int PrintInventory(GameCharacter *pGC)
 }
 
 /******************************************************************************
-   Function: PrintItemName
+   Function: GetItemName
 
-Description: Given an item ID, prints the name of that item.
+Description: Given an item ID, returns the name of that item.
 
-     Inputs: idNum - ID number of an item.
+     Inputs: idNum - ID number of the item of interest.
 
-    Outputs: SUCCESS or FAILURE.
+    Outputs: The item's name as a pointer to an array of characters.
 ******************************************************************************/
-int PrintItemName(int idNum)
+char *GetItemName(int idNum)
 {
+  static char itemName[SHORT_STR_LEN + 1];
+
   switch (idNum)
   {
     case FOOD:
-      printf("Food");
+      strcpy(itemName, "Food");
       break;
     case HEALING_POTION:
-      printf("Healing Potion");
+      strcpy(itemName, "Healing Potion");
       break;
     case GLOWING_MUSHROOM:
-      printf("Glowing Mushroom");
+      strcpy(itemName, "Glowing Mushroom");
       break;
     default:
 #if DEBUG
       ERROR_MESSAGE
 #endif
-      printf("???");
-      return FAILURE;
+      strcpy(itemName, "???");
   }
 
-  return SUCCESS;
+  return itemName;
 }
 
 /******************************************************************************
-   Function: PrintItemNamePlural
+   Function: GetItemNamePlural
 
-Description: Given an item ID, prints the plural name of that item.
+Description: Given an item ID, returns the plural name of that item.
 
-     Inputs: idNum - ID number of an item.
+     Inputs: idNum - ID number of the item of interest.
 
-    Outputs: SUCCESS or FAILURE.
+    Outputs: The item's plural name as a pointer to an array of characters.
 ******************************************************************************/
-int PrintItemNamePlural(int idNum)
+char *GetItemNamePlural(int idNum)
 {
-  BOOL errorFound = FALSE;
+  static char itemName[SHORT_STR_LEN + 1];
 
-  switch (idNum)
+  strcpy(itemName, GetItemName(idNum));
+  if (idNum != FOOD)
   {
-    default:
-      if (PrintItemName(idNum) == FAILURE)
-      {
-        errorFound = TRUE;
-      }
-      printf("s");  /* The default is to simply add an 's' to the item name. */
-      break;
-  }
-  if (errorFound)
-  {
-    return FAILURE;
+    strcat(itemName, "s");
   }
 
-  return SUCCESS;
+  return itemName;
 }
 
 /******************************************************************************
@@ -293,9 +282,7 @@ int AddItem(GameCharacter *receiver, int itemID)
   receiver->inventory[itemID]++;
   if (receiver->ID == PLAYER)
   {
-    printf("You discover: ");
-    PrintItemName(itemID);
-    printf("\n");
+    printf("You discover: %s\n", GetItemName(itemID));
     FlushInput();
   }
 
@@ -329,9 +316,10 @@ int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID)
     giver->equippedItems[itemID]--;
   }
   receiver->inventory[itemID]++;
-  printf("%s gives ", giver->name);
-  PrintItemName(itemID);
-  printf(" to %s.\n", receiver->name);
+  printf("%s gives %s to %s\n",
+         giver->name,
+         GetItemName(itemID),
+         receiver->name);
   FlushInput();
 
   return SUCCESS;
@@ -369,9 +357,11 @@ int GiveItems(GameCharacter *giver,
     giver->equippedItems[itemID] = giver->inventory[itemID];
   }
   receiver->inventory[itemID] += amount;
-  printf("%s gives %d ", giver->name, amount);
-  PrintItemNamePlural(itemID);
-  printf(" to %s.\n", receiver->name);
+  printf("%s gives %d %s to %s.\n",
+         giver->name,
+         amount,
+         GetItemNamePlural(itemID),
+         receiver->name);
   FlushInput();
 
   return SUCCESS;

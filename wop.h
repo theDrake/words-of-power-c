@@ -25,8 +25,8 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define SUCCESS 1
 #define FAILURE 0
 
-#define UPPERCASE 1
-#define LOWERCASE 0
+#define CAPITALIZED 1
+#define LOWERCASE   0
 
   /* String length constants.                                                */
 #define SHORT_STR_LEN   50
@@ -276,9 +276,9 @@ BOOL IsEvil(GameCharacter *pGC);
 BOOL IsNeutral(GameCharacter *pGC);
 int NumberOfLanguagesKnown(GameCharacter *pGC);
 int NumberOfWordsKnown(GameCharacter *pGC);
-int PrintNameDefinite(GameCharacter *pGC, BOOL capitalize);
-int PrintNameIndefinite(GameCharacter *pGC, BOOL capitalize);
-int PrintNamePlural(GameCharacter *pGC, BOOL capitalize);
+char *GetNameDefinite(GameCharacter *pGC, BOOL capitalize);
+char *GetNameIndefinite(GameCharacter *pGC, BOOL capitalize);
+char *GetNamePlural(GameCharacter *pGC, BOOL capitalize);
 void CheckStatus(void);
 void UpdateVisibleGameCharCounter(void);
 GameCharacter *GetTarget(void);
@@ -333,8 +333,8 @@ BOOL IsSpellcaster(GameCharacter *pGC);
 int ItemMenu(void);
 int UseItem(GameCharacter *pGC, int idNum);
 int PrintInventory(GameCharacter *pGC);
-int PrintItemName(int idNum);
-int PrintItemNamePlural(int idNum);
+char *GetItemName(int idNum);
+char *GetItemNamePlural(int idNum);
 int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount);
 int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID);
 int GiveItems(GameCharacter *giver,
