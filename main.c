@@ -61,7 +61,9 @@ int main(void)
 
 Description: Prints a given string according to the maximum characters per
              line, followed by a new line character. (Assumes the string is
-             NULL-terminated and contains no tabs.)
+             NULL-terminated and contains no tabs. If no NULL-terminator is
+             encountered, assume the size of the string is equal to
+             LONG_STR_LEN.)
 
      Inputs: str - The string to be printed, which must be NULL-terminated.
 
@@ -70,55 +72,41 @@ Description: Prints a given string according to the maximum characters per
 void PrintString(char *str)
 {
   int i, last_blank_space_index = 0, current_line_length = 0;
-  char current_line[MAX_LINE_LENGTH + 1];
 
-  for (i = 0; str[i] != '\0'; i++)
+  for (i = 0; i < LONG_STR_LEN && str[i] != '\0'; i++)
   {
-    current_line[current_line_length] = str[i];
-    current_line[current_line_length + 1] = '\0';
     current_line_length++;
 
-    /* Check for a blank space.                                              */
     if (str[i] == ' ')
     {
       last_blank_space_index = i;
     }
-
-    /* If a new line character is encountered, print the current line.       */
     if (str[i] == '\n')
     {
-      printf("%s", current_line);
       last_blank_space_index = 0;
-      current_line_length = 0;
+      current_line_length    = 0;
     }
-
-    /* Check for maximum line length.                                        */
-    else if (current_line_length == MAX_LINE_LENGTH - 1)
+    else if (current_line_length == MAX_LINE_LENGTH)
     {
-      /* Check for a line with no blank spaces.                              */
       if (last_blank_space_index == 0)
       {
-        printf("%s\n", current_line);
+        str[i]              = '\n';
+        current_line_length = 0;
       }
-
-      /* If there was a space, trim the line to the most recent blank space. */
       else
       {
-        current_line[current_line_length - i - last_blank_space_index] = '\0';
-        printf("%s\n", current_line);
-        i = last_blank_space_index;
+        i                      = last_blank_space_index;
+        str[i]                 = '\n';
         last_blank_space_index = 0;
+        current_line_length    = 0;
       }
-
-      current_line_length = 0;
-    }
-
-    /* If we're at the end of the input string, print the line plus a '\n'.  */
-    else if (str[i + 1] == '\0')
-    {
-      printf("%s\n", current_line);
     }
   }
+  if (i == LONG_STR_LEN)
+  {
+    str[i] = '\0';
+  }
+  printf("%s\n", str);
 }
 
 /******************************************************************************
