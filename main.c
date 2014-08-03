@@ -62,7 +62,7 @@ int main(void)
 Description: Prints a given string according to the maximum characters per
              line, followed by a new line character. (Assumes the string is
              NULL-terminated and contains no tabs. If no NULL-terminator is
-             encountered, assume the size of the string is equal to
+             encountered, assumes the size of the string is equal to
              LONG_STR_LEN.)
 
      Inputs: str - The string to be printed, which must be NULL-terminated.
@@ -72,16 +72,18 @@ Description: Prints a given string according to the maximum characters per
 void PrintString(char *str)
 {
   int i, last_blank_space_index = 0, current_line_length = 0;
+  static char output[LONG_STR_LEN + 1];
 
-  for (i = 0; i < LONG_STR_LEN && str[i] != '\0'; i++)
+  strcpy(output, str);
+  for (i = 0; i < LONG_STR_LEN && output[i] != '\0'; i++)
   {
     current_line_length++;
 
-    if (str[i] == ' ')
+    if (output[i] == ' ')
     {
       last_blank_space_index = i;
     }
-    if (str[i] == '\n')
+    if (output[i] == '\n')
     {
       last_blank_space_index = 0;
       current_line_length    = 0;
@@ -90,13 +92,13 @@ void PrintString(char *str)
     {
       if (last_blank_space_index == 0)
       {
-        str[i]              = '\n';
+        output[i]           = '\n';
         current_line_length = 0;
       }
       else
       {
         i                      = last_blank_space_index;
-        str[i]                 = '\n';
+        output[i]              = '\n';
         last_blank_space_index = 0;
         current_line_length    = 0;
       }
@@ -104,9 +106,9 @@ void PrintString(char *str)
   }
   if (i == LONG_STR_LEN)
   {
-    str[i] = '\0';
+    output[i] = '\0';
   }
-  printf("%s\n", str);
+  printf("%s\n", output);
 }
 
 /******************************************************************************
