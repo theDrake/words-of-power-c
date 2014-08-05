@@ -2182,8 +2182,11 @@ void CheckStatus(void)
       //MainMenu();
     }
   }
-  PrintString(output);
-  FlushInput();
+  if (strlen(output) > 0)
+  {
+    PrintString(output);
+    FlushInput();
+  }
 }
 
 /******************************************************************************

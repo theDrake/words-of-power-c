@@ -166,7 +166,7 @@ int Dialogue(GameCharacter *pGC)
       if (pGC->conversations == 1)  /* Indicates a new game: offer tutorial. */
       {
         sprintf(output,
-                "%s: \"Good morning, %s, and congratulations!\"\n",
+                "%s: \"Good morning, %s, and congratulations!\"",
                 pGC->name,
                 player.name);
         PrintString(output);
@@ -175,7 +175,7 @@ int Dialogue(GameCharacter *pGC)
                 "%s: \"You have mastered the art of projecting your will "
                 "through the four elemental Words of Power -- the Words of "
                 "Air, Water, Earth, and Fire -- and demonstrated great "
-                "potential as a mage.\"\n",
+                "potential as a mage.\"",
                 pGC->name);
         PrintString(output);
         FlushInput();
@@ -186,7 +186,7 @@ int Dialogue(GameCharacter *pGC)
                 "fact, I already have a task in mind for you. Before "
                 "discussing the details, however, would you like an "
                 "opportunity to once again demonstrate your skills for some of"
-                " the newer students?\"",
+                " the newer students?\"\n",
                 pGC->name);
         allegiances[ELEMENTS_GUILD] = GOOD_FRIEND;
         PrintString(output);
@@ -313,13 +313,13 @@ int Dialogue(GameCharacter *pGC)
       break;
     case DRUID:
       sprintf(output,
-              "%s: \"Greetings, friend! Nature's blessings upon you.\""
+              "%s: \"Greetings, friend! Nature's blessings upon you.\"\n"
               "[1] \"Nature's blessings upon you as well.\"\n"
               "[2] \"Can you teach me a new language?\"\n"
               "[3] \"Can you teach me a new Word of Power?\"",
               pGC->name);
       PrintString(output);
-      GetIntInput(&iInput, 1, 2);
+      GetIntInput(&iInput, 1, 3);
       if (iInput == 2)
       {
         LanguageLearningDialogue(pGC);
@@ -554,11 +554,11 @@ int LanguageLearningDialogue(GameCharacter *pGC)
       if (count == 1)
       {
         sprintf(output,
-                "%s: \"What language do you want to learn?\"\n",
+                "%s: \"What language do you want to learn?\"",
                 pGC->name);
       }
       sprintf(output + strlen(output),
-              "[%d] %s\n",
+              "\n[%d] %s",
               count,
               LanguageName(i));
     }
@@ -567,7 +567,7 @@ int LanguageLearningDialogue(GameCharacter *pGC)
   if (count > 0)
   {
     sprintf(output + strlen(output),
-            "[%d] Cancel\n",
+            "\n[%d] Cancel",
             ++count);
     PrintString(output);
     GetIntInput(&iInput, 1, count);

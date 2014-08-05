@@ -1319,214 +1319,216 @@ void DescribeSituation(void)
   int temp;
   int gcTypesDescribed; /* Number of GC types described.        */
   GameCharacter *pGC;   /* To search through local inhabitants. */
+  char output[LONG_STR_LEN + 1] = "";
 
     /* Describue the current location.                                       */
   switch (player.locationID)
   {
     case ILLARUM_SCHOOL:
+      sprintf(output,
+              "You are in the School of the Elements in the city of Illarum."
+              " ");
       if (world[ILLARUM_SCHOOL]->visits == 0)  /* Indicates a new game.      */
       {
         world[ILLARUM_SCHOOL]->visits++;
-        printf(
-"You are in the School of the Elements in the city of Illarum. %s, \n"
-"head of the school and Archwizard of the Elements, has summoned you here \n"
-"and now approaches to speak with you.\n",
-              FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
+        sprintf(output + strlen(output),
+                "%s, head of the school and Archwizard of the Elements, has "
+                "summoned you here and now approaches to speak with you.",
+                FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
+        PrintString(output);
         FlushInput();
         Dialogue(FindInhabitant(ARCHWIZARD_OF_ELEMENTS));
       }
-      else
-      {
-        printf(
-"You are in the School of the Elements in the city of Illarum. "
-              );
-      }
       break;
     case ILLARUM_ENTRANCE:
-      printf("You are at the main gate of the city of Illarum. ");
+      sprintf(output, "You are at the main gate of the city of Illarum. ");
       break;
     case ILLARUM_MARKET:
-      printf("You are in the marketplace of the city of Illarum. ");
+      sprintf(output, "You are in the marketplace of the city of Illarum. ");
       break;
     case ILLARUM_INN:
-      printf("You are at an inn in the city of Illarum. ");
+      sprintf(output, "You are at an inn in the city of Illarum. ");
       break;
     case ILLARUM_TEMPLE:
-      printf("You are in the Illarum Temple. ");
+      sprintf(output, "You are in the Illarum Temple. ");
       break;
     case ILLARUM_PALACE:
-      printf("You are in the palace of the king of Illarum. ");
+      sprintf(output, "You are in the palace of the king of Illarum. ");
       break;
     case ILLARUM_PRISON:
-      printf("You are in the Illarum prison. ");
+      sprintf(output, "You are in the Illarum prison. ");
       break;
     case VENTARRIS_ENTRANCE:
-      printf("You are at the main gate of the city of Ventarris. ");
+      sprintf(output, "You are at the main gate of the city of Ventarris. ");
       break;
     case VENTARRIS_MARKET:
-      printf("You are in the marketplace of the city of Ventarris. ");
+      sprintf(output, "You are in the marketplace of the city of Ventarris. ");
       break;
     case VENTARRIS_INN:
-      printf("You are at an inn in the city of Ventarris. ");
+      sprintf(output, "You are at an inn in the city of Ventarris. ");
       break;
     case VENTARRIS_SCHOOL:
-      printf("You are in the School of Mind in the city of Ventarris. ");
+      sprintf(output,
+              "You are in the School of Mind in the city of Ventarris. ");
       break;
     case VENTARRIS_TEMPLE:
-      printf("You are in the Ventarris Temple. ");
+      sprintf(output, "You are in the Ventarris Temple. ");
       break;
     case VENTARRIS_PALACE:
-      printf("You are in the palace of the king of Ventarris. ");
+      sprintf(output, "You are in the palace of the king of Ventarris. ");
       break;
     case VENTARRIS_PRISON:
-      printf("You are in the Ventarris prison. ");
+      sprintf(output, "You are in the Ventarris prison. ");
       break;
     case VENTARRIS_DOCKS:
-      printf("You are at the docks of the city of Ventarris. ");
+      sprintf(output, "You are at the docks of the city of Ventarris. ");
       break;
     case PLAINS_NORTH:
-      printf("You are in the northern plains. ");
+      sprintf(output, "You are in the northern plains. ");
       break;
     case NORTHERN_FARMS:
-      printf("You are in the northern farmlands. ");
+      sprintf(output, "You are in the northern farmlands. ");
       break;
     case BRILL_OUTSKIRTS:
-      printf("You are in the outskirts of the village of Brill. ");
+      sprintf(output, "You are in the outskirts of the village of Brill. ");
       break;
     case BRILL_MARKET:
-      printf("You are in the marketplace of the village of Brill. ");
+      sprintf(output, "You are in the marketplace of the village of Brill. ");
       break;
     case BRILL_INN:
-      printf("You are at an inn in the village of Brill. ");
+      sprintf(output, "You are at an inn in the village of Brill. ");
       break;
     case BRILL_DOCKS:
-      printf("You are at the docks of the village of Brill. ");
+      sprintf(output, "You are at the docks of the village of Brill. ");
       break;
     case PLAINS_SOUTH:
-      printf("You are in the southern plains. ");
+      sprintf(output, "You are in the southern plains. ");
       break;
     case SOUTHERN_FARMS:
-      printf("You are in the southern farmlands. ");
+      sprintf(output, "You are in the southern farmlands. ");
       break;
     case SILENT_SAGE_HOME:
-      printf(
-"You are at a simple, solitary home in the middle of the southern plains. "
-            );
+      sprintf(output,
+              "You are at a simple, solitary home in the middle of the "
+              "southern plains. ");
       break;
     case FOREST:
-      printf("You are in the western woods. ");
+      sprintf(output, "You are in the western woods. ");
       break;
     case DRUIDS_GROVE:
-      printf("You are in the Druids' Grove of the western woods. ");
+      sprintf(output, "You are in the Druids' Grove of the western woods. ");
       break;
     case HERMIT_HUT:
-      printf("You are at a solitary hut deep in the western woods. ");
+      sprintf(output, "You are at a solitary hut deep in the western woods. ");
       break;
     case WYNNFAER_ENTRANCE:
-      printf("You are at the main gate of the city of Wynnfaer. ");
+      sprintf(output, "You are at the main gate of the city of Wynnfaer. ");
       break;
     case WYNNFAER_PLAZA:
-      printf("You are in the central plaza of the city of Wynnfaer. ");
+      sprintf(output,
+              "You are in the central plaza of the city of Wynnfaer. ");
       break;
     case WYNNFAER_PALACE:
-      printf("You are in the palace of the city of Wynnfaer. ");
+      sprintf(output, "You are in the palace of the city of Wynnfaer. ");
       break;
     case MOUNTAINS:
-      printf("You are in the northern mountains. ");
+      sprintf(output, "You are in the northern mountains. ");
       break;
     case GESHTAL:
-      printf("You are in the barbarian village of Gesh'tal. ");
+      sprintf(output, "You are in the barbarian village of Gesh'tal. ");
       break;
     case TORR_ENTRANCE:
-      printf("You are at the entrance to the underground city of Torr. ");
+      sprintf(output,
+              "You are at the entrance to the underground city of Torr. ");
       break;
     case TORR_MARKET:
-      printf("You are in the marketplace of the city of Torr. ");
+      sprintf(output, "You are in the marketplace of the city of Torr. ");
       break;
     case TORR_SCHOOL:
-      printf("You are in the school of the city of Torr. ");
+      sprintf(output, "You are in the school of the city of Torr. ");
       break;
     case TORR_TEMPLE:
-      printf("You are in the temple of the city of Torr. ");
+      sprintf(output, "You are in the temple of the city of Torr. ");
       break;
     case TORR_THRONE_ROOM:
-      printf("You are in the throne room of the king of Torr. ");
+      sprintf(output, "You are in the throne room of the king of Torr. ");
       break;
     case TORR_MINE:
-      printf("You are in the mines of Torr. ");
+      sprintf(output, "You are in the mines of Torr. ");
       break;
     case TORR_VAULT:
-      printf("You are in a secret vault in the city of Torr. ");
+      sprintf(output, "You are in a secret vault in the city of Torr. ");
       break;
     case TORR_PRISON:
-      printf("You are in the prison of the city of Torr. ");
+      sprintf(output, "You are in the prison of the city of Torr. ");
       break;
     case GUGGENHOLM_ENTRANCE:
-      printf(
-"You are at the entrance to the underground city of Guggenholm. "
-            );
+      sprintf(output,
+              "You are at the entrance to the underground city of Guggenholm."
+              " ");
       break;
     case GUGGENHOLM_MAIN:
-      printf("You are in the main hall of Guggenholm. ");
+      sprintf(output, "You are in the main hall of Guggenholm. ");
       break;
     case GUGGENHOLM_MINE:
-      printf("You are in the mines of Guggenholm. ");
+      sprintf(output, "You are in the mines of Guggenholm. ");
       break;
     case SWAMP:
-      printf("You are in the southwestern swamplands. ");
+      sprintf(output, "You are in the southwestern swamplands. ");
       break;
     case NECROMANCERS_CIRCLE:
-      printf("You are deep in the southwestern swamplands. ");
+      sprintf(output, "You are deep in the southwestern swamplands. ");
       break;
     case ISHTARR_ENTRANCE:
-      printf("You are at the main gate of the dark citadel of Ishtarr. ");
+      sprintf(output,
+              "You are at the main gate of the dark citadel of Ishtarr. ");
       break;
     case ISHTARR_EAST_WING:
-      printf("You are in the east wing of Ishtarr. ");
+      sprintf(output, "You are in the east wing of Ishtarr. ");
       break;
     case ISHTARR_WEST_WING:
-      printf("You are in the west wing of Ishtarr. ");
+      sprintf(output, "You are in the west wing of Ishtarr. ");
       break;
     case ISHTARR_CENTRAL_TOWER:
-      printf("You are in the central tower of Ishtarr. ");
+      sprintf(output, "You are in the central tower of Ishtarr. ");
       break;
     case ISHTARR_DUNGEON:
-      printf("You are in the dungeon of Ishtarr. ");
+      sprintf(output, "You are in the dungeon of Ishtarr. ");
       break;
     case SHORE_NE:
-      printf("You are on the northeastern shore. ");
+      sprintf(output, "You are on the northeastern shore. ");
       break;
     case SHORE_EAST:
-      printf("You are on the eastern shore. ");
+      sprintf(output, "You are on the eastern shore. ");
       break;
     case SHORE_SE:
-      printf("You are on the southeastern shore. ");
+      sprintf(output, "You are on the southeastern shore. ");
       break;
     case OCEAN_SURFACE:
-      printf("You are on the surface of the ocean. ");
+      sprintf(output, "You are on the surface of the ocean. ");
       break;
     case OCEAN_SHALLOW:
-      printf("You are in the ocean at a relatively shallow depth. ");
+      sprintf(output, "You are in the ocean at a relatively shallow depth. ");
       break;
     case OCEAN_DEEP:
-      printf("You are deep in the ocean. ");
+      sprintf(output, "You are deep in the ocean. ");
       break;
     case OCEAN_TRENCH:
-      printf("You are in an oceanic trench. ");
+      sprintf(output, "You are in an oceanic trench. ");
       break;
     case QUELACENTUS_ENTRANCE:
-      printf(
-"You are in the deep, dark waters just above the merfolk city of Quelacentus. "
-            );
+      sprintf(output,
+              "You are in the deep, dark waters just above the merfolk city of"
+              " Quelacentus. ");
       break;
     case QUELACENTUS_PLAZA:
-      printf("You are in the central plaze of Quelacentus. ");
+      sprintf(output, "You are in the central plaze of Quelacentus. ");
       break;
     case QUELACENTUS_TEMPLE:
-      printf("You are in the temple of Quelacentus. ");
+      sprintf(output, "You are in the temple of Quelacentus. ");
       break;
     case QUELACENTUS_PALACE:
-      printf("You are in the palace of the queen of Quelacentus. ");
+      sprintf(output, "You are in the palace of the queen of Quelacentus. ");
       break;
     default:
 #if DEBUG
@@ -1545,7 +1547,7 @@ void DescribeSituation(void)
   temp = VisibleInhabitants(world[player.locationID]);
   if (temp > 0)
   {
-    printf("You see ");
+    strcat(output, "You see ");
     for (pGC = world[player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next)
@@ -1558,35 +1560,38 @@ void DescribeSituation(void)
           {
             if (gcTypesDescribed > 1)
             {
-              printf(",");
+              strcat(output, ",");
             }
-            printf(" and ");
+            strcat(output, " and ");
           }
           else
           {
-            printf(", ");
+            strcat(output, ", ");
           }
         }
         if (visibleGameCharCounter[pGC->ID] == 1)
         {
-          printf("%s", GetNameIndefinite(pGC, LOWERCASE));
+          strcat(output, GetNameIndefinite(pGC, LOWERCASE));
         }
         else
         {
-          printf("%d %s",
-                 visibleGameCharCounter[pGC->ID],
-                 GetNamePlural(pGC, LOWERCASE));
+          sprintf(output + strlen(output),
+                  "%d %s",
+                  visibleGameCharCounter[pGC->ID],
+                  GetNamePlural(pGC, LOWERCASE));
         }
         gcTypesDescribed++;
         gcDescribed[pGC->ID] = TRUE;
         temp -= visibleGameCharCounter[pGC->ID];
         if (temp <= 0)
         {
-          printf(". ");
+          strcat(output, ". ");
         }
       }
     }
   }
+  PrintString(output);
+  FlushInput();
 
     /* Check for hostile enemies. If any exist, they immediately attack.     */
   for (pGC = world[player.locationID]->inhabitants;
@@ -1600,7 +1605,7 @@ void DescribeSituation(void)
   }
   if (NumberOfEnemies() > 0)
   {
-    printf("You are being attacked!\n");
+    printf("\nYou are being attacked!\n");
     FlushInput();
     Combat();
     if (worldExists)
