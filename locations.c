@@ -363,29 +363,24 @@ Description: Determines whether a given location is within the territory
 ******************************************************************************/
 BOOL InVentarrisTerritory(Location *location)
 {
-  if (location->ID == VENTARRIS_ENTRANCE ||
-      location->ID == VENTARRIS_MARKET ||
-      location->ID == VENTARRIS_INN ||
-      location->ID == VENTARRIS_SCHOOL ||
-      location->ID == VENTARRIS_TEMPLE ||
-      location->ID == VENTARRIS_PALACE ||
-      location->ID == VENTARRIS_PRISON ||
-      location->ID == VENTARRIS_DOCKS ||
-      location->ID == PLAINS_SOUTH ||
-      location->ID == SOUTHERN_FARMS ||
-      location->ID == SWAMP ||
-      location->ID == NECROMANCERS_CIRCLE ||
-      location->ID == ISHTARR_ENTRANCE ||
-      location->ID == ISHTARR_EAST_WING ||
-      location->ID == ISHTARR_WEST_WING ||
-      location->ID == ISHTARR_CENTRAL_TOWER ||
-      location->ID == ISHTARR_DUNGEON ||
-      location->ID == SHORE_SE)
-  {
-    return TRUE;
-  }
-
-  return FALSE;
+  return location->ID == VENTARRIS_ENTRANCE    ||
+         location->ID == VENTARRIS_MARKET      ||
+         location->ID == VENTARRIS_INN         ||
+         location->ID == VENTARRIS_SCHOOL      ||
+         location->ID == VENTARRIS_TEMPLE      ||
+         location->ID == VENTARRIS_PALACE      ||
+         location->ID == VENTARRIS_PRISON      ||
+         location->ID == VENTARRIS_DOCKS       ||
+         location->ID == PLAINS_SOUTH          ||
+         location->ID == SOUTHERN_FARMS        ||
+         location->ID == SWAMP                 ||
+         location->ID == NECROMANCERS_CIRCLE   ||
+         location->ID == ISHTARR_ENTRANCE      ||
+         location->ID == ISHTARR_EAST_WING     ||
+         location->ID == ISHTARR_WEST_WING     ||
+         location->ID == ISHTARR_CENTRAL_TOWER ||
+         location->ID == ISHTARR_DUNGEON       ||
+         location->ID == SHORE_SE;
 }
 
 /******************************************************************************
@@ -1241,6 +1236,7 @@ Description: Determines the outcome of a given search.
 int SearchLocation(Location *location)
 {
   int temp;
+  char output[LONG_STR_LEN + 1] = "";
 
   if (location == NULL)
   {
@@ -1257,48 +1253,53 @@ int SearchLocation(Location *location)
       temp = RandomInt(1, 5);
       if (temp == 1)
       {
-        printf("You have discovered the Druids' Grove!\n");
+        sprintf(output, "You have discovered the Druids' Grove!");
         MovePlayer(DRUIDS_GROVE);
         break;
       }
       else if (temp == 2)
       {
         AddItem(&player, GLOWING_MUSHROOM);
+        break;
       }
-      else
-      {
-        AddRandomEnemy(world[player.locationID]);
-      }
-      break;
+      /* Otherwise, fall through. */
     default:
       switch (RandomInt(1, 5))
       {
         case 1:
           temp = RandomInt(1, 20);
-          printf("You discover a small bag holding %d gold coins.\n", temp);
+          sprintf(output,
+                  "You find a small bag holding %d gold coins.",
+                  temp);
           player.gold += temp;
           break;
         case 2:
-          printf("You discover a healing potion.\n", temp);
+          sprintf(output,
+                  "You find a healing potion.",
+                  temp);
           player.inventory[HEALING_POTION]++;
           break;
         case 3:
           if (AddRandomEnemy(world[player.locationID]) == SUCCESS)
           {
-            printf("While searching, you're attacked by %s!",
-                   GetNameIndefinite(enemyNPCs[0], LOWERCASE));
-            FlushInput();
-            Combat();
+            sprintf(output,
+                    "While searching, you're attacked by %s!",
+                    GetNameIndefinite(enemyNPCs[0], LOWERCASE));
             break;
           }
           /* Fall through if no random enemy appeared. */
         default:
-          printf("You search diligently, but find nothing of consequence.\n");
+          sprintf(output, "You find nothing of consequence.");
           break;
       }
       break;
   }
+  PrintString(output);
   FlushInput();
+  if (enemyNPCs[0] != NULL)
+  {
+    Combat();
+  }
 
   return SUCCESS;
 }
