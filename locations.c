@@ -1333,8 +1333,8 @@ void DescribeSituation(void)
       {
         world[ILLARUM_SCHOOL]->visits++;
         sprintf(output + strlen(output),
-                "%s, head of the school and Archwizard of the Elements, has "
-                "summoned you here and now approaches to speak with you.",
+                "%s, head of the school and Archwizard of the Elements, "
+                "approaches to speak with you.",
                 FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
         PrintString(output);
         FlushInput();
@@ -1354,7 +1354,7 @@ void DescribeSituation(void)
       sprintf(output, "You are in the Illarum Temple. ");
       break;
     case ILLARUM_PALACE:
-      sprintf(output, "You are in the palace of the king of Illarum. ");
+      sprintf(output, "You are in the palace of the King of Illarum. ");
       break;
     case ILLARUM_PRISON:
       sprintf(output, "You are in the Illarum prison. ");
@@ -1376,7 +1376,7 @@ void DescribeSituation(void)
       sprintf(output, "You are in the Ventarris Temple. ");
       break;
     case VENTARRIS_PALACE:
-      sprintf(output, "You are in the palace of the king of Ventarris. ");
+      sprintf(output, "You are in the palace of the King of Ventarris. ");
       break;
     case VENTARRIS_PRISON:
       sprintf(output, "You are in the Ventarris prison. ");
@@ -1452,7 +1452,7 @@ void DescribeSituation(void)
       sprintf(output, "You are in the temple of the city of Torr. ");
       break;
     case TORR_THRONE_ROOM:
-      sprintf(output, "You are in the throne room of the king of Torr. ");
+      sprintf(output, "You are in the throne room of the King of Torr. ");
       break;
     case TORR_MINE:
       sprintf(output, "You are in the mines of Torr. ");
@@ -1523,13 +1523,13 @@ void DescribeSituation(void)
               " Quelacentus. ");
       break;
     case QUELACENTUS_PLAZA:
-      sprintf(output, "You are in the central plaze of Quelacentus. ");
+      sprintf(output, "You are in the central plaza of Quelacentus. ");
       break;
     case QUELACENTUS_TEMPLE:
       sprintf(output, "You are in the temple of Quelacentus. ");
       break;
     case QUELACENTUS_PALACE:
-      sprintf(output, "You are in the palace of the queen of Quelacentus. ");
+      sprintf(output, "You are in the palace of the Queen of Quelacentus. ");
       break;
     default:
 #if DEBUG
