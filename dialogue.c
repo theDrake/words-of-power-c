@@ -185,8 +185,8 @@ int Dialogue(GameCharacter *pGC)
                 " employment as an agent of the Elemental Wizards' Guild. In "
                 "fact, I already have a task in mind for you. Before "
                 "discussing the details, however, would you like an "
-                "opportunity to once again demonstrate your skills for some of"
-                " the newer students?\"\n",
+                "opportunity to demonstrate your skills once again for the "
+                "newer students?\"\n",
                 pGC->name);
         allegiances[ELEMENTS_GUILD] = GOOD_FRIEND;
         PrintString(output);
@@ -197,9 +197,8 @@ int Dialogue(GameCharacter *pGC)
         {
           case 1:
             sprintf(output,
-                    "%s: \"Excellent! As usual, we'll set up a stuffed dummy "
-                    "for you to destroy. A simple, one-word spell should "
-                    "suffice.\"",
+                    "%s: \"Excellent! Destroy this stuffed dummy with a "
+                    "simple, one-Word spell.\"",
                     pGC->name);
             PrintString(output);
             FlushInput();
@@ -207,46 +206,36 @@ int Dialogue(GameCharacter *pGC)
             Combat();
             sprintf(output,
                     "%s: \"Well done! We'll set up another dummy. This time, "
-                    "be a bit more bold by speaking two or more Words of Power"
-                    " in succession. Remember, this can be harmful to the "
-                    "spellcaster when elemental Words are involved, so be "
-                    "cautious! We will heal you if necessary while you are "
-                    "practicing in our school, but elsewhere you'll have no "
-                    "such protection.\"",
+                    "speak two or more Words in succession. Remember, this can"
+                    " be harmful to the spellcaster, so be cautious! We will "
+                    "heal you if necessary while you are practicing in our "
+                    "school, but elsewhere you'll have no such protection.\"",
                     pGC->name);
             PrintString(output);
             FlushInput();
             AddEnemy(AddInhabitant(world[player.locationID], DUMMY));
             Combat();
             sprintf(output,
-                    "%s: \"Good. Here's one more dummy for you to dismantle. "
-                    "Feel free to experiment a little more!\"",
+                    "%s: \"Fantastic! It's gratifying to see the progress "
+                    "you've made. But now, let us discuss the work I have in "
+                    "mind for you...\"",
                     pGC->name);
             PrintString(output);
             FlushInput();
-            AddEnemy(AddInhabitant(world[player.locationID], DUMMY));
-            Combat();
-            sprintf(output,
-                    "%s: \"It is very gratifying to see the progress you have "
-                    "made! Now then, let us discuss the work I have in mind "
-                    "for you...\"",
-                    pGC->name);
-            PrintString(output);
-            FlushInput();
-            while (FindInhabitant(DUMMY) != NULL)
+            /*while (FindInhabitant(DUMMY) != NULL)
             {
               DeleteInhabitant(world[player.locationID],
                                FindInhabitant(DUMMY));
-            }
+            }*/
             player.currentHP = player.maxHP;
             /* Fall through. */
           default:
             sprintf(output,
-                    "%s: \"Your first task is quite simple: go to the western "
-                    "woods and return with at least ten Glowing Mushrooms. I "
+                    "%s: \"Your first task is quite simple. Go to the western "
+                    "woods and return with at least ten glowing mushrooms. I "
                     "need them for one of my research projects. You may "
-                    "encounter a wild beast or two while you're snooping "
-                    "around, but you should be more than a match for them!\"",
+                    "encounter wild beasts while snooping around, but you "
+                    "should be more than a match for them!\"",
                     pGC->name);
             PrintString(output);
             FlushInput();
@@ -257,11 +246,11 @@ int Dialogue(GameCharacter *pGC)
       else if (missions[ELEMENTS1] == OPEN)
       {
         sprintf(output,
-                "%s: \"Do you have those mushroom samples I asked for?\"",
+                "%s: \"Do you have those mushroom samples I asked for?\"\n"
+                "[1] \"Yes.\"\n"
+                "[2] \"No.\"",
                 pGC->name);
         PrintString(output);
-        printf("[1] \"Yes.\"\n"
-               "[2] \"No.\"\n");
         GetIntInput(&iInput, 1, 2);
         switch (iInput)
         {
@@ -275,27 +264,48 @@ int Dialogue(GameCharacter *pGC)
               PrintString(output);
               FlushInput();
               missions[ELEMENTS1] = COMPLETED;
+              player.inventory[GLOWING_MUSHROOM] -= 10;
               GiveGold(pGC, &player, 20);
+              pGC->relationship++;
               GainExperience(STD_MISSION_EXP);
+            }
+            else
+            {
+              sprintf(output,
+                      "%s: \"No you don't. If this is a joke, it isn't funny. "
+                      "Return when you have those ten samples!\"",
+                      pGC->name);
+              if (pGC->relationship > INDIFFERENT)
+              {
+                pGC->relationship--;
+              }
             }
             break;
           default:
             sprintf(output,
-                    "%s: \"I don't have any more work for you right now, I'm "
-                    "afraid, but I will in the near future. Please check in "
-                    "with me again soon.\"",
+                    "%s: \"Please collect them for me as soon as possible.\"",
                     pGC->name);
             PrintString(output);
             FlushInput();
             break;
         }
       }
-      else if (missions[ELEMENTS1] == OPEN)
+      else if (missions[ELEMENTS2] == OPEN)
       {
         sprintf(output,
-                "%s: \"Have you delivered those goods to the druids yet, %s? "
-                "Why not? Please hurry or I will not trust you with any more "
+                "%s: \"Why haven't you delivered those goods to the druids "
+                "yet, %s? Please hurry or I will not trust you with any more "
                 "errands.\"",
+                pGC->name,
+                player.name);
+        PrintString(output);
+        FlushInput();
+      }
+      else if (missions[ELEMENTS2] == COMPLETED)
+      {
+        sprintf(output,
+                "%s: \"Thank you for delivering those goods to the druids, %s!"
+                "Our relationship with them is crucial to Illarum's future.\"",
                 pGC->name,
                 player.name);
         PrintString(output);
