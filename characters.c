@@ -88,13 +88,13 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->words[WORD_OF_AIR] = KNOWN;
       pGC->inventory[HEALING_POTION] = 3;
       pGC->locationID = ILLARUM_SCHOOL;
-      PrintString("You are a human wizard from a distant land who has traveled"
-                  " to the city of Illarum in order to study at the "
-                  "prestigious School of the Elements.\0");
+      PrintString("You are a human wizard who has been studying at the "
+                  "prestigious School of the Elements in the city of Illarum "
+                  "for the past five years.\0");
       FlushInput();
       do
       {
-        printf("What is thy name? ");
+        printf("Choose your name: ");
         GetStrInput(pGC->name, SHORT_STR_LEN + 1);
         repeatOptions = strlen(pGC->name) < 1;
       }while (repeatOptions);
@@ -1946,13 +1946,12 @@ int NumberOfWordsKnown(GameCharacter *pGC)
 Description: Returns either a name or a generic descriptor preceded by "the"
              for a given game character.
 
-     Inputs: pGC        - The game character whose named/descriptor is desired.
-             capitalize - Indicates whether or not to capitalize (e.g., "The").
+     Inputs: pGC - Pointer to the game character of interest.
 
     Outputs: The game character's definite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameDefinite(GameCharacter *pGC, BOOL capitalize)
+char *GetNameDefinite(GameCharacter *pGC)
 {
   static char gcName[SHORT_STR_LEN + 1];
 
@@ -1968,17 +1967,7 @@ char *GetNameDefinite(GameCharacter *pGC, BOOL capitalize)
   {
     return pGC->name;
   }
-  else
-  {
-    if (capitalize)
-    {
-      strcpy(gcName, "The ");
-    }
-    else
-    {
-      strcpy(gcName, "the ");
-    }
-  }
+  strcpy(gcName, "the ");
   strcat(gcName, pGC->descriptor);
 
   return gcName;
@@ -1990,13 +1979,12 @@ char *GetNameDefinite(GameCharacter *pGC, BOOL capitalize)
 Description: Returns either a name or a generic descriptor preceded by "a" or
              "an" for a given game character.
 
-     Inputs: pGC        - The game character whose name/descriptor is desired.
-             capitalize - Indicates whether or not to capitalize (e.g., "An").
+     Inputs: pGC - Pointer to the game character of interest.
 
     Outputs: The game character's indefinite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameIndefinite(GameCharacter *pGC, BOOL capitalize)
+char *GetNameIndefinite(GameCharacter *pGC)
 {
   static char gcName[SHORT_STR_LEN + 1];
 
@@ -2023,25 +2011,11 @@ char *GetNameIndefinite(GameCharacter *pGC, BOOL capitalize)
            pGC->descriptor[0] == 'O' ||
            pGC->descriptor[0] == 'U')
   {
-    if (capitalize)
-    {
-      strcpy(gcName, "An ");
-    }
-    else
-    {
-      strcpy(gcName, "an ");
-    }
+    strcpy(gcName, "an ");
   }
   else
   {
-    if (capitalize)
-    {
-      strcpy(gcName, "A ");
-    }
-    else
-    {
-      strcpy(gcName, "a ");
-    }
+    strcpy(gcName, "a ");
   }
   strcat(gcName, pGC->descriptor);
 
@@ -2054,14 +2028,13 @@ char *GetNameIndefinite(GameCharacter *pGC, BOOL capitalize)
 Description: Returns the plural form of a given game character's generic
              descriptor.
 
-     Inputs: pGC        - Game character whose name/description is to be made
-                          plural.
-             capitalize - If TRUE, capitalize.
+     Inputs: pGC - Pointer to the game character whose name/description is to
+                   be made plural.
 
     Outputs: The game character's plural name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNamePlural(GameCharacter *pGC, BOOL capitalize)
+char *GetNamePlural(GameCharacter *pGC)
 {
   int nameLength;
   static char gcName[SHORT_STR_LEN + 1];
@@ -2117,10 +2090,6 @@ char *GetNamePlural(GameCharacter *pGC, BOOL capitalize)
       gcName[nameLength + 1] = '\0';
       break;
   }
-  if (capitalize)
-  {
-    gcName[0] = toupper(gcName[0]);
-  }
 
   return gcName;
 }
@@ -2146,7 +2115,7 @@ void CheckStatus(void)
     {
       if (enemyNPCs[i]->currentHP <= 0)
       {
-        strcat(output, GetNameDefinite(enemyNPCs[i], TRUE));
+        strcat(output, Capitalize(GetNameDefinite(enemyNPCs[i])));
         if (enemyNPCs[i]->status[INANIMATE])
         {
           strcat(output, " has been destroyed.\n");

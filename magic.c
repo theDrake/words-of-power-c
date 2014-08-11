@@ -74,7 +74,7 @@ int SpellMenu(void)
            pGC = pGC->next)
       {
         temp++;
-        printf("[%d] My companion, %s\n", GetNameDefinite(pGC, LOWERCASE));
+        printf("[%d] My companion, %s\n", GetNameDefinite(pGC));
       }
     }
     if (player.status[IN_COMBAT]) /* Combat mode: display enemies.           */
@@ -593,7 +593,7 @@ int CastSpell(GameCharacter *spellcaster,
         }
         else
         {
-          printf("%s is dead.\n", GetNameDefinite(gcTargets[i], CAPITALIZED));
+          printf("%s is dead.\n", Capitalize(GetNameDefinite(gcTargets[i])));
           FlushInput();
         }
         for (pGC = world[player.locationID]->inhabitants;

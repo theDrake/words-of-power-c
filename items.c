@@ -87,12 +87,12 @@ int UseItem(GameCharacter *pGC, int idNum)
   {
     case HEALING_POTION:
       printf("%s drinks a healing potion and regains %d hit points.\n",
-             GetNameDefinite(pGC, CAPITALIZED),
+             Capitalize(GetNameDefinite(pGC)),
              HealGameCharacter(pGC, RandomInt(DEFAULT_HP / 2, DEFAULT_HP)));
       break;
     case FOOD:
       printf("%s eats food and regains %d hit points.\n",
-             GetNameDefinite(pGC, CAPITALIZED),
+             Capitalize(GetNameDefinite(pGC)),
              HealGameCharacter(pGC,
                                RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;

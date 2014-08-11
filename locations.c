@@ -1284,7 +1284,7 @@ int SearchLocation(Location *location)
           {
             sprintf(output,
                     "While searching, you're attacked by %s!",
-                    GetNameIndefinite(enemyNPCs[0], LOWERCASE));
+                    GetNameIndefinite(enemyNPCs[0]));
             break;
           }
           /* Fall through if no random enemy appeared. */
@@ -1326,19 +1326,23 @@ void DescribeSituation(void)
   switch (player.locationID)
   {
     case ILLARUM_SCHOOL:
-      sprintf(output,
-              "You are in the School of the Elements in the city of Illarum."
-              " ");
       if (world[ILLARUM_SCHOOL]->visits == 0)  /* Indicates a new game.      */
       {
         world[ILLARUM_SCHOOL]->visits++;
-        sprintf(output + strlen(output),
-                "%s, head of the school and Archwizard of the Elements, "
-                "approaches to speak with you.",
+        sprintf(output,
+                "%s, Archwizard of the School of the Elements, approaches to "
+                "speak with you.",
                 FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
         PrintString(output);
         FlushInput();
         Dialogue(FindInhabitant(ARCHWIZARD_OF_ELEMENTS));
+        return;
+      }
+      else
+      {
+        sprintf(output,
+                "You are in the School of the Elements in the city of Illarum."
+                " ");
       }
       break;
     case ILLARUM_ENTRANCE:
@@ -1572,14 +1576,14 @@ void DescribeSituation(void)
         }
         if (visibleGameCharCounter[pGC->ID] == 1)
         {
-          strcat(output, GetNameIndefinite(pGC, LOWERCASE));
+          strcat(output, GetNameIndefinite(pGC));
         }
         else
         {
           sprintf(output + strlen(output),
                   "%d %s",
                   visibleGameCharCounter[pGC->ID],
-                  GetNamePlural(pGC, LOWERCASE));
+                  GetNamePlural(pGC));
         }
         gcTypesDescribed++;
         gcDescribed[pGC->ID] = TRUE;

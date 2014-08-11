@@ -29,7 +29,7 @@ int main(void)
   quit = FALSE;
 
   PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
-              "and programmed by David C. Drake (www.davidcdrake.com)!\0");
+              "and programmed by David C. Drake (www.davidcdrake.com)\n\0");
 
   while (!quit)
   {
@@ -54,61 +54,6 @@ int main(void)
 #endif
 
   return 0;
-}
-
-/******************************************************************************
-   Function: PrintString
-
-Description: Prints a given string according to the maximum characters per
-             line, followed by a new line character. (Assumes the string is
-             NULL-terminated and contains no tabs. If no NULL-terminator is
-             encountered, assumes the size of the string is equal to
-             LONG_STR_LEN.)
-
-     Inputs: str - The string to be printed, which must be NULL-terminated.
-
-    Outputs: None.
-******************************************************************************/
-void PrintString(char *str)
-{
-  int i, last_blank_space_index = 0, current_line_length = 0;
-  static char output[LONG_STR_LEN + 1];
-
-  strcpy(output, str);
-  for (i = 0; i < LONG_STR_LEN && output[i] != '\0'; i++)
-  {
-    current_line_length++;
-
-    if (output[i] == ' ')
-    {
-      last_blank_space_index = i;
-    }
-    if (output[i] == '\n')
-    {
-      last_blank_space_index = 0;
-      current_line_length    = 0;
-    }
-    else if (current_line_length == MAX_LINE_LENGTH)
-    {
-      if (last_blank_space_index == 0)
-      {
-        output[i]           = '\n';
-        current_line_length = 0;
-      }
-      else
-      {
-        i                      = last_blank_space_index;
-        output[i]              = '\n';
-        last_blank_space_index = 0;
-        current_line_length    = 0;
-      }
-    }
-  }
-  if (i == LONG_STR_LEN)
-  {
-    output[i] = '\0';
-  }
-  printf("%s\n", output);
 }
 
 /******************************************************************************
@@ -412,10 +357,8 @@ BOOL GetExitConfirmation(void)
 
   do
   {
-    printf(
-"Are you sure you want to exit to the main menu (and lose any unsaved data)? "
-"\n(Y/N) "
-          );
+    printf("Are you sure you want to exit to the main menu (and lose any "
+           "unsaved data)?\n(Y/N) ");
     GetCharInput(&cInput);
     if (cInput == 'Y')
     {
@@ -426,7 +369,7 @@ BOOL GetExitConfirmation(void)
     {
       printf("Invalid response.\n\n");
     }
-  }while (cInput != 'N' && cInput != 'Y');
+  }while (cInput != 'N');
 
   return FALSE;
 }
@@ -547,14 +490,13 @@ int GetIntInput(int *i, int low, int high)
 
 Description: Takes in a string of one or more characters entered by the user.
 
-     Inputs: string - Pointer to the array of characters that will store input.
-             n      - Maximum number of characters to read in (if greater than
-                      SHORT_STR_LEN or negative, it will be set to
-                      SHORT_STR_LEN).
+     Inputs: str - Pointer to the string that will store input.
+             n   - Maximum number of characters to read in (if greater than
+                   SHORT_STR_LEN or negative, it will be set to SHORT_STR_LEN).
 
-    Outputs: Returns a pointer to string where the input is stored.
+    Outputs: Returns a pointer to the string where the input is stored.
 ******************************************************************************/
-char *GetStrInput(char *string, int n)
+char *GetStrInput(char *str, int n)
 {
   int length;  /* To store the input string's length.                        */
 
@@ -568,15 +510,108 @@ char *GetStrInput(char *string, int n)
       n = SHORT_STR_LEN;
     }
   }
-  fgets(string, n, stdin);
-  length = strlen(string);
-  if (length > 0 && string[length - 1] == '\n')
+  fgets(str, n, stdin);
+  length = strlen(str);
+  if (length > 0 && str[length - 1] == '\n')
   {
-    string[length - 1] = '\0';
+    str[length - 1] = '\0';
   }
   printf("\n");
 
-  return string;
+  return str;
+}
+
+/******************************************************************************
+   Function: PrintString
+
+Description: Prints a given string according to the maximum characters per
+             line, followed by a new line character. (Assumes the string is
+             NULL-terminated and contains no tabs. If no NULL-terminator is
+             encountered, assumes the size of the string is equal to
+             LONG_STR_LEN.)
+
+     Inputs: str - The string to be printed, which must be NULL-terminated.
+
+    Outputs: None.
+******************************************************************************/
+void PrintString(char *str)
+{
+  int i, last_blank_space_index = 0, current_line_length = 0;
+  static char output[LONG_STR_LEN + 1];
+
+  strcpy(output, str);
+  for (i = 0; i < LONG_STR_LEN && output[i] != '\0'; i++)
+  {
+    current_line_length++;
+
+    if (output[i] == ' ')
+    {
+      last_blank_space_index = i;
+    }
+    if (output[i] == '\n')
+    {
+      last_blank_space_index = 0;
+      current_line_length    = 0;
+    }
+    else if (current_line_length == MAX_LINE_LENGTH)
+    {
+      if (last_blank_space_index == 0)
+      {
+        output[i]           = '\n';
+        current_line_length = 0;
+      }
+      else
+      {
+        i                      = last_blank_space_index;
+        output[i]              = '\n';
+        last_blank_space_index = 0;
+        current_line_length    = 0;
+      }
+    }
+  }
+  if (i == LONG_STR_LEN)
+  {
+    output[i] = '\0';
+  }
+  printf("%s\n", output);
+}
+
+/******************************************************************************
+   Function: Capitalize
+
+Description: Capitalizes the first character of a given string.
+
+     Inputs: str - The string to be capitalized.
+
+    Outputs: Pointer to the capitalized string.
+******************************************************************************/
+char *Capitalize(char *str)
+{
+  toupper(str[0]);
+
+  return str;
+}
+
+/******************************************************************************
+   Function: AllCaps
+
+Description: Capitalizes every character in a given string (which is assumed to
+             be NULL-terminated).
+
+     Inputs: str - The string to be modified.
+
+    Outputs: Pointer to the modified string.
+******************************************************************************/
+char *AllCaps(char *str)
+{
+  int i;
+
+  for (i = 0; str[i] != '\0'; i++)
+  {
+    toupper(str[i]);
+  }
+
+  return str;
 }
 
 /******************************************************************************
@@ -584,19 +619,18 @@ char *GetStrInput(char *string, int n)
 
 Description: Determines whether a given string contains a given character.
 
-     Inputs: string - Pointer to the string of interest.
-             c      - Character to search for in the string.
+     Inputs: str - Pointer to the string of interest.
+             c   - Character to search for in the string.
 
     Outputs: TRUE if the string contains "c", otherwise FALSE.
 ******************************************************************************/
-BOOL StrContains(char string[], char c)
+BOOL StrContains(char *str, char c)
 {
-  int i;  /* for loop variable */
-  int stringLength = strlen(string);
+  int i;
 
-  for (i = 0; i < stringLength; i++)
+  for (i = 0; str[i] != '\0'; i++)
   {
-    if (string[i] == c)
+    if (str[i] == c)
     {
       return TRUE;
     }

@@ -19,14 +19,11 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define ERROR_MESSAGE printf("ERROR: %s, line %d\n", __FILE__, __LINE__); FlushInput();
 
 #define BOOL  int
-#define TRUE  1
 #define FALSE 0
+#define TRUE  1
 
-#define SUCCESS 1
 #define FAILURE 0
-
-#define CAPITALIZED 1
-#define LOWERCASE   0
+#define SUCCESS 1
 
   /* String length constants.                                                */
 #define SHORT_STR_LEN   50
@@ -486,7 +483,6 @@ typedef struct LOCATION
 
   /* Function prototypes for "main.c"                                        */
 int main(void);
-void PrintString(char *str);
 void MainMenu(void);
 void PrintStandardOptions(void);
 int CreateWorld(void);
@@ -497,8 +493,11 @@ int RandomInt(int low, int high);
 int RandomBool(void);
 char GetCharInput(char *c);
 int GetIntInput(int *i, int low, int high);
-char *GetStrInput(char *string, int n);
-BOOL StrContains(char string[], char c);
+char *GetStrInput(char *str, int n);
+void PrintString(char *str);
+char *Capitalize(char *str);
+char *AllCaps(char *str);
+BOOL StrContains(char *str, char c);
 void FlushInput(void);
 
   /* Function prototypes for "locations.c"                                   */
@@ -530,9 +529,9 @@ BOOL IsEvil(GameCharacter *pGC);
 BOOL IsNeutral(GameCharacter *pGC);
 int NumberOfLanguagesKnown(GameCharacter *pGC);
 int NumberOfWordsKnown(GameCharacter *pGC);
-char *GetNameDefinite(GameCharacter *pGC, BOOL capitalize);
-char *GetNameIndefinite(GameCharacter *pGC, BOOL capitalize);
-char *GetNamePlural(GameCharacter *pGC, BOOL capitalize);
+char *GetNameDefinite(GameCharacter *pGC);
+char *GetNameIndefinite(GameCharacter *pGC);
+char *GetNamePlural(GameCharacter *pGC);
 void CheckStatus(void);
 void UpdateVisibleGameCharCounter(void);
 GameCharacter *GetTarget(void);

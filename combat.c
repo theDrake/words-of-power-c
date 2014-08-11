@@ -874,7 +874,7 @@ int AttackMenu(void)
             }
             else
             {
-              printf("%s is dead.\n", GetNameDefinite(target, CAPITALIZED));
+              printf("%s is dead.\n", Capitalize(GetNameDefinite(target)));
               FlushInput();
             }
             for (target = world[player.locationID]->inhabitants;
