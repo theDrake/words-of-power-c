@@ -428,7 +428,7 @@ int Dialogue(GameCharacter *pGC)
           sprintf(output,
                   "%s: \"You want my advice? Stay away from the southwestern "
                   "swamplands...unless you've got a death wish, that is. Not "
-                  "only is it a known refuge for necromances and other evil "
+                  "only is it a known refuge for necromancers and other evil "
                   "wizards, but deep within the swamp lies the dark citadel of"
                   " a powerful lich and his undead minions.\"",
                   AllCaps(pGC->name));
@@ -451,21 +451,18 @@ int Dialogue(GameCharacter *pGC)
         case 5:
           sprintf(output,
                   "%s: \"You heard of the Silent Sage? He lives in a solitary "
-                  "house on the southern plains. Never speaks to anyone, so "
-                  "some folks wonder if he might be deaf or mute. I don't know"
-                  " anything about that, but what I do know is that he's "
-                  "considered by many to be the most powerful wizard in the "
-                  "world!\"",
+                  "house on the southern plains. Never speaks to anyone. Some "
+                  "folks think he's deaf or mute. I don't know anything about "
+                  "that, but I do know this: he's considered by some to be the"
+                  " most powerful wizard in the world!\"",
                   AllCaps(pGC->name));
           break;
         case 6:
           sprintf(output,
                   "%s: \"The elves live in a place called Wynnfaer, deep "
-                  "within the western woods. Don't bother trying to find it on"
-                  " your own: the elves' magic will prevent you from ever "
-                  "getting close. If you want to talk with the elves, I "
-                  "suggest getting to know the druids of the forest. They can "
-                  "guide you to Wynnfaer...if they trust you, that is.\"",
+                  "within the western woods. Don't bother trying to find it, "
+                  "though: their magic will prevent you from ever getting "
+                  "close!\"",
                   AllCaps(pGC->name));
           break;
         case 7:
@@ -485,18 +482,18 @@ int Dialogue(GameCharacter *pGC)
         case 9:
           sprintf(output,
                   "%s: \"The dwarves have a stronghold up in the northern "
-                  "mountains known as 'Torr.' They say the dwarven loremasters"
-                  " have hidden several rare tomes of arcane knowledge there "
+                  "mountains known as Torr. They say the dwarven loremasters "
+                  "have hidden several rare tomes of arcane knowledge there "
                   "in a secret vault. I bet a wizard like you would love to "
-                  "get your hands on some of that knowledge!\"",
+                  "get your hands on some of those books!\"",
                   AllCaps(pGC->name));
           break;
         case 10:
           sprintf(output,
-                  "%s: \"Some of the sailors and fisherman in these parts like"
-                  " to tell tall tales about mermaids and such. They even "
-                  "claim the merfolk live in a great city deep within the "
-                  "ocean to the east of here. Ha!\"",
+                  "%s: \"Some sailors and fisherman in these parts like to "
+                  "tell tall tales about mermaids and such. They even claim "
+                  "the merfolk live in a great city deep within the ocean to "
+                  "the east of here. Ha!\"",
                   AllCaps(pGC->name));
           break;
         case 11:
@@ -512,10 +509,9 @@ int Dialogue(GameCharacter *pGC)
           sprintf(output,
                   "%s: \"It's well known that the king of Ventarris wants to "
                   "conquer Illarum and expand his power throughout this "
-                  "region. But did you know that the lich of the southern "
-                  "swamp was himself once a king of Ventarris? He also hopes "
-                  "to dominate this region and once again be recognized as "
-                  "king.\"",
+                  "region. But did you know the lich of the southern swamp was"
+                  " himself once a king of Ventarris? He also hopes to "
+                  "dominate the region and reign once again as king.\"",
                   AllCaps(pGC->name));
           break;
         default:
