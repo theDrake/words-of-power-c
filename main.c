@@ -22,8 +22,7 @@ Description: Main function for the "Words of Power" RPG.
 
     Outputs: Number of errors encountered.
 ******************************************************************************/
-int main(void)
-{
+int main(void) {
   srand(time(0));
   worldExists = FALSE;
   quit = FALSE;
@@ -31,21 +30,16 @@ int main(void)
   PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
               "and programmed by David C. Drake (www.davidcdrake.com)\n\0");
 
-  while (!quit)
-  {
-    if (!worldExists)
-    {
+  while (!quit) {
+    if (!worldExists) {
       MainMenu();
-    }
-    else
-    {
+    } else {
       CheckStatus();
       DescribeSituation();
       PrintStandardOptions();
     }
   }
-  if (worldExists)
-  {
+  if (worldExists) {
     DestroyWorld();
   }
   printf("Farewell!\n");
@@ -65,40 +59,34 @@ Description: Displays main menu options and does some handling of input.
 
     Outputs: None.
 ******************************************************************************/
-void MainMenu(void)
-{
+void MainMenu(void) {
   char cInput;
   BOOL repeatOptions;
 
-  do
-  {
+  do {
     repeatOptions = FALSE;
     printf("Main Menu:\n"
            "[N]ew Game\n"
            "[L]oad Game\n"
            "[Q]uit\n");
     GetCharInput(&cInput);
-    switch (cInput)
-    {
+    switch (cInput) {
       case 'N': /* New Game */
-        if (worldExists)
-        {
+        if (worldExists) {
           DestroyWorld();
         }
         CreateWorld();
         InitializeCharacter(&player, PLAYER, world[ILLARUM_SCHOOL]);
         break;
       case 'L': /* Load Game */
-        if (worldExists)
-        {
+        if (worldExists) {
           DestroyWorld();
         }
         /*LoadGame();*/
         printf("Sorry, no save files found.\n\n");
         break;
       case 'Q': /* Quit */
-        if (worldExists)
-        {
+        if (worldExists) {
           DestroyWorld();
         }
         quit = TRUE;
@@ -108,7 +96,7 @@ void MainMenu(void)
         repeatOptions = TRUE;
         break;
     }
-  }while(repeatOptions);
+  }while (repeatOptions);
 }
 
 /******************************************************************************
@@ -380,7 +368,7 @@ BOOL GetExitConfirmation(void)
 Description: Returns a pseudo-random integer between specified values
              (inclusive).
 
-     Inputs: low  – Lowest possible return value.
+     Inputs: low  ï¿½ Lowest possible return value.
              high - Highest possible return value.
 
     Outputs: A randomly generated integer between "low" and "high" (inclusive).
@@ -585,8 +573,7 @@ Description: Capitalizes the first character of a given string.
 
     Outputs: Pointer to the capitalized string.
 ******************************************************************************/
-char *Capitalize(char *str)
-{
+char *Capitalize(char *str) {
   toupper(str[0]);
 
   return str;
@@ -602,12 +589,10 @@ Description: Capitalizes every character in a given string (which is assumed to
 
     Outputs: Pointer to the modified string.
 ******************************************************************************/
-char *AllCaps(char *str)
-{
+char *AllCaps(char *str) {
   int i;
 
-  for (i = 0; str[i] != '\0'; i++)
-  {
+  for (i = 0; str[i] != '\0'; i++) {
     toupper(str[i]);
   }
 
@@ -624,14 +609,11 @@ Description: Determines whether a given string contains a given character.
 
     Outputs: TRUE if the string contains "c", otherwise FALSE.
 ******************************************************************************/
-BOOL StrContains(char *str, char c)
-{
+BOOL StrContains(char *str, char c) {
   int i;
 
-  for (i = 0; str[i] != '\0'; i++)
-  {
-    if (str[i] == c)
-    {
+  for (i = 0; str[i] != '\0'; i++) {
+    if (str[i] == c) {
       return TRUE;
     }
   }
@@ -650,12 +632,10 @@ Description: Removes remaining input up to and including an end of line or end
 
     Outputs: None.
 ******************************************************************************/
-void FlushInput(void)
-{
+void FlushInput(void) {
   int c;
 
-  while((c = getchar()) != '\n' && c != EOF)
-  {
+  while((c = getchar()) != '\n' && c != EOF) {
     /* discard */ ;
   }
 }

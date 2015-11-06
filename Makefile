@@ -7,9 +7,9 @@
 #              Cygwin environment utilizing Digital Mars Make (5.05).
 ###############################################################################
 
-CC      = gcc
-CFLAGS  = -I.
-HEADER  = wop.h
+CC = gcc
+CFLAGS = -I.
+HEADER = wop.h
 OBJECTS = main.o characters.o combat.o dialogue.o items.o locations.o magic.o
 
 .c.o:
