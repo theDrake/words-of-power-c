@@ -109,17 +109,13 @@ Description: Prints the standard (i.e., non-combat) player options and
 
     Outputs: None.
 ******************************************************************************/
-void PrintStandardOptions(void)
-{
-  int i;              /* for loop variable                        */
-  int iInput;
+void PrintStandardOptions(void) {
+  int i, iInput, temp;
   char cInput;
-  int temp;
   BOOL repeatOptions;
-  GameCharacter *pGC; /* To scan linked lists of game characters. */
+  GameCharacter *pGC;  /* To scan linked lists of game characters. */
 
-  do
-  {
+  do {
     repeatOptions = FALSE;
     printf("What do you want to do?\n"
            "[T]alk\n"
@@ -131,51 +127,43 @@ void PrintStandardOptions(void)
            "[M]ove to Another Location\n"
            "[Q]uit (Return to Main Menu)\n");
     GetCharInput(&cInput);
-    switch (cInput)
-    {
-      case 'T': /* Talk */
-        if (TalkMenu() == FAILURE)
-        {
+    switch (cInput) {
+      case 'T':  /* Talk */
+        if (TalkMenu() == FAILURE) {
           repeatOptions = TRUE;
         }
         break;
-      case 'S': /* Search */
-        if (SearchLocation(world[player.locationID]) == FAILURE)
-        {
+      case 'S':  /* Search */
+        if (SearchLocation(world[player.locationID]) == FAILURE) {
           repeatOptions = TRUE;
         }
         break;
-      case 'U': /* Use an Item */
-        if (ItemMenu() == FAILURE)
-        {
+      case 'U':  /* Use an Item */
+        if (ItemMenu() == FAILURE) {
           repeatOptions = TRUE;
         }
         break;
-      case 'C': /* Cast a Spell */
-        if (SpellMenu() == FAILURE)
-        {
+      case 'C':  /* Cast a Spell */
+        if (SpellMenu() == FAILURE) {
           repeatOptions = TRUE;
         }
         break;
-      case 'A': /* Attack */
-        if (AttackMenu() == FAILURE)
-        {
+      case 'A':  /* Attack */
+        if (AttackMenu() == FAILURE) {
           repeatOptions = TRUE;
         }
         break;
-      case 'M': /* Move to Another Location */
-        if (MovementMenu() == FAILURE)
-        {
+      case 'M':  /* Move to Another Location */
+        if (MovementMenu() == FAILURE) {
           repeatOptions = TRUE;
         }
         break;
-      case 'V': /* View Inventory and Status */
+      case 'V':  /* View Inventory and Status */
         DisplayCharacterData(&player);
         repeatOptions = TRUE;
         break;
-      case 'Q': /* Quit */
-        if (GetExitConfirmation() == FALSE)
-        {
+      case 'Q':  /* Quit */
+        if (GetExitConfirmation() == FALSE) {
           repeatOptions = TRUE;
         }
         break;
@@ -199,18 +187,14 @@ Description: Allocates memory for, and initializes, Location structs for all
 
     Outputs: The number of failed location initializations.
 ******************************************************************************/
-int CreateWorld(void)
-{
-  int i;          /* for loop variable                                       */
-  int errors = 0; /* The number of failed location initializations.          */
+int CreateWorld(void) {
+  int i, errors = 0;
 
 #if DEBUG
   printf("Creating world...\n\n");
 #endif
 
-    /* If a game world already exists in memory, destroy it.                 */
-  if (worldExists)
-  {
+  if (worldExists) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -219,15 +203,11 @@ int CreateWorld(void)
   }
 
     /* Initialize each location (including its inhabitants).                 */
-  for (i = 0; i < TOTAL_LOCATION_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_LOCATION_IDS; i++) {
     world[i] = malloc(sizeof(Location));
-    if (world[i] != NULL)
-    {
+    if (world[i] != NULL) {
       errors += InitializeLocation(world[i], i);
-    }
-    else
-    {
+    } else {
 #if DEBUG
       ERROR_MESSAGE
 #endif
@@ -236,20 +216,17 @@ int CreateWorld(void)
   }
 
     /* Set the status of all missions to CLOSED.                             */
-  for (i = 0; i < TOTAL_MISSION_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_MISSION_IDS; i++) {
     missions[i] = CLOSED;
   }
 
-    /* Initialize the player's allegiances.                                  */
-  for (i = 0; i < TOTAL_GROUP_IDS; i++)
-  {
+    /* Initialize player allegiances.                                        */
+  for (i = 0; i < TOTAL_GROUP_IDS; i++) {
     allegiances[i] = INDIFFERENT;
   }
 
     /* Initialize the player's "kill" history.                               */
-  for (i = 0; i < TOTAL_GC_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {
     kills[i] = 0;
   }
 
@@ -270,14 +247,11 @@ Description: Deallocates all memory set aside for Location structs and their
 
     Outputs: The number of errors detected.
 ******************************************************************************/
-int DestroyWorld(void)
-{
-  int i;               /* for loop variable                                  */
-  int errors = 0;      /* The number of errors detected.                     */
+int DestroyWorld(void) {
+  int i, errors = 0;
   GameCharacter *temp; /* To search for and deallocate game characters.      */
 
-  if (worldExists == FALSE)
-  {
+  if (worldExists == FALSE) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -288,39 +262,28 @@ int DestroyWorld(void)
   printf("Destroying world...\n\n");
 #endif
 
-  for (i = 0; i < TOTAL_LOCATION_IDS; i++)
-  {
-    if (world[i] != NULL)
-    {
-      while (world[i]->inhabitants != NULL)
-      {
-        if (DeleteInhabitant(world[i], world[i]->inhabitants) == FAILURE)
-        {
+  for (i = 0; i < TOTAL_LOCATION_IDS; i++) {
+    if (world[i] != NULL) {
+      while (world[i]->inhabitants != NULL) {
+        if (DeleteInhabitant(world[i], world[i]->inhabitants) == FAILURE) {
           errors++;
         }
       }
       free(world[i]);
-    }
-    else
-    {
+    } else {
       errors++;
     }
   }
-  for (i = 0; i < MAX_ENEMIES; i++)
-  {
+  for (i = 0; i < MAX_ENEMIES; i++) {
     enemyNPCs[i] = NULL;
   }
-  while (player.next != NULL)
-  {
-    if (DeleteCompanion(player.next) == FAILURE)
-    {
+  while (player.next != NULL) {
+    if (DeleteCompanion(player.next) == FAILURE) {
       errors++;
     }
   }
-  if (player.summonedCreature != NULL)
-  {
-    if (DeleteCreatureSummonedBy(&player) == FAILURE)
-    {
+  if (player.summonedCreature != NULL) {
+    if (DeleteCreatureSummonedBy(&player) == FAILURE) {
       errors++;
     }
   }
@@ -339,22 +302,17 @@ Description: Asks for confirmation of intent to exit to the main menu. If
 
     Outputs: TRUE if the player confirms they want to exit to the main menu.
 ******************************************************************************/
-BOOL GetExitConfirmation(void)
-{
+BOOL GetExitConfirmation(void) {
   char cInput;
 
-  do
-  {
+  do {
     printf("Are you sure you want to exit to the main menu (and lose any "
            "unsaved data)?\n(Y/N) ");
     GetCharInput(&cInput);
-    if (cInput == 'Y')
-    {
+    if (cInput == 'Y') {
       DestroyWorld();
       return TRUE;
-    }
-    else if (cInput != 'N')
-    {
+    } else if (cInput != 'N') {
       printf("Invalid response.\n\n");
     }
   }while (cInput != 'N');
@@ -365,21 +323,17 @@ BOOL GetExitConfirmation(void)
 /******************************************************************************
    Function: RandomInt
 
-Description: Returns a pseudo-random integer between specified values
-             (inclusive).
+Description: Returns a random integer between specified values (inclusive).
 
-     Inputs: low  � Lowest possible return value.
+     Inputs: low  - Lowest possible return value.
              high - Highest possible return value.
 
     Outputs: A randomly generated integer between "low" and "high" (inclusive).
 ******************************************************************************/
-int RandomInt(int low, int high)
-{
+int RandomInt(int low, int high) {
   int temp;
 
-    /* If the arguments were passed in the wrong order, switch them.         */
-  if (low > high)
-  {
+  if (low > high) {
     temp = low;
     low = high;
     high = temp;
@@ -394,14 +348,13 @@ int RandomInt(int low, int high)
 /******************************************************************************
    Function: RandomBool
 
-Description: Randomly returns a boolean value.
+Description: Returns a random boolean value.
 
      Inputs: None.
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-int RandomBool(void)
-{
+int RandomBool(void) {
   return rand() % 2;
 }
 
@@ -416,8 +369,7 @@ Description: Takes in one character entered by the user, converts it to
     Outputs: Returns the character read in from the user, converted to
              uppercase.
 ******************************************************************************/
-char GetCharInput(char *c)
-{
+char GetCharInput(char *c) {
   scanf(" %c", c);
   FlushInput();
   printf("\n");
@@ -439,14 +391,11 @@ Description: Reads in one integer, then repeats until an integer within given
 
     Outputs: Returns the input value stored in "*i".
 ******************************************************************************/
-int GetIntInput(int *i, int low, int high)
-{
+int GetIntInput(int *i, int low, int high) {
   int temp;
   BOOL repeat;
 
-    /* If "low" and "high" were passed in the wrong order, switch them.      */
-  if (low > high)
-  {
+  if (low > high) {
     temp = low;
     low = high;
     high = temp;
@@ -455,13 +404,11 @@ int GetIntInput(int *i, int low, int high)
 #endif
   }
 
-  do
-  {
+  do {
     repeat = FALSE;
     scanf("%d", i);
     FlushInput();
-    if (*i < low || *i > high)
-    {
+    if (*i < low || *i > high) {
       printf("Invalid response. Enter a number between %d and %d: ",
              low,
              high);
@@ -486,22 +433,19 @@ Description: Takes in a string of one or more characters entered by the user.
 ******************************************************************************/
 char *GetStrInput(char *str, int n)
 {
-  int length;  /* To store the input string's length.                        */
+  int length;
 
-  if (n < 0 || n > (SHORT_STR_LEN + 1))
-  {
+  if (n < 0 || n > (SHORT_STR_LEN + 1)) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
-    if (n > SHORT_STR_LEN)
-    {
+    if (n > SHORT_STR_LEN) {
       n = SHORT_STR_LEN;
     }
   }
   fgets(str, n, stdin);
   length = strlen(str);
-  if (length > 0 && str[length - 1] == '\n')
-  {
+  if (length > 0 && str[length - 1] == '\n') {
     str[length - 1] = '\0';
   }
   printf("\n");
@@ -522,43 +466,32 @@ Description: Prints a given string according to the maximum characters per
 
     Outputs: None.
 ******************************************************************************/
-void PrintString(char *str)
-{
+void PrintString(char *str) {
   int i, last_blank_space_index = 0, current_line_length = 0;
   static char output[LONG_STR_LEN + 1];
 
   strcpy(output, str);
-  for (i = 0; i < LONG_STR_LEN && output[i] != '\0'; i++)
-  {
+  for (i = 0; i < LONG_STR_LEN && output[i] != '\0'; i++) {
     current_line_length++;
-
-    if (output[i] == ' ')
-    {
+    if (output[i] == ' ') {
       last_blank_space_index = i;
     }
-    if (output[i] == '\n')
-    {
+    if (output[i] == '\n') {
       last_blank_space_index = 0;
       current_line_length    = 0;
-    }
-    else if (current_line_length == MAX_LINE_LENGTH)
-    {
-      if (last_blank_space_index == 0)
-      {
+    } else if (current_line_length == MAX_LINE_LENGTH) {
+      if (last_blank_space_index == 0) {
         output[i]           = '\n';
         current_line_length = 0;
-      }
-      else
-      {
-        i                      = last_blank_space_index;
-        output[i]              = '\n';
+      } else {
+        i = last_blank_space_index;
+        output[i] = '\n';
         last_blank_space_index = 0;
-        current_line_length    = 0;
+        current_line_length = 0;
       }
     }
   }
-  if (i == LONG_STR_LEN)
-  {
+  if (i == LONG_STR_LEN) {
     output[i] = '\0';
   }
   printf("%s\n", output);
