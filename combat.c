@@ -19,22 +19,18 @@ Description: Given an already existing game character, adds a pointer to it in
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddEnemy(GameCharacter *pGC)
-{
-  int i; /* for loop variable */
+int AddEnemy(GameCharacter *pGC) {
+  int i;
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-  for (i = 0; i < MAX_ENEMIES; i++)
-  {
-    if (enemyNPCs[i] == NULL)
-    {
+  for (i = 0; i < MAX_ENEMIES; i++) {
+    if (enemyNPCs[i] == NULL) {
       enemyNPCs[i] = pGC;
       pGC->status[IN_COMBAT] = TRUE;
       return SUCCESS;
@@ -60,20 +56,17 @@ Description: Creates a new game character and adds a pointer to it in the local
 
     Outputs: SUCCESS if an enemy is added, otherwise FAILURE.
 ******************************************************************************/
-int AddRandomEnemy(Location *location)
-{
+int AddRandomEnemy(Location *location) {
   GameCharacter *newEnemy = NULL;
 
-  if (location == NULL)
-  {
+  if (location == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-  switch (location->ID)
-  {
+  switch (location->ID) {
     case ILLARUM_ENTRANCE:
       newEnemy = AddInhabitant(location, THIEF);
       break;
@@ -136,12 +129,9 @@ int AddRandomEnemy(Location *location)
     case SILENT_SAGE_HOME:
       break;
     case FOREST:
-      if (player.soul <= EVIL)
-      {
+      if (player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
-      }
-      else
-      {
+      } else {
         newEnemy = AddInhabitant(location, BEAR);
       }
       break;
@@ -150,20 +140,17 @@ int AddRandomEnemy(Location *location)
     case HERMIT_HUT:
       break;
     case WYNNFAER_ENTRANCE:
-      if (player.soul <= EVIL)
-      {
+      if (player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       }
       break;
     case WYNNFAER_PLAZA:
-      if (player.soul <= EVIL)
-      {
+      if (player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       }
       break;
     case WYNNFAER_PALACE:
-      if (player.soul <= EVIL)
-      {
+      if (player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       }
       break;
@@ -171,56 +158,47 @@ int AddRandomEnemy(Location *location)
       newEnemy = AddInhabitant(location, GOBLIN);
       break;
     case GESHTAL:
-      if (player.soul <= EVIL)
-      {
+      if (player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, BARBARIAN);
       }
       break;
     case TORR_ENTRANCE:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_MARKET:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_SCHOOL:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_TEMPLE:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_THRONE_ROOM:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_MINE:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_VAULT:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_PRISON:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
@@ -228,14 +206,12 @@ int AddRandomEnemy(Location *location)
       newEnemy = AddInhabitant(location, GOBLIN);
       break;
     case GUGGENHOLM_MAIN:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, GNOME);
       }
       break;
     case GUGGENHOLM_MINE:
-      if (player.soul <= VERY_EVIL)
-      {
+      if (player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, GNOME);
       }
       break;
@@ -295,8 +271,7 @@ int AddRandomEnemy(Location *location)
 #endif
       break;
   }
-  if (newEnemy != NULL)
-  {
+  if (newEnemy != NULL) {
     AddEnemy(newEnemy);
     return SUCCESS;
   }
@@ -315,12 +290,10 @@ Description: Removes a pointer to a given enemy from the global "enemyNPCs"
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveEnemy(GameCharacter *pGC)
-{
-  int i, j; /* for loop variables */
+int RemoveEnemy(GameCharacter *pGC) {
+  int i, j;
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -328,17 +301,13 @@ int RemoveEnemy(GameCharacter *pGC)
   }
 
   pGC->status[IN_COMBAT] = FALSE;
-  for (i = 0; i < MAX_ENEMIES; i++)
-  {
-    if (enemyNPCs[i] == pGC)
-    {
-        /* Remove the pointer to "pGC".                                      */
+  for (i = 0; i < MAX_ENEMIES; i++) {
+    if (enemyNPCs[i] == pGC) {
       enemyNPCs[i] = NULL;
         /* If any active pointers existed past "pGC", shift them left.       */
       for (j = i + 1;
            j < MAX_ENEMIES && enemyNPCs[j] != NULL;
-           j++, i++)
-      {
+           j++, i++) {
         enemyNPCs[i] = enemyNPCs[j];
         enemyNPCs[j] = NULL;
       }
@@ -364,14 +333,10 @@ Description: Removes a pointer to a given enemy from the global "enemyNPCs"
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteEnemy(GameCharacter *pGC)
-{
-  if (RemoveEnemy(pGC) == SUCCESS)
-  {
+int DeleteEnemy(GameCharacter *pGC) {
+  if (RemoveEnemy(pGC) == SUCCESS) {
     DeleteInhabitant(world[pGC->locationID], pGC);
-  }
-  else
-  {
+  } else {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -391,11 +356,12 @@ Description: Returns the number of enemies pointed to by the global array
 
     Outputs: The number of active pointers in "enemyNPCs".
 ******************************************************************************/
-int NumberOfEnemies(void)
-{
+int NumberOfEnemies(void) {
   int i;
+
   for (i = 0; i < MAX_ENEMIES && enemyNPCs[i] != NULL; i++)
     ;
+
   return i;
 }
 
@@ -408,24 +374,17 @@ Description: Returns the number of visible enemies.
 
     Outputs: The number of visible enemies.
 ******************************************************************************/
-int VisibleEnemies(void)
-{
-  int i;         /* for loop counter           */
-  int count = 0; /* Number of visible enemies. */
+int VisibleEnemies(void) {
+  int i, count = 0;
 
-  if (player.status[IN_COMBAT] == FALSE)
-  {
+  if (player.status[IN_COMBAT] == FALSE) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return count;
-  }
-  else
-  {
-    for (i = 0; i < MAX_ENEMIES && enemyNPCs[i] != NULL; i++)
-    {
-      if (enemyNPCs[i]->status[INVISIBLE] == FALSE)
-      {
+  } else {
+    for (i = 0; i < MAX_ENEMIES && enemyNPCs[i] != NULL; i++) {
+      if (enemyNPCs[i]->status[INVISIBLE] == FALSE) {
         count++;
       }
     }
