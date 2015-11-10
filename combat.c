@@ -403,17 +403,13 @@ Description: Handles combat situations between the player and NPCs by
 
     Outputs: Returns the number of enemies remaining (usually 0).
 ******************************************************************************/
-int Combat(void)
-{
-  int i;              /* for loop variable                                   */
-  int round = 1;
+int Combat(void) {
+  int i, round = 1;
   char cInput;
-  BOOL repeatOptions;
-  BOOL playerFirst;   /* TRUE if the player has the initiative.              */
-  GameCharacter *pGC; /* For searching through linked lists of GCs.          */
+  BOOL repeatOptions, playerFirst;
+  GameCharacter *pGC;
 
-  if (NumberOfEnemies() == 0)
-  {
+  if (NumberOfEnemies() == 0) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -423,20 +419,16 @@ int Combat(void)
   player.status[IN_COMBAT] = TRUE;
   playerFirst = RandomBool();     /* Determine who gets the first round.     */
 
-  do
-  {
+  do {
     printf("  ____________\n"
            "_/ENEMY STATS \\__________________________________________________"
            "______________\n");
-    for (i = 0; i < MAX_ENEMIES; i++)
-    {
-      if (enemyNPCs[i] == NULL)
-      {
+    for (i = 0; i < MAX_ENEMIES; i++) {
+      if (enemyNPCs[i] == NULL) {
         break;
       }
       PrintCombatStatus(enemyNPCs[i]);
-      if (enemyNPCs[i]->summonedCreature != NULL)
-      {
+      if (enemyNPCs[i]->summonedCreature != NULL) {
         printf("%s's summoned creature: ", enemyNPCs[i]->name);
         PrintCombatStatus(enemyNPCs[i]->summonedCreature);
       }
@@ -444,21 +436,17 @@ int Combat(void)
     printf("  ____________\n"
            "_/PLAYER STATS\\__________________________________________________"
            "______________\n");
-    for (pGC = &player; pGC != NULL; pGC = pGC->next)
-    {
+    for (pGC = &player; pGC != NULL; pGC = pGC->next) {
       PrintCombatStatus(pGC);
     }
-    if (player.summonedCreature != NULL)
-    {
+    if (player.summonedCreature != NULL) {
       PrintCombatStatus(player.summonedCreature);
     }
     printf("\n");
 
-    if (round > 1 || playerFirst) /* Check initiative only on the 1st round. */
-    {
+    if (round > 1 || playerFirst) {  /* Check initiative only on 1st round. */
         /* --PLAYER'S TURN-- */
-      do
-      {
+      do {
         repeatOptions = FALSE;
         printf("Choose an action:\n"
                "[A]ttack\n"
@@ -467,58 +455,45 @@ int Combat(void)
                "[F]lee\n"
                "[Q]uit (Return to Main Menu)\n");
         GetCharInput(&cInput);
-        switch (cInput)
-        {
+        switch (cInput) {
           case 'A': /* Attack */
-            if (AttackMenu() == FAILURE)
-            {
+            if (AttackMenu() == FAILURE) {
               repeatOptions = TRUE;
             }
             break;
           case 'C': /* Cast a Spell */
-            if (SpellMenu() == FAILURE)
-            {
+            if (SpellMenu() == FAILURE) {
               repeatOptions = TRUE;
             }
             break;
           case 'U': /* Use an Item */
-            if (ItemMenu() == FAILURE)
-            {
+            if (ItemMenu() == FAILURE) {
               repeatOptions = TRUE;
             }
             break;
           case 'F': /* Flee */
-            if (enemyNPCs[0]->ID == DUMMY)  /*Indicates tutorial mode.       */
-            {
+            if (enemyNPCs[0]->ID == DUMMY) {  /* Indicates tutorial mode. */
               printf("%s: \"Come on, destroy the dummy already!\"\n",
                      FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
               FlushInput();
               repeatOptions = TRUE;
-            }
-            else if (RandomInt(1, 3) == 1)
-            {
+            } else if (RandomInt(1, 3) == 1) {
               printf("You have successfully fled.\n");
               FlushInput();
-              while (NumberOfEnemies() > 0)
-              {
+              while (NumberOfEnemies() > 0) {
                 RemoveEnemy(enemyNPCs[0]);
               }
               player.status[IN_COMBAT] = FALSE;
               MovementMenu();
-            }
-            else
-            {
+            } else {
               printf("Your attempt to escape has failed.\n");
               FlushInput();
             }
             break;
           case 'Q': /* Quit */
-            if (GetExitConfirmation())
-            {
+            if (GetExitConfirmation()) {
               return 0;
-            }
-            else
-            {
+            } else {
               repeatOptions = TRUE;
             }
             break;
@@ -530,24 +505,21 @@ int Combat(void)
       }while (repeatOptions);
       CheckStatus();
 
-        /* Increment "round" here if the NPCs had the initiative.            */
-      if (!playerFirst)
-      {
+        /* Increment "round" here if the NPCs had the initiative. */
+      if (!playerFirst) {
         round++;
       }
     }
 
-      /* --THE ENEMY'S TURN-- */
-    for (i = 0; i < NumberOfEnemies(); i++)
-    {
+      /* -- ENEMY'S TURN-- */
+    for (i = 0; i < NumberOfEnemies(); i++) {
       EnemyAI(i);
     }
     printf("\n");
     CheckStatus();
 
-      /* Increment "round" here if the player had the initiative.            */
-    if (playerFirst)
-    {
+      /* Increment "round" here if the player had the initiative. */
+    if (playerFirst) {
       round++;
     }
   }while (player.currentHP > 0 && NumberOfEnemies() > 0);
@@ -566,10 +538,8 @@ Description: Prints some basic, combat-relevant information about a given game
 
     Outputs: None.
 ******************************************************************************/
-void PrintCombatStatus(GameCharacter *pGC)
-{
-  if (pGC == NULL)
-  {
+void PrintCombatStatus(GameCharacter *pGC) {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -591,73 +561,59 @@ Description: Handles enemy NPC decision-making during combat.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int EnemyAI(int index)
-{
-  int i;  /* for loop variable */
+int EnemyAI(int index) {
+  int i;
   BOOL actionPerformed = FALSE;
   GameCharacter *gcTargets[MAX_TARGETS] = {NULL};
 
-  if (enemyNPCs[index] == NULL)
-  {
+  if (enemyNPCs[index] == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-  if (enemyNPCs[index]->status[INANIMATE] == TRUE)
-  {
+  if (enemyNPCs[index]->status[INANIMATE] == TRUE) {
     return SUCCESS;
-  }
-  else if (IsSpellcaster(enemyNPCs[index]))
-  {
-    if (RandomInt(1, 10) > 1)  /* 90% chance of casting a spell.             */
-    {
-      for (i = 0; i < NumberOfEnemies(); i++)
-      {
+  } else if (IsSpellcaster(enemyNPCs[index])) {
+    if (RandomInt(1, 10) > 1) {  /* 90% chance of casting a spell. */
+      for (i = 0; i < NumberOfEnemies(); i++) {
         if (enemyNPCs[i]->currentHP <= (enemyNPCs[i]->maxHP / 4) &&
-            enemyNPCs[i]->words[WORD_OF_HEALTH] == KNOWN)
-        {
+            enemyNPCs[i]->words[WORD_OF_HEALTH] == KNOWN) {
           gcTargets[0] = enemyNPCs[i];
-          CastSpell(enemyNPCs[index], "Y", gcTargets);  /* Healing spell.    */
+          CastSpell(enemyNPCs[index], "Y", gcTargets);  /* Healing spell. */
           actionPerformed = TRUE;
         }
       }
-      while (actionPerformed == FALSE)
-      {
+      while (actionPerformed == FALSE) {
         if (enemyNPCs[i]->words[WORD_OF_FIRE] == KNOWN ||
             enemyNPCs[i]->words[WORD_OF_AIR] == KNOWN ||
             enemyNPCs[i]->words[WORD_OF_WATER] == KNOWN ||
             enemyNPCs[i]->words[WORD_OF_EARTH] == KNOWN)
-        switch (RandomInt(1, 4))
-        {
+        switch (RandomInt(1, 4)) {
           case 1:
-            if (enemyNPCs[i]->words[WORD_OF_AIR] == KNOWN)
-            {
+            if (enemyNPCs[i]->words[WORD_OF_AIR] == KNOWN) {
               gcTargets[0] = &player;
-              CastSpell(enemyNPCs[index], "E", gcTargets);   /* Wind spell.  */
+              CastSpell(enemyNPCs[index], "E", gcTargets);  /* Wind spell. */
               actionPerformed = TRUE;
             }
             break;
           case 2:
-            if (enemyNPCs[i]->words[WORD_OF_WATER] == KNOWN)
-            {
+            if (enemyNPCs[i]->words[WORD_OF_WATER] == KNOWN) {
               gcTargets[0] = &player;
-              CastSpell(enemyNPCs[index], "S", gcTargets);   /* Water spell. */
+              CastSpell(enemyNPCs[index], "S", gcTargets);  /* Water spell. */
               actionPerformed = TRUE;
             }
             break;
           case 3:
-            if (enemyNPCs[i]->words[WORD_OF_EARTH] == KNOWN)
-            {
+            if (enemyNPCs[i]->words[WORD_OF_EARTH] == KNOWN) {
               gcTargets[0] = &player;
               CastSpell(enemyNPCs[index], "P", gcTargets);   /* Earth spell. */
               actionPerformed = TRUE;
             }
             break;
           default:
-            if (enemyNPCs[i]->words[WORD_OF_FIRE] == KNOWN)
-            {
+            if (enemyNPCs[i]->words[WORD_OF_FIRE] == KNOWN) {
               gcTargets[0] = &player;
               CastSpell(enemyNPCs[index], "B", gcTargets);   /* Fire spell.  */
               actionPerformed = TRUE;
@@ -665,14 +621,10 @@ int EnemyAI(int index)
             break;
         }
       }
-    }
-    else
-    {
+    } else {
       Attack(enemyNPCs[index], &player);
     }
-  }
-  else /* The active NPC is not a spellcaster. */
-  {
+  } else {  /* The active NPC is not a spellcaster. */
     Attack(enemyNPCs[index], &player);
   }
 
@@ -689,16 +641,12 @@ Description: Takes the player through the process of selecting a game character
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AttackMenu(void)
-{
-  int i;                 /* for loop variable                                */
-  int iInput;
+int AttackMenu(void) {
+  int i, iInput, temp;
   BOOL repeatOptions;
-  int temp;
-  GameCharacter *target; /* To select a target from a list of inhabitants.   */
+  GameCharacter *target;
 
-  if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY)
-  {
+  if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) {
     printf("%s: \"You're a wizard, not a warrior. Cast a spell!\"\n",
            FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
     FlushInput();
@@ -707,31 +655,23 @@ int AttackMenu(void)
 
   UpdateVisibleGameCharCounter();
   temp = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {
     gcDescribed[i] = FALSE;
   }
 
-    /* Potential targets are displayed (unless only one is available).       */
-  if (player.status[IN_COMBAT])
-  {
-    if (VisibleEnemies() == 1)
-    {
+    /* Potential targets are displayed (unless only one is available). */
+  if (player.status[IN_COMBAT]) {
+    if (VisibleEnemies() == 1) {
       Attack(&player, enemyNPCs[0]);
       return SUCCESS;
-    }
-    else
-    {
+    } else {
       printf("Select a target:\n");
-      for (i = 0; i < NumberOfEnemies(); i++)
-      {
+      for (i = 0; i < NumberOfEnemies(); i++) {
         if (enemyNPCs[i]->status[INVISIBLE] == FALSE &&
-            gcDescribed[enemyNPCs[i]->ID] == FALSE)
-        {
+            gcDescribed[enemyNPCs[i]->ID] == FALSE) {
           temp++;
           printf("[%d] %s", temp, enemyNPCs[i]->name);
-          if (visibleGameCharCounter[enemyNPCs[i]->ID] > 1)
-          {
+          if (visibleGameCharCounter[enemyNPCs[i]->ID] > 1) {
             printf(" (%d available)",
                    visibleGameCharCounter[enemyNPCs[i]->ID]);
           }
@@ -740,42 +680,31 @@ int AttackMenu(void)
         }
       }
     }
-  }
-  else  /* Not in combat mode: player attacks a local inhabitant.            */
-  {
-    if (VisibleInhabitants(world[player.locationID]) == 0)
-    {
+  } else {  /* Not in combat mode: player attacks a local inhabitant. */
+    if (VisibleInhabitants(world[player.locationID]) == 0) {
       printf("There is nobody here to attack.\n");
       FlushInput();
       return FAILURE;
     }
-    if (VisibleInhabitants(world[player.locationID]) == 1)
-    {
+    if (VisibleInhabitants(world[player.locationID]) == 1) {
       for (target = world[player.locationID]->inhabitants;
            target != NULL;
-           target = target->next)
-      {
-        if (target->status[INVISIBLE] == FALSE)
-        {
+           target = target->next) {
+        if (target->status[INVISIBLE] == FALSE) {
           Attack(&player, target);
           return SUCCESS;
         }
       }
-    }
-    else  /* Multiple visible inhabitants to choose from.                    */
-    {
+    } else {  /* Multiple visible inhabitants to choose from. */
       printf("Select a target:\n");
       for (target = world[player.locationID]->inhabitants;
            target != NULL;
-           target = target->next)
-      {
+           target = target->next) {
         if (target->status[INVISIBLE] == FALSE &&
-            gcDescribed[target->ID] == FALSE)
-        {
+            gcDescribed[target->ID] == FALSE) {
           temp++;
           printf("[%d] %s", temp, target->name);
-          if (visibleGameCharCounter[target->ID] > 1)
-          {
+          if (visibleGameCharCounter[target->ID] > 1) {
             printf(" (%d available)", visibleGameCharCounter[target->ID]);
           }
           printf("\n");
@@ -785,70 +714,53 @@ int AttackMenu(void)
     }
   }
 
-    /* Player chooses a target by number.                                    */
+    /* Player chooses a target by number. */
   GetIntInput(&iInput, 1, temp);
 
     /* The target is now found, and attacked, by matching it with the input. */
   temp = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {
     gcDescribed[i] = FALSE;
   }
-  if (player.status[IN_COMBAT])
-  {
-    for (i = 0; i < NumberOfEnemies(); i++)
-    {
+  if (player.status[IN_COMBAT]) {
+    for (i = 0; i < NumberOfEnemies(); i++) {
       if (enemyNPCs[i]->status[INVISIBLE] == FALSE &&
-          gcDescribed[enemyNPCs[i]->ID] == FALSE)
-      {
+          gcDescribed[enemyNPCs[i]->ID] == FALSE) {
         temp++;
-        if (temp == iInput)
-        {
+        if (temp == iInput) {
           Attack(&player, enemyNPCs[i]);
           return SUCCESS;
         }
         gcDescribed[enemyNPCs[i]->ID] = TRUE;
       }
     }
-  }
-  else  /* Not in combat mode: player attacks a local inhabitant.            */
-  {
+  } else {  /* Not in combat mode: player attacks a local inhabitant. */
     for (target = world[player.locationID]->inhabitants;
          target != NULL;
-         target = target->next)
-    {
+         target = target->next) {
       if (target->status[INVISIBLE] == FALSE &&
-          gcDescribed[target->ID] == FALSE)
-      {
+          gcDescribed[target->ID] == FALSE) {
         temp++;
-        if (temp == iInput)
-        {
+        if (temp == iInput) {
           Attack(&player, target);
-          if (player.status[IN_COMBAT] == FALSE)
-          {
-            if (target->currentHP > 0)
-            {
+          if (player.status[IN_COMBAT] == FALSE) {
+            if (target->currentHP > 0) {
               target->relationship = HOSTILE_ENEMY;
               AddEnemy(target);
-            }
-            else
-            {
+            } else {
               printf("%s is dead.\n", Capitalize(GetNameDefinite(target)));
               FlushInput();
             }
             for (target = world[player.locationID]->inhabitants;
                  target != NULL;
-                 target = target->next)
-            {
-              if (WillingToFight(target) && target->status[IN_COMBAT] == FALSE)
-              {
+                 target = target->next) {
+              if (WillingToFight(target) && target->status[IN_COMBAT] == FALSE) {
                 target->relationship = HOSTILE_ENEMY;
                 AddEnemy(target);
               }
             }
           }
-          if (player.status[IN_COMBAT] == FALSE && NumberOfEnemies() > 0)
-          {
+          if (player.status[IN_COMBAT] == FALSE && NumberOfEnemies() > 0) {
             printf("Prepare for battle!\n");
             FlushInput();
             Combat();
@@ -876,12 +788,10 @@ Description: Handles a physical attack between two game characters.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int Attack(GameCharacter *attacker, GameCharacter *defender)
-{
+int Attack(GameCharacter *attacker, GameCharacter *defender) {
   int damage;
 
-  if (attacker == NULL || defender == NULL)
-  {
+  if (attacker == NULL || defender == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -889,19 +799,15 @@ int Attack(GameCharacter *attacker, GameCharacter *defender)
   }
 
   printf("%s attacks %s", attacker->name, defender->name);
-  if (RandomInt(1, 10) > 2)  /* 80% chance of a successful hit.              */
-  {
+  if (RandomInt(1, 10) > 2) {  /* 80% chance of a successful hit.            */
     damage = RandomInt(1, attacker->physicalPower);
     damage -= RandomInt(0, defender->physicalDefense);
-    if (damage <= 0)
-    {
+    if (damage <= 0) {
       damage = 1;
     }
     defender->currentHP -= damage;
     printf(" for %d damage.", damage);
-  }
-  else
-  {
+  } else {
     printf(", but misses.");
   }
   FlushInput();
@@ -919,8 +825,7 @@ Description: Determines whether a given NPC will fight the player if the player
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL WillingToFight(GameCharacter *pGC)
-{
+BOOL WillingToFight(GameCharacter *pGC) {
   if (pGC->ID == SOLDIER || pGC->ID == KNIGHT || pGC->ID == WIZARD ||
       pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
       pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||
@@ -939,8 +844,7 @@ BOOL WillingToFight(GameCharacter *pGC)
       pGC->ID == MERFOLK_PRIESTESS || pGC->ID == MERFOLK_HIGH_PRIESTESS ||
       pGC->ID == MERFOLK_QUEEN || pGC->ID == VENTARRIS_KING ||
       pGC->ID == ILLARUM_KING || pGC->ID == LICH || pGC->ID == NECROMANCER ||
-      pGC->ID == ARCHNECROMANCER || pGC->ID == SKELETAL_KNIGHT)
-  {
+      pGC->ID == ARCHNECROMANCER || pGC->ID == SKELETAL_KNIGHT) {
     return TRUE;
   }
 
@@ -956,8 +860,7 @@ Description: Determines whether a given NPC will flee when losing a fight.
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL WillingToFlee(GameCharacter *pGC)
-{
+BOOL WillingToFlee(GameCharacter *pGC) {
   return pGC->ID == PEASANT ||
          pGC->ID == SOLDIER ||
          pGC->ID == WIZARD ||
@@ -997,8 +900,7 @@ Description: Determines whether a given NPC will assist allies during combat
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL WillingToHelp(GameCharacter *pGC)
-{
+BOOL WillingToHelp(GameCharacter *pGC) {
   if (pGC->ID == SOLDIER || pGC->ID == KNIGHT || pGC->ID == WIZARD ||
       pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
       pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||
@@ -1016,8 +918,7 @@ BOOL WillingToHelp(GameCharacter *pGC)
       pGC->ID == ARCHDRUID || pGC->ID == MERFOLK_SOLDIER ||
       pGC->ID == MERFOLK_PRIESTESS || pGC->ID == MERFOLK_HIGH_PRIESTESS ||
       pGC->ID == MERFOLK_QUEEN || pGC->ID == VENTARRIS_KING ||
-      pGC->ID == ILLARUM_KING)
-  {
+      pGC->ID == ILLARUM_KING) {
     return TRUE;
   }
 
