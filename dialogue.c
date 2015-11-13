@@ -19,54 +19,39 @@ Description: Takes the player through the process of selecting a game character
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int TalkMenu(void)
-{
-  int i;                 /* for loop variable                                */
-  int iInput;
+int TalkMenu(void) {
+  int i, iInput, temp = 0;
   BOOL repeatOptions;
-  int temp;
-  GameCharacter *target; /* To select a target from a list of inhabitants.   */
+  GameCharacter *target;
 
   UpdateVisibleGameCharCounter();
-  temp = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {
     gcDescribed[i] = FALSE;
   }
 
     /* Potential targets are displayed (unless only one is available).       */
-  if (VisibleInhabitants(world[player.locationID]) == 0)
-  {
+  if (VisibleInhabitants(world[player.locationID]) == 0) {
     PrintString("There is no one to speak with here.");
     FlushInput();
     return FAILURE;
-  }
-  else if (VisibleInhabitants(world[player.locationID]) == 1)
-  {
+  } else if (VisibleInhabitants(world[player.locationID]) == 1) {
     for (target = world[player.locationID]->inhabitants;
          target != NULL;
-         target = target->next)
-    {
-      if (target->status[INVISIBLE] == FALSE)
-      {
+         target = target->next) {
+      if (target->status[INVISIBLE] == FALSE) {
         return Dialogue(target);
       }
     }
-  }
-  else  /* Multiple visible inhabitants to choose from.                      */
-  {
+  } else {  /* Multiple visible inhabitants to choose from. */
     PrintString("With whom do you wish to speak?");
     for (target = world[player.locationID]->inhabitants;
          target != NULL;
-         target = target->next)
-    {
+         target = target->next) {
       if (target->status[INVISIBLE] == FALSE &&
-          gcDescribed[target->ID] == FALSE)
-      {
+          gcDescribed[target->ID] == FALSE) {
         temp++;
         printf("[%d] %s", temp, Capitalize(GetNameIndefinite(target)));
-        if (visibleGameCharCounter[target->ID] > 1)
-        {
+        if (visibleGameCharCounter[target->ID] > 1) {
           printf(" (%d available)", visibleGameCharCounter[target->ID]);
         }
         printf("\n");
@@ -75,26 +60,22 @@ int TalkMenu(void)
     }
   }
 
-    /* Player chooses a target by number.                                    */
+    /* Player chooses a target by number. */
   GetIntInput(&iInput, 1, temp);
 
-    /* The target is now found by matching it with the input.                */
+    /* The target is now found by matching it with the input. */
   temp = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {
     gcDescribed[i] = FALSE;
   }
 
   for (target = world[player.locationID]->inhabitants;
        target != NULL;
-       target = target->next)
-  {
+       target = target->next) {
     if (target->status[INVISIBLE] == FALSE &&
-        gcDescribed[target->ID] == FALSE)
-    {
+        gcDescribed[target->ID] == FALSE) {
       temp++;
-      if (temp == iInput)
-      {
+      if (temp == iInput) {
         return Dialogue(target);
       }
       gcDescribed[target->ID] = TRUE;
@@ -118,53 +99,43 @@ Description: Presents dialogue text and options when the player interacts with
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int Dialogue(GameCharacter *pGC)
-{
-  int i;                /* for loop variable                                 */
-  int iInput;
-  BOOL repeatOptions;
-  BOOL canCommunicate;  /* TRUE if a shared language can be found.           */
+int Dialogue(GameCharacter *pGC) {
+  int i, iInput;
+  BOOL repeatOptions, canCommunicate;
   char output[LONG_STR_LEN + 1] = "";
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Check for language compatibility.                                     */
+    /* Check for language compatibility. */
   canCommunicate = FALSE;
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
-  {
-    if (player.languages[i] == KNOWN && pGC->languages[i] == KNOWN)
-    {
+  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+    if (player.languages[i] == KNOWN && pGC->languages[i] == KNOWN) {
       canCommunicate = TRUE;
       break;
     }
   }
-  if (canCommunicate == FALSE)
-  {
+  if (canCommunicate == FALSE) {
     sprintf(output,
             "All your attempts at communication have failed. It appears that "
             "you and %s do not share a common language.",
             GetNameDefinite(pGC));
     PrintString(output);
     FlushInput();
-    return SUCCESS; /* Although they can't talk, no error has occurred.      */
+    return SUCCESS; /* Although they can't talk, no error has occurred. */
   }
 
   pGC->conversations++;
-  if (pGC->ID == MERCHANT || pGC->ID == DWARF_MERCHANT)
-  {
+  if (pGC->ID == MERCHANT || pGC->ID == DWARF_MERCHANT) {
     MerchantDialogue(pGC);
   }
-  switch (pGC->ID)
-  {
+  switch (pGC->ID) {
     case ARCHWIZARD_OF_ELEMENTS:
-      if (pGC->conversations == 1)  /* Indicates a new game: offer tutorial. */
-      {
+      if (pGC->conversations == 1) {  /* Indicates new game: offer tutorial. */
         sprintf(output,
                 "%s: \"Good morning, %s, and congratulations!\"",
                 AllCaps(pGC->name),
@@ -193,8 +164,7 @@ int Dialogue(GameCharacter *pGC)
         printf("[1] \"Of course!\"  (Enter tutorial.)\n"
                "[2] \"No, thanks.\" (Skip tutorial.)\n");
         GetIntInput(&iInput, 1, 2);
-        switch (iInput)
-        {
+        switch (iInput) {
           case 1:
             sprintf(output,
                     "%s: \"Excellent! Destroy this stuffed dummy with a "
@@ -222,8 +192,7 @@ int Dialogue(GameCharacter *pGC)
                     AllCaps(pGC->name));
             PrintString(output);
             FlushInput();
-            /*while (FindInhabitant(DUMMY) != NULL)
-            {
+            /*while (FindInhabitant(DUMMY) != NULL) {
               DeleteInhabitant(world[player.locationID],
                                FindInhabitant(DUMMY));
             }*/
@@ -242,9 +211,7 @@ int Dialogue(GameCharacter *pGC)
             missions[ELEMENTS1] = OPEN;
             break;
         }
-      }
-      else if (missions[ELEMENTS1] == OPEN)
-      {
+      } else if (missions[ELEMENTS1] == OPEN) {
         sprintf(output,
                 "%s: \"Do you have those mushroom samples I asked for?\"\n"
                 "[1] \"Yes.\"\n"
@@ -252,11 +219,9 @@ int Dialogue(GameCharacter *pGC)
                 AllCaps(pGC->name));
         PrintString(output);
         GetIntInput(&iInput, 1, 2);
-        switch (iInput)
-        {
+        switch (iInput) {
           case 1:
-            if (player.inventory[GLOWING_MUSHROOM] >= 10)
-            {
+            if (player.inventory[GLOWING_MUSHROOM] >= 10) {
               sprintf(output,
                       "%s: \"Excellent! I knew I could count on you. Here's 20"
                       " gold to compensate you for your time.\"",
@@ -268,15 +233,12 @@ int Dialogue(GameCharacter *pGC)
               GiveGold(pGC, &player, 20);
               pGC->relationship++;
               GainExperience(STD_MISSION_EXP);
-            }
-            else
-            {
+            } else {
               sprintf(output,
                       "%s: \"No you don't. If this is a joke, it isn't funny. "
                       "Return when you have those ten samples!\"",
                       AllCaps(pGC->name));
-              if (pGC->relationship > INDIFFERENT)
-              {
+              if (pGC->relationship > INDIFFERENT) {
                 pGC->relationship--;
               }
             }
@@ -289,9 +251,7 @@ int Dialogue(GameCharacter *pGC)
             FlushInput();
             break;
         }
-      }
-      else if (missions[ELEMENTS2] == OPEN)
-      {
+      } else if (missions[ELEMENTS2] == OPEN) {
         sprintf(output,
                 "%s: \"Why haven't you delivered those goods to the druids "
                 "yet, %s? Please hurry or I will not trust you with any more "
@@ -300,9 +260,7 @@ int Dialogue(GameCharacter *pGC)
                 player.name);
         PrintString(output);
         FlushInput();
-      }
-      else if (missions[ELEMENTS2] == COMPLETED)
-      {
+      } else if (missions[ELEMENTS2] == COMPLETED) {
         sprintf(output,
                 "%s: \"Thank you for delivering those goods to the druids, %s!"
                 "Our relationship with them is crucial to Illarum's future.\"",
@@ -310,9 +268,7 @@ int Dialogue(GameCharacter *pGC)
                 player.name);
         PrintString(output);
         FlushInput();
-      }
-      else
-      {
+      } else {
         sprintf(output,
                 "%s: \"Welcome back, %s! Tell me of your travels...\"\n",
                 AllCaps(pGC->name),
@@ -330,18 +286,14 @@ int Dialogue(GameCharacter *pGC)
               AllCaps(pGC->name));
       PrintString(output);
       GetIntInput(&iInput, 1, 3);
-      if (iInput == 2)
-      {
+      if (iInput == 2) {
         LanguageLearningDialogue(pGC);
-      }
-      else if (iInput == 3)
-      {
+      } else if (iInput == 3) {
         WordLearningDialogue(pGC);
       }
       break;
     case ARCHDRUID:
-      if (missions[ELEMENTS1] == OPEN)
-      {
+      if (missions[ELEMENTS1] == OPEN) {
         sprintf(output,
                 "%s: \"Greetings, friend. You wear the garb of a Wizard of the"
                 " Elements. Do you bear goods from the Archwizard?\"\n"
@@ -350,13 +302,10 @@ int Dialogue(GameCharacter *pGC)
                 AllCaps(pGC->name));
         PrintString(output);
         GetIntInput(&iInput, 1, 2);
-        switch (iInput)
-        {
+        switch (iInput) {
           case 1:
-            if (player.inventory[FOOD] > 0)
-            {
-              if (player.inventory[FOOD] < 5)
-              {
+            if (player.inventory[FOOD] > 0) {
+              if (player.inventory[FOOD] < 5) {
                 sprintf(output,
                         "%s: \"Hm. This is less than we were promised, but we "
                         "will get by. Be sure to thank the Archwizard for me, "
@@ -366,9 +315,7 @@ int Dialogue(GameCharacter *pGC)
                 FlushInput();
                 pGC->inventory[FOOD] += player.inventory[FOOD];
                 player.inventory[FOOD] = 0;
-              }
-              else
-              {
+              } else {
                 sprintf(output,
                         "%s: \"Wonderful! It is just as we were promised. Be "
                         "sure to thank the Archwizard for me, will you?\"",
@@ -379,9 +326,7 @@ int Dialogue(GameCharacter *pGC)
                 player.inventory[FOOD] -= 5;
               }
               missions[ELEMENTS1] = COMPLETED;
-            }
-            else
-            {
+            } else {
               printf(output,
                      "%s: \"Yet you bring us no food. Please return once you "
                      "have the promised supplies.\"",
@@ -402,9 +347,7 @@ int Dialogue(GameCharacter *pGC)
             FlushInput();
             break;
         }
-      }
-      else
-      {
+      } else {
         sprintf(output,
                 "%s: \"Greetings, friend.\"\n",
                 AllCaps(pGC->name));
@@ -413,8 +356,7 @@ int Dialogue(GameCharacter *pGC)
       }
       break;
     default:
-      switch (RandomInt(1, 14))
-      {
+      switch (RandomInt(1, 14)) {
         case 1:
           sprintf(output,
                   "%s: \"Ever heard of the Lonely Fisherman, otherwise known "
@@ -537,28 +479,21 @@ Description: Presents dialogue and options relevant to learning a language.
 
     Outputs: SUCCESS if a language is learned, otherwise FAILURE.
 ******************************************************************************/
-int LanguageLearningDialogue(GameCharacter *pGC)
-{
-  int i;                /* for loop variable                                 */
-  int count = 0;        /* Number of languages available to be learned.      */
-  int iInput;
+int LanguageLearningDialogue(GameCharacter *pGC) {
+  int i, iInput, count = 0;  /* Number of languages available to be learned. */
   char output[LONG_STR_LEN + 1] = "";
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
-  {
-    if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN)
-    {
+  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+    if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN) {
       count++;
-      if (count == 1)
-      {
+      if (count == 1) {
         sprintf(output,
                 "%s: \"What language do you want to learn?\"",
                 AllCaps(pGC->name));
@@ -570,37 +505,28 @@ int LanguageLearningDialogue(GameCharacter *pGC)
     }
   }
 
-  if (count > 0)
-  {
+  if (count > 0) {
     sprintf(output + strlen(output),
             "\n[%d] Cancel",
             ++count);
     PrintString(output);
     GetIntInput(&iInput, 1, count);
     count = 0;
-    for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
-    {
-      if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN)
-      {
+    for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+      if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN) {
         count++;
-        if (iInput == count)
-        {
+        if (iInput == count) {
           if (Transaction(pGC,
-                          STD_LANG_FEE * GetPriceModifier(pGC)) == SUCCESS)
-          {
+                          STD_LANG_FEE * GetPriceModifier(pGC)) == SUCCESS) {
             LearnLanguage(i);
             return SUCCESS;
-          }
-          else
-          {
+          } else {
             break;
           }
         }
       }
     }
-  }
-  else
-  {
+  } else {
     sprintf(output,
             "%s: \"You already know all the languages I can teach you.\"",
             AllCaps(pGC->name));
@@ -621,28 +547,21 @@ Description: Presents dialogue and options relevant to learning a Word of
 
     Outputs: SUCCESS if a Word is learned, otherwise FAILURE.
 ******************************************************************************/
-int WordLearningDialogue(GameCharacter *pGC)
-{
-  int i;                /* for loop variable                                 */
-  int count = 0;        /* Number of Words available to be learned.          */
-  int iInput;
+int WordLearningDialogue(GameCharacter *pGC) {
+  int i, iInput, count = 0;  /* Number of Words available to be learned. */
   char output[LONG_STR_LEN + 1] = "";
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-  for (i = 0; i < TOTAL_WORD_IDS; i++)
-  {
-    if (pGC->words[i] == KNOWN && player.words[i] != KNOWN)
-    {
+  for (i = 0; i < TOTAL_WORD_IDS; i++) {
+    if (pGC->words[i] == KNOWN && player.words[i] != KNOWN) {
       count++;
-      if (count == 1)
-      {
+      if (count == 1) {
         sprintf(output,
                 "%s: \"I am willing to teach the following Words. Which one "
                 "interests you?\"",
@@ -655,37 +574,28 @@ int WordLearningDialogue(GameCharacter *pGC)
     }
   }
 
-  if (count > 0)
-  {
+  if (count > 0) {
     sprintf(output + strlen(output),
             "[%d] Cancel\n",
             ++count);
     PrintString(output);
     GetIntInput(&iInput, 1, count);
     count = 0;
-    for (i = 0; i < TOTAL_WORD_IDS; i++)
-    {
-      if (pGC->words[i] == KNOWN && player.words[i] != KNOWN)
-      {
+    for (i = 0; i < TOTAL_WORD_IDS; i++) {
+      if (pGC->words[i] == KNOWN && player.words[i] != KNOWN) {
         count++;
-        if (iInput == count)
-        {
+        if (iInput == count) {
           if (Transaction(pGC,
-                          STD_WORD_FEE * GetPriceModifier(pGC)) == SUCCESS)
-          {
+                          STD_WORD_FEE * GetPriceModifier(pGC)) == SUCCESS) {
             LearnWord(i);
             return SUCCESS;
-          }
-          else
-          {
+          } else {
             break;
           }
         }
       }
     }
-  }
-  else
-  {
+  } else {
     sprintf(output,
             "%s: \"You already know all the Words I'm willing to teach you.\"",
             AllCaps(pGC->name));
@@ -707,35 +617,29 @@ Description: Presents dialogue and options relevant to buying and selling.
 ******************************************************************************/
 int MerchantDialogue(GameCharacter *merchant)
 {
-  int i;                /* for loop variable                                 */
-  int iInput;
-  int count = 0;        /* Number of item types and other options available. */
+  int i, iInput, count = 0;  /* No. of item types and/or options available. */
   char output[LONG_STR_LEN + 1] = "";
 
-  if (merchant == NULL)
-  {
+  if (merchant == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Present the merchant's inventory and other options to the player.     */
+    /* Present the merchant's inventory and other options to the player. */
   sprintf(output,
           "%s: \"What would you like to buy?\"\n",
           merchant->name);
-  for (i = 0; i < TOTAL_ITEM_IDS; i++)
-  {
-    if (merchant->inventory[i] > 0)
-    {
+  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+    if (merchant->inventory[i] > 0) {
       count++;
       sprintf(output + strlen(output),
               "[%d] %s (%d gold)\n",
               count,
               GetItemName(i),
               ItemValue(i) * GetPriceModifier(merchant));
-      if (merchant->inventory[i] >= 10)
-      {
+      if (merchant->inventory[i] >= 10) {
         count++;
         sprintf(output + strlen(output),
                 "[%d] 10 %s (%d gold)",
@@ -751,32 +655,25 @@ int MerchantDialogue(GameCharacter *merchant)
           ++count,
           ++count);
 
-    /* Get input and determine what selection the player made.               */
+    /* Get input and determine what selection the player made. */
   GetIntInput(&iInput, 1, count);
-  for (i = 0; i < TOTAL_ITEM_IDS; i++)
-  {
-    if (merchant->inventory[i] > 0)
-    {
+  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+    if (merchant->inventory[i] > 0) {
       count++;
-      if (count == iInput)
-      {
+      if (count == iInput) {
         if (Transaction(merchant,
-                        ItemValue(i) * GetPriceModifier(merchant)) == SUCCESS)
-        {
+                        ItemValue(i) * GetPriceModifier(merchant)) == SUCCESS) {
           GiveItem(merchant, &player, i);
-          merchant->inventory[i]++;        /* Merchant's supply is infinite. */
+          merchant->inventory[i]++;  /* Merchant's supply is infinite. */
           return SUCCESS;
         }
       }
-      if (merchant->inventory[i] >= 10)
-      {
+      if (merchant->inventory[i] >= 10) {
         count++;
-        if (count == iInput)
-        {
+        if (count == iInput) {
           if (Transaction(merchant,
                           10 * (ItemValue(i) *
-                                GetPriceModifier(merchant))) == SUCCESS)
-          {
+                                GetPriceModifier(merchant))) == SUCCESS) {
             GiveItems(merchant, &player, i, 10);
             merchant->inventory[i] += 10;  /* Merchant's supply is infinite. */
             return SUCCESS;
@@ -785,8 +682,7 @@ int MerchantDialogue(GameCharacter *merchant)
       }
     }
   }
-  if (iInput == ++count)
-  {
+  if (iInput == ++count) {
     /* Sell stuff. */
   }
 
@@ -804,14 +700,10 @@ Description: Returns a floating point value for adjusting a price up or down
     Outputs: Floating point value that may be multiplied by a price to adjust
              the price up or down.
 ******************************************************************************/
-double GetPriceModifier(GameCharacter *merchant)
-{
-  if (merchant->relationship > INDIFFERENT)
-  {
+double GetPriceModifier(GameCharacter *merchant) {
+  if (merchant->relationship > INDIFFERENT) {
     return FRIEND_MODIFIER;
-  }
-  else if (merchant->relationship < INDIFFERENT)
-  {
+  } else if (merchant->relationship < INDIFFERENT) {
     return ENEMY_MODIFIER;
   }
 
@@ -828,12 +720,10 @@ Description: Presents dialogue and options relevant to completing a purchase.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
 ******************************************************************************/
-int Transaction(GameCharacter *merchant, int price)
-{
+int Transaction(GameCharacter *merchant, int price) {
   int iInput;
 
-  if (merchant == NULL)
-  {
+  if (merchant == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -846,10 +736,8 @@ int Transaction(GameCharacter *merchant, int price)
          merchant->name,
          price);
   GetIntInput(&iInput, 1, 2);
-  if (iInput == 1)
-  {
-    if (player.gold < price)
-    {
+  if (iInput == 1) {
+    if (player.gold < price) {
       printf("%s: \"It looks like you don't have enough gold.\"\n",
              merchant->name);
       FlushInput();
@@ -874,10 +762,8 @@ Description: Returns the name of a given language as a string (e.g., "Elvish").
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *LanguageName(int idNum)
-{
-  switch (idNum)
-  {
+char *LanguageName(int idNum) {
+  switch (idNum) {
     case IMPERIAL:
       return "Imperial";
     case ANCIENT_IMPERIAL:
