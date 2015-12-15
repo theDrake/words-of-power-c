@@ -1,7 +1,7 @@
 /******************************************************************************
    Filename: combat.c
 
-     Author: David C. Drake (www.davidcdrake.com)
+     Author: David C. Drake (http://davidcdrake.com)
 
 Description: Functions governing enemies and combat for the text-based fantasy
              RPG "Words of Power."

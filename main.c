@@ -1,7 +1,7 @@
 /******************************************************************************
    Filename: main.c
 
-     Author: David C. Drake (www.davidcdrake.com)
+     Author: David C. Drake (http://davidcdrake.com)
 
 Description: Main C file for "Words of Power": a text-based fantasy RPG
              emphasizing verbal spell-casting through the use of magic words.

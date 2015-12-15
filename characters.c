@@ -1,7 +1,7 @@
 /******************************************************************************
    Filename: characters.c
 
-     Author: David C. Drake (www.davidcdrake.com)
+     Author: David C. Drake (http://davidcdrake.com)
 
 Description: Functions governing the creation, initialization, and basic
              analysis of game characters for the text-based fantasy RPG "Words

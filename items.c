@@ -1,7 +1,7 @@
 /******************************************************************************
    Filename: items.c
 
-     Author: David C. Drake (www.davidcdrake.com)
+     Author: David C. Drake (http://davidcdrake.com)
 
 Description: Functions governing items for the text-based fantasy RPG "Words of
              Power."
