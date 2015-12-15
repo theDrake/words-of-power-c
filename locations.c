@@ -1,7 +1,7 @@
 /******************************************************************************
    Filename: locations.c
 
-     Author: David C. Drake (www.davidcdrake.com)
+     Author: David C. Drake (http://davidcdrake.com)
 
 Description: Functions governing locations, their inhabitants, and movement
              between locations for the text-based fantasy RPG "Words of Power."
@@ -21,9 +21,8 @@ Description: Initializes a given Location struct, along with all of its
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeLocation(Location *location, int idNum)
-{
-  int i;  /* for loop variable */
+int InitializeLocation(Location *location, int idNum) {
+  int i;
 
   location->ID = idNum;
   location->hidden = FALSE;
@@ -31,8 +30,7 @@ int InitializeLocation(Location *location, int idNum)
   location->searches = 0;
   location->inhabitants = NULL;
 
-  switch (idNum)
-  {
+  switch (idNum) {
     case ILLARUM_ENTRANCE:
       strcpy(location->name, "Illarum, City Gate");
       AddInhabitants(location, HUMAN, RandomInt(15, 25));
@@ -361,8 +359,7 @@ Description: Determines whether a given location is within the territory
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL InVentarrisTerritory(Location *location)
-{
+BOOL InVentarrisTerritory(Location *location) {
   return location->ID == VENTARRIS_ENTRANCE    ||
          location->ID == VENTARRIS_MARKET      ||
          location->ID == VENTARRIS_INN         ||
@@ -394,39 +391,28 @@ Description: Creates a new game character and adds it to a given location's list
 
     Outputs: Pointer to the new game character (or NULL if it failed).
 ******************************************************************************/
-GameCharacter *AddInhabitant(Location *location, int idNum)
-{
-  GameCharacter *newGC = NULL;  /* To point to the new character.            */
-  GameCharacter *temp;          /* To scan the location's inhabitant list.   */
+GameCharacter *AddInhabitant(Location *location, int idNum) {
+  GameCharacter *newGC = NULL, *temp;
 
-  if (location == NULL)
-  {
+  if (location == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
-  }
-  else
-  {
+  } else {
     newGC = malloc(sizeof(GameCharacter));
-    if (newGC != NULL)
-    {
+    if (newGC != NULL) {
       InitializeCharacter(newGC, idNum, location);
       newGC->locationID = location->ID;
-      if (location->inhabitants == NULL)
-      {
-        location->inhabitants = newGC; /* New inhabitant successfully added. */
-      }
-      else
-      {
+      if (location->inhabitants == NULL) {
+        location->inhabitants = newGC;  /* New inhabitant successfully added. */
+      } else {
         for (temp = location->inhabitants;
              temp->next != NULL;
              temp = temp->next)
           ;
-        temp->next = newGC;            /* New inhabitant successfully added. */
+        temp->next = newGC;  /* New inhabitant successfully added. */
       }
-    }
-    else
-    {
+    } else {
 #if DEBUG
       ERROR_MESSAGE
 #endif
@@ -449,14 +435,11 @@ Description: Creates multiple game characters of a single type and adds them to
 
     Outputs: Number of game characters successfully added.
 ******************************************************************************/
-int AddInhabitants(Location *location, int idNum, int amount)
-{
+int AddInhabitants(Location *location, int idNum, int amount) {
   int count;
 
-  while (amount-- > 0)
-  {
-    if(AddInhabitant(location, idNum) != NULL)
-    {
+  while (amount-- > 0) {
+    if(AddInhabitant(location, idNum) != NULL) {
       count++;
     }
   }
@@ -474,16 +457,13 @@ Description: Returns a pointer to the first inhabitant found (if any) bearing a
 
     Outputs: Pointer to an appropriate inhabitant, or NULL if none is found.
 ******************************************************************************/
-GameCharacter *FindInhabitant(int idNum)
-{
+GameCharacter *FindInhabitant(int idNum) {
   GameCharacter *pGC;
 
   for (pGC = world[player.locationID]->inhabitants;
        pGC != NULL;
-       pGC = pGC->next)
-  {
-    if (pGC->ID == idNum)
-    {
+       pGC = pGC->next) {
+    if (pGC->ID == idNum) {
       return pGC;
     }
   }
@@ -501,27 +481,22 @@ Description: Handles the movement of an NPC from one location to another.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int MoveInhabitant(GameCharacter *inhabitant, int destinationID)
-{
-  GameCharacter *pGC1, *pGC2; /* For scanning inhabitant lists.              */
+int MoveInhabitant(GameCharacter *inhabitant, int destinationID) {
+  GameCharacter *pGC1, *pGC2;
 
   if (inhabitant == NULL ||
       destinationID < 0 ||
-      destinationID >= TOTAL_LOCATION_IDS)
-  {
+      destinationID >= TOTAL_LOCATION_IDS) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Add "inhabitant" to the new location's list of inhabitants.           */
-  if (world[destinationID]->inhabitants == NULL)
-  {
+    /* Add "inhabitant" to the new location's list of inhabitants. */
+  if (world[destinationID]->inhabitants == NULL) {
     world[destinationID]->inhabitants = inhabitant;
-  }
-  else
-  {
+  } else {
     for (pGC1 = world[destinationID]->inhabitants;
          pGC1->next != NULL;
          pGC1 = pGC1->next)
@@ -529,30 +504,24 @@ int MoveInhabitant(GameCharacter *inhabitant, int destinationID)
     pGC1->next = inhabitant;
   }
 
-    /* Remove "inhabitant" from the old location's list of inhabitants.      */
+    /* Remove "inhabitant" from the old location's list of inhabitants. */
   for (pGC1 = world[inhabitant->locationID]->inhabitants;
        pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next)
-  {
-    if (pGC1 == inhabitant)
-    {
-      if (pGC1->next == NULL)
-      {
+       pGC2 = pGC1, pGC1 = pGC1->next) {
+    if (pGC1 == inhabitant) {
+      if (pGC1->next == NULL) {
         pGC2->next = NULL;
-      }
-      else
-      {
+      } else {
         pGC2->next = pGC1->next;
       }
       break;
     }
   }
 
-    /* Update other relevant variables.                                      */
+    /* Update other relevant variables. */
   inhabitant->locationID = destinationID;
   inhabitant->next = NULL;
-  if (inhabitant->summonedCreature != NULL)
-  {
+  if (inhabitant->summonedCreature != NULL) {
     inhabitant->summonedCreature->locationID = destinationID;
   }
 
@@ -569,12 +538,10 @@ Description: Removes a game character from a Location's list of inhabitants.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveInhabitant(Location *location, GameCharacter *inhabitant)
-{
-  GameCharacter *pGC1, *pGC2; /* To scan the list of inhabitants.            */
+int RemoveInhabitant(Location *location, GameCharacter *inhabitant) {
+  GameCharacter *pGC1, *pGC2;
 
-  if (location == NULL || inhabitant == NULL)
-  {
+  if (location == NULL || inhabitant == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -583,23 +550,17 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant)
 
   for (pGC1 = location->inhabitants;
        pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next)
-  {
-    if (pGC1 == inhabitant)
-    {
-      if (pGC1->next == NULL)
-      {
+       pGC2 = pGC1, pGC1 = pGC1->next) {
+    if (pGC1 == inhabitant) {
+      if (pGC1->next == NULL) {
         pGC2->next = NULL;
-      }
-      else
-      {
+      } else {
         pGC2->next = pGC1->next;
       }
       return SUCCESS;
     }
   }
-  if (pGC1 == NULL) /* If true, "inhabitant" was not found.                  */
-  {
+  if (pGC1 == NULL) {  /* If true, "inhabitant" was not found. */
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -620,12 +581,10 @@ Description: Removes a game character from a Location's list of inhabitants and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
-{
+int DeleteInhabitant(Location *location, GameCharacter *inhabitant) {
   GameCharacter *pGC1, *pGC2;
 
-  if (location == NULL || inhabitant == NULL)
-  {
+  if (location == NULL || inhabitant == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -634,22 +593,13 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
 
   pGC1 = location->inhabitants;
   pGC2 = NULL;
-  do
-  {
-    if (pGC1 == inhabitant)
-    {
-      if (pGC2 == NULL)       /* Only one inhabitant in this location.       */
-      {
+  do {    if (pGC1 == inhabitant) {
+      if (pGC2 == NULL) {  /* Only one inhabitant in this location. */
         location->inhabitants = NULL;
-      }
-      else                    /* More than one inhabitant in this location.  */
-      {
-        if (inhabitant->next == NULL) /* End of the list.                    */
-        {
-          pGC2->next = NULL;  /* Remove remaining pointer to "inhabitant".   */
-        }
-        else                  /* "inhabitant" is not the end of the list.    */
-        {
+      } else {  /* More than one inhabitant in this location. */
+        if (inhabitant->next == NULL) {  /* End of the list. */
+          pGC2->next = NULL;  /* Remove remaining pointer to "inhabitant". */
+        } else {  /* "inhabitant" is not the end of the list. */
             /*
              * Set the GameCharacter previous to "inhabitant" to point at the
              * next GameCharacter after "inhabitant".
@@ -658,15 +608,12 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant)
           pGC2->next = pGC1;
         }
       }
-      if (inhabitant->summonedCreature != NULL)
-      {
+      if (inhabitant->summonedCreature != NULL) {
         DeleteCreatureSummonedBy(inhabitant);
       }
       free(inhabitant);
       return SUCCESS;
-    }
-    else
-    {
+    } else {
       pGC2 = pGC1;
       pGC1 = pGC1->next;
     }
@@ -688,25 +635,19 @@ Description: Returns the number of visible inhabitants in a given location.
 
     Outputs: The number of visible inhabitants in the specified location.
 ******************************************************************************/
-int VisibleInhabitants(Location *location)
-{
+int VisibleInhabitants(Location *location) {
   int count = 0;
   GameCharacter *pGC;
 
-  if (location == NULL)
-  {
+  if (location == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
-  }
-  else
-  {
+  } else {
     for (pGC = location->inhabitants;
          pGC != NULL;
-         pGC = pGC->next)
-    {
-      if (pGC->status[INVISIBLE] == FALSE)
-      {
+         pGC = pGC->next) {
+      if (pGC->status[INVISIBLE] == FALSE) {
         count++;
       }
     }
@@ -724,16 +665,12 @@ Description: Displays movement options to the player.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int MovementMenu(void)
-{
-  int i;                    /* for loop variable                             */
-  int iInput;
-  int numDestinations = 0;  /* Number of destinations to choose from.        */
+int MovementMenu(void) {
+  int i, iInput, numDestinations = 0;
   Location *destinations[MAX_DESTINATIONS] = {NULL};
 
-    /* Determine available destinations and describe their orientation.      */
-  switch (player.locationID)
-  {
+    /* Determine available destinations and describe their orientation. */
+  switch (player.locationID) {
     case ILLARUM_ENTRANCE:
       destinations[0] = world[ILLARUM_MARKET];
       destinations[1] = world[ILLARUM_INN];
@@ -1175,10 +1112,9 @@ int MovementMenu(void)
       break;
   }
 
-    /* List the available destinations; player chooses one by number.        */
+    /* List the available destinations; player chooses one by number. */
   printf("Where would you like to go?\n");
-  for (i = 0; i < MAX_DESTINATIONS && destinations[i] != NULL; i++)
-  {
+  for (i = 0; i < MAX_DESTINATIONS && destinations[i] != NULL; i++) {
     printf("[%d] %s\n", i + 1, destinations[i]->name);
   }
   GetIntInput(&iInput, 1, i);
@@ -1196,12 +1132,10 @@ Description: Handles the movement of the player character from one location to
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int MovePlayer(int destinationID)
-{
-  GameCharacter *temp; /* To scan the player's list of companions.           */
+int MovePlayer(int destinationID) {
+  GameCharacter *companion;
 
-  if (destinationID < 0 || destinationID >= TOTAL_LOCATION_IDS)
-  {
+  if (destinationID < 0 || destinationID >= TOTAL_LOCATION_IDS) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1209,15 +1143,14 @@ int MovePlayer(int destinationID)
   }
 
   player.locationID = destinationID;
-  if (player.summonedCreature != NULL)
-  {
+  if (player.summonedCreature != NULL) {
     player.summonedCreature->locationID = destinationID;
   }
-  if (player.next != NULL)
-  {
-    for (temp = player.next; temp != NULL; temp = temp->next)
-    {
-      temp->locationID = destinationID;
+  if (player.next != NULL) {
+    for (companion = player.next;
+         companion != NULL;
+         companion = companion->next) {
+      companion->locationID = destinationID;
     }
   }
 
@@ -1233,13 +1166,11 @@ Description: Determines the outcome of a given search.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int SearchLocation(Location *location)
-{
+int SearchLocation(Location *location) {
   int temp;
   char output[LONG_STR_LEN + 1] = "";
 
-  if (location == NULL)
-  {
+  if (location == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1247,25 +1178,20 @@ int SearchLocation(Location *location)
   }
 
   location->searches++;
-  switch (location->ID)
-  {
+  switch (location->ID) {
     case FOREST:
       temp = RandomInt(1, 5);
-      if (temp == 1)
-      {
+      if (temp == 1) {
         sprintf(output, "You have discovered the Druids' Grove!");
         MovePlayer(DRUIDS_GROVE);
         break;
-      }
-      else if (temp == 2)
-      {
+      } else if (temp == 2) {
         AddItem(&player, GLOWING_MUSHROOM);
         break;
       }
       /* Otherwise, fall through. */
     default:
-      switch (RandomInt(1, 5))
-      {
+      switch (RandomInt(1, 5)) {
         case 1:
           temp = RandomInt(1, 20);
           sprintf(output,
@@ -1280,8 +1206,7 @@ int SearchLocation(Location *location)
           player.inventory[HEALING_POTION]++;
           break;
         case 3:
-          if (AddRandomEnemy(world[player.locationID]) == SUCCESS)
-          {
+          if (AddRandomEnemy(world[player.locationID]) == SUCCESS) {
             sprintf(output,
                     "While searching, you're attacked by %s!",
                     GetNameIndefinite(enemyNPCs[0]));
@@ -1296,8 +1221,7 @@ int SearchLocation(Location *location)
   }
   PrintString(output);
   FlushInput();
-  if (enemyNPCs[0] != NULL)
-  {
+  if (enemyNPCs[0] != NULL) {
     Combat();
   }
 
@@ -1314,20 +1238,16 @@ Description: Describes the current location and its inhabitants to the player.
 
     Outputs: None.
 ******************************************************************************/
-void DescribeSituation(void)
-{
-  int i;                /* for loop counter                     */
-  int temp;
-  int gcTypesDescribed; /* Number of GC types described.        */
-  GameCharacter *pGC;   /* To search through local inhabitants. */
+void DescribeSituation(void) {
+  int i, temp, gcTypesDescribed;
   char output[LONG_STR_LEN + 1] = "";
+  GameCharacter *pGC;
 
-    /* Describue the current location.                                       */
+    /* Describue the current location. */
   switch (player.locationID)
   {
     case ILLARUM_SCHOOL:
-      if (world[ILLARUM_SCHOOL]->visits == 0)  /* Indicates a new game.      */
-      {
+      if (world[ILLARUM_SCHOOL]->visits == 0) {  /* Indicates a new game. */
         world[ILLARUM_SCHOOL]->visits++;
         sprintf(output,
                 "%s, Archwizard of the School of the Elements, approaches to "
@@ -1337,9 +1257,7 @@ void DescribeSituation(void)
         FlushInput();
         Dialogue(FindInhabitant(ARCHWIZARD_OF_ELEMENTS));
         return;
-      }
-      else
-      {
+      } else {
         sprintf(output,
                 "You are in the School of the Elements in the city of Illarum."
                 " ");
@@ -1545,41 +1463,29 @@ void DescribeSituation(void)
     /* Describe local inhabitants (NPCs).                                    */
   UpdateVisibleGameCharCounter();
   gcTypesDescribed = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {
     gcDescribed[i] = FALSE;
   }
   temp = VisibleInhabitants(world[player.locationID]);
-  if (temp > 0)
-  {
+  if (temp > 0) {
     strcat(output, "You see ");
     for (pGC = world[player.locationID]->inhabitants;
          pGC != NULL;
-         pGC = pGC->next)
-    {
-      if (pGC->status[INVISIBLE] == FALSE && gcDescribed[pGC->ID] == FALSE)
-      {
-        if (temp < VisibleInhabitants(world[player.locationID]))
-        {
-          if (temp <= visibleGameCharCounter[pGC->ID])
-          {
-            if (gcTypesDescribed > 1)
-            {
+         pGC = pGC->next) {
+      if (pGC->status[INVISIBLE] == FALSE && gcDescribed[pGC->ID] == FALSE) {
+        if (temp < VisibleInhabitants(world[player.locationID])) {
+          if (temp <= visibleGameCharCounter[pGC->ID]) {
+            if (gcTypesDescribed > 1) {
               strcat(output, ",");
             }
             strcat(output, " and ");
-          }
-          else
-          {
+          } else {
             strcat(output, ", ");
           }
         }
-        if (visibleGameCharCounter[pGC->ID] == 1)
-        {
+        if (visibleGameCharCounter[pGC->ID] == 1) {
           strcat(output, GetNameIndefinite(pGC));
-        }
-        else
-        {
+        } else {
           sprintf(output + strlen(output),
                   "%d %s",
                   visibleGameCharCounter[pGC->ID],
@@ -1588,8 +1494,7 @@ void DescribeSituation(void)
         gcTypesDescribed++;
         gcDescribed[pGC->ID] = TRUE;
         temp -= visibleGameCharCounter[pGC->ID];
-        if (temp <= 0)
-        {
+        if (temp <= 0) {
           strcat(output, ". ");
         }
       }
@@ -1601,20 +1506,16 @@ void DescribeSituation(void)
     /* Check for hostile enemies. If any exist, they immediately attack.     */
   for (pGC = world[player.locationID]->inhabitants;
        pGC != NULL;
-       pGC = pGC->next)
-  {
-    if (pGC->relationship <= HOSTILE_ENEMY)
-    {
+       pGC = pGC->next) {
+    if (pGC->relationship <= HOSTILE_ENEMY) {
       AddEnemy(pGC);
     }
   }
-  if (NumberOfEnemies() > 0)
-  {
+  if (NumberOfEnemies() > 0) {
     printf("\nYou are being attacked!\n");
     FlushInput();
     Combat();
-    if (worldExists)
-    {
+    if (worldExists) {
       DescribeSituation();
     }
   }
