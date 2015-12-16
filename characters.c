@@ -22,13 +22,12 @@ Description: Initializes a given GameCharacter struct to its default starting
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
-{
-  int i; /* for loop variable */
+int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
+  int i;
   char cInput;
   BOOL repeatOptions;
 
-    /* Default stats, representative of an average adult human.              */
+    /* Default stats, representative of an average adult human. */
   pGC->ID = idNum;
   strcpy(pGC->name, "");
   strcpy(pGC->descriptor, "");
@@ -47,22 +46,18 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
   pGC->knownToPlayer = FALSE;
   pGC->relationship = INDIFFERENT;
   pGC->conversations = 0;
-  for (i = 0; i < TOTAL_STATUS_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_STATUS_IDS; i++) {
     pGC->status[i] = FALSE;
   }
   pGC->gold = 0;
-  for (i = 0; i < TOTAL_ITEM_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
     pGC->inventory[i] = 0;
     pGC->equippedItems[i] = 0;
   }
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
     pGC->languages[i] = UNKNOWN;
   }
-  for (i = 0; i < TOTAL_WORD_IDS; i++)
-  {
+  for (i = 0; i < TOTAL_WORD_IDS; i++) {
     pGC->words[i] = UNKNOWN;
   }
   pGC->locationID = location->ID;
@@ -70,8 +65,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
   pGC->next = NULL;
 
     /* Character-specific stats.                                             */
-  switch (pGC->ID)
-  {
+  switch (pGC->ID) {
     case PLAYER:
       pGC->unique = TRUE;
       pGC->experience = 0;
@@ -92,8 +86,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
                   "prestigious School of the Elements in the city of Illarum "
                   "for the past five years.\0");
       FlushInput();
-      do
-      {
+      do {
         printf("Choose your name: ");
         GetStrInput(pGC->name, SHORT_STR_LEN + 1);
         repeatOptions = strlen(pGC->name) < 1;
@@ -194,12 +187,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case HUMAN:
       strcpy(pGC->name, "Peasant");
       strcpy(pGC->descriptor, "peasant");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->gold = RandomInt(0, 5);
@@ -207,12 +197,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case THIEF:
       strcpy(pGC->name, "Thief");
       strcpy(pGC->descriptor, "thief");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->gold = RandomInt(5, 10);
@@ -220,12 +207,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case SOLDIER:
       strcpy(pGC->name, "Soldier");
       strcpy(pGC->descriptor, "soldier");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->physicalPower *= 1.5;
@@ -235,12 +219,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case MERCHANT:
       strcpy(pGC->name, "Merchant");
       strcpy(pGC->descriptor, "merchant");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->gold = RandomInt(25, 50);
@@ -248,12 +229,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case INNKEEPER:
       strcpy(pGC->name, "Innkeeper");
       strcpy(pGC->descriptor, "innkeeper");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->gold = RandomInt(10, 30);
@@ -285,8 +263,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->languages[IMPERIAL] = KNOWN;
       pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
       pGC->languages[VENTARRI] = KNOWN;
-      for (i = 0; i < TOTAL_WORD_IDS; i++)
-      {
+      for (i = 0; i < TOTAL_WORD_IDS; i++) {
         pGC->words[i] = KNOWN;
       }
       pGC->level = 20;
@@ -307,12 +284,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->currentHP *= 3;
       pGC->physicalPower *= 3;
       pGC->physicalDefense *= 3;
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->level = 10;
@@ -322,12 +296,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case SERVANT:
       strcpy(pGC->name, "Servant");
       strcpy(pGC->descriptor, "servant");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       break;
@@ -340,12 +311,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->physicalDefense /= 2;
       pGC->mentalPower /= 2;
       pGC->mentalDefense /= 2;
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->experience /= 2;
@@ -359,12 +327,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->physicalDefense /= 1.5;
       pGC->mentalPower /= 1.5;
       pGC->mentalDefense /= 1.5;
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->experience /= 1.5;
@@ -372,12 +337,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case SAILOR:
       strcpy(pGC->name, "Sailor");
       strcpy(pGC->descriptor, "sailor");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       break;
@@ -498,12 +460,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
       pGC->maxHP *= 1.5;
       pGC->currentHP *= 1.5;
       pGC->soul = GOOD;
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->gold = RandomInt(0, 5);
@@ -511,12 +470,9 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location)
     case FISHERMAN:
       strcpy(pGC->name, "Fisherman");
       strcpy(pGC->descriptor, "fisherman");
-      if (InVentarrisTerritory(location))
-      {
+      if (InVentarrisTerritory(location)) {
         pGC->languages[VENTARRI] = KNOWN;
-      }
-      else
-      {
+      } else {
         pGC->languages[IMPERIAL] = KNOWN;
       }
       pGC->gold = RandomInt(0, 5);
@@ -1465,25 +1421,20 @@ Description: Removes a game character from the current location's list of
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddCompanion(GameCharacter *companion)
-{
-  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                 */
+int AddCompanion(GameCharacter *companion) {
+  GameCharacter *pGC1, *pGC2;
 
-  if (companion == NULL)
-  {
+  if (companion == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Add "companion" to the player's list of companions.                   */
-  if (player.next == NULL)
-  {
+    /* Add "companion" to the player's list of companions. */
+  if (player.next == NULL) {
     player.next = companion;
-  }
-  else
-  {
+  } else {
     for (pGC1 = player.next;
          pGC1->next != NULL;
          pGC1 = pGC1->next)
@@ -1491,19 +1442,14 @@ int AddCompanion(GameCharacter *companion)
     pGC1->next = companion;
   }
 
-    /* Remove "companion" from the current location's list of inhabitants.   */
+    /* Remove "companion" from the current location's list of inhabitants. */
   for (pGC1 = world[player.locationID]->inhabitants;
        pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next)
-  {
-    if (pGC1 == companion)
-    {
-      if (pGC1->next == NULL)
-      {
+       pGC2 = pGC1, pGC1 = pGC1->next) {
+    if (pGC1 == companion) {
+      if (pGC1->next == NULL) {
         pGC2->next = NULL;
-      }
-      else
-      {
+      } else {
         pGC2->next = pGC1->next;
       }
       break;
@@ -1512,8 +1458,7 @@ int AddCompanion(GameCharacter *companion)
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) /* If true, "companion" was not at the current location. */
-  {
+  if (pGC1 == NULL) {  /* If true, "companion" wasn't at current location. */
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1533,25 +1478,20 @@ Description: Removes a game character from the player's list of companions and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveCompanion(GameCharacter *companion)
-{
-  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                 */
+int RemoveCompanion(GameCharacter *companion) {
+  GameCharacter *pGC1, *pGC2;
 
-  if (companion == NULL)
-  {
+  if (companion == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Add "companion" to the current location's list of inhabitants.        */
-  if (world[player.locationID]->inhabitants == NULL)
-  {
+    /* Add "companion" to the current location's list of inhabitants. */
+  if (world[player.locationID]->inhabitants == NULL) {
     world[player.locationID]->inhabitants = companion;
-  }
-  else
-  {
+  } else {
     for (pGC1 = world[player.locationID]->inhabitants;
          pGC1->next != NULL;
          pGC1 = pGC1->next)
@@ -1562,16 +1502,11 @@ int RemoveCompanion(GameCharacter *companion)
     /* Remove "companion" from the player's list of companions.              */
   for (pGC1 = player.next;
        pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next)
-  {
-    if (pGC1 == companion)
-    {
-      if (pGC1->next == NULL)
-      {
+       pGC2 = pGC1, pGC1 = pGC1->next) {
+    if (pGC1 == companion) {
+      if (pGC1->next == NULL) {
         pGC2->next = NULL;
-      }
-      else
-      {
+      } else {
         pGC2->next = pGC1->next;
       }
       break;
@@ -1580,8 +1515,7 @@ int RemoveCompanion(GameCharacter *companion)
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
-  {
+  if (pGC1 == NULL) {  /* If true, "companion" wasn't player's companion. */
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1601,47 +1535,38 @@ Description: Removes a game character from the player's list of companions and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteCompanion(GameCharacter *companion)
-{
-  GameCharacter *pGC1, *pGC2;  /* For scanning linked lists.                 */
+int DeleteCompanion(GameCharacter *companion) {
+  GameCharacter *pGC1, *pGC2;
 
-  if (companion == NULL)
-  {
+  if (companion == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Remove "companion" from the player's list of companions.              */
+    /* Remove "companion" from the player's list of companions. */
   for (pGC1 = player.next;
        pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next)
-  {
-    if (pGC1 == companion)
-    {
-      if (pGC1->next == NULL)
-      {
+       pGC2 = pGC1, pGC1 = pGC1->next) {
+    if (pGC1 == companion) {
+      if (pGC1->next == NULL) {
         pGC2->next = NULL;
-      }
-      else
-      {
+      } else {
         pGC2->next = pGC1->next;
       }
       break;
     }
   }
-  if (pGC1 == NULL) /* If true, "companion" was not the player's companion.  */
-  {
+  if (pGC1 == NULL) {  /* If true, "companion" wasn't player's companion. */
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-    /* Deallocate associated memory.                                         */
-  if (companion->summonedCreature != NULL)
-  {
+    /* Deallocate associated memory. */
+  if (companion->summonedCreature != NULL) {
     DeleteCreatureSummonedBy(companion);
   }
   free(companion);
@@ -1661,30 +1586,21 @@ Description: Creates a new, summoned game character and associates it with its
 
     Outputs: Pointer to the summoned creature.
 ******************************************************************************/
-GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum)
-{
-  GameCharacter *newGC = NULL;  /* To point to the new character.            */
-  GameCharacter *temp;          /* To scan the location's inhabitant list.   */
+GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum) {
+  GameCharacter *newGC = NULL, *temp;
 
-  if (summoner == NULL)
-  {
+  if (summoner == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
-  }
-  else
-  {
-    if (summoner->summonedCreature != NULL)
-    {
+  } else {
+    if (summoner->summonedCreature != NULL) {
       DeleteCreatureSummonedBy(summoner);
     }
     newGC = malloc(sizeof(GameCharacter));
-    if (newGC != NULL)
-    {
+    if (newGC != NULL) {
       InitializeCharacter(newGC, idNum, world[summoner->locationID]);
-    }
-    else
-    {
+    } else {
 #if DEBUG
       ERROR_MESSAGE
 #endif
@@ -1706,12 +1622,10 @@ Description: Removes a summoned creature from its summoner's struct and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteCreatureSummonedBy(GameCharacter *summoner)
-{
+int DeleteCreatureSummonedBy(GameCharacter *summoner) {
   GameCharacter *creature;
 
-  if (summoner == NULL || summoner->summonedCreature == NULL)
-  {
+  if (summoner == NULL || summoner->summonedCreature == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1735,10 +1649,8 @@ Description: Displays detailed information about a given game character (and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DisplayCharacterData(GameCharacter *pGC)
-{
-  if (pGC == NULL)
-  {
+int DisplayCharacterData(GameCharacter *pGC) {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1764,8 +1676,7 @@ int DisplayCharacterData(GameCharacter *pGC)
   printf("\n");
   /* PrintStatus(pGC); */
   printf("\n");
-  if (pGC->summonedCreature != NULL)
-  {
+  if (pGC->summonedCreature != NULL) {
     printf("Summoned creature: %s (%d/%d, ",
            pGC->summonedCreature->name,
            pGC->summonedCreature->currentHP,
@@ -1788,41 +1699,25 @@ Description: Prints one or two words describing the general state of a given
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int PrintSoulDescription(GameCharacter *pGC)
-{
-  if (pGC == NULL)
-  {
+int PrintSoulDescription(GameCharacter *pGC) {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
-  }
-  else if (pGC->soul <= EXTREMELY_EVIL)
-  {
+  } else if (pGC->soul <= EXTREMELY_EVIL) {
     printf("Extremely Evil");
-  }
-  else if (pGC->soul <= VERY_EVIL)
-  {
+  } else if (pGC->soul <= VERY_EVIL) {
     printf("Very Evil");
-  }
-  else if (pGC->soul <= EVIL)
-  {
+  } else if (pGC->soul <= EVIL) {
     printf("Evil");
-  }
-  else if (pGC->soul >= EXTREMELY_GOOD)
-  {
+  } else if (pGC->soul >= EXTREMELY_GOOD) {
     printf("Extremely Good");
-  }
-  else if (pGC->soul >= VERY_GOOD)
-  {
+  } else if (pGC->soul >= VERY_GOOD) {
     printf("Very Good");
-  }
-  else if (pGC->soul >= GOOD)
-  {
+  } else if (pGC->soul >= GOOD) {
     printf("Good");
-  }
-  else
-  {
+  } else {
     printf("Neutral");
   }
 
@@ -1838,9 +1733,8 @@ Description: Returns TRUE if a given game character has a good soul.
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL IsGood(GameCharacter *pGC)
-{
-  return (pGC != NULL && pGC->soul >= GOOD);
+BOOL IsGood(GameCharacter *pGC) {
+  return pGC != NULL && pGC->soul >= GOOD;
 }
 
 /******************************************************************************
@@ -1852,9 +1746,8 @@ Description: Returns TRUE if a given game character has an evil soul.
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL IsEvil(GameCharacter *pGC)
-{
-  return (pGC != NULL && pGC->soul <= EVIL);
+BOOL IsEvil(GameCharacter *pGC) {
+  return pGC != NULL && pGC->soul <= EVIL;
 }
 
 /******************************************************************************
@@ -1867,9 +1760,8 @@ Description: Returns TRUE if a given game character has a neutral soul (neither
 
     Outputs: TRUE or FALSE.
 ******************************************************************************/
-BOOL IsNeutral(GameCharacter *pGC)
-{
-  return (pGC != NULL && (pGC->soul > EVIL && pGC->soul < GOOD));
+BOOL IsNeutral(GameCharacter *pGC) {
+  return pGC != NULL && pGC->soul > EVIL && pGC->soul < GOOD;
 }
 
 /******************************************************************************
@@ -1882,23 +1774,18 @@ Description: Returns the number of languages a given game character knows.
     Outputs: Number of languages the game character knows (or -1 if an error is
              encountered).
 ******************************************************************************/
-int NumberOfLanguagesKnown(GameCharacter *pGC)
-{
-  int i;  /* for loop variable */
-  int numLanguages = 0;
+int NumberOfLanguagesKnown(GameCharacter *pGC) {
+  int i, numLanguages = 0;
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
   }
 
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++)
-  {
-    if (pGC->languages[i] == KNOWN)
-    {
+  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+    if (pGC->languages[i] == KNOWN) {
       numLanguages++;
     }
   }
@@ -1916,23 +1803,18 @@ Description: Returns the number of Words of Power a given game character knows.
     Outputs: Number of Words the game character knows (or -1 if an error is
              encountered).
 ******************************************************************************/
-int NumberOfWordsKnown(GameCharacter *pGC)
-{
-  int i;  /* for loop variable */
-  int numWords = 0;
+int NumberOfWordsKnown(GameCharacter *pGC) {
+  int i, numWords = 0;
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
   }
 
-  for (i = 0; i < TOTAL_WORD_IDS; i++)
-  {
-    if (pGC->words[i] == KNOWN)
-    {
+  for (i = 0; i < TOTAL_WORD_IDS; i++) {
+    if (pGC->words[i] == KNOWN) {
       numWords++;
     }
   }
@@ -1951,20 +1833,17 @@ Description: Returns either a name or a generic descriptor preceded by "the"
     Outputs: The game character's definite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameDefinite(GameCharacter *pGC)
-{
+char *GetNameDefinite(GameCharacter *pGC) {
   static char gcName[SHORT_STR_LEN + 1];
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return NULL;
   }
 
-  if (pGC->unique && pGC->knownToPlayer)
-  {
+  if (pGC->unique && pGC->knownToPlayer) {
     return pGC->name;
   }
   strcpy(gcName, "the ");
@@ -1984,37 +1863,30 @@ Description: Returns either a name or a generic descriptor preceded by "a" or
     Outputs: The game character's indefinite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameIndefinite(GameCharacter *pGC)
-{
+char *GetNameIndefinite(GameCharacter *pGC) {
   static char gcName[SHORT_STR_LEN + 1];
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return NULL;
   }
 
-  if (pGC->unique && pGC->knownToPlayer)
-  {
+  if (pGC->unique && pGC->knownToPlayer) {
     return pGC->name;
-  }
-  else if (pGC->descriptor[0] == 'a' ||
-           pGC->descriptor[0] == 'e' ||
-           pGC->descriptor[0] == 'i' ||
-           pGC->descriptor[0] == 'o' ||
-           pGC->descriptor[0] == 'u' ||
-           pGC->descriptor[0] == 'A' ||
-           pGC->descriptor[0] == 'E' ||
-           pGC->descriptor[0] == 'I' ||
-           pGC->descriptor[0] == 'O' ||
-           pGC->descriptor[0] == 'U')
-  {
+  } else if (pGC->descriptor[0] == 'a' ||
+             pGC->descriptor[0] == 'e' ||
+             pGC->descriptor[0] == 'i' ||
+             pGC->descriptor[0] == 'o' ||
+             pGC->descriptor[0] == 'u' ||
+             pGC->descriptor[0] == 'A' ||
+             pGC->descriptor[0] == 'E' ||
+             pGC->descriptor[0] == 'I' ||
+             pGC->descriptor[0] == 'O' ||
+             pGC->descriptor[0] == 'U') {
     strcpy(gcName, "an ");
-  }
-  else
-  {
+  } else {
     strcpy(gcName, "a ");
   }
   strcat(gcName, pGC->descriptor);
@@ -2034,21 +1906,18 @@ Description: Returns the plural form of a given game character's generic
     Outputs: The game character's plural name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNamePlural(GameCharacter *pGC)
-{
+char *GetNamePlural(GameCharacter *pGC) {
   int nameLength;
   static char gcName[SHORT_STR_LEN + 1];
 
-  if (pGC == NULL)
-  {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return FAILURE;
   }
 
-  switch (pGC->ID)
-  {
+  switch (pGC->ID) {
     case HUMAN:
       strcpy(gcName, "common folk");
       break;
@@ -2076,11 +1945,10 @@ char *GetNamePlural(GameCharacter *pGC)
     case DUMMY:
       strcpy(gcName, "stuffed dummies");
       break;
-    default: /* Simply adds "s" to the end of a game character's descriptor. */
+    default:  /* Simply add "s" to the end of the descriptor. */
       strcpy(gcName, pGC->descriptor);
       nameLength = strlen(gcName);
-      if (nameLength >= SHORT_STR_LEN - 1) /* Must have room for 's'.        */
-      {
+      if (nameLength >= SHORT_STR_LEN - 1) {  /* Must have room for 's'. */
 #if DEBUG
         ERROR_MESSAGE
 #endif
@@ -2104,38 +1972,29 @@ Description: Checks player's HP and status to see if anything needs to be
 
     Outputs: None.
 ******************************************************************************/
-void CheckStatus(void)
-{
+void CheckStatus(void) {
   int i;
   char output[LONG_STR_LEN + 1] = "";
 
-  if (player.status[IN_COMBAT] == TRUE)
-  {
-    for (i = 0; i < NumberOfEnemies(); i++)
-    {
-      if (enemyNPCs[i]->currentHP <= 0)
-      {
+  if (player.status[IN_COMBAT] == TRUE) {
+    for (i = 0; i < NumberOfEnemies(); i++) {
+      if (enemyNPCs[i]->currentHP <= 0) {
         strcat(output, Capitalize(GetNameDefinite(enemyNPCs[i])));
-        if (enemyNPCs[i]->status[INANIMATE])
-        {
+        if (enemyNPCs[i]->status[INANIMATE]) {
           strcat(output, " has been destroyed.\n");
-        }
-        else
-        {
+        } else {
           strcat(output, " is dead.\n");
         }
         kills[enemyNPCs[i]->ID]++;
         DeleteEnemy(enemyNPCs[i]);
-        i--;  /* Because the "enemyNPCs" array has now been left-shifted.    */
+        i--;  /* Because the "enemyNPCs" array has now been left-shifted. */
       }
     }
     PrintString(output);
     FlushInput();
   }
-  if (player.currentHP <= 0)
-  {
-    if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) /* Tutorial mode. */
-    {
+  if (player.currentHP <= 0) {
+    if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) {  /* Tutorial. */
       sprintf(output,
               "%s: \"You have fallen due to severe backlash from your spell! "
               "This is often caused by speaking the same elemental Word more "
@@ -2144,15 +2003,12 @@ void CheckStatus(void)
               "but you must be more cautious in the future.\"",
               FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
       player.currentHP = player.maxHP;
-    }
-    else /* Not in tutorial mode: death is permanent.                        */
-    {
+    } else {  /* Not in tutorial mode: death is permanent. */
       sprintf(output, "Alas, %s has perished!\n", player.name);
       //MainMenu();
     }
   }
-  if (strlen(output) > 0)
-  {
+  if (strlen(output) > 0) {
     PrintString(output);
     FlushInput();
   }
@@ -2170,37 +2026,27 @@ Description: Updates the GameCharacter counter to accurately reflect the number
 
     Outputs: None. (Modifies the global "visibleGameCharCounter" array.)
 ******************************************************************************/
-void UpdateVisibleGameCharCounter(void)
-{
-  int i;              /* for loop variable                  */
-  GameCharacter *pGC; /* To scan the local inhabitant list. */
+void UpdateVisibleGameCharCounter(void) {
+  int i;
+  GameCharacter *pGC;
 
-  for (i = 0; i < TOTAL_GC_IDS; i++)  /* Clear the visible GC counter.       */
-  {
+  for (i = 0; i < TOTAL_GC_IDS; i++) {  /* Clear the visible GC counter. */
     visibleGameCharCounter[i] = 0;
   }
-  if (player.status[IN_COMBAT]) /* Combat mode: only count enemies.          */
-  {
-    for (i = 0; i < NumberOfEnemies(); i++)
-    {
+  if (player.status[IN_COMBAT]) {  /* Combat mode: only count enemies. */
+    for (i = 0; i < NumberOfEnemies(); i++) {
       visibleGameCharCounter[enemyNPCs[i]->ID]++;
-      if (enemyNPCs[i]->summonedCreature != NULL)
-      {
+      if (enemyNPCs[i]->summonedCreature != NULL) {
         visibleGameCharCounter[enemyNPCs[i]->summonedCreature->ID]++;
       }
     }
-  }
-  else  /* Not in combat mode: count all local inhabitants.                  */
-  {
+  } else {  /* Not in combat mode: count all local inhabitants. */
     for (pGC = world[player.locationID]->inhabitants;
          pGC != NULL;
-         pGC = pGC->next)
-    {
-      if (pGC->status[INVISIBLE] == FALSE)
-      {
+         pGC = pGC->next) {
+      if (pGC->status[INVISIBLE] == FALSE) {
         visibleGameCharCounter[pGC->ID]++;
-        if (pGC->summonedCreature != NULL)
-        {
+        if (pGC->summonedCreature != NULL) {
           visibleGameCharCounter[pGC->summonedCreature->ID]++;
         }
       }
@@ -2217,8 +2063,7 @@ Description: Takes the player through the process of selecting a target.
 
     Outputs: Pointer to the targeted game character.
 ******************************************************************************/
-GameCharacter *GetTarget(void)
-{
+GameCharacter *GetTarget(void) {
   GameCharacter *target = NULL;
 
   return target;
@@ -2236,14 +2081,11 @@ Description: Determines whether a given game character is currently being
 
     Outputs: TRUE if "pGC" is being targeted, otherwise FALSE.
 ******************************************************************************/
-BOOL IsTargeted(GameCharacter *pGC, GameCharacter *targets[])
-{
-  int i; /* for loop variable */
+BOOL IsTargeted(GameCharacter *pGC, GameCharacter *targets[]) {
+  int i;
 
-  for (i = 0; i < MAX_TARGETS; i++)
-  {
-    if (targets[i] == pGC)
-    {
+  for (i = 0; i < MAX_TARGETS; i++) {
+    if (targets[i] == pGC) {
       return TRUE;
     }
   }
@@ -2264,23 +2106,19 @@ Description: Causes a given game character to regain a certain number of hit
 
     Outputs: Number of hit points regained (or -1 if an error is encountered).
 ******************************************************************************/
-int HealGameCharacter(GameCharacter *pGC, int amount)
-{
-  if (pGC == NULL)
-  {
+int HealGameCharacter(GameCharacter *pGC, int amount) {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
   }
 
-  if (amount <= 0)
-  {
-    amount = 1;                    /* At least 1 HP should be regained.      */
+  if (amount <= 0) {
+    amount = 1;  /* At least 1 HP should be restored. */
   }
   pGC->currentHP += amount;
-  if (pGC->currentHP > pGC->maxHP) /* Current HP may not exceed maximum HP.  */
-  {
+  if (pGC->currentHP > pGC->maxHP) {
     pGC->currentHP = pGC->maxHP;
   }
 
@@ -2299,24 +2137,20 @@ Description: Causes a given game character to lose a certain number of hit
 
     Outputs: Number of hit points lost (or -1 if an error is encountered).
 ******************************************************************************/
-int DamageGameCharacter(GameCharacter *pGC, int amount)
-{
-  if (pGC == NULL)
-  {
+int DamageGameCharacter(GameCharacter *pGC, int amount) {
+  if (pGC == NULL) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
     return -1;
   }
 
-  if (amount <= 0)
-  {
-    amount = 1;         /* At least 1 HP should be lost.                     */
+  if (amount <= 0) {
+    amount = 1;  /* At least 1 HP should be lost. */
   }
   pGC->currentHP -= amount;
-  if (pGC->currentHP < 0)
-  {
-    pGC->currentHP = 0; /* Game characters may not have negative HP.         */
+  if (pGC->currentHP < 0) {
+    pGC->currentHP = 0;  /* Game characters may not have negative HP. */
   }
 
   return amount;
@@ -2332,18 +2166,14 @@ Description: Increases the player's experience by a specified amount and checks
 
     Outputs: Number of level-ups.
 ******************************************************************************/
-int GainExperience(int amount)
-{
-  int i; /* for loop variable */
-  int levelUpCounter = 0;
+int GainExperience(int amount) {
+  int i, levelUpCounter = 0;
 
   printf("%d experience points earned!\n", amount);
   FlushInput();
-  for (i = 0; i < amount; i++)
-  {
+  for (i = 0; i < amount; i++) {
     player.experience++;
-    if (player.experience % EXP_PER_LEVEL == 0)
-    {
+    if (player.experience % EXP_PER_LEVEL == 0) {
       LevelUp();
       levelUpCounter++;
     }
@@ -2361,47 +2191,40 @@ Description: Increases the player's level and relevant stats.
 
     Outputs: None.
 ******************************************************************************/
-void LevelUp(void)
-{
+void LevelUp(void) {
   int temp;
 
   player.level++;
   printf("%s has reached Level %d!\n", player.name, player.level);
   FlushInput();
   temp = HP_LEVEL_UP_VALUE;
-  if (temp > 0)
-  {
+  if (temp > 0) {
     player.maxHP += temp;
     HealGameCharacter(&player, temp);
     printf("Maximum hit points increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
-  if (temp > 0)
-  {
+  if (temp > 0) {
     player.physicalPower += temp;
     printf("Physical power increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
-  if (temp > 0)
-  {
+  if (temp > 0) {
     player.physicalDefense += temp;
     printf("Physical defense increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
-  if (temp > 0)
-  {
+  if (temp > 0) {
     player.speed += temp;
     printf("Speed increased by %d.\n", temp);
   }
   temp = MENTAL_LEVEL_UP_VALUE;
-  if (temp > 0)
-  {
+  if (temp > 0) {
     player.mentalPower += temp;
     printf("Mental power increased by %d.\n", temp);
   }
   temp = MENTAL_LEVEL_UP_VALUE;
-  if (temp > 0)
-  {
+  if (temp > 0) {
     player.mentalDefense += temp;
     printf("Mental defense increased by %d.\n", temp);
   }
@@ -2417,8 +2240,7 @@ Description: Sets one of the player's languages to KNOWN.
 
     Outputs: None.
 ******************************************************************************/
-void LearnLanguage(int langID)
-{
+void LearnLanguage(int langID) {
   player.languages[langID] = KNOWN;
   printf("%s has learned the %s  language!\n",
          player.name,
@@ -2435,8 +2257,7 @@ Description: Sets one of the player's Words of Power to KNOWN.
 
     Outputs: None.
 ******************************************************************************/
-void LearnWord(int wordID)
-{
+void LearnWord(int wordID) {
   player.words[wordID] = KNOWN;
   printf("%s has learned %s, the Word of %s!\n",
          player.name,
