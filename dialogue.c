@@ -83,7 +83,7 @@ int TalkMenu(void) {
   }
 
 #if DEBUG
-  ERROR_MESSAGE
+  PRINT_ERROR_MESSAGE;
 #endif
   return FAILURE;
 }
@@ -106,7 +106,7 @@ int Dialogue(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -485,7 +485,7 @@ int LanguageLearningDialogue(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -553,7 +553,7 @@ int WordLearningDialogue(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -622,7 +622,7 @@ int MerchantDialogue(GameCharacter *merchant)
 
   if (merchant == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -725,7 +725,7 @@ int Transaction(GameCharacter *merchant, int price) {
 
   if (merchant == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -795,7 +795,7 @@ char *LanguageName(int idNum) {
   }
 
 #if DEBUG
-  ERROR_MESSAGE
+  PRINT_ERROR_MESSAGE;
 #endif
   return NULL;
 }

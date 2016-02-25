@@ -1402,7 +1402,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       return FAILURE;
   }
@@ -1426,7 +1426,7 @@ int AddCompanion(GameCharacter *companion) {
 
   if (companion == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1460,7 +1460,7 @@ int AddCompanion(GameCharacter *companion) {
 
   if (pGC1 == NULL) {  /* If true, "companion" wasn't at current location. */
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1483,7 +1483,7 @@ int RemoveCompanion(GameCharacter *companion) {
 
   if (companion == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1517,7 +1517,7 @@ int RemoveCompanion(GameCharacter *companion) {
 
   if (pGC1 == NULL) {  /* If true, "companion" wasn't player's companion. */
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1540,7 +1540,7 @@ int DeleteCompanion(GameCharacter *companion) {
 
   if (companion == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1560,7 +1560,7 @@ int DeleteCompanion(GameCharacter *companion) {
   }
   if (pGC1 == NULL) {  /* If true, "companion" wasn't player's companion. */
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1591,7 +1591,7 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum) {
 
   if (summoner == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
   } else {
     if (summoner->summonedCreature != NULL) {
@@ -1602,7 +1602,7 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum) {
       InitializeCharacter(newGC, idNum, world[summoner->locationID]);
     } else {
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       exit(1);
     }
@@ -1627,7 +1627,7 @@ int DeleteCreatureSummonedBy(GameCharacter *summoner) {
 
   if (summoner == NULL || summoner->summonedCreature == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1652,7 +1652,7 @@ Description: Displays detailed information about a given game character (and
 int DisplayCharacterData(GameCharacter *pGC) {
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1702,7 +1702,7 @@ Description: Prints one or two words describing the general state of a given
 int PrintSoulDescription(GameCharacter *pGC) {
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   } else if (pGC->soul <= EXTREMELY_EVIL) {
@@ -1779,7 +1779,7 @@ int NumberOfLanguagesKnown(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return -1;
   }
@@ -1808,7 +1808,7 @@ int NumberOfWordsKnown(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return -1;
   }
@@ -1838,7 +1838,7 @@ char *GetNameDefinite(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return NULL;
   }
@@ -1868,7 +1868,7 @@ char *GetNameIndefinite(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return NULL;
   }
@@ -1912,7 +1912,7 @@ char *GetNamePlural(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1950,7 +1950,7 @@ char *GetNamePlural(GameCharacter *pGC) {
       nameLength = strlen(gcName);
       if (nameLength >= SHORT_STR_LEN - 1) {  /* Must have room for 's'. */
 #if DEBUG
-        ERROR_MESSAGE
+        PRINT_ERROR_MESSAGE;
 #endif
         return NULL;
       }
@@ -2109,7 +2109,7 @@ Description: Causes a given game character to regain a certain number of hit
 int HealGameCharacter(GameCharacter *pGC, int amount) {
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return -1;
   }
@@ -2140,7 +2140,7 @@ Description: Causes a given game character to lose a certain number of hit
 int DamageGameCharacter(GameCharacter *pGC, int amount) {
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return -1;
   }

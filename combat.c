@@ -24,7 +24,7 @@ int AddEnemy(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -39,7 +39,7 @@ int AddEnemy(GameCharacter *pGC) {
 
     /* If we reach this point, "enemyNPCs" was full and the add failed.      */
 #if DEBUG
-  ERROR_MESSAGE
+  PRINT_ERROR_MESSAGE;
 #endif
   return FAILURE;
 }
@@ -61,7 +61,7 @@ int AddRandomEnemy(Location *location) {
 
   if (location == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -267,7 +267,7 @@ int AddRandomEnemy(Location *location) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       break;
   }
@@ -295,7 +295,7 @@ int RemoveEnemy(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -317,7 +317,7 @@ int RemoveEnemy(GameCharacter *pGC) {
 
     /* If we reach this point, "pGC" was not found.                          */
 #if DEBUG
-  ERROR_MESSAGE
+  PRINT_ERROR_MESSAGE;
 #endif
   return FAILURE;
 }
@@ -338,7 +338,7 @@ int DeleteEnemy(GameCharacter *pGC) {
     DeleteInhabitant(world[pGC->locationID], pGC);
   } else {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -379,7 +379,7 @@ int VisibleEnemies(void) {
 
   if (player.status[IN_COMBAT] == false) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return count;
   } else {
@@ -411,7 +411,7 @@ int Combat(void) {
 
   if (NumberOfEnemies() == 0) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return 0;
   }
@@ -541,7 +541,7 @@ Description: Prints some basic, combat-relevant information about a given game
 void PrintCombatStatus(GameCharacter *pGC) {
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return;
   }
@@ -568,7 +568,7 @@ int EnemyAI(int index) {
 
   if (enemyNPCs[index] == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -773,7 +773,7 @@ int AttackMenu(void) {
   }
 
 #if DEBUG
-  ERROR_MESSAGE
+  PRINT_ERROR_MESSAGE;
 #endif
   return FAILURE;
 }
@@ -793,7 +793,7 @@ int Attack(GameCharacter *attacker, GameCharacter *defender) {
 
   if (attacker == NULL || defender == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }

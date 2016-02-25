@@ -16,16 +16,23 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #include <string.h>  // strlen, strcpy, strcmp
 #include <stdbool.h>  // bool, true, false
 
-#define DEBUG false
-#define ERROR_MESSAGE printf("ERROR: %s, line %d\n", __FILE__, __LINE__); FlushInput();
+/******************************************************************************
+  Constants
+******************************************************************************/
+
+// Error checking:
+#define DEBUG   false
 #define FAILURE false
 #define SUCCESS true
-#define SHORT_STR_LEN 50
-#define LONG_STR_LEN 500
-#define MAX_LINE_LENGTH 80  // including new line character
-#define MAX_ENEMIES 100  // per battle
-#define MAX_TARGETS (MAX_ENEMIES * 2)  // per spell
-#define TOTAL_SECRETS 200  // to evaluate player progress
+#define PRINT_ERROR_MESSAGE printf("ERROR: %s, line %d\n", __FILE__, __LINE__); FlushInput()
+
+// String lengths and other max. values:
+#define SHORT_STR_LEN    50
+#define LONG_STR_LEN     500
+#define MAX_LINE_LENGTH  80  // including new line character
+#define MAX_ENEMIES      100  // per battle
+#define MAX_TARGETS      (MAX_ENEMIES * 2)  // per spell
+#define TOTAL_SECRETS    200  // to evaluate player progress
 #define MAX_MENU_OPTIONS 100
 #define MAX_DESTINATIONS 20
 
@@ -73,6 +80,10 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 
 // Maximum number of Words allowed in a single spell:
 #define MAX_SPELL_LEN 8
+
+/******************************************************************************
+  Enumerations
+******************************************************************************/
 
 enum WordID {
   WORD_OF_AIR,
@@ -412,6 +423,10 @@ enum Knowledge {
   KNOWN
 };
 
+/******************************************************************************
+  Structures
+******************************************************************************/
+
 typedef struct GAME_CHARACTER {
   int ID;
   bool unique;  // False for generic NPCs.
@@ -450,6 +465,26 @@ typedef struct LOCATION {
   int searches;  // Number of times player has searched the location.
   struct GAME_CHARACTER *inhabitants;  // Linked list of local NPCs.
 } Location;
+
+/******************************************************************************
+  Global Variables
+******************************************************************************/
+
+Location *world[NUM_LOCATION_IDS];  // Pointers to all game locations.
+bool worldExists;  // Indicates whether game world exists in memory.
+bool quit;  // Indicates player's desire to quit the game.
+int secretsFound;  // Number of "secrets" discovered by the player.
+GameCharacter player;
+GameCharacter *enemyNPCs[MAX_ENEMIES];
+int missions[NUM_MISSION_IDS];  // To track player progress.
+int allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
+int kills[NUM_GC_IDS];  // Number of each GC type killed.
+int visibleGameCharCounter[NUM_GC_IDS];  // Number of each GC type visible.
+bool gcDescribed[NUM_GC_IDS];  // To prevent duplicate descriptions of GCs.
+
+/******************************************************************************
+  Function Prototypes
+******************************************************************************/
 
 // Function prototypes for "main.c":
 int main(void);
@@ -540,8 +575,7 @@ char *LanguageName(int idNum);
 
 // Function prototypes for "magic.c":
 int SpellMenu(void);
-int CastSpell(GameCharacter *spellcaster,
-              char *spell,
+int CastSpell(GameCharacter *spellcaster, char *spell,
               GameCharacter *gcTargets[]);
 int Targeted(GameCharacter *pGC, GameCharacter *gcTargets[]);
 bool CanCastBeneficialSpells(GameCharacter *pGC);
@@ -560,23 +594,8 @@ char *GetItemName(int idNum);
 char *GetItemNamePlural(int idNum);
 int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount);
 int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID);
-int GiveItems(GameCharacter *giver,
-              GameCharacter *receiver,
-              int itemID,
+int GiveItems(GameCharacter *giver, GameCharacter *receiver, int itemID,
               int amount);
 int ItemValue(int idNum);
-
-// Global variables:
-Location *world[NUM_LOCATION_IDS];  // Pointers to all game locations.
-bool worldExists;  // Indicates whether game world exists in memory.
-bool quit;  // Indicates player's desire to quit the game.
-int secretsFound;  // Number of "secrets" discovered by the player.
-GameCharacter player;
-GameCharacter *enemyNPCs[MAX_ENEMIES];
-int missions[NUM_MISSION_IDS];  // To track player progress.
-int allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
-int kills[NUM_GC_IDS];  // Number of each GC type killed.
-int visibleGameCharCounter[NUM_GC_IDS];  // Number of each GC type visible.
-bool gcDescribed[NUM_GC_IDS];  // To prevent duplicate descriptions of GCs.
 
 #endif  // WOP_H_

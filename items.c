@@ -65,7 +65,7 @@ Description: Executes the use of an item by a given game character (the player
 int UseItem(GameCharacter *pGC, int idNum) {
   if (pGC->inventory[idNum] < 1) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -84,7 +84,7 @@ int UseItem(GameCharacter *pGC, int idNum) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       return FAILURE;
   }
@@ -109,7 +109,7 @@ int PrintInventory(GameCharacter *pGC) {
 
   if (pGC == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return -1;
   }
@@ -167,7 +167,7 @@ char *GetItemName(int idNum) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       strcpy(itemName, "???");
   }
@@ -209,7 +209,7 @@ Description: Transfers gold from one game character to another.
 int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount) {
   if (giver == NULL || receiver == NULL || giver->gold < amount) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -238,7 +238,7 @@ Description: Adds a given item to a given game character's inventory.
 int AddItem(GameCharacter *receiver, int itemID) {
   if (receiver == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -266,7 +266,7 @@ Description: Transfers an item from one game character to another.
 int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID) {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] <= 0) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -304,7 +304,7 @@ int GiveItems(GameCharacter *giver,
               int amount) {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] < amount) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -344,7 +344,7 @@ int ItemValue(int idNum) {
       return 20;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       break;
   }

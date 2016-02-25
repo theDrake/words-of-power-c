@@ -341,7 +341,7 @@ int InitializeLocation(Location *location, int idNum) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       return FAILURE;
   }
@@ -396,7 +396,7 @@ GameCharacter *AddInhabitant(Location *location, int idNum) {
 
   if (location == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
   } else {
     newGC = malloc(sizeof(GameCharacter));
@@ -414,7 +414,7 @@ GameCharacter *AddInhabitant(Location *location, int idNum) {
       }
     } else {
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       exit(1);
     }
@@ -488,7 +488,7 @@ int MoveInhabitant(GameCharacter *inhabitant, int destinationID) {
       destinationID < 0 ||
       destinationID >= NUM_LOCATION_IDS) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -543,7 +543,7 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant) {
 
   if (location == NULL || inhabitant == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -562,7 +562,7 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant) {
   }
   if (pGC1 == NULL) {  /* If true, "inhabitant" was not found. */
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -586,7 +586,7 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant) {
 
   if (location == NULL || inhabitant == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -621,7 +621,7 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant) {
 
     /* If we reach this point, "inhabitant" was not found.                   */
 #if DEBUG
-  ERROR_MESSAGE
+  PRINT_ERROR_MESSAGE;
 #endif
   return FAILURE;
 }
@@ -641,7 +641,7 @@ int VisibleInhabitants(Location *location) {
 
   if (location == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
   } else {
     for (pGC = location->inhabitants;
@@ -1107,7 +1107,7 @@ int MovementMenu(void) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       break;
   }
@@ -1137,7 +1137,7 @@ int MovePlayer(int destinationID) {
 
   if (destinationID < 0 || destinationID >= NUM_LOCATION_IDS) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1172,7 +1172,7 @@ int SearchLocation(Location *location) {
 
   if (location == NULL) {
 #if DEBUG
-    ERROR_MESSAGE
+    PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
@@ -1455,7 +1455,7 @@ void DescribeSituation(void) {
       break;
     default:
 #if DEBUG
-      ERROR_MESSAGE
+      PRINT_ERROR_MESSAGE;
 #endif
       break;
   }
