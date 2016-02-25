@@ -21,12 +21,12 @@ Description: Takes the player through the process of selecting a game character
 ******************************************************************************/
 int TalkMenu(void) {
   int i, iInput, temp = 0;
-  BOOL repeatOptions;
+  bool repeatOptions;
   GameCharacter *target;
 
   UpdateVisibleGameCharCounter();
-  for (i = 0; i < TOTAL_GC_IDS; i++) {
-    gcDescribed[i] = FALSE;
+  for (i = 0; i < NUM_GC_IDS; i++) {
+    gcDescribed[i] = false;
   }
 
     /* Potential targets are displayed (unless only one is available).       */
@@ -38,7 +38,7 @@ int TalkMenu(void) {
     for (target = world[player.locationID]->inhabitants;
          target != NULL;
          target = target->next) {
-      if (target->status[INVISIBLE] == FALSE) {
+      if (target->status[INVISIBLE] == false) {
         return Dialogue(target);
       }
     }
@@ -47,15 +47,15 @@ int TalkMenu(void) {
     for (target = world[player.locationID]->inhabitants;
          target != NULL;
          target = target->next) {
-      if (target->status[INVISIBLE] == FALSE &&
-          gcDescribed[target->ID] == FALSE) {
+      if (target->status[INVISIBLE] == false &&
+          gcDescribed[target->ID] == false) {
         temp++;
         printf("[%d] %s", temp, Capitalize(GetNameIndefinite(target)));
         if (visibleGameCharCounter[target->ID] > 1) {
           printf(" (%d available)", visibleGameCharCounter[target->ID]);
         }
         printf("\n");
-        gcDescribed[target->ID] = TRUE;
+        gcDescribed[target->ID] = true;
       }
     }
   }
@@ -65,20 +65,20 @@ int TalkMenu(void) {
 
     /* The target is now found by matching it with the input. */
   temp = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++) {
-    gcDescribed[i] = FALSE;
+  for (i = 0; i < NUM_GC_IDS; i++) {
+    gcDescribed[i] = false;
   }
 
   for (target = world[player.locationID]->inhabitants;
        target != NULL;
        target = target->next) {
-    if (target->status[INVISIBLE] == FALSE &&
-        gcDescribed[target->ID] == FALSE) {
+    if (target->status[INVISIBLE] == false &&
+        gcDescribed[target->ID] == false) {
       temp++;
       if (temp == iInput) {
         return Dialogue(target);
       }
-      gcDescribed[target->ID] = TRUE;
+      gcDescribed[target->ID] = true;
     }
   }
 
@@ -101,7 +101,7 @@ Description: Presents dialogue text and options when the player interacts with
 ******************************************************************************/
 int Dialogue(GameCharacter *pGC) {
   int i, iInput;
-  BOOL repeatOptions, canCommunicate;
+  bool repeatOptions, canCommunicate;
   char output[LONG_STR_LEN + 1] = "";
 
   if (pGC == NULL) {
@@ -112,14 +112,14 @@ int Dialogue(GameCharacter *pGC) {
   }
 
     /* Check for language compatibility. */
-  canCommunicate = FALSE;
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+  canCommunicate = false;
+  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
     if (player.languages[i] == KNOWN && pGC->languages[i] == KNOWN) {
-      canCommunicate = TRUE;
+      canCommunicate = true;
       break;
     }
   }
-  if (canCommunicate == FALSE) {
+  if (canCommunicate == false) {
     sprintf(output,
             "All your attempts at communication have failed. It appears that "
             "you and %s do not share a common language.",
@@ -490,7 +490,7 @@ int LanguageLearningDialogue(GameCharacter *pGC) {
     return FAILURE;
   }
 
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
     if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN) {
       count++;
       if (count == 1) {
@@ -512,7 +512,7 @@ int LanguageLearningDialogue(GameCharacter *pGC) {
     PrintString(output);
     GetIntInput(&iInput, 1, count);
     count = 0;
-    for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+    for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
       if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN) {
         count++;
         if (iInput == count) {
@@ -558,7 +558,7 @@ int WordLearningDialogue(GameCharacter *pGC) {
     return FAILURE;
   }
 
-  for (i = 0; i < TOTAL_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_IDS; i++) {
     if (pGC->words[i] == KNOWN && player.words[i] != KNOWN) {
       count++;
       if (count == 1) {
@@ -581,7 +581,7 @@ int WordLearningDialogue(GameCharacter *pGC) {
     PrintString(output);
     GetIntInput(&iInput, 1, count);
     count = 0;
-    for (i = 0; i < TOTAL_WORD_IDS; i++) {
+    for (i = 0; i < NUM_WORD_IDS; i++) {
       if (pGC->words[i] == KNOWN && player.words[i] != KNOWN) {
         count++;
         if (iInput == count) {
@@ -631,7 +631,7 @@ int MerchantDialogue(GameCharacter *merchant)
   sprintf(output,
           "%s: \"What would you like to buy?\"\n",
           merchant->name);
-  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_IDS; i++) {
     if (merchant->inventory[i] > 0) {
       count++;
       sprintf(output + strlen(output),
@@ -657,7 +657,7 @@ int MerchantDialogue(GameCharacter *merchant)
 
     /* Get input and determine what selection the player made. */
   GetIntInput(&iInput, 1, count);
-  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_IDS; i++) {
     if (merchant->inventory[i] > 0) {
       count++;
       if (count == iInput) {

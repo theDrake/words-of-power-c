@@ -25,7 +25,7 @@ int InitializeLocation(Location *location, int idNum) {
   int i;
 
   location->ID = idNum;
-  location->hidden = FALSE;
+  location->hidden = false;
   location->visits = 0;
   location->searches = 0;
   location->inhabitants = NULL;
@@ -165,7 +165,7 @@ int InitializeLocation(Location *location, int idNum) {
     case SILENT_SAGE_HOME:
       strcpy(location->name, "Solitary House");
       AddInhabitant(location, THE_SILENT_SAGE);
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case FOREST:
       strcpy(location->name, "Western Woods, Fringe");
@@ -174,17 +174,17 @@ int InitializeLocation(Location *location, int idNum) {
       strcpy(location->name, "Druids' Grove");
       AddInhabitant(location, ARCHDRUID);
       AddInhabitants(location, DRUID, RandomInt(3, 6));
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case HERMIT_HUT:
       strcpy(location->name, "Solitary Hut");
       AddInhabitant(location, THE_HERMIT);
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case WYNNFAER_ENTRANCE:
       strcpy(location->name, "Wynnfaer, Main Gate");
       AddInhabitants(location, ELF, RandomInt(3, 6));
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case WYNNFAER_PLAZA:
       strcpy(location->name, "Wynnfaer, Central Plaza");
@@ -203,12 +203,12 @@ int InitializeLocation(Location *location, int idNum) {
       AddInhabitants(location, BARBARIAN_WARRIOR, RandomInt(7, 12));
       AddInhabitants(location, BARBARIAN_SHAMAN, RandomInt(3, 6));
       AddInhabitant(location, BARBARIAN_CHIEFTAIN);
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case TORR_ENTRANCE:
       strcpy(location->name, "Torr, Entrance");
       AddInhabitants(location, DWARF_GUARDIAN, RandomInt(3, 6));
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case TORR_MARKET:
       strcpy(location->name, "Torr, Marketplace");
@@ -238,7 +238,7 @@ int InitializeLocation(Location *location, int idNum) {
     case TORR_VAULT:
       strcpy(location->name, "Torr, Secret Vault");
       AddInhabitants(location, DWARF_LOREMASTER, RandomInt(1, 2));
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case TORR_PRISON:
       strcpy(location->name, "Torr, Prison");
@@ -248,7 +248,7 @@ int InitializeLocation(Location *location, int idNum) {
     case GUGGENHOLM_ENTRANCE:
       strcpy(location->name, "Guggenholm, Entrance");
       AddInhabitant(location, DRAGON);
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case GUGGENHOLM_MAIN:
       strcpy(location->name, "Guggenholm, Main Hall");
@@ -316,12 +316,12 @@ int InitializeLocation(Location *location, int idNum) {
       break;
     case OCEAN_TRENCH:
       strcpy(location->name, "Ocean, Trench");
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case QUELACENTUS_ENTRANCE:
       strcpy(location->name, "Quelacentus, Entrance");
       AddInhabitants(location, MERFOLK_SOLDIER, RandomInt(3, 6));
-      location->hidden = TRUE;
+      location->hidden = true;
       break;
     case QUELACENTUS_PLAZA:
       strcpy(location->name, "Quelacentus, Central Plaza");
@@ -357,9 +357,9 @@ Description: Determines whether a given location is within the territory
 
      Inputs: location - The location of interest.
 
-    Outputs: TRUE or FALSE.
+    Outputs: true or false.
 ******************************************************************************/
-BOOL InVentarrisTerritory(Location *location) {
+bool InVentarrisTerritory(Location *location) {
   return location->ID == VENTARRIS_ENTRANCE    ||
          location->ID == VENTARRIS_MARKET      ||
          location->ID == VENTARRIS_INN         ||
@@ -486,7 +486,7 @@ int MoveInhabitant(GameCharacter *inhabitant, int destinationID) {
 
   if (inhabitant == NULL ||
       destinationID < 0 ||
-      destinationID >= TOTAL_LOCATION_IDS) {
+      destinationID >= NUM_LOCATION_IDS) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -647,7 +647,7 @@ int VisibleInhabitants(Location *location) {
     for (pGC = location->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
-      if (pGC->status[INVISIBLE] == FALSE) {
+      if (pGC->status[INVISIBLE] == false) {
         count++;
       }
     }
@@ -1135,7 +1135,7 @@ Description: Handles the movement of the player character from one location to
 int MovePlayer(int destinationID) {
   GameCharacter *companion;
 
-  if (destinationID < 0 || destinationID >= TOTAL_LOCATION_IDS) {
+  if (destinationID < 0 || destinationID >= NUM_LOCATION_IDS) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -1463,8 +1463,8 @@ void DescribeSituation(void) {
     /* Describe local inhabitants (NPCs).                                    */
   UpdateVisibleGameCharCounter();
   gcTypesDescribed = 0;
-  for (i = 0; i < TOTAL_GC_IDS; i++) {
-    gcDescribed[i] = FALSE;
+  for (i = 0; i < NUM_GC_IDS; i++) {
+    gcDescribed[i] = false;
   }
   temp = VisibleInhabitants(world[player.locationID]);
   if (temp > 0) {
@@ -1472,7 +1472,7 @@ void DescribeSituation(void) {
     for (pGC = world[player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
-      if (pGC->status[INVISIBLE] == FALSE && gcDescribed[pGC->ID] == FALSE) {
+      if (pGC->status[INVISIBLE] == false && gcDescribed[pGC->ID] == false) {
         if (temp < VisibleInhabitants(world[player.locationID])) {
           if (temp <= visibleGameCharCounter[pGC->ID]) {
             if (gcTypesDescribed > 1) {
@@ -1492,7 +1492,7 @@ void DescribeSituation(void) {
                   GetNamePlural(pGC));
         }
         gcTypesDescribed++;
-        gcDescribed[pGC->ID] = TRUE;
+        gcDescribed[pGC->ID] = true;
         temp -= visibleGameCharCounter[pGC->ID];
         if (temp <= 0) {
           strcat(output, ". ");

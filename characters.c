@@ -25,13 +25,13 @@ Description: Initializes a given GameCharacter struct to its default starting
 int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
   int i;
   char cInput;
-  BOOL repeatOptions;
+  bool repeatOptions;
 
     /* Default stats, representative of an average adult human. */
   pGC->ID = idNum;
   strcpy(pGC->name, "");
   strcpy(pGC->descriptor, "");
-  pGC->unique = FALSE;
+  pGC->unique = false;
   pGC->maxHP = DEFAULT_HP;
   pGC->currentHP = DEFAULT_HP;
   pGC->physicalPower = DEFAULT_PHYSICAL_POWER;
@@ -42,22 +42,22 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
   pGC->soul = NEUTRAL;
   pGC->level = 1;
   pGC->experience = DEFAULT_EXP;
-  pGC->knowsPlayer = FALSE;
-  pGC->knownToPlayer = FALSE;
+  pGC->knowsPlayer = false;
+  pGC->knownToPlayer = false;
   pGC->relationship = INDIFFERENT;
   pGC->conversations = 0;
-  for (i = 0; i < TOTAL_STATUS_IDS; i++) {
-    pGC->status[i] = FALSE;
+  for (i = 0; i < NUM_STATUS_IDS; i++) {
+    pGC->status[i] = false;
   }
   pGC->gold = 0;
-  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_IDS; i++) {
     pGC->inventory[i] = 0;
     pGC->equippedItems[i] = 0;
   }
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
     pGC->languages[i] = UNKNOWN;
   }
-  for (i = 0; i < TOTAL_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_IDS; i++) {
     pGC->words[i] = UNKNOWN;
   }
   pGC->locationID = location->ID;
@@ -67,12 +67,12 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     /* Character-specific stats.                                             */
   switch (pGC->ID) {
     case PLAYER:
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->experience = 0;
       pGC->mentalPower *= 2;
       pGC->mentalDefense *= 2;
-      pGC->knowsPlayer = TRUE;
-      pGC->knownToPlayer = TRUE;
+      pGC->knowsPlayer = true;
+      pGC->knownToPlayer = true;
       pGC->relationship = GREAT_FRIEND;
       pGC->gold = 10;
       pGC->languages[IMPERIAL] = KNOWN;
@@ -95,15 +95,15 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case ARCHWIZARD_OF_ELEMENTS:
       strcpy(pGC->name, "Archememnon");
       strcpy(pGC->descriptor, "archwizard");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->mentalPower *= 10;
       pGC->mentalDefense *= 10;
       pGC->soul = EVIL;
       pGC->relationship = GOOD_FRIEND;
-      pGC->knowsPlayer = TRUE;
-      pGC->knownToPlayer = TRUE;
+      pGC->knowsPlayer = true;
+      pGC->knownToPlayer = true;
       pGC->languages[IMPERIAL] = KNOWN;
       pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
       pGC->languages[VENTARRI] = KNOWN;
@@ -121,8 +121,8 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
       pGC->mentalPower *= 2;
       pGC->mentalDefense *= 2;
       pGC->relationship = GOOD_FRIEND;
-      pGC->knowsPlayer = TRUE;
-      pGC->knownToPlayer = TRUE;
+      pGC->knowsPlayer = true;
+      pGC->knownToPlayer = true;
       pGC->languages[IMPERIAL] = KNOWN;
       pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
       pGC->languages[VENTARRI] = KNOWN;
@@ -154,7 +154,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case ILLARUM_HIGH_PRIEST:
       strcpy(pGC->name, "Yemmul");
       strcpy(pGC->descriptor, "high priest");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2.5;
       pGC->currentHP *= 2.5;
       pGC->mentalPower *= 5;
@@ -182,7 +182,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
       pGC->mentalPower = 0;
       pGC->mentalDefense = 0;
       pGC->experience = 1;
-      pGC->status[INANIMATE] = TRUE;
+      pGC->status[INANIMATE] = true;
       break;
     case HUMAN:
       strcpy(pGC->name, "Peasant");
@@ -239,7 +239,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case ILLARUM_KING:
       strcpy(pGC->name, "King of Illarum");
       strcpy(pGC->descriptor, "king");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->physicalPower *= 2;
@@ -263,7 +263,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
       pGC->languages[IMPERIAL] = KNOWN;
       pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
       pGC->languages[VENTARRI] = KNOWN;
-      for (i = 0; i < TOTAL_WORD_IDS; i++) {
+      for (i = 0; i < NUM_WORD_IDS; i++) {
         pGC->words[i] = KNOWN;
       }
       pGC->level = 20;
@@ -346,7 +346,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case ARCHWIZARD_OF_MIND:
       strcpy(pGC->name, "Kaeloss");
       strcpy(pGC->descriptor, "archwizard");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->mentalPower *= 10;
@@ -416,7 +416,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case VENTARRIS_HIGH_PRIEST:
       strcpy(pGC->name, "Graelmach");
       strcpy(pGC->descriptor, "high priest");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2.5;
       pGC->currentHP *= 2.5;
       pGC->mentalPower *= 5;
@@ -440,7 +440,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case VENTARRIS_KING:
       strcpy(pGC->name, "King Estvann");
       strcpy(pGC->descriptor, "king");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->physicalPower *= 2;
@@ -508,7 +508,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case ARCHDRUID:
       strcpy(pGC->name, "Pann");
       strcpy(pGC->descriptor, "archdruid");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->mentalPower *= 10;
@@ -646,7 +646,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case BARBARIAN_CHIEFTAIN:
       strcpy(pGC->name, "Telth");
       strcpy(pGC->descriptor, "barbarian chieftain");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->physicalPower *= 5;
@@ -940,7 +940,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case LICH:
       strcpy(pGC->name, "Velroth");
       strcpy(pGC->descriptor, "lich");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 5;
       pGC->currentHP *= 5;
       pGC->physicalPower *= 3;
@@ -1114,7 +1114,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case MERFOLK_HIGH_PRIESTESS:
       strcpy(pGC->name, "Quaelos");
       strcpy(pGC->descriptor, "mermaid high priestess");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->physicalPower *= 1.5;
@@ -1181,7 +1181,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case MERFOLK_QUEEN:
       strcpy(pGC->name, "Queen Serashnul");
       strcpy(pGC->descriptor, "mermaid queen");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 2;
       pGC->currentHP *= 2;
       pGC->physicalPower *= 2;
@@ -1201,7 +1201,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case THE_DARK_RECLUSE:
       strcpy(pGC->name, "The Dark Recluse");
       strcpy(pGC->descriptor, "black-robed wizard");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 4;
       pGC->currentHP *= 4;
       pGC->physicalPower *= 1.5;
@@ -1240,7 +1240,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case THE_HERMIT:
       strcpy(pGC->name, "The Hermit");
       strcpy(pGC->descriptor, "old, green-robed man");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 4;
       pGC->currentHP *= 4;
       pGC->physicalPower *= 2;
@@ -1278,7 +1278,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case THE_ANGLER:
       strcpy(pGC->name, "The Angler");
       strcpy(pGC->descriptor, "old, blue-robed fisherman");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 3;
       pGC->currentHP *= 3;
       pGC->mentalPower *= 15;
@@ -1315,7 +1315,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case THE_WANDERING_MONK:
       strcpy(pGC->name, "The Wandering Monk");
       strcpy(pGC->descriptor, "red-robed monk");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 4;
       pGC->currentHP *= 4;
       pGC->physicalPower *= 3;
@@ -1358,7 +1358,7 @@ int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
     case THE_SILENT_SAGE:
       strcpy(pGC->name, "The Silent Sage");
       strcpy(pGC->descriptor, "old, white-robed man");
-      pGC->unique = TRUE;
+      pGC->unique = true;
       pGC->maxHP *= 3;
       pGC->currentHP *= 3;
       pGC->mentalPower *= 20;
@@ -1727,40 +1727,40 @@ int PrintSoulDescription(GameCharacter *pGC) {
 /******************************************************************************
    Function: IsGood
 
-Description: Returns TRUE if a given game character has a good soul.
+Description: Returns true if a given game character has a good soul.
 
      Inputs: pGC - Game character of interest.
 
-    Outputs: TRUE or FALSE.
+    Outputs: true or false.
 ******************************************************************************/
-BOOL IsGood(GameCharacter *pGC) {
+bool IsGood(GameCharacter *pGC) {
   return pGC != NULL && pGC->soul >= GOOD;
 }
 
 /******************************************************************************
    Function: IsEvil
 
-Description: Returns TRUE if a given game character has an evil soul.
+Description: Returns true if a given game character has an evil soul.
 
      Inputs: pGC - Game character of interest.
 
-    Outputs: TRUE or FALSE.
+    Outputs: true or false.
 ******************************************************************************/
-BOOL IsEvil(GameCharacter *pGC) {
+bool IsEvil(GameCharacter *pGC) {
   return pGC != NULL && pGC->soul <= EVIL;
 }
 
 /******************************************************************************
    Function: IsNeutral
 
-Description: Returns TRUE if a given game character has a neutral soul (neither
+Description: Returns true if a given game character has a neutral soul (neither
              good nor evil).
 
      Inputs: pGC - Game character of interest.
 
-    Outputs: TRUE or FALSE.
+    Outputs: true or false.
 ******************************************************************************/
-BOOL IsNeutral(GameCharacter *pGC) {
+bool IsNeutral(GameCharacter *pGC) {
   return pGC != NULL && pGC->soul > EVIL && pGC->soul < GOOD;
 }
 
@@ -1784,7 +1784,7 @@ int NumberOfLanguagesKnown(GameCharacter *pGC) {
     return -1;
   }
 
-  for (i = 0; i < TOTAL_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
     if (pGC->languages[i] == KNOWN) {
       numLanguages++;
     }
@@ -1813,7 +1813,7 @@ int NumberOfWordsKnown(GameCharacter *pGC) {
     return -1;
   }
 
-  for (i = 0; i < TOTAL_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_IDS; i++) {
     if (pGC->words[i] == KNOWN) {
       numWords++;
     }
@@ -1976,7 +1976,7 @@ void CheckStatus(void) {
   int i;
   char output[LONG_STR_LEN + 1] = "";
 
-  if (player.status[IN_COMBAT] == TRUE) {
+  if (player.status[IN_COMBAT] == true) {
     for (i = 0; i < NumberOfEnemies(); i++) {
       if (enemyNPCs[i]->currentHP <= 0) {
         strcat(output, Capitalize(GetNameDefinite(enemyNPCs[i])));
@@ -2030,7 +2030,7 @@ void UpdateVisibleGameCharCounter(void) {
   int i;
   GameCharacter *pGC;
 
-  for (i = 0; i < TOTAL_GC_IDS; i++) {  /* Clear the visible GC counter. */
+  for (i = 0; i < NUM_GC_IDS; i++) {  /* Clear the visible GC counter. */
     visibleGameCharCounter[i] = 0;
   }
   if (player.status[IN_COMBAT]) {  /* Combat mode: only count enemies. */
@@ -2044,7 +2044,7 @@ void UpdateVisibleGameCharCounter(void) {
     for (pGC = world[player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
-      if (pGC->status[INVISIBLE] == FALSE) {
+      if (pGC->status[INVISIBLE] == false) {
         visibleGameCharCounter[pGC->ID]++;
         if (pGC->summonedCreature != NULL) {
           visibleGameCharCounter[pGC->summonedCreature->ID]++;
@@ -2079,18 +2079,18 @@ Description: Determines whether a given game character is currently being
      Inputs: pGC     - Pointer to the game character of interest.
              targets - Array of pointers to targeted game characters.
 
-    Outputs: TRUE if "pGC" is being targeted, otherwise FALSE.
+    Outputs: true if "pGC" is being targeted, otherwise false.
 ******************************************************************************/
-BOOL IsTargeted(GameCharacter *pGC, GameCharacter *targets[]) {
+bool IsTargeted(GameCharacter *pGC, GameCharacter *targets[]) {
   int i;
 
   for (i = 0; i < MAX_TARGETS; i++) {
     if (targets[i] == pGC) {
-      return TRUE;
+      return true;
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 /******************************************************************************

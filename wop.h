@@ -6,48 +6,30 @@
 Description: Header file for the text-based fantasy RPG "Words of Power."
 ******************************************************************************/
 
-#ifndef WOP_H
-#define WOP_H
+#ifndef WOP_H_
+#define WOP_H_
 
-#include <stdio.h>  /* printf, scanf                                         */
-#include <stdlib.h> /* srand, rand                                           */
-#include <time.h>   /* time                                                  */
-#include <ctype.h>  /* toupper, isalnum                                      */
-#include <string.h> /* strlen, strcpy, strcmp                                */
+#include <stdio.h>  // printf, scanf
+#include <stdlib.h>  // srand, rand
+#include <time.h>  // time
+#include <ctype.h>  // toupper, isalnum
+#include <string.h>  // strlen, strcpy, strcmp
+#include <stdbool.h>  // bool, true, false
 
-#define DEBUG 0
+#define DEBUG false
 #define ERROR_MESSAGE printf("ERROR: %s, line %d\n", __FILE__, __LINE__); FlushInput();
-
-#define BOOL  int
-#define FALSE 0
-#define TRUE  1
-
-#define FAILURE 0
-#define SUCCESS 1
-
-  /* String length constants.                                                */
-#define SHORT_STR_LEN   50
-#define LONG_STR_LEN    500
-
-  /* Maximum characters per line, including new line character.              */
-#define MAX_LINE_LENGTH 80
-
-  /* Maximum number of enemies per battle.                                   */
-#define MAX_ENEMIES 100
-
-  /* Maximum number of targets per spell.                                    */
-#define MAX_TARGETS (MAX_ENEMIES * 2)
-
-  /* To evaluate the player's progress with regard to game secrets.          */
-#define TOTAL_SECRETS 200
-
-  /* Maximum number of menu options.                                         */
-#define MAX_OPTIONS 100
-
-  /* Maximum number of travel options.                                       */
+#define FAILURE false
+#define SUCCESS true
+#define SHORT_STR_LEN 50
+#define LONG_STR_LEN 500
+#define MAX_LINE_LENGTH 80  // including new line character
+#define MAX_ENEMIES 100  // per battle
+#define MAX_TARGETS (MAX_ENEMIES * 2)  // per spell
+#define TOTAL_SECRETS 200  // to evaluate player progress
+#define MAX_MENU_OPTIONS 100
 #define MAX_DESTINATIONS 20
 
-  /* Default stats, representative of an average adult human.                */
+// Default stats, representative of an average adult human:
 #define DEFAULT_HP               30
 #define DEFAULT_PHYSICAL_POWER   10
 #define DEFAULT_PHYSICAL_DEFENSE 10
@@ -56,22 +38,22 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define DEFAULT_SPEED            5
 #define DEFAULT_EXP              10
 
-  /* Standard prices and price modifiers for goods and services.             */
+// Standard prices and price modifiers for goods and services:
 #define STD_LANG_FEE    50
 #define STD_WORD_FEE    100
 #define FRIEND_MODIFIER 0.8
 #define ENEMY_MODIFIER  1.5
 
-  /* The amount of experience earned for completing the easiest missions.    */
+// Amount of experience earned for completing the easiest missions:
 #define STD_MISSION_EXP 25
 
-  /* The amount of experience needed to level-up.                            */
+// Amount of experience needed to level-up:
 #define EXP_PER_LEVEL           100
 #define HP_LEVEL_UP_VALUE       RandomInt(5, 10)
 #define PHYSICAL_LEVEL_UP_VALUE RandomInt(0, 2)
 #define MENTAL_LEVEL_UP_VALUE   RandomInt(0, 2)
 
-  /* Values for different kinds of "souls."                                  */
+// Values for different kinds of "souls":
 #define EXTREMELY_EVIL -30
 #define VERY_EVIL      -15
 #define EVIL           -5
@@ -80,7 +62,7 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define VERY_GOOD      15
 #define EXTREMELY_GOOD 30
 
-  /* Values for important relationship thresholds.                           */
+// Values for important relationship thresholds:
 #define HOSTILE_ENEMY -10
 #define BAD_ENEMY     -5
 #define ENEMY         -1
@@ -89,11 +71,10 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define GOOD_FRIEND   5
 #define GREAT_FRIEND  10
 
-  /* Maximum number of Words allowed in a single spell.                      */
+// Maximum number of Words allowed in a single spell:
 #define MAX_SPELL_LEN 8
 
-enum WordID
-{
+enum WordID {
   WORD_OF_AIR,
   WORD_OF_WATER,
   WORD_OF_EARTH,
@@ -120,11 +101,10 @@ enum WordID
   WORD_OF_FOCUS,
   WORD_OF_TIME,
   WORD_OF_VOID,
-  TOTAL_WORD_IDS
+  NUM_WORD_IDS
 };
 
-enum LanguageID
-{
+enum LanguageID {
   IMPERIAL,
   ANCIENT_IMPERIAL,
   ELVISH,
@@ -138,11 +118,10 @@ enum LanguageID
   GESH,
   VENTARRI,
   ANCIENT_VENTARRI,
-  TOTAL_LANGUAGE_IDS
+  NUM_LANGUAGE_IDS
 };
 
-enum LocationID
-{
+enum LocationID {
   ILLARUM_ENTRANCE,
   ILLARUM_MARKET,
   ILLARUM_INN,
@@ -203,11 +182,10 @@ enum LocationID
   QUELACENTUS_PLAZA,
   QUELACENTUS_TEMPLE,
   QUELACENTUS_PALACE,
-  TOTAL_LOCATION_IDS
+  NUM_LOCATION_IDS
 };
 
-enum GameCharID
-{
+enum GameCharID {
   PLAYER,
   HUMAN,
   SOLDIER,
@@ -291,11 +269,10 @@ enum GameCharID
   THE_ANGLER,
   THE_WANDERING_MONK,
   THE_SILENT_SAGE,
-  TOTAL_GC_IDS
+  NUM_GC_IDS
 };
 
-enum GameCharStatusID
-{
+enum GameCharStatusID {
   INVISIBLE,
   FLYING,
   WATER_BREATHING,
@@ -310,19 +287,17 @@ enum GameCharStatusID
   IN_COMBAT,
   SUMMONED,
   INANIMATE,
-  TOTAL_STATUS_IDS
+  NUM_STATUS_IDS
 };
 
-enum ItemID
-{
+enum ItemID {
   FOOD,
   HEALING_POTION,
   GLOWING_MUSHROOM,
-  TOTAL_ITEM_IDS
+  NUM_ITEM_IDS
 };
 
-enum MissionID
-{
+enum MissionID {
   ELEMENTS1,
   ELEMENTS2,
   ELEMENTS3,
@@ -403,11 +378,10 @@ enum MissionID
   VENTARRIS_KING3,
   VENTARRIS_KING4,
   VENTARRIS_KING5,
-  TOTAL_MISSION_IDS
+  NUM_MISSION_IDS
 };
 
-enum MissionStatus
-{
+enum MissionStatus {
   CLOSED,
   OPEN,
   COMPLETED,
@@ -415,8 +389,7 @@ enum MissionStatus
   FAILED
 };
 
-enum GroupID
-{
+enum GroupID {
   ELEMENTS_GUILD,
   MIND_GUILD,
   THE_DRUIDS,
@@ -430,24 +403,22 @@ enum GroupID
   PRIESTS_OF_TORR,
   THE_NECROMANCERS,
   THE_FARMERS,
-  TOTAL_GROUP_IDS
+  NUM_GROUP_IDS
 };
 
-enum Knowledge
-{
+enum Knowledge {
   UNKNOWN,
   PARTIALLY_KNOWN,
   KNOWN
 };
 
-typedef struct GAME_CHARACTER
-{
+typedef struct GAME_CHARACTER {
   int ID;
-  BOOL unique;                        /* FALSE for generic NPCs.             */
-  char name[SHORT_STR_LEN + 1];       /* Capitalized, even for generic NPCs. */
-  char descriptor[SHORT_STR_LEN + 1]; /* Brief and generic description.      */
+  bool unique;  // False for generic NPCs.
+  char name[SHORT_STR_LEN + 1];  // Capitalized, even for generic NPCs.
+  char descriptor[SHORT_STR_LEN + 1];  // Brief generic description.
   int level;
-  int experience;    /* "Total exp." for player; "exp. obtainable" for NPCs. */
+  int experience;  // "Total exp." for player, "exp. obtainable" for NPCs.
   int maxHP;
   int currentHP;
   int physicalPower;
@@ -455,39 +426,38 @@ typedef struct GAME_CHARACTER
   int speed;
   int mentalPower;
   int mentalDefense;
-  int soul;          /* Ranges from EXTREMELY_EVIL to EXTREMELY_GOOD.        */
-  enum Knowledge words[TOTAL_WORD_IDS];  /* Records known Words of Power.    */
-  enum Knowledge languages[TOTAL_LANGUAGE_IDS];
-  int conversations; /* Number of conversations held with player.            */
-  BOOL knowsPlayer;
-  BOOL knownToPlayer;
-  int relationship;  /* Relative to player: FRIEND, ENEMY, INDIFFERENT, etc. */
-  int status[TOTAL_STATUS_IDS];
+  int soul;  // Ranges from EXTREMELY_EVIL to EXTREMELY_GOOD.
+  enum Knowledge words[NUM_WORD_IDS];  // Records known Words of Power.
+  enum Knowledge languages[NUM_LANGUAGE_IDS];
+  int conversations;  // Number of conversations held with player.
+  bool knowsPlayer;
+  bool knownToPlayer;
+  int relationship;  // Relative to player: FRIEND, ENEMY, INDIFFERENT, etc.
+  int status[NUM_STATUS_IDS];
   int gold;
-  int inventory[TOTAL_ITEM_IDS]; /* Includes equipped items.                 */
-  int equippedItems[TOTAL_ITEM_IDS];
+  int inventory[NUM_ITEM_IDS];  // Includes equipped items.
+  int equippedItems[NUM_ITEM_IDS];
   int locationID;
-  struct GAME_CHARACTER *summonedCreature;  /* Only one allowed at a time.   */
-  struct GAME_CHARACTER *next;   /* For forming linked lists.                */
-}GameCharacter;
+  struct GAME_CHARACTER *summonedCreature;  // Only one allowed at a time.
+  struct GAME_CHARACTER *next;  // For forming linked lists.
+} GameCharacter;
 
-typedef struct LOCATION
-{
+typedef struct LOCATION {
   int ID;
   char name[SHORT_STR_LEN + 1];
-  BOOL hidden;  /* If TRUE, special effort is required to find the location. */
-  int visits;   /* Number of times player has visited the location.          */
-  int searches; /* Number of times player has searched the location.         */
-  struct GAME_CHARACTER *inhabitants;  /* Linked list of local NPCs.         */
-}Location;
+  bool hidden;  // If true, special effort is required to find the location.
+  int visits;  // Number of times player has visited the location.
+  int searches;  // Number of times player has searched the location.
+  struct GAME_CHARACTER *inhabitants;  // Linked list of local NPCs.
+} Location;
 
-  /* Function prototypes for "main.c"                                        */
+// Function prototypes for "main.c":
 int main(void);
 void MainMenu(void);
 void PrintStandardOptions(void);
 int CreateWorld(void);
 int DestroyWorld(void);
-BOOL GetExitConfirmation(void);
+bool GetExitConfirmation(void);
 void HelpMenu(void);
 int RandomInt(int low, int high);
 int RandomBool(void);
@@ -497,12 +467,12 @@ char *GetStrInput(char *str, int n);
 void PrintString(char *str);
 char *Capitalize(char *str);
 char *AllCaps(char *str);
-BOOL StrContains(char *str, char c);
+bool StrContains(char *str, char c);
 void FlushInput(void);
 
-  /* Function prototypes for "locations.c"                                   */
+// Function prototypes for "locations.c":
 int InitializeLocation(Location *location, int idNum);
-BOOL InVentarrisTerritory(Location *location);
+bool InVentarrisTerritory(Location *location);
 GameCharacter *AddInhabitant(Location *location, int idNum);
 int AddInhabitants(Location *location, int idNum, int amount);
 GameCharacter *FindInhabitant(int idNum);
@@ -515,7 +485,7 @@ int MovePlayer(int destinationID);
 int SearchLocation(Location *location);
 void DescribeSituation(void);
 
-  /* Function prototypes for "characters.c"                                  */
+// Function prototypes for "characters.c":
 int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location);
 int AddCompanion(GameCharacter *companion);
 int RemoveCompanion(GameCharacter *companion);
@@ -524,9 +494,9 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum);
 int DeleteCreatureSummonedBy(GameCharacter *summoner);
 int DisplayCharacterData(GameCharacter *pGC);
 int PrintSoulDescription(GameCharacter *pGC);
-BOOL IsGood(GameCharacter *pGC);
-BOOL IsEvil(GameCharacter *pGC);
-BOOL IsNeutral(GameCharacter *pGC);
+bool IsGood(GameCharacter *pGC);
+bool IsEvil(GameCharacter *pGC);
+bool IsNeutral(GameCharacter *pGC);
 int NumberOfLanguagesKnown(GameCharacter *pGC);
 int NumberOfWordsKnown(GameCharacter *pGC);
 char *GetNameDefinite(GameCharacter *pGC);
@@ -535,7 +505,7 @@ char *GetNamePlural(GameCharacter *pGC);
 void CheckStatus(void);
 void UpdateVisibleGameCharCounter(void);
 GameCharacter *GetTarget(void);
-BOOL IsTargeted(GameCharacter *pGC, GameCharacter *targets[]);
+bool IsTargeted(GameCharacter *pGC, GameCharacter *targets[]);
 int HealGameCharacter(GameCharacter *pGC, int amount);
 int DamageGameCharacter(GameCharacter *pGC, int amount);
 int GainExperience(int amount);
@@ -543,7 +513,7 @@ void LevelUp(void);
 void LearnLanguage(int langID);
 void LearnWord(int wordID);
 
-  /* Function prototypes for "combat.c"                                      */
+// Function prototypes for "combat.c":
 int AddEnemy(GameCharacter *pGC);
 int AddRandomEnemy(Location *location);
 int RemoveEnemy(GameCharacter *pGC);
@@ -555,11 +525,11 @@ void PrintCombatStatus(GameCharacter *pGC);
 int EnemyAI(int index);
 int AttackMenu(void);
 int Attack(GameCharacter *attacker, GameCharacter *defender);
-BOOL WillingToFight(GameCharacter *pGC);
-BOOL WillingToFlee(GameCharacter *pGC);
-BOOL WillingToHelp(GameCharacter *pGC);
+bool WillingToFight(GameCharacter *pGC);
+bool WillingToFlee(GameCharacter *pGC);
+bool WillingToHelp(GameCharacter *pGC);
 
-  /* Function prototypes for "dialogue.c"                                    */
+// Function prototypes for "dialogue.c":
 int TalkMenu(void);
 int Dialogue(GameCharacter *pGC);
 int LanguageLearningDialogue(GameCharacter *pGC);
@@ -568,21 +538,21 @@ double GetPriceModifier(GameCharacter *merchant);
 int Transaction(GameCharacter *merchant, int price);
 char *LanguageName(int idNum);
 
-  /* Function prototypes for "magic.c"                                       */
+// Function prototypes for "magic.c":
 int SpellMenu(void);
 int CastSpell(GameCharacter *spellcaster,
               char *spell,
               GameCharacter *gcTargets[]);
 int Targeted(GameCharacter *pGC, GameCharacter *gcTargets[]);
-BOOL CanCastBeneficialSpells(GameCharacter *pGC);
+bool CanCastBeneficialSpells(GameCharacter *pGC);
 int PrintKnownWords(void);
 char *Word(int idNum);
 char *WordStartingWith(char firstLetter);
 char *WordName(int idNum);
 int WordID(char firstLetter);
-BOOL IsSpellcaster(GameCharacter *pGC);
+bool IsSpellcaster(GameCharacter *pGC);
 
-  /* Function prototypes for "item.c"                                        */
+// Function prototypes for "item.c":
 int ItemMenu(void);
 int UseItem(GameCharacter *pGC, int idNum);
 int PrintInventory(GameCharacter *pGC);
@@ -596,17 +566,17 @@ int GiveItems(GameCharacter *giver,
               int amount);
 int ItemValue(int idNum);
 
-  /* Global variables.                                                       */
-Location *world[TOTAL_LOCATION_IDS];      /* Pointers to all game locations. */
-BOOL worldExists;   /* Indicates whether a game world exists in memory.      */
-BOOL quit;          /* Indicates a player's desire to quit the game.         */
-int secretsFound;   /* Number of "secrets" discovered by the player.         */
-GameCharacter player;                     /* Player character.               */
-GameCharacter *enemyNPCs[MAX_ENEMIES];    /* For linked lists of enemies.    */
-int missions[TOTAL_MISSION_IDS];          /* To track the player's progress. */
-int allegiances[TOTAL_GROUP_IDS];         /* Player relationships w/groups.  */
-int kills[TOTAL_GC_IDS];                  /* Number of each GC type killed.  */
-int visibleGameCharCounter[TOTAL_GC_IDS]; /* Number of each GC type visible. */
-BOOL gcDescribed[TOTAL_GC_IDS]; /* To prevent duplicate descriptions of GCs. */
+// Global variables:
+Location *world[NUM_LOCATION_IDS];  // Pointers to all game locations.
+bool worldExists;  // Indicates whether game world exists in memory.
+bool quit;  // Indicates player's desire to quit the game.
+int secretsFound;  // Number of "secrets" discovered by the player.
+GameCharacter player;
+GameCharacter *enemyNPCs[MAX_ENEMIES];
+int missions[NUM_MISSION_IDS];  // To track player progress.
+int allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
+int kills[NUM_GC_IDS];  // Number of each GC type killed.
+int visibleGameCharCounter[NUM_GC_IDS];  // Number of each GC type visible.
+bool gcDescribed[NUM_GC_IDS];  // To prevent duplicate descriptions of GCs.
 
-#endif
+#endif  // WOP_H_

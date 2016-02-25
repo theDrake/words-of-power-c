@@ -24,8 +24,8 @@ Description: Main function for the "Words of Power" RPG.
 ******************************************************************************/
 int main(void) {
   srand(time(0));
-  worldExists = FALSE;
-  quit = FALSE;
+  worldExists = false;
+  quit = false;
 
   PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
               "and programmed by David C. Drake (www.davidcdrake.com)\n\0");
@@ -61,10 +61,10 @@ Description: Displays main menu options and does some handling of input.
 ******************************************************************************/
 void MainMenu(void) {
   char cInput;
-  BOOL repeatOptions;
+  bool repeatOptions;
 
   do {
-    repeatOptions = FALSE;
+    repeatOptions = false;
     printf("Main Menu:\n"
            "[N]ew Game\n"
            "[L]oad Game\n"
@@ -89,11 +89,11 @@ void MainMenu(void) {
         if (worldExists) {
           DestroyWorld();
         }
-        quit = TRUE;
+        quit = true;
         break;
       default:
         printf("Invalid response.\n\n");
-        repeatOptions = TRUE;
+        repeatOptions = true;
         break;
     }
   }while (repeatOptions);
@@ -112,11 +112,11 @@ Description: Prints the standard (i.e., non-combat) player options and
 void PrintStandardOptions(void) {
   int i, iInput, temp;
   char cInput;
-  BOOL repeatOptions;
+  bool repeatOptions;
   GameCharacter *pGC;  /* To scan linked lists of game characters. */
 
   do {
-    repeatOptions = FALSE;
+    repeatOptions = false;
     printf("What do you want to do?\n"
            "[T]alk\n"
            "[S]earch\n"
@@ -130,46 +130,46 @@ void PrintStandardOptions(void) {
     switch (cInput) {
       case 'T':  /* Talk */
         if (TalkMenu() == FAILURE) {
-          repeatOptions = TRUE;
+          repeatOptions = true;
         }
         break;
       case 'S':  /* Search */
         if (SearchLocation(world[player.locationID]) == FAILURE) {
-          repeatOptions = TRUE;
+          repeatOptions = true;
         }
         break;
       case 'U':  /* Use an Item */
         if (ItemMenu() == FAILURE) {
-          repeatOptions = TRUE;
+          repeatOptions = true;
         }
         break;
       case 'C':  /* Cast a Spell */
         if (SpellMenu() == FAILURE) {
-          repeatOptions = TRUE;
+          repeatOptions = true;
         }
         break;
       case 'A':  /* Attack */
         if (AttackMenu() == FAILURE) {
-          repeatOptions = TRUE;
+          repeatOptions = true;
         }
         break;
       case 'M':  /* Move to Another Location */
         if (MovementMenu() == FAILURE) {
-          repeatOptions = TRUE;
+          repeatOptions = true;
         }
         break;
       case 'V':  /* View Inventory and Status */
         DisplayCharacterData(&player);
-        repeatOptions = TRUE;
+        repeatOptions = true;
         break;
       case 'Q':  /* Quit */
-        if (GetExitConfirmation() == FALSE) {
-          repeatOptions = TRUE;
+        if (GetExitConfirmation() == false) {
+          repeatOptions = true;
         }
         break;
       default:
         printf("Invalid response.\n\n");
-        repeatOptions = TRUE;
+        repeatOptions = true;
         break;
     }
   }while (repeatOptions);
@@ -203,7 +203,7 @@ int CreateWorld(void) {
   }
 
     /* Initialize each location (including its inhabitants).                 */
-  for (i = 0; i < TOTAL_LOCATION_IDS; i++) {
+  for (i = 0; i < NUM_LOCATION_IDS; i++) {
     world[i] = malloc(sizeof(Location));
     if (world[i] != NULL) {
       errors += InitializeLocation(world[i], i);
@@ -216,23 +216,23 @@ int CreateWorld(void) {
   }
 
     /* Set the status of all missions to CLOSED.                             */
-  for (i = 0; i < TOTAL_MISSION_IDS; i++) {
+  for (i = 0; i < NUM_MISSION_IDS; i++) {
     missions[i] = CLOSED;
   }
 
     /* Initialize player allegiances.                                        */
-  for (i = 0; i < TOTAL_GROUP_IDS; i++) {
+  for (i = 0; i < NUM_GROUP_IDS; i++) {
     allegiances[i] = INDIFFERENT;
   }
 
     /* Initialize the player's "kill" history.                               */
-  for (i = 0; i < TOTAL_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_IDS; i++) {
     kills[i] = 0;
   }
 
     /* Initialize remaining global variables.                                */
   secretsFound = 0;
-  worldExists = TRUE;
+  worldExists = true;
 
   return errors;
 }
@@ -251,7 +251,7 @@ int DestroyWorld(void) {
   int i, errors = 0;
   GameCharacter *temp; /* To search for and deallocate game characters.      */
 
-  if (worldExists == FALSE) {
+  if (worldExists == false) {
 #if DEBUG
     ERROR_MESSAGE
 #endif
@@ -262,7 +262,7 @@ int DestroyWorld(void) {
   printf("Destroying world...\n\n");
 #endif
 
-  for (i = 0; i < TOTAL_LOCATION_IDS; i++) {
+  for (i = 0; i < NUM_LOCATION_IDS; i++) {
     if (world[i] != NULL) {
       while (world[i]->inhabitants != NULL) {
         if (DeleteInhabitant(world[i], world[i]->inhabitants) == FAILURE) {
@@ -287,7 +287,7 @@ int DestroyWorld(void) {
       errors++;
     }
   }
-  worldExists = FALSE;
+  worldExists = false;
 
   return errors;
 }
@@ -300,9 +300,9 @@ Description: Asks for confirmation of intent to exit to the main menu. If
 
      Inputs: None.
 
-    Outputs: TRUE if the player confirms they want to exit to the main menu.
+    Outputs: true if the player confirms they want to exit to the main menu.
 ******************************************************************************/
-BOOL GetExitConfirmation(void) {
+bool GetExitConfirmation(void) {
   char cInput;
 
   do {
@@ -311,13 +311,13 @@ BOOL GetExitConfirmation(void) {
     GetCharInput(&cInput);
     if (cInput == 'Y') {
       DestroyWorld();
-      return TRUE;
+      return true;
     } else if (cInput != 'N') {
       printf("Invalid response.\n\n");
     }
   }while (cInput != 'N');
 
-  return FALSE;
+  return false;
 }
 
 /******************************************************************************
@@ -352,7 +352,7 @@ Description: Returns a random boolean value.
 
      Inputs: None.
 
-    Outputs: TRUE or FALSE.
+    Outputs: true or false.
 ******************************************************************************/
 int RandomBool(void) {
   return rand() % 2;
@@ -393,7 +393,7 @@ Description: Reads in one integer, then repeats until an integer within given
 ******************************************************************************/
 int GetIntInput(int *i, int low, int high) {
   int temp;
-  BOOL repeat;
+  bool repeat;
 
   if (low > high) {
     temp = low;
@@ -405,14 +405,14 @@ int GetIntInput(int *i, int low, int high) {
   }
 
   do {
-    repeat = FALSE;
+    repeat = false;
     scanf("%d", i);
     FlushInput();
     if (*i < low || *i > high) {
       printf("Invalid response. Enter a number between %d and %d: ",
              low,
              high);
-      repeat = TRUE;
+      repeat = true;
     }
   }while (repeat);
   printf("\n");
@@ -540,18 +540,18 @@ Description: Determines whether a given string contains a given character.
      Inputs: str - Pointer to the string of interest.
              c   - Character to search for in the string.
 
-    Outputs: TRUE if the string contains "c", otherwise FALSE.
+    Outputs: true if the string contains "c", otherwise false.
 ******************************************************************************/
-BOOL StrContains(char *str, char c) {
+bool StrContains(char *str, char c) {
   int i;
 
   for (i = 0; str[i] != '\0'; i++) {
     if (str[i] == c) {
-      return TRUE;
+      return true;
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 /******************************************************************************

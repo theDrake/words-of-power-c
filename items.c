@@ -22,7 +22,7 @@ Description: Displays the player's inventory and prompts the player to choose
 int ItemMenu(void) {
   int i, iInput, temp = 0;
 
-  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_IDS; i++) {
     if (player.inventory[i] > 0) {
       temp++;
       printf("[%d] %s (%d)\n", temp, GetItemName(i), player.inventory[i]);
@@ -37,7 +37,7 @@ int ItemMenu(void) {
     printf("[%d] Cancel (return to previous menu)\n", temp);
     GetIntInput(&iInput, 1, temp);
     temp = 0;
-    for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+    for (i = 0; i < NUM_ITEM_IDS; i++) {
       if (player.inventory[i] > 0) {
         temp++;
         if (temp == iInput) {
@@ -115,7 +115,7 @@ int PrintInventory(GameCharacter *pGC) {
   }
 
   printf("Inventory: ");
-  for (i = 0; i < TOTAL_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_IDS; i++) {
     if (pGC->inventory[i] > 0) {
       if (itemTypesDescribed > 0) {
         printf(", ");
