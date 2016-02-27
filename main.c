@@ -71,21 +71,21 @@ void MainMenu(void) {
            "[Q]uit\n");
     GetCharInput(&cInput);
     switch (cInput) {
-      case 'N': /* New Game */
+      case 'N':  // New Game
         if (worldExists) {
           DestroyWorld();
         }
         CreateWorld();
         InitializeCharacter(&player, PLAYER, world[ILLARUM_SCHOOL]);
         break;
-      case 'L': /* Load Game */
+      case 'L':  // Load Game
         if (worldExists) {
           DestroyWorld();
         }
         /*LoadGame();*/
         printf("Sorry, no save files found.\n\n");
         break;
-      case 'Q': /* Quit */
+      case 'Q':  // Quit
         if (worldExists) {
           DestroyWorld();
         }
@@ -113,7 +113,7 @@ void PrintStandardOptions(void) {
   int i, iInput, temp;
   char cInput;
   bool repeatOptions;
-  game_character_t *pGC;  /* To scan linked lists of game characters. */
+  game_character_t *pGC;  // To scan linked lists of game characters.
 
   do {
     repeatOptions = false;
@@ -128,41 +128,41 @@ void PrintStandardOptions(void) {
            "[Q]uit (Return to Main Menu)\n");
     GetCharInput(&cInput);
     switch (cInput) {
-      case 'T':  /* Talk */
+      case 'T':  // Talk
         if (TalkMenu() == FAILURE) {
           repeatOptions = true;
         }
         break;
-      case 'S':  /* Search */
+      case 'S':  // Search
         if (SearchLocation(world[player.locationID]) == FAILURE) {
           repeatOptions = true;
         }
         break;
-      case 'U':  /* Use an Item */
+      case 'U':  // Use an Item
         if (ItemMenu() == FAILURE) {
           repeatOptions = true;
         }
         break;
-      case 'C':  /* Cast a Spell */
+      case 'C':  // Cast a Spell
         if (SpellMenu() == FAILURE) {
           repeatOptions = true;
         }
         break;
-      case 'A':  /* Attack */
+      case 'A':  // Attack
         if (AttackMenu() == FAILURE) {
           repeatOptions = true;
         }
         break;
-      case 'M':  /* Move to Another Location */
+      case 'M':  // Move to Another Location
         if (MovementMenu() == FAILURE) {
           repeatOptions = true;
         }
         break;
-      case 'V':  /* View Inventory and Status */
+      case 'V':  // View Inventory and Status
         DisplayCharacterData(&player);
         repeatOptions = true;
         break;
-      case 'Q':  /* Quit */
+      case 'Q':  // Quit
         if (GetExitConfirmation() == false) {
           repeatOptions = true;
         }
@@ -202,7 +202,7 @@ int CreateWorld(void) {
     DestroyWorld();
   }
 
-    /* Initialize each location (including its inhabitants).                 */
+  // Initialize each location (including its inhabitants):
   for (i = 0; i < NUM_LOCATION_IDS; i++) {
     world[i] = malloc(sizeof(location_t));
     if (world[i] != NULL) {
@@ -215,22 +215,22 @@ int CreateWorld(void) {
     }
   }
 
-    /* Set the status of all missions to CLOSED.                             */
+  // Set status of all missions to CLOSED:
   for (i = 0; i < NUM_MISSION_IDS; i++) {
     missions[i] = CLOSED;
   }
 
-    /* Initialize player allegiances.                                        */
+  // Initialize player allegiances:
   for (i = 0; i < NUM_GROUP_IDS; i++) {
     allegiances[i] = INDIFFERENT;
   }
 
-    /* Initialize the player's "kill" history.                               */
+  // Initialize player's "kill" history:
   for (i = 0; i < NUM_GC_IDS; i++) {
     kills[i] = 0;
   }
 
-    /* Initialize remaining global variables.                                */
+  // Initialize remaining global variables:
   secretsFound = 0;
   worldExists = true;
 
@@ -249,7 +249,7 @@ Description: Deallocates all memory set aside for location structs and their
 ******************************************************************************/
 int DestroyWorld(void) {
   int i, errors = 0;
-  game_character_t *temp; /* To search for and deallocate game characters.   */
+  game_character_t *temp;  // To search for and deallocate game characters.
 
   if (worldExists == false) {
 #if DEBUG
