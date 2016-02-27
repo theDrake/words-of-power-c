@@ -12,16 +12,16 @@ Description: Functions governing locations, their inhabitants, and movement
 /******************************************************************************
    Function: InitializeLocation
 
-Description: Initializes a given Location struct, along with all of its
-             inhabitants (a linked list of GameCharacter structs), to their
+Description: Initializes a given location struct, along with all of its
+             inhabitants (a linked list of game character structs), to their
              default starting values.
 
-     Inputs: location - Pointer to the Location struct to be initialized.
+     Inputs: location - Pointer to the location struct to be initialized.
              idNum    - ID number of the desired location.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeLocation(Location *location, int idNum) {
+int InitializeLocation(location_t *location, int idNum) {
   int i;
 
   location->ID = idNum;
@@ -359,7 +359,7 @@ Description: Determines whether a given location is within the territory
 
     Outputs: true or false.
 ******************************************************************************/
-bool InVentarrisTerritory(Location *location) {
+bool InVentarrisTerritory(location_t *location) {
   return location->ID == VENTARRIS_ENTRANCE    ||
          location->ID == VENTARRIS_MARKET      ||
          location->ID == VENTARRIS_INN         ||
@@ -391,15 +391,15 @@ Description: Creates a new game character and adds it to a given location's list
 
     Outputs: Pointer to the new game character (or NULL if it failed).
 ******************************************************************************/
-GameCharacter *AddInhabitant(Location *location, int idNum) {
-  GameCharacter *newGC = NULL, *temp;
+game_character_t *AddInhabitant(location_t *location, int idNum) {
+  game_character_t *newGC = NULL, *temp;
 
   if (location == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
   } else {
-    newGC = malloc(sizeof(GameCharacter));
+    newGC = malloc(sizeof(game_character_t));
     if (newGC != NULL) {
       InitializeCharacter(newGC, idNum, location);
       newGC->locationID = location->ID;
@@ -435,7 +435,7 @@ Description: Creates multiple game characters of a single type and adds them to
 
     Outputs: Number of game characters successfully added.
 ******************************************************************************/
-int AddInhabitants(Location *location, int idNum, int amount) {
+int AddInhabitants(location_t *location, int idNum, int amount) {
   int count;
 
   while (amount-- > 0) {
@@ -457,8 +457,8 @@ Description: Returns a pointer to the first inhabitant found (if any) bearing a
 
     Outputs: Pointer to an appropriate inhabitant, or NULL if none is found.
 ******************************************************************************/
-GameCharacter *FindInhabitant(int idNum) {
-  GameCharacter *pGC;
+game_character_t *FindInhabitant(int idNum) {
+  game_character_t *pGC;
 
   for (pGC = world[player.locationID]->inhabitants;
        pGC != NULL;
@@ -481,8 +481,8 @@ Description: Handles the movement of an NPC from one location to another.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int MoveInhabitant(GameCharacter *inhabitant, int destinationID) {
-  GameCharacter *pGC1, *pGC2;
+int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
+  game_character_t *pGC1, *pGC2;
 
   if (inhabitant == NULL ||
       destinationID < 0 ||
@@ -531,15 +531,15 @@ int MoveInhabitant(GameCharacter *inhabitant, int destinationID) {
 /******************************************************************************
    Function: RemoveInhabitant
 
-Description: Removes a game character from a Location's list of inhabitants.
+Description: Removes a game character from a location's list of inhabitants.
 
      Inputs: location   - Pointer to the relevant location.
              inhabitant - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveInhabitant(Location *location, GameCharacter *inhabitant) {
-  GameCharacter *pGC1, *pGC2;
+int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
+  game_character_t *pGC1, *pGC2;
 
   if (location == NULL || inhabitant == NULL) {
 #if DEBUG
@@ -573,7 +573,7 @@ int RemoveInhabitant(Location *location, GameCharacter *inhabitant) {
 /******************************************************************************
    Function: DeleteInhabitant
 
-Description: Removes a game character from a Location's list of inhabitants and
+Description: Removes a game character from a location's list of inhabitants and
              deallocates its associated memory.
 
      Inputs: location   - Pointer to the relevant location.
@@ -581,8 +581,8 @@ Description: Removes a game character from a Location's list of inhabitants and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteInhabitant(Location *location, GameCharacter *inhabitant) {
-  GameCharacter *pGC1, *pGC2;
+int DeleteInhabitant(location_t *location, game_character_t *inhabitant) {
+  game_character_t *pGC1, *pGC2;
 
   if (location == NULL || inhabitant == NULL) {
 #if DEBUG
@@ -601,8 +601,8 @@ int DeleteInhabitant(Location *location, GameCharacter *inhabitant) {
           pGC2->next = NULL;  /* Remove remaining pointer to "inhabitant". */
         } else {  /* "inhabitant" is not the end of the list. */
             /*
-             * Set the GameCharacter previous to "inhabitant" to point at the
-             * next GameCharacter after "inhabitant".
+             * Set the game character previous to "inhabitant" to point at the
+             * next game character after "inhabitant".
              */
           pGC1 = inhabitant->next;
           pGC2->next = pGC1;
@@ -635,9 +635,9 @@ Description: Returns the number of visible inhabitants in a given location.
 
     Outputs: The number of visible inhabitants in the specified location.
 ******************************************************************************/
-int VisibleInhabitants(Location *location) {
+int VisibleInhabitants(location_t *location) {
   int count = 0;
-  GameCharacter *pGC;
+  game_character_t *pGC;
 
   if (location == NULL) {
 #if DEBUG
@@ -667,7 +667,7 @@ Description: Displays movement options to the player.
 ******************************************************************************/
 int MovementMenu(void) {
   int i, iInput, numDestinations = 0;
-  Location *destinations[MAX_DESTINATIONS] = {NULL};
+  location_t *destinations[MAX_DESTINATIONS] = {NULL};
 
     /* Determine available destinations and describe their orientation. */
   switch (player.locationID) {
@@ -1133,7 +1133,7 @@ Description: Handles the movement of the player character from one location to
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int MovePlayer(int destinationID) {
-  GameCharacter *companion;
+  game_character_t *companion;
 
   if (destinationID < 0 || destinationID >= NUM_LOCATION_IDS) {
 #if DEBUG
@@ -1166,7 +1166,7 @@ Description: Determines the outcome of a given search.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int SearchLocation(Location *location) {
+int SearchLocation(location_t *location) {
   int temp;
   char output[LONG_STR_LEN + 1] = "";
 
@@ -1241,7 +1241,7 @@ Description: Describes the current location and its inhabitants to the player.
 void DescribeSituation(void) {
   int i, temp, gcTypesDescribed;
   char output[LONG_STR_LEN + 1] = "";
-  GameCharacter *pGC;
+  game_character_t *pGC;
 
     /* Describue the current location. */
   switch (player.locationID)

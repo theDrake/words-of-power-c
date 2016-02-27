@@ -113,7 +113,7 @@ void PrintStandardOptions(void) {
   int i, iInput, temp;
   char cInput;
   bool repeatOptions;
-  GameCharacter *pGC;  /* To scan linked lists of game characters. */
+  game_character_t *pGC;  /* To scan linked lists of game characters. */
 
   do {
     repeatOptions = false;
@@ -178,8 +178,8 @@ void PrintStandardOptions(void) {
 /******************************************************************************
    Function: CreateWorld
 
-Description: Allocates memory for, and initializes, Location structs for all
-             game locations as well as GameCharacter structs for each
+Description: Allocates memory for, and initializes, location structs for all
+             game locations as well as game character structs for each
              location's default inhabitants. Also sets other global variables
              to their default starting values.
 
@@ -204,7 +204,7 @@ int CreateWorld(void) {
 
     /* Initialize each location (including its inhabitants).                 */
   for (i = 0; i < NUM_LOCATION_IDS; i++) {
-    world[i] = malloc(sizeof(Location));
+    world[i] = malloc(sizeof(location_t));
     if (world[i] != NULL) {
       errors += InitializeLocation(world[i], i);
     } else {
@@ -240,7 +240,7 @@ int CreateWorld(void) {
 /******************************************************************************
    Function: DestroyWorld
 
-Description: Deallocates all memory set aside for Location structs and their
+Description: Deallocates all memory set aside for location structs and their
              inhabitants.
 
      Inputs: None.
@@ -249,7 +249,7 @@ Description: Deallocates all memory set aside for Location structs and their
 ******************************************************************************/
 int DestroyWorld(void) {
   int i, errors = 0;
-  GameCharacter *temp; /* To search for and deallocate game characters.      */
+  game_character_t *temp; /* To search for and deallocate game characters.   */
 
   if (worldExists == false) {
 #if DEBUG

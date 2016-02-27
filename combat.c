@@ -19,7 +19,7 @@ Description: Given an already existing game character, adds a pointer to it in
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddEnemy(GameCharacter *pGC) {
+int AddEnemy(game_character_t *pGC) {
   int i;
 
   if (pGC == NULL) {
@@ -56,8 +56,8 @@ Description: Creates a new game character and adds a pointer to it in the local
 
     Outputs: SUCCESS if an enemy is added, otherwise FAILURE.
 ******************************************************************************/
-int AddRandomEnemy(Location *location) {
-  GameCharacter *newEnemy = NULL;
+int AddRandomEnemy(location_t *location) {
+  game_character_t *newEnemy = NULL;
 
   if (location == NULL) {
 #if DEBUG
@@ -290,7 +290,7 @@ Description: Removes a pointer to a given enemy from the global "enemyNPCs"
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveEnemy(GameCharacter *pGC) {
+int RemoveEnemy(game_character_t *pGC) {
   int i, j;
 
   if (pGC == NULL) {
@@ -333,7 +333,7 @@ Description: Removes a pointer to a given enemy from the global "enemyNPCs"
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteEnemy(GameCharacter *pGC) {
+int DeleteEnemy(game_character_t *pGC) {
   if (RemoveEnemy(pGC) == SUCCESS) {
     DeleteInhabitant(world[pGC->locationID], pGC);
   } else {
@@ -407,7 +407,7 @@ int Combat(void) {
   int i, round = 1;
   char cInput;
   bool repeatOptions, playerFirst;
-  GameCharacter *pGC;
+  game_character_t *pGC;
 
   if (NumberOfEnemies() == 0) {
 #if DEBUG
@@ -538,7 +538,7 @@ Description: Prints some basic, combat-relevant information about a given game
 
     Outputs: None.
 ******************************************************************************/
-void PrintCombatStatus(GameCharacter *pGC) {
+void PrintCombatStatus(game_character_t *pGC) {
   if (pGC == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -564,7 +564,7 @@ Description: Handles enemy NPC decision-making during combat.
 int EnemyAI(int index) {
   int i;
   bool actionPerformed = false;
-  GameCharacter *gcTargets[MAX_TARGETS] = {NULL};
+  game_character_t *gcTargets[MAX_TARGETS] = {NULL};
 
   if (enemyNPCs[index] == NULL) {
 #if DEBUG
@@ -644,7 +644,7 @@ Description: Takes the player through the process of selecting a game character
 int AttackMenu(void) {
   int i, iInput, temp;
   bool repeatOptions;
-  GameCharacter *target;
+  game_character_t *target;
 
   if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) {
     printf("%s: \"You're a wizard, not a warrior. Cast a spell!\"\n",
@@ -788,7 +788,7 @@ Description: Handles a physical attack between two game characters.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int Attack(GameCharacter *attacker, GameCharacter *defender) {
+int Attack(game_character_t *attacker, game_character_t *defender) {
   int damage;
 
   if (attacker == NULL || defender == NULL) {
@@ -825,7 +825,7 @@ Description: Determines whether a given NPC will fight the player if the player
 
     Outputs: true or false.
 ******************************************************************************/
-bool WillingToFight(GameCharacter *pGC) {
+bool WillingToFight(game_character_t *pGC) {
   if (pGC->ID == SOLDIER || pGC->ID == KNIGHT || pGC->ID == WIZARD ||
       pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
       pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||
@@ -860,7 +860,7 @@ Description: Determines whether a given NPC will flee when losing a fight.
 
     Outputs: true or false.
 ******************************************************************************/
-bool WillingToFlee(GameCharacter *pGC) {
+bool WillingToFlee(game_character_t *pGC) {
   return pGC->ID == PEASANT ||
          pGC->ID == SOLDIER ||
          pGC->ID == WIZARD ||
@@ -900,7 +900,7 @@ Description: Determines whether a given NPC will assist allies during combat
 
     Outputs: true or false.
 ******************************************************************************/
-bool WillingToHelp(GameCharacter *pGC) {
+bool WillingToHelp(game_character_t *pGC) {
   if (pGC->ID == SOLDIER || pGC->ID == KNIGHT || pGC->ID == WIZARD ||
       pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
       pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||

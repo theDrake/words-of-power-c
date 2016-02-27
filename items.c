@@ -62,7 +62,7 @@ Description: Executes the use of an item by a given game character (the player
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int UseItem(GameCharacter *pGC, int idNum) {
+int UseItem(game_character_t *pGC, int idNum) {
   if (pGC->inventory[idNum] < 1) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -104,7 +104,7 @@ Description: Prints the name and quantity of each item owned by a given game
 
     Outputs: Number of item types described (or -1 if an error is encountered).
 ******************************************************************************/
-int PrintInventory(GameCharacter *pGC) {
+int PrintInventory(game_character_t *pGC) {
   int i, itemTypesDescribed = 0;
 
   if (pGC == NULL) {
@@ -206,7 +206,7 @@ Description: Transfers gold from one game character to another.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount) {
+int GiveGold(game_character_t *giver, game_character_t *receiver, int amount) {
   if (giver == NULL || receiver == NULL || giver->gold < amount) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -235,7 +235,7 @@ Description: Adds a given item to a given game character's inventory.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddItem(GameCharacter *receiver, int itemID) {
+int AddItem(game_character_t *receiver, int itemID) {
   if (receiver == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -263,7 +263,7 @@ Description: Transfers an item from one game character to another.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID) {
+int GiveItem(game_character_t *giver, game_character_t *receiver, int itemID) {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] <= 0) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -298,9 +298,7 @@ Description: Transfers a specified amount of a given item from one game
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int GiveItems(GameCharacter *giver,
-              GameCharacter *receiver,
-              int itemID,
+int GiveItems(game_character_t *giver, game_character_t *receiver, int itemID,
               int amount) {
   if (giver == NULL || receiver == NULL || giver->inventory[itemID] < amount) {
 #if DEBUG

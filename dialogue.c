@@ -22,7 +22,7 @@ Description: Takes the player through the process of selecting a game character
 int TalkMenu(void) {
   int i, iInput, temp = 0;
   bool repeatOptions;
-  GameCharacter *target;
+  game_character_t *target;
 
   UpdateVisibleGameCharCounter();
   for (i = 0; i < NUM_GC_IDS; i++) {
@@ -94,12 +94,12 @@ int TalkMenu(void) {
 Description: Presents dialogue text and options when the player interacts with
              a particular NPC.
 
-     Inputs: pGC - A pointer to the GameCharacter struct of the NPC the player
+     Inputs: pGC - A pointer to the game character struct of the NPC the player
                    is speaking with (or, in group dialogue, the main NPC).
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int Dialogue(GameCharacter *pGC) {
+int Dialogue(game_character_t *pGC) {
   int i, iInput;
   bool repeatOptions, canCommunicate;
   char output[LONG_STR_LEN + 1] = "";
@@ -479,7 +479,7 @@ Description: Presents dialogue and options relevant to learning a language.
 
     Outputs: SUCCESS if a language is learned, otherwise FAILURE.
 ******************************************************************************/
-int LanguageLearningDialogue(GameCharacter *pGC) {
+int LanguageLearningDialogue(game_character_t *pGC) {
   int i, iInput, count = 0;  /* Number of languages available to be learned. */
   char output[LONG_STR_LEN + 1] = "";
 
@@ -547,7 +547,7 @@ Description: Presents dialogue and options relevant to learning a Word of
 
     Outputs: SUCCESS if a Word is learned, otherwise FAILURE.
 ******************************************************************************/
-int WordLearningDialogue(GameCharacter *pGC) {
+int WordLearningDialogue(game_character_t *pGC) {
   int i, iInput, count = 0;  /* Number of Words available to be learned. */
   char output[LONG_STR_LEN + 1] = "";
 
@@ -615,7 +615,7 @@ Description: Presents dialogue and options relevant to buying and selling.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
 ******************************************************************************/
-int MerchantDialogue(GameCharacter *merchant)
+int MerchantDialogue(game_character_t *merchant)
 {
   int i, iInput, count = 0;  /* No. of item types and/or options available. */
   char output[LONG_STR_LEN + 1] = "";
@@ -700,7 +700,7 @@ Description: Returns a floating point value for adjusting a price up or down
     Outputs: Floating point value that may be multiplied by a price to adjust
              the price up or down.
 ******************************************************************************/
-double GetPriceModifier(GameCharacter *merchant) {
+double GetPriceModifier(game_character_t *merchant) {
   if (merchant->relationship > INDIFFERENT) {
     return FRIEND_MODIFIER;
   } else if (merchant->relationship < INDIFFERENT) {
@@ -720,7 +720,7 @@ Description: Presents dialogue and options relevant to completing a purchase.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
 ******************************************************************************/
-int Transaction(GameCharacter *merchant, int price) {
+int Transaction(game_character_t *merchant, int price) {
   int iInput;
 
   if (merchant == NULL) {

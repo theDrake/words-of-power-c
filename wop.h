@@ -427,7 +427,7 @@ enum Knowledge {
   Structures
 ******************************************************************************/
 
-typedef struct GAME_CHARACTER {
+typedef struct GameCharacter {
   int ID;
   bool unique;  // False for generic NPCs.
   char name[SHORT_STR_LEN + 1];  // Capitalized, even for generic NPCs.
@@ -455,27 +455,27 @@ typedef struct GAME_CHARACTER {
   int locationID;
   struct GAME_CHARACTER *summonedCreature;  // Only one allowed at a time.
   struct GAME_CHARACTER *next;  // For forming linked lists.
-} GameCharacter;
+} game_character_t;
 
-typedef struct LOCATION {
+typedef struct Location {
   int ID;
   char name[SHORT_STR_LEN + 1];
   bool hidden;  // If true, special effort is required to find the location.
   int visits;  // Number of times player has visited the location.
   int searches;  // Number of times player has searched the location.
   struct GAME_CHARACTER *inhabitants;  // Linked list of local NPCs.
-} Location;
+} location_t;
 
 /******************************************************************************
   Global Variables
 ******************************************************************************/
 
-Location *world[NUM_LOCATION_IDS];  // Pointers to all game locations.
+location_t *world[NUM_LOCATION_IDS];  // Pointers to all game locations.
 bool worldExists;  // Indicates whether game world exists in memory.
 bool quit;  // Indicates player's desire to quit the game.
 int secretsFound;  // Number of "secrets" discovered by the player.
-GameCharacter player;
-GameCharacter *enemyNPCs[MAX_ENEMIES];
+game_character_t player;
+game_character_t *enemyNPCs[MAX_ENEMIES];
 int missions[NUM_MISSION_IDS];  // To track player progress.
 int allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
 int kills[NUM_GC_IDS];  // Number of each GC type killed.
@@ -506,95 +506,96 @@ bool StrContains(char *str, char c);
 void FlushInput(void);
 
 // Function prototypes for "locations.c":
-int InitializeLocation(Location *location, int idNum);
-bool InVentarrisTerritory(Location *location);
-GameCharacter *AddInhabitant(Location *location, int idNum);
-int AddInhabitants(Location *location, int idNum, int amount);
-GameCharacter *FindInhabitant(int idNum);
-int MoveInhabitant(GameCharacter *inhabitant, int destinationID);
-int RemoveInhabitant(Location *location, GameCharacter *inhabitant);
-int DeleteInhabitant(Location *location, GameCharacter *inhabitant);
-int VisibleInhabitants(Location *location);
+int InitializeLocation(location_t *location, int idNum);
+bool InVentarrisTerritory(location_t *location);
+game_character_t *AddInhabitant(location_t *location, int idNum);
+int AddInhabitants(location_t *location, int idNum, int amount);
+game_character_t *FindInhabitant(int idNum);
+int MoveInhabitant(game_character_t *inhabitant, int destinationID);
+int RemoveInhabitant(location_t *location, game_character_t *inhabitant);
+int DeleteInhabitant(location_t *location, game_character_t *inhabitant);
+int VisibleInhabitants(location_t *location);
 int MovementMenu(void);
 int MovePlayer(int destinationID);
-int SearchLocation(Location *location);
+int SearchLocation(location_t *location);
 void DescribeSituation(void);
 
 // Function prototypes for "characters.c":
-int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location);
-int AddCompanion(GameCharacter *companion);
-int RemoveCompanion(GameCharacter *companion);
-int DeleteCompanion(GameCharacter *companion);
-GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum);
-int DeleteCreatureSummonedBy(GameCharacter *summoner);
-int DisplayCharacterData(GameCharacter *pGC);
-int PrintSoulDescription(GameCharacter *pGC);
-bool IsGood(GameCharacter *pGC);
-bool IsEvil(GameCharacter *pGC);
-bool IsNeutral(GameCharacter *pGC);
-int NumberOfLanguagesKnown(GameCharacter *pGC);
-int NumberOfWordsKnown(GameCharacter *pGC);
-char *GetNameDefinite(GameCharacter *pGC);
-char *GetNameIndefinite(GameCharacter *pGC);
-char *GetNamePlural(GameCharacter *pGC);
+int InitializeCharacter(game_character_t *pGC, int idNum,
+                        location_t *location);
+int AddCompanion(game_character_t *companion);
+int RemoveCompanion(game_character_t *companion);
+int DeleteCompanion(game_character_t *companion);
+game_character_t *AddSummonedCreature(game_character_t *summoner, int idNum);
+int DeleteCreatureSummonedBy(game_character_t *summoner);
+int DisplayCharacterData(game_character_t *pGC);
+int PrintSoulDescription(game_character_t *pGC);
+bool IsGood(game_character_t *pGC);
+bool IsEvil(game_character_t *pGC);
+bool IsNeutral(game_character_t *pGC);
+int NumberOfLanguagesKnown(game_character_t *pGC);
+int NumberOfWordsKnown(game_character_t *pGC);
+char *GetNameDefinite(game_character_t *pGC);
+char *GetNameIndefinite(game_character_t *pGC);
+char *GetNamePlural(game_character_t *pGC);
 void CheckStatus(void);
 void UpdateVisibleGameCharCounter(void);
-GameCharacter *GetTarget(void);
-bool IsTargeted(GameCharacter *pGC, GameCharacter *targets[]);
-int HealGameCharacter(GameCharacter *pGC, int amount);
-int DamageGameCharacter(GameCharacter *pGC, int amount);
+game_character_t *GetTarget(void);
+bool IsTargeted(game_character_t *pGC, game_character_t *targets[]);
+int HealGameCharacter(game_character_t *pGC, int amount);
+int DamageGameCharacter(game_character_t *pGC, int amount);
 int GainExperience(int amount);
 void LevelUp(void);
 void LearnLanguage(int langID);
 void LearnWord(int wordID);
 
 // Function prototypes for "combat.c":
-int AddEnemy(GameCharacter *pGC);
-int AddRandomEnemy(Location *location);
-int RemoveEnemy(GameCharacter *pGC);
-int DeleteEnemy(GameCharacter *pGC);
+int AddEnemy(game_character_t *pGC);
+int AddRandomEnemy(location_t *location);
+int RemoveEnemy(game_character_t *pGC);
+int DeleteEnemy(game_character_t *pGC);
 int NumberOfEnemies(void);
 int VisibleEnemies(void);
 int Combat(void);
-void PrintCombatStatus(GameCharacter *pGC);
+void PrintCombatStatus(game_character_t *pGC);
 int EnemyAI(int index);
 int AttackMenu(void);
-int Attack(GameCharacter *attacker, GameCharacter *defender);
-bool WillingToFight(GameCharacter *pGC);
-bool WillingToFlee(GameCharacter *pGC);
-bool WillingToHelp(GameCharacter *pGC);
+int Attack(game_character_t *attacker, game_character_t *defender);
+bool WillingToFight(game_character_t *pGC);
+bool WillingToFlee(game_character_t *pGC);
+bool WillingToHelp(game_character_t *pGC);
 
 // Function prototypes for "dialogue.c":
 int TalkMenu(void);
-int Dialogue(GameCharacter *pGC);
-int LanguageLearningDialogue(GameCharacter *pGC);
-int WordLearningDialogue(GameCharacter *pGC);
-double GetPriceModifier(GameCharacter *merchant);
-int Transaction(GameCharacter *merchant, int price);
+int Dialogue(game_character_t *pGC);
+int LanguageLearningDialogue(game_character_t *pGC);
+int WordLearningDialogue(game_character_t *pGC);
+double GetPriceModifier(game_character_t *merchant);
+int Transaction(game_character_t *merchant, int price);
 char *LanguageName(int idNum);
 
 // Function prototypes for "magic.c":
 int SpellMenu(void);
-int CastSpell(GameCharacter *spellcaster, char *spell,
-              GameCharacter *gcTargets[]);
-int Targeted(GameCharacter *pGC, GameCharacter *gcTargets[]);
-bool CanCastBeneficialSpells(GameCharacter *pGC);
+int CastSpell(game_character_t *spellcaster, char *spell,
+              game_character_t *gcTargets[]);
+int Targeted(game_character_t *pGC, game_character_t *gcTargets[]);
+bool CanCastBeneficialSpells(game_character_t *pGC);
 int PrintKnownWords(void);
 char *Word(int idNum);
 char *WordStartingWith(char firstLetter);
 char *WordName(int idNum);
 int WordID(char firstLetter);
-bool IsSpellcaster(GameCharacter *pGC);
+bool IsSpellcaster(game_character_t *pGC);
 
 // Function prototypes for "item.c":
 int ItemMenu(void);
-int UseItem(GameCharacter *pGC, int idNum);
-int PrintInventory(GameCharacter *pGC);
+int UseItem(game_character_t *pGC, int idNum);
+int PrintInventory(game_character_t *pGC);
 char *GetItemName(int idNum);
 char *GetItemNamePlural(int idNum);
-int GiveGold(GameCharacter *giver, GameCharacter *receiver, int amount);
-int GiveItem(GameCharacter *giver, GameCharacter *receiver, int itemID);
-int GiveItems(GameCharacter *giver, GameCharacter *receiver, int itemID,
+int GiveGold(game_character_t *giver, game_character_t *receiver, int amount);
+int GiveItem(game_character_t *giver, game_character_t *receiver, int itemID);
+int GiveItems(game_character_t *giver, game_character_t *receiver, int itemID,
               int amount);
 int ItemValue(int idNum);
 

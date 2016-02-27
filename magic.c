@@ -24,7 +24,7 @@ int SpellMenu(void) {
   int i, iInput, temp, spellLength, numTargets = 0;
   bool repeatOptions;
   char spell[MAX_SPELL_LEN + 1];
-  GameCharacter *pGC, *gcTargets[MAX_TARGETS];
+  game_character_t *pGC, *gcTargets[MAX_TARGETS];
 
     /* --STATUS CHECK-- */
 
@@ -241,19 +241,17 @@ Description: Carries out a spell's effects (if any) and reports them to the
              spell       - String of letters, each representing a Word of
                            Power.
              gcTargets   - Array of pointers to targeted game characters.
-             location    - Pointer to targeted location.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int CastSpell(GameCharacter *spellcaster,
-              char *spell,
-              GameCharacter *gcTargets[]) {
+int CastSpell(game_character_t *spellcaster, char *spell,
+              game_character_t *gcTargets[]) {
   bool light = false, dark = false, holy = false, evil = false, giving = false,
        taking = false, increase = false, decrease = false, life = false,
        death = false, shield = false, counter = false, balance = false;
   int i, numTargets, spellLength, fireValue = 0, waterValue = 0, airValue = 0,
       earthValue = 0, damage = 0, backlashValue = 0;
-  GameCharacter *pGC; /* To search through linked lists of game characters.  */
+  game_character_t *pGC; /* To search through lists of game characters.      */
 
   for (numTargets = 0;
        numTargets < MAX_TARGETS && gcTargets[numTargets] != NULL;
@@ -513,7 +511,7 @@ Description: Determines whether a given game character is contained within a
 
     Outputs: true or false.
 ******************************************************************************/
-int Targeted(GameCharacter *pGC, GameCharacter *gcTargets[]) {
+int Targeted(game_character_t *pGC, game_character_t *gcTargets[]) {
   int i;
 
   for (i = 0; i < MAX_TARGETS && gcTargets[i] != NULL; i++) {
@@ -536,7 +534,7 @@ Description: Determines whether a given game character is capable of casting
 
     Outputs: true if "pGC" is being targeted, otherwise false.
 ******************************************************************************/
-bool CanCastBeneficialSpells(GameCharacter *pGC) {
+bool CanCastBeneficialSpells(game_character_t *pGC) {
   return pGC->words[WORD_OF_BODY]      == KNOWN ||
          pGC->words[WORD_OF_MIND]      == KNOWN ||
          pGC->words[WORD_OF_FLORA]     == KNOWN ||
@@ -812,7 +810,7 @@ Description: Determines whether a given game character can cast spells.
 
     Outputs: true if the GC knows at least one Word, otherwise false.
 ******************************************************************************/
-bool IsSpellcaster(GameCharacter *pGC) {
+bool IsSpellcaster(game_character_t *pGC) {
   int i;
 
   for (i = 0; i < NUM_WORD_IDS; i++) {

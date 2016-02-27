@@ -13,7 +13,7 @@ Description: Functions governing the creation, initialization, and basic
 /******************************************************************************
    Function: InitializeCharacter
 
-Description: Initializes a given GameCharacter struct to its default starting
+Description: Initializes a given game character struct to its default starting
              values.
 
      Inputs: pGC      - Pointer to the GameCharacer struct to be initialized.
@@ -22,7 +22,8 @@ Description: Initializes a given GameCharacter struct to its default starting
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeCharacter(GameCharacter *pGC, int idNum, Location *location) {
+int InitializeCharacter(game_character_t *pGC, int idNum,
+                        location_t *location) {
   int i;
   char cInput;
   bool repeatOptions;
@@ -1421,8 +1422,8 @@ Description: Removes a game character from the current location's list of
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddCompanion(GameCharacter *companion) {
-  GameCharacter *pGC1, *pGC2;
+int AddCompanion(game_character_t *companion) {
+  game_character_t *pGC1, *pGC2;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1478,8 +1479,8 @@ Description: Removes a game character from the player's list of companions and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveCompanion(GameCharacter *companion) {
-  GameCharacter *pGC1, *pGC2;
+int RemoveCompanion(game_character_t *companion) {
+  game_character_t *pGC1, *pGC2;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1535,8 +1536,8 @@ Description: Removes a game character from the player's list of companions and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteCompanion(GameCharacter *companion) {
-  GameCharacter *pGC1, *pGC2;
+int DeleteCompanion(game_character_t *companion) {
+  game_character_t *pGC1, *pGC2;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1586,8 +1587,8 @@ Description: Creates a new, summoned game character and associates it with its
 
     Outputs: Pointer to the summoned creature.
 ******************************************************************************/
-GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum) {
-  GameCharacter *newGC = NULL, *temp;
+game_character_t *AddSummonedCreature(game_character_t *summoner, int idNum) {
+  game_character_t *newGC = NULL, *temp;
 
   if (summoner == NULL) {
 #if DEBUG
@@ -1597,7 +1598,7 @@ GameCharacter *AddSummonedCreature(GameCharacter *summoner, int idNum) {
     if (summoner->summonedCreature != NULL) {
       DeleteCreatureSummonedBy(summoner);
     }
-    newGC = malloc(sizeof(GameCharacter));
+    newGC = malloc(sizeof(game_character_t));
     if (newGC != NULL) {
       InitializeCharacter(newGC, idNum, world[summoner->locationID]);
     } else {
@@ -1622,8 +1623,8 @@ Description: Removes a summoned creature from its summoner's struct and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteCreatureSummonedBy(GameCharacter *summoner) {
-  GameCharacter *creature;
+int DeleteCreatureSummonedBy(game_character_t *summoner) {
+  game_character_t *creature;
 
   if (summoner == NULL || summoner->summonedCreature == NULL) {
 #if DEBUG
@@ -1649,7 +1650,7 @@ Description: Displays detailed information about a given game character (and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DisplayCharacterData(GameCharacter *pGC) {
+int DisplayCharacterData(game_character_t *pGC) {
   if (pGC == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -1699,7 +1700,7 @@ Description: Prints one or two words describing the general state of a given
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int PrintSoulDescription(GameCharacter *pGC) {
+int PrintSoulDescription(game_character_t *pGC) {
   if (pGC == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -1733,7 +1734,7 @@ Description: Returns true if a given game character has a good soul.
 
     Outputs: true or false.
 ******************************************************************************/
-bool IsGood(GameCharacter *pGC) {
+bool IsGood(game_character_t *pGC) {
   return pGC != NULL && pGC->soul >= GOOD;
 }
 
@@ -1746,7 +1747,7 @@ Description: Returns true if a given game character has an evil soul.
 
     Outputs: true or false.
 ******************************************************************************/
-bool IsEvil(GameCharacter *pGC) {
+bool IsEvil(game_character_t *pGC) {
   return pGC != NULL && pGC->soul <= EVIL;
 }
 
@@ -1760,7 +1761,7 @@ Description: Returns true if a given game character has a neutral soul (neither
 
     Outputs: true or false.
 ******************************************************************************/
-bool IsNeutral(GameCharacter *pGC) {
+bool IsNeutral(game_character_t *pGC) {
   return pGC != NULL && pGC->soul > EVIL && pGC->soul < GOOD;
 }
 
@@ -1774,7 +1775,7 @@ Description: Returns the number of languages a given game character knows.
     Outputs: Number of languages the game character knows (or -1 if an error is
              encountered).
 ******************************************************************************/
-int NumberOfLanguagesKnown(GameCharacter *pGC) {
+int NumberOfLanguagesKnown(game_character_t *pGC) {
   int i, numLanguages = 0;
 
   if (pGC == NULL) {
@@ -1803,7 +1804,7 @@ Description: Returns the number of Words of Power a given game character knows.
     Outputs: Number of Words the game character knows (or -1 if an error is
              encountered).
 ******************************************************************************/
-int NumberOfWordsKnown(GameCharacter *pGC) {
+int NumberOfWordsKnown(game_character_t *pGC) {
   int i, numWords = 0;
 
   if (pGC == NULL) {
@@ -1833,7 +1834,7 @@ Description: Returns either a name or a generic descriptor preceded by "the"
     Outputs: The game character's definite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameDefinite(GameCharacter *pGC) {
+char *GetNameDefinite(game_character_t *pGC) {
   static char gcName[SHORT_STR_LEN + 1];
 
   if (pGC == NULL) {
@@ -1863,7 +1864,7 @@ Description: Returns either a name or a generic descriptor preceded by "a" or
     Outputs: The game character's indefinite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameIndefinite(GameCharacter *pGC) {
+char *GetNameIndefinite(game_character_t *pGC) {
   static char gcName[SHORT_STR_LEN + 1];
 
   if (pGC == NULL) {
@@ -1906,7 +1907,7 @@ Description: Returns the plural form of a given game character's generic
     Outputs: The game character's plural name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNamePlural(GameCharacter *pGC) {
+char *GetNamePlural(game_character_t *pGC) {
   int nameLength;
   static char gcName[SHORT_STR_LEN + 1];
 
@@ -2017,7 +2018,7 @@ void CheckStatus(void) {
 /******************************************************************************
    Function: UpdateVisibleGameCharCounter
 
-Description: Updates the GameCharacter counter to accurately reflect the number
+Description: Updates the game character counter to accurately reflect the
              number of each GC type currently visible to the player. If in
              combat mode, only enemies will be counted. Summoned creatures are
              included in the count.
@@ -2028,7 +2029,7 @@ Description: Updates the GameCharacter counter to accurately reflect the number
 ******************************************************************************/
 void UpdateVisibleGameCharCounter(void) {
   int i;
-  GameCharacter *pGC;
+  game_character_t *pGC;
 
   for (i = 0; i < NUM_GC_IDS; i++) {  /* Clear the visible GC counter. */
     visibleGameCharCounter[i] = 0;
@@ -2063,8 +2064,8 @@ Description: Takes the player through the process of selecting a target.
 
     Outputs: Pointer to the targeted game character.
 ******************************************************************************/
-GameCharacter *GetTarget(void) {
-  GameCharacter *target = NULL;
+game_character_t *GetTarget(void) {
+  game_character_t *target = NULL;
 
   return target;
 }
@@ -2081,7 +2082,7 @@ Description: Determines whether a given game character is currently being
 
     Outputs: true if "pGC" is being targeted, otherwise false.
 ******************************************************************************/
-bool IsTargeted(GameCharacter *pGC, GameCharacter *targets[]) {
+bool IsTargeted(game_character_t *pGC, game_character_t *targets[]) {
   int i;
 
   for (i = 0; i < MAX_TARGETS; i++) {
@@ -2106,7 +2107,7 @@ Description: Causes a given game character to regain a certain number of hit
 
     Outputs: Number of hit points regained (or -1 if an error is encountered).
 ******************************************************************************/
-int HealGameCharacter(GameCharacter *pGC, int amount) {
+int HealGameCharacter(game_character_t *pGC, int amount) {
   if (pGC == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -2137,7 +2138,7 @@ Description: Causes a given game character to lose a certain number of hit
 
     Outputs: Number of hit points lost (or -1 if an error is encountered).
 ******************************************************************************/
-int DamageGameCharacter(GameCharacter *pGC, int amount) {
+int DamageGameCharacter(game_character_t *pGC, int amount) {
   if (pGC == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
