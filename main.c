@@ -28,7 +28,7 @@ int main(void) {
   g_player_has_quit = false;
 
   PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
-              "and programmed by David C. Drake (www.davidcdrake.com)\n\0");
+              "and programmed by David C. Drake (http://davidcdrake.com)\n\0");
 
   while (!g_player_has_quit) {
     if (!g_world_exists) {
