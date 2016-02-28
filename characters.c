@@ -1433,10 +1433,10 @@ int AddCompanion(game_character_t *companion) {
   }
 
     /* Add "companion" to the player's list of companions. */
-  if (player.next == NULL) {
-    player.next = companion;
+  if (g_player.next == NULL) {
+    g_player.next = companion;
   } else {
-    for (pGC1 = player.next;
+    for (pGC1 = g_player.next;
          pGC1->next != NULL;
          pGC1 = pGC1->next)
       ;
@@ -1444,7 +1444,7 @@ int AddCompanion(game_character_t *companion) {
   }
 
     /* Remove "companion" from the current location's list of inhabitants. */
-  for (pGC1 = world[player.locationID]->inhabitants;
+  for (pGC1 = g_world[g_player.locationID]->inhabitants;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
     if (pGC1 == companion) {
@@ -1490,10 +1490,10 @@ int RemoveCompanion(game_character_t *companion) {
   }
 
     /* Add "companion" to the current location's list of inhabitants. */
-  if (world[player.locationID]->inhabitants == NULL) {
-    world[player.locationID]->inhabitants = companion;
+  if (g_world[g_player.locationID]->inhabitants == NULL) {
+    g_world[g_player.locationID]->inhabitants = companion;
   } else {
-    for (pGC1 = world[player.locationID]->inhabitants;
+    for (pGC1 = g_world[g_player.locationID]->inhabitants;
          pGC1->next != NULL;
          pGC1 = pGC1->next)
       ;
@@ -1501,7 +1501,7 @@ int RemoveCompanion(game_character_t *companion) {
   }
 
     /* Remove "companion" from the player's list of companions.              */
-  for (pGC1 = player.next;
+  for (pGC1 = g_player.next;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
     if (pGC1 == companion) {
@@ -1547,7 +1547,7 @@ int DeleteCompanion(game_character_t *companion) {
   }
 
     /* Remove "companion" from the player's list of companions. */
-  for (pGC1 = player.next;
+  for (pGC1 = g_player.next;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
     if (pGC1 == companion) {
@@ -1600,7 +1600,7 @@ game_character_t *AddSummonedCreature(game_character_t *summoner, int idNum) {
     }
     newGC = malloc(sizeof(game_character_t));
     if (newGC != NULL) {
-      InitializeCharacter(newGC, idNum, world[summoner->locationID]);
+      InitializeCharacter(newGC, idNum, g_world[summoner->locationID]);
     } else {
 #if DEBUG
       PRINT_ERROR_MESSAGE;
@@ -1977,25 +1977,25 @@ void CheckStatus(void) {
   int i;
   char output[LONG_STR_LEN + 1] = "";
 
-  if (player.status[IN_COMBAT] == true) {
+  if (g_player.status[IN_COMBAT] == true) {
     for (i = 0; i < NumberOfEnemies(); i++) {
-      if (enemyNPCs[i]->currentHP <= 0) {
-        strcat(output, Capitalize(GetNameDefinite(enemyNPCs[i])));
-        if (enemyNPCs[i]->status[INANIMATE]) {
+      if (g_enemies[i]->currentHP <= 0) {
+        strcat(output, Capitalize(GetNameDefinite(g_enemies[i])));
+        if (g_enemies[i]->status[INANIMATE]) {
           strcat(output, " has been destroyed.\n");
         } else {
           strcat(output, " is dead.\n");
         }
-        kills[enemyNPCs[i]->ID]++;
-        DeleteEnemy(enemyNPCs[i]);
-        i--;  /* Because the "enemyNPCs" array has now been left-shifted. */
+        g_num_kills[g_enemies[i]->ID]++;
+        DeleteEnemy(g_enemies[i]);
+        i--;  /* Because the "g_enemies" array has now been left-shifted. */
       }
     }
     PrintString(output);
     FlushInput();
   }
-  if (player.currentHP <= 0) {
-    if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) {  /* Tutorial. */
+  if (g_player.currentHP <= 0) {
+    if (g_enemies[0] != NULL && g_enemies[0]->ID == DUMMY) {  /* Tutorial. */
       sprintf(output,
               "%s: \"You have fallen due to severe backlash from your spell! "
               "This is often caused by speaking the same elemental Word more "
@@ -2003,9 +2003,9 @@ void CheckStatus(void) {
               "single spell. We will bring you back to full health for now, "
               "but you must be more cautious in the future.\"",
               FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
-      player.currentHP = player.maxHP;
+      g_player.currentHP = g_player.maxHP;
     } else {  /* Not in tutorial mode: death is permanent. */
-      sprintf(output, "Alas, %s has perished!\n", player.name);
+      sprintf(output, "Alas, %s has perished!\n", g_player.name);
       //MainMenu();
     }
   }
@@ -2025,30 +2025,30 @@ Description: Updates the game character counter to accurately reflect the
 
      Inputs: None.
 
-    Outputs: None. (Modifies the global "visibleGameCharCounter" array.)
+    Outputs: None. (Modifies the global "g_num_visible_of_type" array.)
 ******************************************************************************/
 void UpdateVisibleGameCharCounter(void) {
   int i;
   game_character_t *pGC;
 
   for (i = 0; i < NUM_GC_IDS; i++) {  /* Clear the visible GC counter. */
-    visibleGameCharCounter[i] = 0;
+    g_num_visible_of_type[i] = 0;
   }
-  if (player.status[IN_COMBAT]) {  /* Combat mode: only count enemies. */
+  if (g_player.status[IN_COMBAT]) {  /* Combat mode: only count enemies. */
     for (i = 0; i < NumberOfEnemies(); i++) {
-      visibleGameCharCounter[enemyNPCs[i]->ID]++;
-      if (enemyNPCs[i]->summonedCreature != NULL) {
-        visibleGameCharCounter[enemyNPCs[i]->summonedCreature->ID]++;
+      g_num_visible_of_type[g_enemies[i]->ID]++;
+      if (g_enemies[i]->summonedCreature != NULL) {
+        g_num_visible_of_type[g_enemies[i]->summonedCreature->ID]++;
       }
     }
   } else {  /* Not in combat mode: count all local inhabitants. */
-    for (pGC = world[player.locationID]->inhabitants;
+    for (pGC = g_world[g_player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
       if (pGC->status[INVISIBLE] == false) {
-        visibleGameCharCounter[pGC->ID]++;
+        g_num_visible_of_type[pGC->ID]++;
         if (pGC->summonedCreature != NULL) {
-          visibleGameCharCounter[pGC->summonedCreature->ID]++;
+          g_num_visible_of_type[pGC->summonedCreature->ID]++;
         }
       }
     }
@@ -2173,8 +2173,8 @@ int GainExperience(int amount) {
   printf("%d experience points earned!\n", amount);
   FlushInput();
   for (i = 0; i < amount; i++) {
-    player.experience++;
-    if (player.experience % EXP_PER_LEVEL == 0) {
+    g_player.experience++;
+    if (g_player.experience % EXP_PER_LEVEL == 0) {
       LevelUp();
       levelUpCounter++;
     }
@@ -2195,38 +2195,38 @@ Description: Increases the player's level and relevant stats.
 void LevelUp(void) {
   int temp;
 
-  player.level++;
-  printf("%s has reached Level %d!\n", player.name, player.level);
+  g_player.level++;
+  printf("%s has reached Level %d!\n", g_player.name, g_player.level);
   FlushInput();
   temp = HP_LEVEL_UP_VALUE;
   if (temp > 0) {
-    player.maxHP += temp;
-    HealGameCharacter(&player, temp);
+    g_player.maxHP += temp;
+    HealGameCharacter(&g_player, temp);
     printf("Maximum hit points increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    player.physicalPower += temp;
+    g_player.physicalPower += temp;
     printf("Physical power increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    player.physicalDefense += temp;
+    g_player.physicalDefense += temp;
     printf("Physical defense increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    player.speed += temp;
+    g_player.speed += temp;
     printf("Speed increased by %d.\n", temp);
   }
   temp = MENTAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    player.mentalPower += temp;
+    g_player.mentalPower += temp;
     printf("Mental power increased by %d.\n", temp);
   }
   temp = MENTAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    player.mentalDefense += temp;
+    g_player.mentalDefense += temp;
     printf("Mental defense increased by %d.\n", temp);
   }
   FlushInput();
@@ -2242,9 +2242,9 @@ Description: Sets one of the player's languages to KNOWN.
     Outputs: None.
 ******************************************************************************/
 void LearnLanguage(int langID) {
-  player.languages[langID] = KNOWN;
+  g_player.languages[langID] = KNOWN;
   printf("%s has learned the %s  language!\n",
-         player.name,
+         g_player.name,
          LanguageName(langID));
   FlushInput();
 }
@@ -2259,9 +2259,9 @@ Description: Sets one of the player's Words of Power to KNOWN.
     Outputs: None.
 ******************************************************************************/
 void LearnWord(int wordID) {
-  player.words[wordID] = KNOWN;
+  g_player.words[wordID] = KNOWN;
   printf("%s has learned %s, the Word of %s!\n",
-         player.name,
+         g_player.name,
          Word(wordID),
          WordName(wordID));
   FlushInput();

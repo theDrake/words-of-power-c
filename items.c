@@ -23,9 +23,9 @@ int ItemMenu(void) {
   int i, iInput, temp = 0;
 
   for (i = 0; i < NUM_ITEM_IDS; i++) {
-    if (player.inventory[i] > 0) {
+    if (g_player.inventory[i] > 0) {
       temp++;
-      printf("[%d] %s (%d)\n", temp, GetItemName(i), player.inventory[i]);
+      printf("[%d] %s (%d)\n", temp, GetItemName(i), g_player.inventory[i]);
     }
   }
   if (temp == 0) {
@@ -38,10 +38,10 @@ int ItemMenu(void) {
     GetIntInput(&iInput, 1, temp);
     temp = 0;
     for (i = 0; i < NUM_ITEM_IDS; i++) {
-      if (player.inventory[i] > 0) {
+      if (g_player.inventory[i] > 0) {
         temp++;
         if (temp == iInput) {
-          UseItem(&player, i);
+          UseItem(&g_player, i);
           return SUCCESS;
         }
       }

@@ -26,16 +26,16 @@ int TalkMenu(void) {
 
   UpdateVisibleGameCharCounter();
   for (i = 0; i < NUM_GC_IDS; i++) {
-    gcDescribed[i] = false;
+    g_character_type_described[i] = false;
   }
 
     /* Potential targets are displayed (unless only one is available).       */
-  if (VisibleInhabitants(world[player.locationID]) == 0) {
+  if (VisibleInhabitants(g_world[g_player.locationID]) == 0) {
     PrintString("There is no one to speak with here.");
     FlushInput();
     return FAILURE;
-  } else if (VisibleInhabitants(world[player.locationID]) == 1) {
-    for (target = world[player.locationID]->inhabitants;
+  } else if (VisibleInhabitants(g_world[g_player.locationID]) == 1) {
+    for (target = g_world[g_player.locationID]->inhabitants;
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false) {
@@ -44,18 +44,18 @@ int TalkMenu(void) {
     }
   } else {  /* Multiple visible inhabitants to choose from. */
     PrintString("With whom do you wish to speak?");
-    for (target = world[player.locationID]->inhabitants;
+    for (target = g_world[g_player.locationID]->inhabitants;
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false &&
-          gcDescribed[target->ID] == false) {
+          g_character_type_described[target->ID] == false) {
         temp++;
         printf("[%d] %s", temp, Capitalize(GetNameIndefinite(target)));
-        if (visibleGameCharCounter[target->ID] > 1) {
-          printf(" (%d available)", visibleGameCharCounter[target->ID]);
+        if (g_num_visible_of_type[target->ID] > 1) {
+          printf(" (%d available)", g_num_visible_of_type[target->ID]);
         }
         printf("\n");
-        gcDescribed[target->ID] = true;
+        g_character_type_described[target->ID] = true;
       }
     }
   }
@@ -66,19 +66,19 @@ int TalkMenu(void) {
     /* The target is now found by matching it with the input. */
   temp = 0;
   for (i = 0; i < NUM_GC_IDS; i++) {
-    gcDescribed[i] = false;
+    g_character_type_described[i] = false;
   }
 
-  for (target = world[player.locationID]->inhabitants;
+  for (target = g_world[g_player.locationID]->inhabitants;
        target != NULL;
        target = target->next) {
     if (target->status[INVISIBLE] == false &&
-        gcDescribed[target->ID] == false) {
+        g_character_type_described[target->ID] == false) {
       temp++;
       if (temp == iInput) {
         return Dialogue(target);
       }
-      gcDescribed[target->ID] = true;
+      g_character_type_described[target->ID] = true;
     }
   }
 
@@ -114,7 +114,7 @@ int Dialogue(game_character_t *pGC) {
     /* Check for language compatibility. */
   canCommunicate = false;
   for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
-    if (player.languages[i] == KNOWN && pGC->languages[i] == KNOWN) {
+    if (g_player.languages[i] == KNOWN && pGC->languages[i] == KNOWN) {
       canCommunicate = true;
       break;
     }
@@ -139,7 +139,7 @@ int Dialogue(game_character_t *pGC) {
         sprintf(output,
                 "%s: \"Good morning, %s, and congratulations!\"",
                 AllCaps(pGC->name),
-                player.name);
+                g_player.name);
         PrintString(output);
         FlushInput();
         sprintf(output,
@@ -159,7 +159,7 @@ int Dialogue(game_character_t *pGC) {
                 "opportunity to demonstrate your skills once again for the "
                 "newer students?\"\n",
                 AllCaps(pGC->name));
-        allegiances[ELEMENTS_GUILD] = GOOD_FRIEND;
+        g_allegiances[ELEMENTS_GUILD] = GOOD_FRIEND;
         PrintString(output);
         printf("[1] \"Of course!\"  (Enter tutorial.)\n"
                "[2] \"No, thanks.\" (Skip tutorial.)\n");
@@ -172,7 +172,7 @@ int Dialogue(game_character_t *pGC) {
                     AllCaps(pGC->name));
             PrintString(output);
             FlushInput();
-            AddEnemy(AddInhabitant(world[player.locationID], DUMMY));
+            AddEnemy(AddInhabitant(g_world[g_player.locationID], DUMMY));
             Combat();
             sprintf(output,
                     "%s: \"Well done! We'll set up another dummy. This time, "
@@ -183,7 +183,7 @@ int Dialogue(game_character_t *pGC) {
                     AllCaps(pGC->name));
             PrintString(output);
             FlushInput();
-            AddEnemy(AddInhabitant(world[player.locationID], DUMMY));
+            AddEnemy(AddInhabitant(g_world[g_player.locationID], DUMMY));
             Combat();
             sprintf(output,
                     "%s: \"Fantastic! It's gratifying to see the progress "
@@ -193,10 +193,10 @@ int Dialogue(game_character_t *pGC) {
             PrintString(output);
             FlushInput();
             /*while (FindInhabitant(DUMMY) != NULL) {
-              DeleteInhabitant(world[player.locationID],
+              DeleteInhabitant(g_world[g_player.locationID],
                                FindInhabitant(DUMMY));
             }*/
-            player.currentHP = player.maxHP;
+            g_player.currentHP = g_player.maxHP;
             /* Fall through. */
           default:
             sprintf(output,
@@ -208,10 +208,10 @@ int Dialogue(game_character_t *pGC) {
                     AllCaps(pGC->name));
             PrintString(output);
             FlushInput();
-            missions[ELEMENTS1] = OPEN;
+            g_missions[ELEMENTS1] = OPEN;
             break;
         }
-      } else if (missions[ELEMENTS1] == OPEN) {
+      } else if (g_missions[ELEMENTS1] == OPEN) {
         sprintf(output,
                 "%s: \"Do you have those mushroom samples I asked for?\"\n"
                 "[1] \"Yes.\"\n"
@@ -221,16 +221,16 @@ int Dialogue(game_character_t *pGC) {
         GetIntInput(&iInput, 1, 2);
         switch (iInput) {
           case 1:
-            if (player.inventory[GLOWING_MUSHROOM] >= 10) {
+            if (g_player.inventory[GLOWING_MUSHROOM] >= 10) {
               sprintf(output,
                       "%s: \"Excellent! I knew I could count on you. Here's 20"
                       " gold to compensate you for your time.\"",
                       AllCaps(pGC->name));
               PrintString(output);
               FlushInput();
-              missions[ELEMENTS1] = COMPLETED;
-              player.inventory[GLOWING_MUSHROOM] -= 10;
-              GiveGold(pGC, &player, 20);
+              g_missions[ELEMENTS1] = COMPLETED;
+              g_player.inventory[GLOWING_MUSHROOM] -= 10;
+              GiveGold(pGC, &g_player, 20);
               pGC->relationship++;
               GainExperience(STD_MISSION_EXP);
             } else {
@@ -251,28 +251,28 @@ int Dialogue(game_character_t *pGC) {
             FlushInput();
             break;
         }
-      } else if (missions[ELEMENTS2] == OPEN) {
+      } else if (g_missions[ELEMENTS2] == OPEN) {
         sprintf(output,
                 "%s: \"Why haven't you delivered those goods to the druids "
                 "yet, %s? Please hurry or I will not trust you with any more "
                 "errands.\"",
                 AllCaps(pGC->name),
-                player.name);
+                g_player.name);
         PrintString(output);
         FlushInput();
-      } else if (missions[ELEMENTS2] == COMPLETED) {
+      } else if (g_missions[ELEMENTS2] == COMPLETED) {
         sprintf(output,
                 "%s: \"Thank you for delivering those goods to the druids, %s!"
                 "Our relationship with them is crucial to Illarum's future.\"",
                 AllCaps(pGC->name),
-                player.name);
+                g_player.name);
         PrintString(output);
         FlushInput();
       } else {
         sprintf(output,
                 "%s: \"Welcome back, %s! Tell me of your travels...\"\n",
                 AllCaps(pGC->name),
-                player.name);
+                g_player.name);
         PrintString(output);
         FlushInput();
       }
@@ -293,7 +293,7 @@ int Dialogue(game_character_t *pGC) {
       }
       break;
     case ARCHDRUID:
-      if (missions[ELEMENTS1] == OPEN) {
+      if (g_missions[ELEMENTS1] == OPEN) {
         sprintf(output,
                 "%s: \"Greetings, friend. You wear the garb of a Wizard of the"
                 " Elements. Do you bear goods from the Archwizard?\"\n"
@@ -304,8 +304,8 @@ int Dialogue(game_character_t *pGC) {
         GetIntInput(&iInput, 1, 2);
         switch (iInput) {
           case 1:
-            if (player.inventory[FOOD] > 0) {
-              if (player.inventory[FOOD] < 5) {
+            if (g_player.inventory[FOOD] > 0) {
+              if (g_player.inventory[FOOD] < 5) {
                 sprintf(output,
                         "%s: \"Hm. This is less than we were promised, but we "
                         "will get by. Be sure to thank the Archwizard for me, "
@@ -313,8 +313,8 @@ int Dialogue(game_character_t *pGC) {
                         AllCaps(pGC->name));
                 PrintString(output);
                 FlushInput();
-                pGC->inventory[FOOD] += player.inventory[FOOD];
-                player.inventory[FOOD] = 0;
+                pGC->inventory[FOOD] += g_player.inventory[FOOD];
+                g_player.inventory[FOOD] = 0;
               } else {
                 sprintf(output,
                         "%s: \"Wonderful! It is just as we were promised. Be "
@@ -323,9 +323,9 @@ int Dialogue(game_character_t *pGC) {
                 PrintString(output);
                 FlushInput();
                 pGC->inventory[FOOD] += 5;
-                player.inventory[FOOD] -= 5;
+                g_player.inventory[FOOD] -= 5;
               }
-              missions[ELEMENTS1] = COMPLETED;
+              g_missions[ELEMENTS1] = COMPLETED;
             } else {
               printf(output,
                      "%s: \"Yet you bring us no food. Please return once you "
@@ -491,7 +491,7 @@ int LanguageLearningDialogue(game_character_t *pGC) {
   }
 
   for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
-    if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN) {
+    if (pGC->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
       count++;
       if (count == 1) {
         sprintf(output,
@@ -513,7 +513,7 @@ int LanguageLearningDialogue(game_character_t *pGC) {
     GetIntInput(&iInput, 1, count);
     count = 0;
     for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
-      if (pGC->languages[i] == KNOWN && player.languages[i] != KNOWN) {
+      if (pGC->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
         count++;
         if (iInput == count) {
           if (Transaction(pGC,
@@ -559,7 +559,7 @@ int WordLearningDialogue(game_character_t *pGC) {
   }
 
   for (i = 0; i < NUM_WORD_IDS; i++) {
-    if (pGC->words[i] == KNOWN && player.words[i] != KNOWN) {
+    if (pGC->words[i] == KNOWN && g_player.words[i] != KNOWN) {
       count++;
       if (count == 1) {
         sprintf(output,
@@ -582,7 +582,7 @@ int WordLearningDialogue(game_character_t *pGC) {
     GetIntInput(&iInput, 1, count);
     count = 0;
     for (i = 0; i < NUM_WORD_IDS; i++) {
-      if (pGC->words[i] == KNOWN && player.words[i] != KNOWN) {
+      if (pGC->words[i] == KNOWN && g_player.words[i] != KNOWN) {
         count++;
         if (iInput == count) {
           if (Transaction(pGC,
@@ -663,7 +663,7 @@ int MerchantDialogue(game_character_t *merchant)
       if (count == iInput) {
         if (Transaction(merchant,
                         ItemValue(i) * GetPriceModifier(merchant)) == SUCCESS) {
-          GiveItem(merchant, &player, i);
+          GiveItem(merchant, &g_player, i);
           merchant->inventory[i]++;  /* Merchant's supply is infinite. */
           return SUCCESS;
         }
@@ -674,7 +674,7 @@ int MerchantDialogue(game_character_t *merchant)
           if (Transaction(merchant,
                           10 * (ItemValue(i) *
                                 GetPriceModifier(merchant))) == SUCCESS) {
-            GiveItems(merchant, &player, i, 10);
+            GiveItems(merchant, &g_player, i, 10);
             merchant->inventory[i] += 10;  /* Merchant's supply is infinite. */
             return SUCCESS;
           }
@@ -737,13 +737,13 @@ int Transaction(game_character_t *merchant, int price) {
          price);
   GetIntInput(&iInput, 1, 2);
   if (iInput == 1) {
-    if (player.gold < price) {
+    if (g_player.gold < price) {
       printf("%s: \"It looks like you don't have enough gold.\"\n",
              merchant->name);
       FlushInput();
       return FAILURE;
     }
-    GiveGold(&player, merchant, price);
+    GiveGold(&g_player, merchant, price);
     return SUCCESS;
   }
   printf("%s: \"Let me know if you change your mind!\"\n",

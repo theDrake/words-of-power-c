@@ -24,14 +24,14 @@ Description: Main function for the "Words of Power" RPG.
 ******************************************************************************/
 int main(void) {
   srand(time(0));
-  worldExists = false;
-  quit = false;
+  g_world_exists = false;
+  g_player_has_quit = false;
 
   PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG designed "
               "and programmed by David C. Drake (www.davidcdrake.com)\n\0");
 
-  while (!quit) {
-    if (!worldExists) {
+  while (!g_player_has_quit) {
+    if (!g_world_exists) {
       MainMenu();
     } else {
       CheckStatus();
@@ -39,7 +39,7 @@ int main(void) {
       PrintStandardOptions();
     }
   }
-  if (worldExists) {
+  if (g_world_exists) {
     DestroyWorld();
   }
   printf("Farewell!\n");
@@ -72,24 +72,24 @@ void MainMenu(void) {
     GetCharInput(&cInput);
     switch (cInput) {
       case 'N':  // New Game
-        if (worldExists) {
+        if (g_world_exists) {
           DestroyWorld();
         }
         CreateWorld();
-        InitializeCharacter(&player, PLAYER, world[ILLARUM_SCHOOL]);
+        InitializeCharacter(&g_player, PLAYER, g_world[ILLARUM_SCHOOL]);
         break;
       case 'L':  // Load Game
-        if (worldExists) {
+        if (g_world_exists) {
           DestroyWorld();
         }
         /*LoadGame();*/
         printf("Sorry, no save files found.\n\n");
         break;
       case 'Q':  // Quit
-        if (worldExists) {
+        if (g_world_exists) {
           DestroyWorld();
         }
-        quit = true;
+        g_player_has_quit = true;
         break;
       default:
         printf("Invalid response.\n\n");
@@ -134,7 +134,7 @@ void PrintStandardOptions(void) {
         }
         break;
       case 'S':  // Search
-        if (SearchLocation(world[player.locationID]) == FAILURE) {
+        if (SearchLocation(g_world[g_player.locationID]) == FAILURE) {
           repeatOptions = true;
         }
         break;
@@ -159,7 +159,7 @@ void PrintStandardOptions(void) {
         }
         break;
       case 'V':  // View Inventory and Status
-        DisplayCharacterData(&player);
+        DisplayCharacterData(&g_player);
         repeatOptions = true;
         break;
       case 'Q':  // Quit
@@ -194,7 +194,7 @@ int CreateWorld(void) {
   printf("Creating world...\n\n");
 #endif
 
-  if (worldExists) {
+  if (g_world_exists) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -204,9 +204,9 @@ int CreateWorld(void) {
 
   // Initialize each location (including its inhabitants):
   for (i = 0; i < NUM_LOCATION_IDS; i++) {
-    world[i] = malloc(sizeof(location_t));
-    if (world[i] != NULL) {
-      errors += InitializeLocation(world[i], i);
+    g_world[i] = malloc(sizeof(location_t));
+    if (g_world[i] != NULL) {
+      errors += InitializeLocation(g_world[i], i);
     } else {
 #if DEBUG
       PRINT_ERROR_MESSAGE;
@@ -217,22 +217,22 @@ int CreateWorld(void) {
 
   // Set status of all missions to CLOSED:
   for (i = 0; i < NUM_MISSION_IDS; i++) {
-    missions[i] = CLOSED;
+    g_missions[i] = CLOSED;
   }
 
   // Initialize player allegiances:
   for (i = 0; i < NUM_GROUP_IDS; i++) {
-    allegiances[i] = INDIFFERENT;
+    g_allegiances[i] = INDIFFERENT;
   }
 
   // Initialize player's "kill" history:
   for (i = 0; i < NUM_GC_IDS; i++) {
-    kills[i] = 0;
+    g_num_kills[i] = 0;
   }
 
   // Initialize remaining global variables:
-  secretsFound = 0;
-  worldExists = true;
+  g_num_secrets_found = 0;
+  g_world_exists = true;
 
   return errors;
 }
@@ -251,7 +251,7 @@ int DestroyWorld(void) {
   int i, errors = 0;
   game_character_t *temp;  // To search for and deallocate game characters.
 
-  if (worldExists == false) {
+  if (g_world_exists == false) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -263,31 +263,31 @@ int DestroyWorld(void) {
 #endif
 
   for (i = 0; i < NUM_LOCATION_IDS; i++) {
-    if (world[i] != NULL) {
-      while (world[i]->inhabitants != NULL) {
-        if (DeleteInhabitant(world[i], world[i]->inhabitants) == FAILURE) {
+    if (g_world[i] != NULL) {
+      while (g_world[i]->inhabitants != NULL) {
+        if (DeleteInhabitant(g_world[i], g_world[i]->inhabitants) == FAILURE) {
           errors++;
         }
       }
-      free(world[i]);
+      free(g_world[i]);
     } else {
       errors++;
     }
   }
   for (i = 0; i < MAX_ENEMIES; i++) {
-    enemyNPCs[i] = NULL;
+    g_enemies[i] = NULL;
   }
-  while (player.next != NULL) {
-    if (DeleteCompanion(player.next) == FAILURE) {
+  while (g_player.next != NULL) {
+    if (DeleteCompanion(g_player.next) == FAILURE) {
       errors++;
     }
   }
-  if (player.summonedCreature != NULL) {
-    if (DeleteCreatureSummonedBy(&player) == FAILURE) {
+  if (g_player.summonedCreature != NULL) {
+    if (DeleteCreatureSummonedBy(&g_player) == FAILURE) {
       errors++;
     }
   }
-  worldExists = false;
+  g_world_exists = false;
 
   return errors;
 }

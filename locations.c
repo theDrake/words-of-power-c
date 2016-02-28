@@ -460,7 +460,7 @@ Description: Returns a pointer to the first inhabitant found (if any) bearing a
 game_character_t *FindInhabitant(int idNum) {
   game_character_t *pGC;
 
-  for (pGC = world[player.locationID]->inhabitants;
+  for (pGC = g_world[g_player.locationID]->inhabitants;
        pGC != NULL;
        pGC = pGC->next) {
     if (pGC->ID == idNum) {
@@ -494,10 +494,10 @@ int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
   }
 
     /* Add "inhabitant" to the new location's list of inhabitants. */
-  if (world[destinationID]->inhabitants == NULL) {
-    world[destinationID]->inhabitants = inhabitant;
+  if (g_world[destinationID]->inhabitants == NULL) {
+    g_world[destinationID]->inhabitants = inhabitant;
   } else {
-    for (pGC1 = world[destinationID]->inhabitants;
+    for (pGC1 = g_world[destinationID]->inhabitants;
          pGC1->next != NULL;
          pGC1 = pGC1->next)
       ;
@@ -505,7 +505,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
   }
 
     /* Remove "inhabitant" from the old location's list of inhabitants. */
-  for (pGC1 = world[inhabitant->locationID]->inhabitants;
+  for (pGC1 = g_world[inhabitant->locationID]->inhabitants;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
     if (pGC1 == inhabitant) {
@@ -670,440 +670,440 @@ int MovementMenu(void) {
   location_t *destinations[MAX_DESTINATIONS] = {NULL};
 
     /* Determine available destinations and describe their orientation. */
-  switch (player.locationID) {
+  switch (g_player.locationID) {
     case ILLARUM_ENTRANCE:
-      destinations[0] = world[ILLARUM_MARKET];
-      destinations[1] = world[ILLARUM_INN];
-      destinations[2] = world[ILLARUM_SCHOOL];
-      destinations[3] = world[ILLARUM_TEMPLE];
-      destinations[4] = world[ILLARUM_PALACE];
-      destinations[5] = world[ILLARUM_PRISON];
-      destinations[6] = world[PLAINS_NORTH];
-      destinations[7] = world[PLAINS_SOUTH];
-      destinations[8] = world[SHORE_EAST];
-      destinations[9] = world[FOREST];
+      destinations[0] = g_world[ILLARUM_MARKET];
+      destinations[1] = g_world[ILLARUM_INN];
+      destinations[2] = g_world[ILLARUM_SCHOOL];
+      destinations[3] = g_world[ILLARUM_TEMPLE];
+      destinations[4] = g_world[ILLARUM_PALACE];
+      destinations[5] = g_world[ILLARUM_PRISON];
+      destinations[6] = g_world[PLAINS_NORTH];
+      destinations[7] = g_world[PLAINS_SOUTH];
+      destinations[8] = g_world[SHORE_EAST];
+      destinations[9] = g_world[FOREST];
       break;
     case ILLARUM_MARKET:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[ILLARUM_INN];
-      destinations[2] = world[ILLARUM_SCHOOL];
-      destinations[3] = world[ILLARUM_TEMPLE];
-      destinations[4] = world[ILLARUM_PALACE];
-      destinations[5] = world[ILLARUM_PRISON];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[ILLARUM_INN];
+      destinations[2] = g_world[ILLARUM_SCHOOL];
+      destinations[3] = g_world[ILLARUM_TEMPLE];
+      destinations[4] = g_world[ILLARUM_PALACE];
+      destinations[5] = g_world[ILLARUM_PRISON];
       break;
     case ILLARUM_INN:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[ILLARUM_MARKET];
-      destinations[2] = world[ILLARUM_SCHOOL];
-      destinations[3] = world[ILLARUM_TEMPLE];
-      destinations[4] = world[ILLARUM_PALACE];
-      destinations[5] = world[ILLARUM_PRISON];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[ILLARUM_MARKET];
+      destinations[2] = g_world[ILLARUM_SCHOOL];
+      destinations[3] = g_world[ILLARUM_TEMPLE];
+      destinations[4] = g_world[ILLARUM_PALACE];
+      destinations[5] = g_world[ILLARUM_PRISON];
       break;
     case ILLARUM_SCHOOL:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[ILLARUM_MARKET];
-      destinations[2] = world[ILLARUM_INN];
-      destinations[3] = world[ILLARUM_TEMPLE];
-      destinations[4] = world[ILLARUM_PALACE];
-      destinations[5] = world[ILLARUM_PRISON];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[ILLARUM_MARKET];
+      destinations[2] = g_world[ILLARUM_INN];
+      destinations[3] = g_world[ILLARUM_TEMPLE];
+      destinations[4] = g_world[ILLARUM_PALACE];
+      destinations[5] = g_world[ILLARUM_PRISON];
       break;
     case ILLARUM_TEMPLE:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[ILLARUM_MARKET];
-      destinations[2] = world[ILLARUM_INN];
-      destinations[3] = world[ILLARUM_SCHOOL];
-      destinations[4] = world[ILLARUM_PALACE];
-      destinations[5] = world[ILLARUM_PRISON];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[ILLARUM_MARKET];
+      destinations[2] = g_world[ILLARUM_INN];
+      destinations[3] = g_world[ILLARUM_SCHOOL];
+      destinations[4] = g_world[ILLARUM_PALACE];
+      destinations[5] = g_world[ILLARUM_PRISON];
       break;
     case ILLARUM_PALACE:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[ILLARUM_MARKET];
-      destinations[2] = world[ILLARUM_INN];
-      destinations[3] = world[ILLARUM_SCHOOL];
-      destinations[4] = world[ILLARUM_TEMPLE];
-      destinations[5] = world[ILLARUM_PRISON];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[ILLARUM_MARKET];
+      destinations[2] = g_world[ILLARUM_INN];
+      destinations[3] = g_world[ILLARUM_SCHOOL];
+      destinations[4] = g_world[ILLARUM_TEMPLE];
+      destinations[5] = g_world[ILLARUM_PRISON];
       break;
     case ILLARUM_PRISON:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[ILLARUM_MARKET];
-      destinations[2] = world[ILLARUM_INN];
-      destinations[3] = world[ILLARUM_SCHOOL];
-      destinations[4] = world[ILLARUM_TEMPLE];
-      destinations[5] = world[ILLARUM_PALACE];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[ILLARUM_MARKET];
+      destinations[2] = g_world[ILLARUM_INN];
+      destinations[3] = g_world[ILLARUM_SCHOOL];
+      destinations[4] = g_world[ILLARUM_TEMPLE];
+      destinations[5] = g_world[ILLARUM_PALACE];
       break;
     case VENTARRIS_ENTRANCE:
-      destinations[0] = world[VENTARRIS_MARKET];
-      destinations[1] = world[VENTARRIS_INN];
-      destinations[2] = world[VENTARRIS_SCHOOL];
-      destinations[3] = world[VENTARRIS_TEMPLE];
-      destinations[4] = world[VENTARRIS_PALACE];
-      destinations[5] = world[VENTARRIS_PRISON];
-      destinations[6] = world[VENTARRIS_DOCKS];
-      destinations[7] = world[SHORE_EAST];
-      destinations[8] = world[SHORE_SE];
-      destinations[9] = world[PLAINS_SOUTH];
+      destinations[0] = g_world[VENTARRIS_MARKET];
+      destinations[1] = g_world[VENTARRIS_INN];
+      destinations[2] = g_world[VENTARRIS_SCHOOL];
+      destinations[3] = g_world[VENTARRIS_TEMPLE];
+      destinations[4] = g_world[VENTARRIS_PALACE];
+      destinations[5] = g_world[VENTARRIS_PRISON];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
+      destinations[7] = g_world[SHORE_EAST];
+      destinations[8] = g_world[SHORE_SE];
+      destinations[9] = g_world[PLAINS_SOUTH];
       break;
     case VENTARRIS_MARKET:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_INN];
-      destinations[2] = world[VENTARRIS_SCHOOL];
-      destinations[3] = world[VENTARRIS_TEMPLE];
-      destinations[4] = world[VENTARRIS_PALACE];
-      destinations[5] = world[VENTARRIS_PRISON];
-      destinations[6] = world[VENTARRIS_DOCKS];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_INN];
+      destinations[2] = g_world[VENTARRIS_SCHOOL];
+      destinations[3] = g_world[VENTARRIS_TEMPLE];
+      destinations[4] = g_world[VENTARRIS_PALACE];
+      destinations[5] = g_world[VENTARRIS_PRISON];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
       break;
     case VENTARRIS_INN:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_MARKET];
-      destinations[2] = world[VENTARRIS_SCHOOL];
-      destinations[3] = world[VENTARRIS_TEMPLE];
-      destinations[4] = world[VENTARRIS_PALACE];
-      destinations[5] = world[VENTARRIS_PRISON];
-      destinations[6] = world[VENTARRIS_DOCKS];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_MARKET];
+      destinations[2] = g_world[VENTARRIS_SCHOOL];
+      destinations[3] = g_world[VENTARRIS_TEMPLE];
+      destinations[4] = g_world[VENTARRIS_PALACE];
+      destinations[5] = g_world[VENTARRIS_PRISON];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
       break;
     case VENTARRIS_SCHOOL:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_MARKET];
-      destinations[2] = world[VENTARRIS_INN];
-      destinations[3] = world[VENTARRIS_TEMPLE];
-      destinations[4] = world[VENTARRIS_PALACE];
-      destinations[5] = world[VENTARRIS_PRISON];
-      destinations[6] = world[VENTARRIS_DOCKS];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_MARKET];
+      destinations[2] = g_world[VENTARRIS_INN];
+      destinations[3] = g_world[VENTARRIS_TEMPLE];
+      destinations[4] = g_world[VENTARRIS_PALACE];
+      destinations[5] = g_world[VENTARRIS_PRISON];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
       break;
     case VENTARRIS_TEMPLE:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_MARKET];
-      destinations[2] = world[VENTARRIS_INN];
-      destinations[3] = world[VENTARRIS_SCHOOL];
-      destinations[4] = world[VENTARRIS_PALACE];
-      destinations[5] = world[VENTARRIS_PRISON];
-      destinations[6] = world[VENTARRIS_DOCKS];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_MARKET];
+      destinations[2] = g_world[VENTARRIS_INN];
+      destinations[3] = g_world[VENTARRIS_SCHOOL];
+      destinations[4] = g_world[VENTARRIS_PALACE];
+      destinations[5] = g_world[VENTARRIS_PRISON];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
       break;
     case VENTARRIS_PALACE:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_MARKET];
-      destinations[2] = world[VENTARRIS_INN];
-      destinations[3] = world[VENTARRIS_SCHOOL];
-      destinations[4] = world[VENTARRIS_TEMPLE];
-      destinations[5] = world[VENTARRIS_PRISON];
-      destinations[6] = world[VENTARRIS_DOCKS];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_MARKET];
+      destinations[2] = g_world[VENTARRIS_INN];
+      destinations[3] = g_world[VENTARRIS_SCHOOL];
+      destinations[4] = g_world[VENTARRIS_TEMPLE];
+      destinations[5] = g_world[VENTARRIS_PRISON];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
       break;
     case VENTARRIS_PRISON:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_MARKET];
-      destinations[2] = world[VENTARRIS_INN];
-      destinations[3] = world[VENTARRIS_SCHOOL];
-      destinations[4] = world[VENTARRIS_TEMPLE];
-      destinations[5] = world[VENTARRIS_PALACE];
-      destinations[6] = world[VENTARRIS_DOCKS];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_MARKET];
+      destinations[2] = g_world[VENTARRIS_INN];
+      destinations[3] = g_world[VENTARRIS_SCHOOL];
+      destinations[4] = g_world[VENTARRIS_TEMPLE];
+      destinations[5] = g_world[VENTARRIS_PALACE];
+      destinations[6] = g_world[VENTARRIS_DOCKS];
       break;
     case VENTARRIS_DOCKS:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[VENTARRIS_MARKET];
-      destinations[2] = world[VENTARRIS_INN];
-      destinations[3] = world[VENTARRIS_SCHOOL];
-      destinations[4] = world[VENTARRIS_TEMPLE];
-      destinations[5] = world[VENTARRIS_PALACE];
-      destinations[6] = world[VENTARRIS_PRISON];
-      destinations[7] = world[SHORE_EAST];
-      destinations[8] = world[SHORE_SE];
-      destinations[9] = world[OCEAN_SURFACE];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[VENTARRIS_MARKET];
+      destinations[2] = g_world[VENTARRIS_INN];
+      destinations[3] = g_world[VENTARRIS_SCHOOL];
+      destinations[4] = g_world[VENTARRIS_TEMPLE];
+      destinations[5] = g_world[VENTARRIS_PALACE];
+      destinations[6] = g_world[VENTARRIS_PRISON];
+      destinations[7] = g_world[SHORE_EAST];
+      destinations[8] = g_world[SHORE_SE];
+      destinations[9] = g_world[OCEAN_SURFACE];
       break;
     case PLAINS_NORTH:
-      destinations[0] = world[NORTHERN_FARMS];
-      destinations[1] = world[MOUNTAINS];
-      destinations[2] = world[ILLARUM_ENTRANCE];
-      destinations[3] = world[BRILL_OUTSKIRTS];
-      destinations[4] = world[FOREST];
-      destinations[5] = world[VENTARRIS_ENTRANCE];
+      destinations[0] = g_world[NORTHERN_FARMS];
+      destinations[1] = g_world[MOUNTAINS];
+      destinations[2] = g_world[ILLARUM_ENTRANCE];
+      destinations[3] = g_world[BRILL_OUTSKIRTS];
+      destinations[4] = g_world[FOREST];
+      destinations[5] = g_world[VENTARRIS_ENTRANCE];
       break;
     case NORTHERN_FARMS:
-      destinations[0] = world[PLAINS_NORTH];
-      destinations[1] = world[MOUNTAINS];
-      destinations[2] = world[ILLARUM_ENTRANCE];
-      destinations[3] = world[BRILL_OUTSKIRTS];
-      destinations[4] = world[FOREST];
-      destinations[5] = world[VENTARRIS_ENTRANCE];
+      destinations[0] = g_world[PLAINS_NORTH];
+      destinations[1] = g_world[MOUNTAINS];
+      destinations[2] = g_world[ILLARUM_ENTRANCE];
+      destinations[3] = g_world[BRILL_OUTSKIRTS];
+      destinations[4] = g_world[FOREST];
+      destinations[5] = g_world[VENTARRIS_ENTRANCE];
       break;
     case BRILL_OUTSKIRTS:
-      destinations[0] = world[BRILL_MARKET];
-      destinations[1] = world[BRILL_INN];
-      destinations[2] = world[BRILL_DOCKS];
-      destinations[3] = world[MOUNTAINS];
-      destinations[4] = world[SHORE_NE];
-      destinations[5] = world[SHORE_EAST];
-      destinations[6] = world[PLAINS_NORTH];
+      destinations[0] = g_world[BRILL_MARKET];
+      destinations[1] = g_world[BRILL_INN];
+      destinations[2] = g_world[BRILL_DOCKS];
+      destinations[3] = g_world[MOUNTAINS];
+      destinations[4] = g_world[SHORE_NE];
+      destinations[5] = g_world[SHORE_EAST];
+      destinations[6] = g_world[PLAINS_NORTH];
       break;
     case BRILL_MARKET:
-      destinations[0] = world[BRILL_OUTSKIRTS];
-      destinations[1] = world[BRILL_INN];
-      destinations[2] = world[BRILL_DOCKS];
+      destinations[0] = g_world[BRILL_OUTSKIRTS];
+      destinations[1] = g_world[BRILL_INN];
+      destinations[2] = g_world[BRILL_DOCKS];
       break;
     case BRILL_INN:
-      destinations[0] = world[BRILL_OUTSKIRTS];
-      destinations[1] = world[BRILL_MARKET];
-      destinations[2] = world[BRILL_DOCKS];
+      destinations[0] = g_world[BRILL_OUTSKIRTS];
+      destinations[1] = g_world[BRILL_MARKET];
+      destinations[2] = g_world[BRILL_DOCKS];
       break;
     case BRILL_DOCKS:
-      destinations[0] = world[BRILL_OUTSKIRTS];
-      destinations[1] = world[BRILL_MARKET];
-      destinations[2] = world[BRILL_INN];
-      destinations[3] = world[SHORE_NE];
-      destinations[4] = world[SHORE_EAST];
-      destinations[5] = world[OCEAN_SURFACE];
+      destinations[0] = g_world[BRILL_OUTSKIRTS];
+      destinations[1] = g_world[BRILL_MARKET];
+      destinations[2] = g_world[BRILL_INN];
+      destinations[3] = g_world[SHORE_NE];
+      destinations[4] = g_world[SHORE_EAST];
+      destinations[5] = g_world[OCEAN_SURFACE];
       break;
     case PLAINS_SOUTH:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[SOUTHERN_FARMS];
-      destinations[2] = world[SILENT_SAGE_HOME];
-      destinations[3] = world[SHORE_EAST];
-      destinations[4] = world[VENTARRIS_ENTRANCE];
-      destinations[5] = world[SHORE_SE];
-      destinations[6] = world[FOREST];
-      destinations[7] = world[SWAMP];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[SOUTHERN_FARMS];
+      destinations[2] = g_world[SILENT_SAGE_HOME];
+      destinations[3] = g_world[SHORE_EAST];
+      destinations[4] = g_world[VENTARRIS_ENTRANCE];
+      destinations[5] = g_world[SHORE_SE];
+      destinations[6] = g_world[FOREST];
+      destinations[7] = g_world[SWAMP];
       break;
     case SOUTHERN_FARMS:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[PLAINS_SOUTH];
-      destinations[2] = world[SILENT_SAGE_HOME];
-      destinations[3] = world[SHORE_EAST];
-      destinations[4] = world[VENTARRIS_ENTRANCE];
-      destinations[5] = world[SHORE_SE];
-      destinations[6] = world[FOREST];
-      destinations[7] = world[SWAMP];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[PLAINS_SOUTH];
+      destinations[2] = g_world[SILENT_SAGE_HOME];
+      destinations[3] = g_world[SHORE_EAST];
+      destinations[4] = g_world[VENTARRIS_ENTRANCE];
+      destinations[5] = g_world[SHORE_SE];
+      destinations[6] = g_world[FOREST];
+      destinations[7] = g_world[SWAMP];
       break;
     case SILENT_SAGE_HOME:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[PLAINS_SOUTH];
-      destinations[2] = world[SOUTHERN_FARMS];
-      destinations[3] = world[SHORE_EAST];
-      destinations[4] = world[VENTARRIS_ENTRANCE];
-      destinations[5] = world[SHORE_SE];
-      destinations[6] = world[FOREST];
-      destinations[7] = world[SWAMP];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[PLAINS_SOUTH];
+      destinations[2] = g_world[SOUTHERN_FARMS];
+      destinations[3] = g_world[SHORE_EAST];
+      destinations[4] = g_world[VENTARRIS_ENTRANCE];
+      destinations[5] = g_world[SHORE_SE];
+      destinations[6] = g_world[FOREST];
+      destinations[7] = g_world[SWAMP];
       break;
     case FOREST:
-      destinations[0] = world[MOUNTAINS];
-      destinations[1] = world[PLAINS_NORTH];
-      destinations[2] = world[SWAMP];
-      destinations[3] = world[ILLARUM_ENTRANCE];
-      destinations[4] = world[PLAINS_SOUTH];
+      destinations[0] = g_world[MOUNTAINS];
+      destinations[1] = g_world[PLAINS_NORTH];
+      destinations[2] = g_world[SWAMP];
+      destinations[3] = g_world[ILLARUM_ENTRANCE];
+      destinations[4] = g_world[PLAINS_SOUTH];
       break;
     case DRUIDS_GROVE:
-      destinations[0] = world[MOUNTAINS];
-      destinations[1] = world[PLAINS_NORTH];
-      destinations[2] = world[SWAMP];
-      destinations[3] = world[ILLARUM_ENTRANCE];
-      destinations[4] = world[PLAINS_SOUTH];
-      destinations[5] = world[FOREST];
+      destinations[0] = g_world[MOUNTAINS];
+      destinations[1] = g_world[PLAINS_NORTH];
+      destinations[2] = g_world[SWAMP];
+      destinations[3] = g_world[ILLARUM_ENTRANCE];
+      destinations[4] = g_world[PLAINS_SOUTH];
+      destinations[5] = g_world[FOREST];
       break;
     case HERMIT_HUT:
-      destinations[0] = world[FOREST];
+      destinations[0] = g_world[FOREST];
       break;
     case WYNNFAER_ENTRANCE:
-      destinations[0] = world[WYNNFAER_PLAZA];
-      destinations[1] = world[WYNNFAER_PALACE];
-      destinations[2] = world[FOREST];
+      destinations[0] = g_world[WYNNFAER_PLAZA];
+      destinations[1] = g_world[WYNNFAER_PALACE];
+      destinations[2] = g_world[FOREST];
       break;
     case WYNNFAER_PLAZA:
-      destinations[0] = world[WYNNFAER_ENTRANCE];
-      destinations[1] = world[WYNNFAER_PALACE];
+      destinations[0] = g_world[WYNNFAER_ENTRANCE];
+      destinations[1] = g_world[WYNNFAER_PALACE];
       break;
     case WYNNFAER_PALACE:
-      destinations[0] = world[WYNNFAER_ENTRANCE];
-      destinations[1] = world[WYNNFAER_PLAZA];
+      destinations[0] = g_world[WYNNFAER_ENTRANCE];
+      destinations[1] = g_world[WYNNFAER_PLAZA];
       break;
     case MOUNTAINS:
-      destinations[0] = world[GESHTAL];
-      destinations[1] = world[TORR_ENTRANCE];
-      destinations[2] = world[FOREST];
-      destinations[3] = world[PLAINS_NORTH];
-      destinations[4] = world[BRILL_OUTSKIRTS];
-      destinations[5] = world[SHORE_NE];
+      destinations[0] = g_world[GESHTAL];
+      destinations[1] = g_world[TORR_ENTRANCE];
+      destinations[2] = g_world[FOREST];
+      destinations[3] = g_world[PLAINS_NORTH];
+      destinations[4] = g_world[BRILL_OUTSKIRTS];
+      destinations[5] = g_world[SHORE_NE];
       break;
     case GESHTAL:
-      destinations[0] = world[MOUNTAINS];
-      destinations[1] = world[TORR_ENTRANCE];
-      destinations[3] = world[FOREST];
-      destinations[4] = world[PLAINS_NORTH];
-      destinations[5] = world[BRILL_OUTSKIRTS];
-      destinations[6] = world[SHORE_NE];
+      destinations[0] = g_world[MOUNTAINS];
+      destinations[1] = g_world[TORR_ENTRANCE];
+      destinations[3] = g_world[FOREST];
+      destinations[4] = g_world[PLAINS_NORTH];
+      destinations[5] = g_world[BRILL_OUTSKIRTS];
+      destinations[6] = g_world[SHORE_NE];
       break;
     case TORR_ENTRANCE:
-      destinations[0] = world[TORR_MARKET];
-      destinations[1] = world[TORR_SCHOOL];
-      destinations[2] = world[TORR_TEMPLE];
-      destinations[3] = world[TORR_THRONE_ROOM];
-      destinations[4] = world[TORR_MINE];
-      destinations[5] = world[TORR_PRISON];
-      destinations[6] = world[MOUNTAINS];
-      destinations[7] = world[GESHTAL];
-      destinations[9] = world[FOREST];
-      destinations[10] = world[PLAINS_NORTH];
-      destinations[11] = world[BRILL_OUTSKIRTS];
+      destinations[0] = g_world[TORR_MARKET];
+      destinations[1] = g_world[TORR_SCHOOL];
+      destinations[2] = g_world[TORR_TEMPLE];
+      destinations[3] = g_world[TORR_THRONE_ROOM];
+      destinations[4] = g_world[TORR_MINE];
+      destinations[5] = g_world[TORR_PRISON];
+      destinations[6] = g_world[MOUNTAINS];
+      destinations[7] = g_world[GESHTAL];
+      destinations[9] = g_world[FOREST];
+      destinations[10] = g_world[PLAINS_NORTH];
+      destinations[11] = g_world[BRILL_OUTSKIRTS];
       break;
     case TORR_MARKET:
-      destinations[0] = world[TORR_ENTRANCE];
-      destinations[1] = world[TORR_SCHOOL];
-      destinations[2] = world[TORR_TEMPLE];
-      destinations[3] = world[TORR_THRONE_ROOM];
-      destinations[4] = world[TORR_MINE];
-      destinations[5] = world[TORR_PRISON];
+      destinations[0] = g_world[TORR_ENTRANCE];
+      destinations[1] = g_world[TORR_SCHOOL];
+      destinations[2] = g_world[TORR_TEMPLE];
+      destinations[3] = g_world[TORR_THRONE_ROOM];
+      destinations[4] = g_world[TORR_MINE];
+      destinations[5] = g_world[TORR_PRISON];
       break;
     case TORR_SCHOOL:
-      destinations[0] = world[TORR_ENTRANCE];
-      destinations[1] = world[TORR_MARKET];
-      destinations[2] = world[TORR_TEMPLE];
-      destinations[3] = world[TORR_THRONE_ROOM];
-      destinations[4] = world[TORR_MINE];
-      destinations[5] = world[TORR_PRISON];
+      destinations[0] = g_world[TORR_ENTRANCE];
+      destinations[1] = g_world[TORR_MARKET];
+      destinations[2] = g_world[TORR_TEMPLE];
+      destinations[3] = g_world[TORR_THRONE_ROOM];
+      destinations[4] = g_world[TORR_MINE];
+      destinations[5] = g_world[TORR_PRISON];
       break;
     case TORR_TEMPLE:
-      destinations[0] = world[TORR_ENTRANCE];
-      destinations[1] = world[TORR_MARKET];
-      destinations[2] = world[TORR_SCHOOL];
-      destinations[3] = world[TORR_THRONE_ROOM];
-      destinations[4] = world[TORR_MINE];
-      destinations[5] = world[TORR_PRISON];
+      destinations[0] = g_world[TORR_ENTRANCE];
+      destinations[1] = g_world[TORR_MARKET];
+      destinations[2] = g_world[TORR_SCHOOL];
+      destinations[3] = g_world[TORR_THRONE_ROOM];
+      destinations[4] = g_world[TORR_MINE];
+      destinations[5] = g_world[TORR_PRISON];
       break;
     case TORR_THRONE_ROOM:
-      destinations[0] = world[TORR_ENTRANCE];
-      destinations[1] = world[TORR_MARKET];
-      destinations[2] = world[TORR_SCHOOL];
-      destinations[3] = world[TORR_TEMPLE];
-      destinations[4] = world[TORR_MINE];
-      destinations[5] = world[TORR_PRISON];
+      destinations[0] = g_world[TORR_ENTRANCE];
+      destinations[1] = g_world[TORR_MARKET];
+      destinations[2] = g_world[TORR_SCHOOL];
+      destinations[3] = g_world[TORR_TEMPLE];
+      destinations[4] = g_world[TORR_MINE];
+      destinations[5] = g_world[TORR_PRISON];
       break;
     case TORR_MINE:
-      destinations[0] = world[TORR_ENTRANCE];
-      destinations[1] = world[TORR_MARKET];
-      destinations[2] = world[TORR_SCHOOL];
-      destinations[3] = world[TORR_TEMPLE];
-      destinations[4] = world[TORR_THRONE_ROOM];
-      destinations[5] = world[TORR_PRISON];
+      destinations[0] = g_world[TORR_ENTRANCE];
+      destinations[1] = g_world[TORR_MARKET];
+      destinations[2] = g_world[TORR_SCHOOL];
+      destinations[3] = g_world[TORR_TEMPLE];
+      destinations[4] = g_world[TORR_THRONE_ROOM];
+      destinations[5] = g_world[TORR_PRISON];
       break;
     case TORR_VAULT:
-      destinations[0] = world[TORR_SCHOOL];
+      destinations[0] = g_world[TORR_SCHOOL];
       break;
     case TORR_PRISON:
-      destinations[0] = world[TORR_ENTRANCE];
-      destinations[1] = world[TORR_MARKET];
-      destinations[2] = world[TORR_SCHOOL];
-      destinations[3] = world[TORR_TEMPLE];
-      destinations[4] = world[TORR_THRONE_ROOM];
-      destinations[5] = world[TORR_MINE];
+      destinations[0] = g_world[TORR_ENTRANCE];
+      destinations[1] = g_world[TORR_MARKET];
+      destinations[2] = g_world[TORR_SCHOOL];
+      destinations[3] = g_world[TORR_TEMPLE];
+      destinations[4] = g_world[TORR_THRONE_ROOM];
+      destinations[5] = g_world[TORR_MINE];
       break;
     case GUGGENHOLM_ENTRANCE:
-      destinations[0] = world[GUGGENHOLM_MAIN];
-      destinations[1] = world[MOUNTAINS];
+      destinations[0] = g_world[GUGGENHOLM_MAIN];
+      destinations[1] = g_world[MOUNTAINS];
       break;
     case GUGGENHOLM_MAIN:
-      destinations[0] = world[GUGGENHOLM_ENTRANCE];
-      destinations[1] = world[GUGGENHOLM_MINE];
+      destinations[0] = g_world[GUGGENHOLM_ENTRANCE];
+      destinations[1] = g_world[GUGGENHOLM_MINE];
       break;
     case GUGGENHOLM_MINE:
-      destinations[0] = world[GUGGENHOLM_MAIN];
+      destinations[0] = g_world[GUGGENHOLM_MAIN];
       break;
     case SWAMP:
-      destinations[0] = world[FOREST];
-      destinations[1] = world[PLAINS_SOUTH];
-      destinations[2] = world[NECROMANCERS_CIRCLE];
+      destinations[0] = g_world[FOREST];
+      destinations[1] = g_world[PLAINS_SOUTH];
+      destinations[2] = g_world[NECROMANCERS_CIRCLE];
       break;
     case NECROMANCERS_CIRCLE:
-      destinations[0] = world[ISHTARR_ENTRANCE];
-      destinations[1] = world[SWAMP];
+      destinations[0] = g_world[ISHTARR_ENTRANCE];
+      destinations[1] = g_world[SWAMP];
       break;
     case ISHTARR_ENTRANCE:
-      destinations[0] = world[ISHTARR_EAST_WING];
-      destinations[1] = world[ISHTARR_WEST_WING];
-      destinations[2] = world[ISHTARR_CENTRAL_TOWER];
-      destinations[3] = world[ISHTARR_DUNGEON];
-      destinations[4] = world[NECROMANCERS_CIRCLE];
+      destinations[0] = g_world[ISHTARR_EAST_WING];
+      destinations[1] = g_world[ISHTARR_WEST_WING];
+      destinations[2] = g_world[ISHTARR_CENTRAL_TOWER];
+      destinations[3] = g_world[ISHTARR_DUNGEON];
+      destinations[4] = g_world[NECROMANCERS_CIRCLE];
       break;
     case ISHTARR_EAST_WING:
-      destinations[0] = world[ISHTARR_ENTRANCE];
-      destinations[1] = world[ISHTARR_WEST_WING];
-      destinations[2] = world[ISHTARR_CENTRAL_TOWER];
-      destinations[3] = world[ISHTARR_DUNGEON];
+      destinations[0] = g_world[ISHTARR_ENTRANCE];
+      destinations[1] = g_world[ISHTARR_WEST_WING];
+      destinations[2] = g_world[ISHTARR_CENTRAL_TOWER];
+      destinations[3] = g_world[ISHTARR_DUNGEON];
       break;
     case ISHTARR_WEST_WING:
-      destinations[0] = world[ISHTARR_ENTRANCE];
-      destinations[1] = world[ISHTARR_EAST_WING];
-      destinations[2] = world[ISHTARR_CENTRAL_TOWER];
-      destinations[3] = world[ISHTARR_DUNGEON];
+      destinations[0] = g_world[ISHTARR_ENTRANCE];
+      destinations[1] = g_world[ISHTARR_EAST_WING];
+      destinations[2] = g_world[ISHTARR_CENTRAL_TOWER];
+      destinations[3] = g_world[ISHTARR_DUNGEON];
       break;
     case ISHTARR_CENTRAL_TOWER:
-      destinations[0] = world[ISHTARR_ENTRANCE];
-      destinations[1] = world[ISHTARR_EAST_WING];
-      destinations[2] = world[ISHTARR_WEST_WING];
-      destinations[3] = world[ISHTARR_DUNGEON];
+      destinations[0] = g_world[ISHTARR_ENTRANCE];
+      destinations[1] = g_world[ISHTARR_EAST_WING];
+      destinations[2] = g_world[ISHTARR_WEST_WING];
+      destinations[3] = g_world[ISHTARR_DUNGEON];
       break;
     case ISHTARR_DUNGEON:
-      destinations[0] = world[ISHTARR_ENTRANCE];
-      destinations[1] = world[ISHTARR_EAST_WING];
-      destinations[2] = world[ISHTARR_WEST_WING];
-      destinations[3] = world[ISHTARR_CENTRAL_TOWER];
+      destinations[0] = g_world[ISHTARR_ENTRANCE];
+      destinations[1] = g_world[ISHTARR_EAST_WING];
+      destinations[2] = g_world[ISHTARR_WEST_WING];
+      destinations[3] = g_world[ISHTARR_CENTRAL_TOWER];
       break;
     case SHORE_NE:
-      destinations[0] = world[MOUNTAINS];
-      destinations[1] = world[BRILL_OUTSKIRTS];
-      destinations[2] = world[OCEAN_SURFACE];
+      destinations[0] = g_world[MOUNTAINS];
+      destinations[1] = g_world[BRILL_OUTSKIRTS];
+      destinations[2] = g_world[OCEAN_SURFACE];
       break;
     case SHORE_EAST:
-      destinations[0] = world[ILLARUM_ENTRANCE];
-      destinations[1] = world[PLAINS_NORTH];
-      destinations[2] = world[BRILL_OUTSKIRTS];
-      destinations[3] = world[PLAINS_SOUTH];
-      destinations[4] = world[VENTARRIS_ENTRANCE];
-      destinations[5] = world[OCEAN_SURFACE];
+      destinations[0] = g_world[ILLARUM_ENTRANCE];
+      destinations[1] = g_world[PLAINS_NORTH];
+      destinations[2] = g_world[BRILL_OUTSKIRTS];
+      destinations[3] = g_world[PLAINS_SOUTH];
+      destinations[4] = g_world[VENTARRIS_ENTRANCE];
+      destinations[5] = g_world[OCEAN_SURFACE];
       break;
     case SHORE_SE:
-      destinations[0] = world[VENTARRIS_ENTRANCE];
-      destinations[1] = world[PLAINS_SOUTH];
-      destinations[2] = world[OCEAN_SURFACE];
+      destinations[0] = g_world[VENTARRIS_ENTRANCE];
+      destinations[1] = g_world[PLAINS_SOUTH];
+      destinations[2] = g_world[OCEAN_SURFACE];
       break;
     case OCEAN_SURFACE:
-      destinations[0] = world[SHORE_NE];
-      destinations[1] = world[BRILL_DOCKS];
-      destinations[2] = world[SHORE_EAST];
-      destinations[3] = world[SHORE_SE];
-      destinations[4] = world[VENTARRIS_DOCKS];
-      destinations[5] = world[OCEAN_SHALLOW];
+      destinations[0] = g_world[SHORE_NE];
+      destinations[1] = g_world[BRILL_DOCKS];
+      destinations[2] = g_world[SHORE_EAST];
+      destinations[3] = g_world[SHORE_SE];
+      destinations[4] = g_world[VENTARRIS_DOCKS];
+      destinations[5] = g_world[OCEAN_SHALLOW];
       break;
     case OCEAN_SHALLOW:
-      destinations[0] = world[OCEAN_SURFACE];
-      destinations[1] = world[OCEAN_DEEP];
+      destinations[0] = g_world[OCEAN_SURFACE];
+      destinations[1] = g_world[OCEAN_DEEP];
       break;
     case OCEAN_DEEP:
-      destinations[0] = world[OCEAN_SHALLOW];
-      destinations[1] = world[OCEAN_TRENCH];
-      destinations[2] = world[QUELACENTUS_ENTRANCE];
+      destinations[0] = g_world[OCEAN_SHALLOW];
+      destinations[1] = g_world[OCEAN_TRENCH];
+      destinations[2] = g_world[QUELACENTUS_ENTRANCE];
       break;
     case OCEAN_TRENCH:
-      destinations[0] = world[OCEAN_DEEP];
-      destinations[1] = world[QUELACENTUS_ENTRANCE];
+      destinations[0] = g_world[OCEAN_DEEP];
+      destinations[1] = g_world[QUELACENTUS_ENTRANCE];
       break;
     case QUELACENTUS_ENTRANCE:
-      destinations[0] = world[QUELACENTUS_PLAZA];
-      destinations[1] = world[QUELACENTUS_TEMPLE];
-      destinations[2] = world[QUELACENTUS_PALACE];
-      destinations[3] = world[OCEAN_DEEP];
-      destinations[4] = world[OCEAN_TRENCH];
+      destinations[0] = g_world[QUELACENTUS_PLAZA];
+      destinations[1] = g_world[QUELACENTUS_TEMPLE];
+      destinations[2] = g_world[QUELACENTUS_PALACE];
+      destinations[3] = g_world[OCEAN_DEEP];
+      destinations[4] = g_world[OCEAN_TRENCH];
       break;
     case QUELACENTUS_PLAZA:
-      destinations[0] = world[QUELACENTUS_ENTRANCE];
-      destinations[1] = world[QUELACENTUS_TEMPLE];
-      destinations[2] = world[QUELACENTUS_PALACE];
+      destinations[0] = g_world[QUELACENTUS_ENTRANCE];
+      destinations[1] = g_world[QUELACENTUS_TEMPLE];
+      destinations[2] = g_world[QUELACENTUS_PALACE];
       break;
     case QUELACENTUS_TEMPLE:
-      destinations[0] = world[QUELACENTUS_ENTRANCE];
-      destinations[1] = world[QUELACENTUS_PLAZA];
-      destinations[2] = world[QUELACENTUS_PALACE];
+      destinations[0] = g_world[QUELACENTUS_ENTRANCE];
+      destinations[1] = g_world[QUELACENTUS_PLAZA];
+      destinations[2] = g_world[QUELACENTUS_PALACE];
       break;
     case QUELACENTUS_PALACE:
-      destinations[0] = world[QUELACENTUS_ENTRANCE];
-      destinations[1] = world[QUELACENTUS_PLAZA];
-      destinations[2] = world[QUELACENTUS_TEMPLE];
+      destinations[0] = g_world[QUELACENTUS_ENTRANCE];
+      destinations[1] = g_world[QUELACENTUS_PLAZA];
+      destinations[2] = g_world[QUELACENTUS_TEMPLE];
       break;
     default:
 #if DEBUG
@@ -1142,12 +1142,12 @@ int MovePlayer(int destinationID) {
     return FAILURE;
   }
 
-  player.locationID = destinationID;
-  if (player.summonedCreature != NULL) {
-    player.summonedCreature->locationID = destinationID;
+  g_player.locationID = destinationID;
+  if (g_player.summonedCreature != NULL) {
+    g_player.summonedCreature->locationID = destinationID;
   }
-  if (player.next != NULL) {
-    for (companion = player.next;
+  if (g_player.next != NULL) {
+    for (companion = g_player.next;
          companion != NULL;
          companion = companion->next) {
       companion->locationID = destinationID;
@@ -1186,7 +1186,7 @@ int SearchLocation(location_t *location) {
         MovePlayer(DRUIDS_GROVE);
         break;
       } else if (temp == 2) {
-        AddItem(&player, GLOWING_MUSHROOM);
+        AddItem(&g_player, GLOWING_MUSHROOM);
         break;
       }
       /* Otherwise, fall through. */
@@ -1197,19 +1197,19 @@ int SearchLocation(location_t *location) {
           sprintf(output,
                   "You find a small bag holding %d gold coins.",
                   temp);
-          player.gold += temp;
+          g_player.gold += temp;
           break;
         case 2:
           sprintf(output,
                   "You find a healing potion.",
                   temp);
-          player.inventory[HEALING_POTION]++;
+          g_player.inventory[HEALING_POTION]++;
           break;
         case 3:
-          if (AddRandomEnemy(world[player.locationID]) == SUCCESS) {
+          if (AddRandomEnemy(g_world[g_player.locationID]) == SUCCESS) {
             sprintf(output,
                     "While searching, you're attacked by %s!",
-                    GetNameIndefinite(enemyNPCs[0]));
+                    GetNameIndefinite(g_enemies[0]));
             break;
           }
           /* Fall through if no random enemy appeared. */
@@ -1221,7 +1221,7 @@ int SearchLocation(location_t *location) {
   }
   PrintString(output);
   FlushInput();
-  if (enemyNPCs[0] != NULL) {
+  if (g_enemies[0] != NULL) {
     Combat();
   }
 
@@ -1244,11 +1244,11 @@ void DescribeSituation(void) {
   game_character_t *pGC;
 
     /* Describue the current location. */
-  switch (player.locationID)
+  switch (g_player.locationID)
   {
     case ILLARUM_SCHOOL:
-      if (world[ILLARUM_SCHOOL]->visits == 0) {  /* Indicates a new game. */
-        world[ILLARUM_SCHOOL]->visits++;
+      if (g_world[ILLARUM_SCHOOL]->visits == 0) {  /* Indicates a new game. */
+        g_world[ILLARUM_SCHOOL]->visits++;
         sprintf(output,
                 "%s, Archwizard of the School of the Elements, approaches to "
                 "speak with you.",
@@ -1464,17 +1464,17 @@ void DescribeSituation(void) {
   UpdateVisibleGameCharCounter();
   gcTypesDescribed = 0;
   for (i = 0; i < NUM_GC_IDS; i++) {
-    gcDescribed[i] = false;
+    g_character_type_described[i] = false;
   }
-  temp = VisibleInhabitants(world[player.locationID]);
+  temp = VisibleInhabitants(g_world[g_player.locationID]);
   if (temp > 0) {
     strcat(output, "You see ");
-    for (pGC = world[player.locationID]->inhabitants;
+    for (pGC = g_world[g_player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
-      if (pGC->status[INVISIBLE] == false && gcDescribed[pGC->ID] == false) {
-        if (temp < VisibleInhabitants(world[player.locationID])) {
-          if (temp <= visibleGameCharCounter[pGC->ID]) {
+      if (pGC->status[INVISIBLE] == false && g_character_type_described[pGC->ID] == false) {
+        if (temp < VisibleInhabitants(g_world[g_player.locationID])) {
+          if (temp <= g_num_visible_of_type[pGC->ID]) {
             if (gcTypesDescribed > 1) {
               strcat(output, ",");
             }
@@ -1483,17 +1483,17 @@ void DescribeSituation(void) {
             strcat(output, ", ");
           }
         }
-        if (visibleGameCharCounter[pGC->ID] == 1) {
+        if (g_num_visible_of_type[pGC->ID] == 1) {
           strcat(output, GetNameIndefinite(pGC));
         } else {
           sprintf(output + strlen(output),
                   "%d %s",
-                  visibleGameCharCounter[pGC->ID],
+                  g_num_visible_of_type[pGC->ID],
                   GetNamePlural(pGC));
         }
         gcTypesDescribed++;
-        gcDescribed[pGC->ID] = true;
-        temp -= visibleGameCharCounter[pGC->ID];
+        g_character_type_described[pGC->ID] = true;
+        temp -= g_num_visible_of_type[pGC->ID];
         if (temp <= 0) {
           strcat(output, ". ");
         }
@@ -1504,7 +1504,7 @@ void DescribeSituation(void) {
   FlushInput();
 
     /* Check for hostile enemies. If any exist, they immediately attack.     */
-  for (pGC = world[player.locationID]->inhabitants;
+  for (pGC = g_world[g_player.locationID]->inhabitants;
        pGC != NULL;
        pGC = pGC->next) {
     if (pGC->relationship <= HOSTILE_ENEMY) {
@@ -1515,7 +1515,7 @@ void DescribeSituation(void) {
     printf("\nYou are being attacked!\n");
     FlushInput();
     Combat();
-    if (worldExists) {
+    if (g_world_exists) {
       DescribeSituation();
     }
   }

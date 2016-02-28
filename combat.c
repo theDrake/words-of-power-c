@@ -13,7 +13,7 @@ Description: Functions governing enemies and combat for the text-based fantasy
    Function: AddEnemy
 
 Description: Given an already existing game character, adds a pointer to it in
-             the global "enemyNPCs" array.
+             the global "g_enemies" array.
 
      Inputs: pGC - Pointer to the game character to be added.
 
@@ -30,14 +30,14 @@ int AddEnemy(game_character_t *pGC) {
   }
 
   for (i = 0; i < MAX_ENEMIES; i++) {
-    if (enemyNPCs[i] == NULL) {
-      enemyNPCs[i] = pGC;
+    if (g_enemies[i] == NULL) {
+      g_enemies[i] = pGC;
       pGC->status[IN_COMBAT] = true;
       return SUCCESS;
     }
   }
 
-    /* If we reach this point, "enemyNPCs" was full and the add failed.      */
+    /* If we reach this point, "g_enemies" was full and the add failed.      */
 #if DEBUG
   PRINT_ERROR_MESSAGE;
 #endif
@@ -48,7 +48,7 @@ int AddEnemy(game_character_t *pGC) {
    Function: AddRandomEnemy
 
 Description: Creates a new game character and adds a pointer to it in the local
-             "inhabitants" array as well as the the global "enemyNPCs" array,
+             "inhabitants" array as well as the the global "g_enemies" array,
              unless no random enemy is associated with the given location, in
              which case nothing happens.
 
@@ -129,7 +129,7 @@ int AddRandomEnemy(location_t *location) {
     case SILENT_SAGE_HOME:
       break;
     case FOREST:
-      if (player.soul <= EVIL) {
+      if (g_player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       } else {
         newEnemy = AddInhabitant(location, BEAR);
@@ -140,17 +140,17 @@ int AddRandomEnemy(location_t *location) {
     case HERMIT_HUT:
       break;
     case WYNNFAER_ENTRANCE:
-      if (player.soul <= EVIL) {
+      if (g_player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       }
       break;
     case WYNNFAER_PLAZA:
-      if (player.soul <= EVIL) {
+      if (g_player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       }
       break;
     case WYNNFAER_PALACE:
-      if (player.soul <= EVIL) {
+      if (g_player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, ELF);
       }
       break;
@@ -158,47 +158,47 @@ int AddRandomEnemy(location_t *location) {
       newEnemy = AddInhabitant(location, GOBLIN);
       break;
     case GESHTAL:
-      if (player.soul <= EVIL) {
+      if (g_player.soul <= EVIL) {
         newEnemy = AddInhabitant(location, BARBARIAN);
       }
       break;
     case TORR_ENTRANCE:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_MARKET:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_SCHOOL:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_TEMPLE:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_THRONE_ROOM:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_MINE:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_VAULT:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
     case TORR_PRISON:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, DWARF);
       }
       break;
@@ -206,12 +206,12 @@ int AddRandomEnemy(location_t *location) {
       newEnemy = AddInhabitant(location, GOBLIN);
       break;
     case GUGGENHOLM_MAIN:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, GNOME);
       }
       break;
     case GUGGENHOLM_MINE:
-      if (player.soul <= VERY_EVIL) {
+      if (g_player.soul <= VERY_EVIL) {
         newEnemy = AddInhabitant(location, GNOME);
       }
       break;
@@ -282,7 +282,7 @@ int AddRandomEnemy(location_t *location) {
 /******************************************************************************
    Function: RemoveEnemy
 
-Description: Removes a pointer to a given enemy from the global "enemyNPCs"
+Description: Removes a pointer to a given enemy from the global "g_enemies"
              array (does NOT remove the enemy from the "world" or deallocate
              its associated memory).
 
@@ -302,14 +302,14 @@ int RemoveEnemy(game_character_t *pGC) {
 
   pGC->status[IN_COMBAT] = false;
   for (i = 0; i < MAX_ENEMIES; i++) {
-    if (enemyNPCs[i] == pGC) {
-      enemyNPCs[i] = NULL;
+    if (g_enemies[i] == pGC) {
+      g_enemies[i] = NULL;
         /* If any active pointers existed past "pGC", shift them left.       */
       for (j = i + 1;
-           j < MAX_ENEMIES && enemyNPCs[j] != NULL;
+           j < MAX_ENEMIES && g_enemies[j] != NULL;
            j++, i++) {
-        enemyNPCs[i] = enemyNPCs[j];
-        enemyNPCs[j] = NULL;
+        g_enemies[i] = g_enemies[j];
+        g_enemies[j] = NULL;
       }
       return SUCCESS;
     }
@@ -325,7 +325,7 @@ int RemoveEnemy(game_character_t *pGC) {
 /******************************************************************************
    Function: DeleteEnemy
 
-Description: Removes a pointer to a given enemy from the global "enemyNPCs"
+Description: Removes a pointer to a given enemy from the global "g_enemies"
              array, then removes the enemy from the "world" and deallocates its
              associated memory.
 
@@ -335,7 +335,7 @@ Description: Removes a pointer to a given enemy from the global "enemyNPCs"
 ******************************************************************************/
 int DeleteEnemy(game_character_t *pGC) {
   if (RemoveEnemy(pGC) == SUCCESS) {
-    DeleteInhabitant(world[pGC->locationID], pGC);
+    DeleteInhabitant(g_world[pGC->locationID], pGC);
   } else {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -350,16 +350,16 @@ int DeleteEnemy(game_character_t *pGC) {
    Function: NumberOfEnemies
 
 Description: Returns the number of enemies pointed to by the global array
-             "enemyNPCs".
+             "g_enemies".
 
      Inputs: None.
 
-    Outputs: The number of active pointers in "enemyNPCs".
+    Outputs: The number of active pointers in "g_enemies".
 ******************************************************************************/
 int NumberOfEnemies(void) {
   int i;
 
-  for (i = 0; i < MAX_ENEMIES && enemyNPCs[i] != NULL; i++)
+  for (i = 0; i < MAX_ENEMIES && g_enemies[i] != NULL; i++)
     ;
 
   return i;
@@ -377,14 +377,14 @@ Description: Returns the number of visible enemies.
 int VisibleEnemies(void) {
   int i, count = 0;
 
-  if (player.status[IN_COMBAT] == false) {
+  if (g_player.status[IN_COMBAT] == false) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return count;
   } else {
-    for (i = 0; i < MAX_ENEMIES && enemyNPCs[i] != NULL; i++) {
-      if (enemyNPCs[i]->status[INVISIBLE] == false) {
+    for (i = 0; i < MAX_ENEMIES && g_enemies[i] != NULL; i++) {
+      if (g_enemies[i]->status[INVISIBLE] == false) {
         count++;
       }
     }
@@ -416,7 +416,7 @@ int Combat(void) {
     return 0;
   }
 
-  player.status[IN_COMBAT] = true;
+  g_player.status[IN_COMBAT] = true;
   playerFirst = RandomBool();     /* Determine who gets the first round.     */
 
   do {
@@ -424,23 +424,23 @@ int Combat(void) {
            "_/ENEMY STATS \\__________________________________________________"
            "______________\n");
     for (i = 0; i < MAX_ENEMIES; i++) {
-      if (enemyNPCs[i] == NULL) {
+      if (g_enemies[i] == NULL) {
         break;
       }
-      PrintCombatStatus(enemyNPCs[i]);
-      if (enemyNPCs[i]->summonedCreature != NULL) {
-        printf("%s's summoned creature: ", enemyNPCs[i]->name);
-        PrintCombatStatus(enemyNPCs[i]->summonedCreature);
+      PrintCombatStatus(g_enemies[i]);
+      if (g_enemies[i]->summonedCreature != NULL) {
+        printf("%s's summoned creature: ", g_enemies[i]->name);
+        PrintCombatStatus(g_enemies[i]->summonedCreature);
       }
     }
     printf("  ____________\n"
            "_/PLAYER STATS\\__________________________________________________"
            "______________\n");
-    for (pGC = &player; pGC != NULL; pGC = pGC->next) {
+    for (pGC = &g_player; pGC != NULL; pGC = pGC->next) {
       PrintCombatStatus(pGC);
     }
-    if (player.summonedCreature != NULL) {
-      PrintCombatStatus(player.summonedCreature);
+    if (g_player.summonedCreature != NULL) {
+      PrintCombatStatus(g_player.summonedCreature);
     }
     printf("\n");
 
@@ -472,7 +472,7 @@ int Combat(void) {
             }
             break;
           case 'F': /* Flee */
-            if (enemyNPCs[0]->ID == DUMMY) {  /* Indicates tutorial mode. */
+            if (g_enemies[0]->ID == DUMMY) {  /* Indicates tutorial mode. */
               printf("%s: \"Come on, destroy the dummy already!\"\n",
                      FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
               FlushInput();
@@ -481,9 +481,9 @@ int Combat(void) {
               printf("You have successfully fled.\n");
               FlushInput();
               while (NumberOfEnemies() > 0) {
-                RemoveEnemy(enemyNPCs[0]);
+                RemoveEnemy(g_enemies[0]);
               }
-              player.status[IN_COMBAT] = false;
+              g_player.status[IN_COMBAT] = false;
               MovementMenu();
             } else {
               printf("Your attempt to escape has failed.\n");
@@ -522,8 +522,8 @@ int Combat(void) {
     if (playerFirst) {
       round++;
     }
-  }while (player.currentHP > 0 && NumberOfEnemies() > 0);
-  player.status[IN_COMBAT] = false;
+  }while (g_player.currentHP > 0 && NumberOfEnemies() > 0);
+  g_player.status[IN_COMBAT] = false;
 
   return NumberOfEnemies();
 }
@@ -556,7 +556,7 @@ void PrintCombatStatus(game_character_t *pGC) {
 
 Description: Handles enemy NPC decision-making during combat.
 
-     Inputs: index - The index value of the active enemy in the "enemyNPCs"
+     Inputs: index - The index value of the active enemy in the "g_enemies"
                      array.
 
     Outputs: SUCCESS or FAILURE.
@@ -566,66 +566,66 @@ int EnemyAI(int index) {
   bool actionPerformed = false;
   game_character_t *gcTargets[MAX_TARGETS] = {NULL};
 
-  if (enemyNPCs[index] == NULL) {
+  if (g_enemies[index] == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  if (enemyNPCs[index]->status[INANIMATE] == true) {
+  if (g_enemies[index]->status[INANIMATE] == true) {
     return SUCCESS;
-  } else if (IsSpellcaster(enemyNPCs[index])) {
+  } else if (IsSpellcaster(g_enemies[index])) {
     if (RandomInt(1, 10) > 1) {  /* 90% chance of casting a spell. */
       for (i = 0; i < NumberOfEnemies(); i++) {
-        if (enemyNPCs[i]->currentHP <= (enemyNPCs[i]->maxHP / 4) &&
-            enemyNPCs[i]->words[WORD_OF_HEALTH] == KNOWN) {
-          gcTargets[0] = enemyNPCs[i];
-          CastSpell(enemyNPCs[index], "Y", gcTargets);  /* Healing spell. */
+        if (g_enemies[i]->currentHP <= (g_enemies[i]->maxHP / 4) &&
+            g_enemies[i]->words[WORD_OF_HEALTH] == KNOWN) {
+          gcTargets[0] = g_enemies[i];
+          CastSpell(g_enemies[index], "Y", gcTargets);  /* Healing spell. */
           actionPerformed = true;
         }
       }
       while (actionPerformed == false) {
-        if (enemyNPCs[i]->words[WORD_OF_FIRE] == KNOWN ||
-            enemyNPCs[i]->words[WORD_OF_AIR] == KNOWN ||
-            enemyNPCs[i]->words[WORD_OF_WATER] == KNOWN ||
-            enemyNPCs[i]->words[WORD_OF_EARTH] == KNOWN)
+        if (g_enemies[i]->words[WORD_OF_FIRE] == KNOWN ||
+            g_enemies[i]->words[WORD_OF_AIR] == KNOWN ||
+            g_enemies[i]->words[WORD_OF_WATER] == KNOWN ||
+            g_enemies[i]->words[WORD_OF_EARTH] == KNOWN)
         switch (RandomInt(1, 4)) {
           case 1:
-            if (enemyNPCs[i]->words[WORD_OF_AIR] == KNOWN) {
-              gcTargets[0] = &player;
-              CastSpell(enemyNPCs[index], "E", gcTargets);  /* Wind spell. */
+            if (g_enemies[i]->words[WORD_OF_AIR] == KNOWN) {
+              gcTargets[0] = &g_player;
+              CastSpell(g_enemies[index], "E", gcTargets);  /* Wind spell. */
               actionPerformed = true;
             }
             break;
           case 2:
-            if (enemyNPCs[i]->words[WORD_OF_WATER] == KNOWN) {
-              gcTargets[0] = &player;
-              CastSpell(enemyNPCs[index], "S", gcTargets);  /* Water spell. */
+            if (g_enemies[i]->words[WORD_OF_WATER] == KNOWN) {
+              gcTargets[0] = &g_player;
+              CastSpell(g_enemies[index], "S", gcTargets);  /* Water spell. */
               actionPerformed = true;
             }
             break;
           case 3:
-            if (enemyNPCs[i]->words[WORD_OF_EARTH] == KNOWN) {
-              gcTargets[0] = &player;
-              CastSpell(enemyNPCs[index], "P", gcTargets);   /* Earth spell. */
+            if (g_enemies[i]->words[WORD_OF_EARTH] == KNOWN) {
+              gcTargets[0] = &g_player;
+              CastSpell(g_enemies[index], "P", gcTargets);   /* Earth spell. */
               actionPerformed = true;
             }
             break;
           default:
-            if (enemyNPCs[i]->words[WORD_OF_FIRE] == KNOWN) {
-              gcTargets[0] = &player;
-              CastSpell(enemyNPCs[index], "B", gcTargets);   /* Fire spell.  */
+            if (g_enemies[i]->words[WORD_OF_FIRE] == KNOWN) {
+              gcTargets[0] = &g_player;
+              CastSpell(g_enemies[index], "B", gcTargets);   /* Fire spell.  */
               actionPerformed = true;
             }
             break;
         }
       }
     } else {
-      Attack(enemyNPCs[index], &player);
+      Attack(g_enemies[index], &g_player);
     }
   } else {  /* The active NPC is not a spellcaster. */
-    Attack(enemyNPCs[index], &player);
+    Attack(g_enemies[index], &g_player);
   }
 
   return SUCCESS;
@@ -646,7 +646,7 @@ int AttackMenu(void) {
   bool repeatOptions;
   game_character_t *target;
 
-  if (enemyNPCs[0] != NULL && enemyNPCs[0]->ID == DUMMY) {
+  if (g_enemies[0] != NULL && g_enemies[0]->ID == DUMMY) {
     printf("%s: \"You're a wizard, not a warrior. Cast a spell!\"\n",
            FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
     FlushInput();
@@ -656,59 +656,59 @@ int AttackMenu(void) {
   UpdateVisibleGameCharCounter();
   temp = 0;
   for (i = 0; i < NUM_GC_IDS; i++) {
-    gcDescribed[i] = false;
+    g_character_type_described[i] = false;
   }
 
     /* Potential targets are displayed (unless only one is available). */
-  if (player.status[IN_COMBAT]) {
+  if (g_player.status[IN_COMBAT]) {
     if (VisibleEnemies() == 1) {
-      Attack(&player, enemyNPCs[0]);
+      Attack(&g_player, g_enemies[0]);
       return SUCCESS;
     } else {
       printf("Select a target:\n");
       for (i = 0; i < NumberOfEnemies(); i++) {
-        if (enemyNPCs[i]->status[INVISIBLE] == false &&
-            gcDescribed[enemyNPCs[i]->ID] == false) {
+        if (g_enemies[i]->status[INVISIBLE] == false &&
+            g_character_type_described[g_enemies[i]->ID] == false) {
           temp++;
-          printf("[%d] %s", temp, enemyNPCs[i]->name);
-          if (visibleGameCharCounter[enemyNPCs[i]->ID] > 1) {
+          printf("[%d] %s", temp, g_enemies[i]->name);
+          if (g_num_visible_of_type[g_enemies[i]->ID] > 1) {
             printf(" (%d available)",
-                   visibleGameCharCounter[enemyNPCs[i]->ID]);
+                   g_num_visible_of_type[g_enemies[i]->ID]);
           }
           printf("\n");
-          gcDescribed[enemyNPCs[i]->ID] = true;
+          g_character_type_described[g_enemies[i]->ID] = true;
         }
       }
     }
   } else {  /* Not in combat mode: player attacks a local inhabitant. */
-    if (VisibleInhabitants(world[player.locationID]) == 0) {
+    if (VisibleInhabitants(g_world[g_player.locationID]) == 0) {
       printf("There is nobody here to attack.\n");
       FlushInput();
       return FAILURE;
     }
-    if (VisibleInhabitants(world[player.locationID]) == 1) {
-      for (target = world[player.locationID]->inhabitants;
+    if (VisibleInhabitants(g_world[g_player.locationID]) == 1) {
+      for (target = g_world[g_player.locationID]->inhabitants;
            target != NULL;
            target = target->next) {
         if (target->status[INVISIBLE] == false) {
-          Attack(&player, target);
+          Attack(&g_player, target);
           return SUCCESS;
         }
       }
     } else {  /* Multiple visible inhabitants to choose from. */
       printf("Select a target:\n");
-      for (target = world[player.locationID]->inhabitants;
+      for (target = g_world[g_player.locationID]->inhabitants;
            target != NULL;
            target = target->next) {
         if (target->status[INVISIBLE] == false &&
-            gcDescribed[target->ID] == false) {
+            g_character_type_described[target->ID] == false) {
           temp++;
           printf("[%d] %s", temp, target->name);
-          if (visibleGameCharCounter[target->ID] > 1) {
-            printf(" (%d available)", visibleGameCharCounter[target->ID]);
+          if (g_num_visible_of_type[target->ID] > 1) {
+            printf(" (%d available)", g_num_visible_of_type[target->ID]);
           }
           printf("\n");
-          gcDescribed[target->ID] = true;
+          g_character_type_described[target->ID] = true;
         }
       }
     }
@@ -720,30 +720,30 @@ int AttackMenu(void) {
     /* The target is now found, and attacked, by matching it with the input. */
   temp = 0;
   for (i = 0; i < NUM_GC_IDS; i++) {
-    gcDescribed[i] = false;
+    g_character_type_described[i] = false;
   }
-  if (player.status[IN_COMBAT]) {
+  if (g_player.status[IN_COMBAT]) {
     for (i = 0; i < NumberOfEnemies(); i++) {
-      if (enemyNPCs[i]->status[INVISIBLE] == false &&
-          gcDescribed[enemyNPCs[i]->ID] == false) {
+      if (g_enemies[i]->status[INVISIBLE] == false &&
+          g_character_type_described[g_enemies[i]->ID] == false) {
         temp++;
         if (temp == iInput) {
-          Attack(&player, enemyNPCs[i]);
+          Attack(&g_player, g_enemies[i]);
           return SUCCESS;
         }
-        gcDescribed[enemyNPCs[i]->ID] = true;
+        g_character_type_described[g_enemies[i]->ID] = true;
       }
     }
   } else {  /* Not in combat mode: player attacks a local inhabitant. */
-    for (target = world[player.locationID]->inhabitants;
+    for (target = g_world[g_player.locationID]->inhabitants;
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false &&
-          gcDescribed[target->ID] == false) {
+          g_character_type_described[target->ID] == false) {
         temp++;
         if (temp == iInput) {
-          Attack(&player, target);
-          if (player.status[IN_COMBAT] == false) {
+          Attack(&g_player, target);
+          if (g_player.status[IN_COMBAT] == false) {
             if (target->currentHP > 0) {
               target->relationship = HOSTILE_ENEMY;
               AddEnemy(target);
@@ -751,7 +751,7 @@ int AttackMenu(void) {
               printf("%s is dead.\n", Capitalize(GetNameDefinite(target)));
               FlushInput();
             }
-            for (target = world[player.locationID]->inhabitants;
+            for (target = g_world[g_player.locationID]->inhabitants;
                  target != NULL;
                  target = target->next) {
               if (WillingToFight(target) && target->status[IN_COMBAT] == false) {
@@ -760,14 +760,14 @@ int AttackMenu(void) {
               }
             }
           }
-          if (player.status[IN_COMBAT] == false && NumberOfEnemies() > 0) {
+          if (g_player.status[IN_COMBAT] == false && NumberOfEnemies() > 0) {
             printf("Prepare for battle!\n");
             FlushInput();
             Combat();
           }
           return SUCCESS;
         }
-        gcDescribed[target->ID] = true;
+        g_character_type_described[target->ID] = true;
       }
     }
   }

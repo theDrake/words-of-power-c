@@ -470,17 +470,17 @@ typedef struct Location {
   Global Variables
 ******************************************************************************/
 
-location_t *world[NUM_LOCATION_IDS];  // Pointers to all game locations.
-bool worldExists;  // Indicates whether game world exists in memory.
-bool quit;  // Indicates player's desire to quit the game.
-int secretsFound;  // Number of "secrets" discovered by the player.
-game_character_t player;
-game_character_t *enemyNPCs[MAX_ENEMIES];
-int missions[NUM_MISSION_IDS];  // To track player progress.
-int allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
-int kills[NUM_GC_IDS];  // Number of each GC type killed.
-int visibleGameCharCounter[NUM_GC_IDS];  // Number of each GC type visible.
-bool gcDescribed[NUM_GC_IDS];  // To prevent duplicate descriptions of GCs.
+location_t *g_world[NUM_LOCATION_IDS];  // Pointers to all game locations.
+bool g_world_exists;  // Indicates whether game world exists in memory.
+bool g_player_has_quit;  // Indicates player's desire to quit the game.
+int g_num_secrets_found;  // Number of "secrets" discovered by the player.
+game_character_t g_player;
+game_character_t *g_enemies[MAX_ENEMIES];
+int g_missions[NUM_MISSION_IDS];  // To track player progress.
+int g_allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
+int g_num_kills[NUM_GC_IDS];  // Number of each GC type killed.
+int g_num_visible_of_type[NUM_GC_IDS];  // Number of each GC type visible.
+bool g_character_type_described[NUM_GC_IDS];  // Helps when describing NPCs.
 
 /******************************************************************************
   Function Prototypes
