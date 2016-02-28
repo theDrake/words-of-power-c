@@ -453,8 +453,8 @@ typedef struct GameCharacter {
   int inventory[NUM_ITEM_IDS];  // Includes equipped items.
   int equippedItems[NUM_ITEM_IDS];
   int locationID;
-  struct GAME_CHARACTER *summonedCreature;  // Only one allowed at a time.
-  struct GAME_CHARACTER *next;  // For forming linked lists.
+  struct GameCharacter *summonedCreature;  // Only one allowed at a time.
+  struct GameCharacter *next;  // For forming linked lists.
 } game_character_t;
 
 typedef struct Location {
@@ -463,7 +463,7 @@ typedef struct Location {
   bool hidden;  // If true, special effort is required to find the location.
   int visits;  // Number of times player has visited the location.
   int searches;  // Number of times player has searched the location.
-  struct GAME_CHARACTER *inhabitants;  // Linked list of local NPCs.
+  game_character_t *inhabitants;  // Linked list of local NPCs.
 } location_t;
 
 /******************************************************************************
