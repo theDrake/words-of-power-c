@@ -1,10 +1,9 @@
 ###############################################################################
 #    Filename: Makefile
 #
-#      Author: David C. Drake (www.davidcdrake.com)
+#      Author: David C. Drake (http://davidcdrake.com)
 #
-# Description: Makefile for the "Words of Power" text-based RPG. Written for a
-#              Cygwin environment utilizing Digital Mars Make (5.05).
+# Description: Makefile for the "Words of Power" text-based RPG.
 ###############################################################################
 
 CC = gcc
