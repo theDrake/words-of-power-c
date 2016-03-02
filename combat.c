@@ -755,7 +755,8 @@ int AttackMenu(void) {
             for (target = g_world[g_player.locationID]->inhabitants;
                  target != NULL;
                  target = target->next) {
-              if (WillingToFight(target) && target->status[IN_COMBAT] == false) {
+              if (WillingToFight(target) &&
+                  target->status[IN_COMBAT] == false) {
                 target->relationship = HOSTILE_ENEMY;
                 AddEnemy(target);
               }
@@ -827,25 +828,47 @@ Description: Determines whether a given NPC will fight the player if the player
     Outputs: true or false.
 ******************************************************************************/
 bool WillingToFight(game_character_t *p_gc) {
-  if (p_gc->type == SOLDIER || p_gc->type == KNIGHT || p_gc->type == WIZARD ||
-      p_gc->type == INNKEEPER || p_gc->type == FISHERMAN || p_gc->type == SAILOR ||
-      p_gc->type == FARMER || p_gc->type == ILLARUM_PRIEST ||
-      p_gc->type == ILLARUM_HIGH_PRIEST || p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
-      p_gc->type == COURT_WIZARD || p_gc->type == WIZARD_OF_ELEMENTS ||
-      p_gc->type == WIZARD_OF_MIND || p_gc->type == ARCHWIZARD_OF_MIND ||
-      p_gc->type == VENTARRIS_PRIEST || p_gc->type == BARBARIAN_WARRIOR ||
-      p_gc->type == VENTARRIS_HIGH_PRIEST || p_gc->type == BARBARIAN ||
-      p_gc->type == BARBARIAN_SHAMAN || p_gc->type == BARBARIAN_CHIEFTAIN ||
-      p_gc->type == ELF || p_gc->type == DWARF_MERCHANT || p_gc->type == DWARF_PRIEST ||
-      p_gc->type == ELF_LOREMASTER || p_gc->type == DWARF || p_gc->type == DWARF_KING ||
-      p_gc->type == DWARF_MINER || p_gc->type == DWARF_GUARDIAN ||
-      p_gc->type == DWARF_LOREMASTER || p_gc->type == DWARF_HIGH_PRIEST ||
-      p_gc->type == GNOME || p_gc->type == GNOME_MINER || p_gc->type == DRUID ||
-      p_gc->type == ARCHDRUID || p_gc->type == MERFOLK_SOLDIER ||
-      p_gc->type == MERFOLK_PRIESTESS || p_gc->type == MERFOLK_HIGH_PRIESTESS ||
-      p_gc->type == MERFOLK_QUEEN || p_gc->type == VENTARRIS_KING ||
-      p_gc->type == ILLARUM_KING || p_gc->type == LICH || p_gc->type == NECROMANCER ||
-      p_gc->type == ARCHNECROMANCER || p_gc->type == SKELETAL_KNIGHT) {
+  if (p_gc->type == SOLDIER ||
+      p_gc->type == KNIGHT ||
+      p_gc->type == WIZARD ||
+      p_gc->type == INNKEEPER ||
+      p_gc->type == FISHERMAN ||
+      p_gc->type == SAILOR ||
+      p_gc->type == FARMER ||
+      p_gc->type == ILLARUM_PRIEST ||
+      p_gc->type == ILLARUM_HIGH_PRIEST ||
+      p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
+      p_gc->type == COURT_WIZARD ||
+      p_gc->type == WIZARD_OF_ELEMENTS ||
+      p_gc->type == WIZARD_OF_MIND ||
+      p_gc->type == ARCHWIZARD_OF_MIND ||
+      p_gc->type == VENTARRIS_PRIEST ||
+      p_gc->type == BARBARIAN_WARRIOR ||
+      p_gc->type == VENTARRIS_HIGH_PRIEST ||
+      p_gc->type == BARBARIAN ||
+      p_gc->type == BARBARIAN_SHAMAN ||
+      p_gc->type == BARBARIAN_CHIEFTAIN ||
+      p_gc->type == ELF ||
+      p_gc->type == DWARF_MERCHANT ||
+      p_gc->type == DWARF_PRIEST ||
+      p_gc->type == ELF_LOREMASTER ||
+      p_gc->type == DWARF || p_gc->type == DWARF_KING ||
+      p_gc->type == DWARF_MINER ||
+      p_gc->type == DWARF_GUARDIAN ||
+      p_gc->type == DWARF_LOREMASTER ||
+      p_gc->type == DWARF_HIGH_PRIEST ||
+      p_gc->type == GNOME ||
+      p_gc->type == GNOME_MINER || p_gc->type == DRUID ||
+      p_gc->type == ARCHDRUID ||
+      p_gc->type == MERFOLK_SOLDIER ||
+      p_gc->type == MERFOLK_PRIESTESS ||
+      p_gc->type == MERFOLK_HIGH_PRIESTESS ||
+      p_gc->type == MERFOLK_QUEEN ||
+      p_gc->type == VENTARRIS_KING ||
+      p_gc->type == ILLARUM_KING ||
+      p_gc->type == LICH || p_gc->type == NECROMANCER ||
+      p_gc->type == ARCHNECROMANCER ||
+      p_gc->type == SKELETAL_KNIGHT) {
     return true;
   }
 
@@ -902,23 +925,45 @@ Description: Determines whether a given NPC will assist allies during combat
     Outputs: true or false.
 ******************************************************************************/
 bool WillingToHelp(game_character_t *p_gc) {
-  if (p_gc->type == SOLDIER || p_gc->type == KNIGHT || p_gc->type == WIZARD ||
-      p_gc->type == INNKEEPER || p_gc->type == FISHERMAN || p_gc->type == SAILOR ||
-      p_gc->type == FARMER || p_gc->type == ILLARUM_PRIEST ||
-      p_gc->type == ILLARUM_HIGH_PRIEST || p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
-      p_gc->type == COURT_WIZARD || p_gc->type == WIZARD_OF_ELEMENTS ||
-      p_gc->type == WIZARD_OF_MIND || p_gc->type == ARCHWIZARD_OF_MIND ||
-      p_gc->type == VENTARRIS_PRIEST || p_gc->type == BARBARIAN_WARRIOR ||
-      p_gc->type == VENTARRIS_HIGH_PRIEST || p_gc->type == BARBARIAN ||
-      p_gc->type == BARBARIAN_SHAMAN || p_gc->type == BARBARIAN_CHIEFTAIN ||
-      p_gc->type == ELF || p_gc->type == DWARF_MERCHANT || p_gc->type == DWARF_PRIEST ||
-      p_gc->type == ELF_LOREMASTER || p_gc->type == DWARF || p_gc->type == DWARF_KING ||
-      p_gc->type == DWARF_MINER || p_gc->type == DWARF_GUARDIAN ||
-      p_gc->type == DWARF_LOREMASTER || p_gc->type == DWARF_HIGH_PRIEST ||
-      p_gc->type == GNOME || p_gc->type == GNOME_MINER || p_gc->type == DRUID ||
-      p_gc->type == ARCHDRUID || p_gc->type == MERFOLK_SOLDIER ||
-      p_gc->type == MERFOLK_PRIESTESS || p_gc->type == MERFOLK_HIGH_PRIESTESS ||
-      p_gc->type == MERFOLK_QUEEN || p_gc->type == VENTARRIS_KING ||
+  if (p_gc->type == SOLDIER ||
+      p_gc->type == KNIGHT ||
+      p_gc->type == WIZARD ||
+      p_gc->type == INNKEEPER ||
+      p_gc->type == FISHERMAN ||
+      p_gc->type == SAILOR ||
+      p_gc->type == FARMER ||
+      p_gc->type == ILLARUM_PRIEST ||
+      p_gc->type == ILLARUM_HIGH_PRIEST ||
+      p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
+      p_gc->type == COURT_WIZARD ||
+      p_gc->type == WIZARD_OF_ELEMENTS ||
+      p_gc->type == WIZARD_OF_MIND ||
+      p_gc->type == ARCHWIZARD_OF_MIND ||
+      p_gc->type == VENTARRIS_PRIEST ||
+      p_gc->type == BARBARIAN_WARRIOR ||
+      p_gc->type == VENTARRIS_HIGH_PRIEST ||
+      p_gc->type == BARBARIAN ||
+      p_gc->type == BARBARIAN_SHAMAN ||
+      p_gc->type == BARBARIAN_CHIEFTAIN ||
+      p_gc->type == ELF ||
+      p_gc->type == DWARF_MERCHANT ||
+      p_gc->type == DWARF_PRIEST ||
+      p_gc->type == ELF_LOREMASTER ||
+      p_gc->type == DWARF ||
+      p_gc->type == DWARF_KING ||
+      p_gc->type == DWARF_MINER ||
+      p_gc->type == DWARF_GUARDIAN ||
+      p_gc->type == DWARF_LOREMASTER ||
+      p_gc->type == DWARF_HIGH_PRIEST ||
+      p_gc->type == GNOME ||
+      p_gc->type == GNOME_MINER ||
+      p_gc->type == DRUID ||
+      p_gc->type == ARCHDRUID ||
+      p_gc->type == MERFOLK_SOLDIER ||
+      p_gc->type == MERFOLK_PRIESTESS ||
+      p_gc->type == MERFOLK_HIGH_PRIESTESS ||
+      p_gc->type == MERFOLK_QUEEN ||
+      p_gc->type == VENTARRIS_KING ||
       p_gc->type == ILLARUM_KING) {
     return true;
   }
