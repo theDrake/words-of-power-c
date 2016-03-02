@@ -57,13 +57,13 @@ int ItemMenu(void) {
 Description: Executes the use of an item by a given game character (the player
              or an NPC).
 
-     Inputs: pGC  - Pointer to the user of the item.
+     Inputs: p_gc  - Pointer to the user of the item.
              item - Integer representing the type of item to be used.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int UseItem(game_character_t *pGC, int item) {
-  if (pGC->inventory[item] < 1) {
+int UseItem(game_character_t *p_gc, int item) {
+  if (p_gc->inventory[item] < 1) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -73,13 +73,13 @@ int UseItem(game_character_t *pGC, int item) {
   switch(item) {
     case HEALING_POTION:
       printf("%s drinks a healing potion and regains %d hit points.\n",
-             Capitalize(GetNameDefinite(pGC)),
-             HealGameCharacter(pGC, RandomInt(DEFAULT_HP / 2, DEFAULT_HP)));
+             Capitalize(GetNameDefinite(p_gc)),
+             HealGameCharacter(p_gc, RandomInt(DEFAULT_HP / 2, DEFAULT_HP)));
       break;
     case FOOD:
       printf("%s eats food and regains %d hit points.\n",
-             Capitalize(GetNameDefinite(pGC)),
-             HealGameCharacter(pGC,
+             Capitalize(GetNameDefinite(p_gc)),
+             HealGameCharacter(p_gc,
                                RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;
     default:
@@ -88,7 +88,7 @@ int UseItem(game_character_t *pGC, int item) {
 #endif
       return FAILURE;
   }
-  pGC->inventory[item]--;
+  p_gc->inventory[item]--;
   FlushInput();
 
   return SUCCESS;
@@ -100,14 +100,14 @@ int UseItem(game_character_t *pGC, int item) {
 Description: Prints the name and quantity of each item owned by a given game
              character. Indicates which, if any, are equipped.
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: Number of item types described (or -1 if an error is encountered).
 ******************************************************************************/
-int PrintInventory(game_character_t *pGC) {
+int PrintInventory(game_character_t *p_gc) {
   int i, itemTypesDescribed = 0;
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -116,23 +116,23 @@ int PrintInventory(game_character_t *pGC) {
 
   printf("Inventory: ");
   for (i = 0; i < NUM_ITEM_TYPES; i++) {
-    if (pGC->inventory[i] > 0) {
+    if (p_gc->inventory[i] > 0) {
       if (itemTypesDescribed > 0) {
         printf(", ");
         if (itemTypesDescribed % 3 == 0) {
           printf("\n\t");
         }
       }
-      if (pGC->inventory[i] == 1) {
+      if (p_gc->inventory[i] == 1) {
         printf("%s", GetItemName(i));
       } else {
-        printf("%d %s", pGC->inventory[i], GetItemNamePlural(i));
+        printf("%d %s", p_gc->inventory[i], GetItemNamePlural(i));
       }
-      if (pGC->equippedItems[i] > 0) {
-        if (pGC->inventory[i] == 1) {
+      if (p_gc->equippedItems[i] > 0) {
+        if (p_gc->inventory[i] == 1) {
           printf("(equipped)");
         } else {
-          printf("(%d equipped)", pGC->equippedItems[i]);
+          printf("(%d equipped)", p_gc->equippedItems[i]);
         }
       }
       itemTypesDescribed++;

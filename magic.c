@@ -24,7 +24,7 @@ int SpellMenu(void) {
   int i, iInput, temp, spellLength, numTargets = 0;
   bool repeatOptions;
   char spell[MAX_SPELL_LEN + 1];
-  game_character_t *pGC, *gcTargets[MAX_TARGETS];
+  game_character_t *p_gc, *gcTargets[MAX_TARGETS];
 
     /* --STATUS CHECK-- */
 
@@ -55,13 +55,13 @@ int SpellMenu(void) {
       if (g_player.summonedCreature != NULL &&
           Targeted(g_player.summonedCreature, gcTargets) == false) {
         temp++;
-        printf("[%d] My summoned %s\n", temp, pGC->descriptor);
+        printf("[%d] My summoned %s\n", temp, p_gc->descriptor);
       }
-      for (pGC = g_player.next;
-           pGC != NULL && Targeted(pGC, gcTargets) == false;
-           pGC = pGC->next) {
+      for (p_gc = g_player.next;
+           p_gc != NULL && Targeted(p_gc, gcTargets) == false;
+           p_gc = p_gc->next) {
         temp++;
-        printf("[%d] My companion, %s\n", GetNameDefinite(pGC));
+        printf("[%d] My companion, %s\n", GetNameDefinite(p_gc));
       }
     }
     if (g_player.status[IN_COMBAT]) {  /* Combat mode: display enemies. */
@@ -81,21 +81,21 @@ int SpellMenu(void) {
         }
       }
     } else {  /* Not in combat mode: display local inhabitants. */
-      for (pGC = g_world[g_player.locationID]->inhabitants;
-           pGC != NULL;
-           pGC = pGC->next) {
-        if (pGC->status[INVISIBLE] == false &&
-            Targeted(pGC, gcTargets) == false &&
-            g_character_type_described[pGC->type] == false) {
+      for (p_gc = g_world[g_player.locationID]->inhabitants;
+           p_gc != NULL;
+           p_gc = p_gc->next) {
+        if (p_gc->status[INVISIBLE] == false &&
+            Targeted(p_gc, gcTargets) == false &&
+            g_character_type_described[p_gc->type] == false) {
           temp++;
-          if (g_num_visible_of_type[pGC->type] > 1) {
+          if (g_num_visible_of_type[p_gc->type] > 1) {
             printf("[%d] %s (%d available)\n", temp,
-                   pGC->name,
-                   g_num_visible_of_type[pGC->type]);
+                   p_gc->name,
+                   g_num_visible_of_type[p_gc->type]);
           } else {
-            printf("[%d] %s\n", temp, pGC->name);
+            printf("[%d] %s\n", temp, p_gc->name);
           }
-          g_character_type_described[pGC->type] = true;
+          g_character_type_described[p_gc->type] = true;
         }
       }
     }
@@ -129,12 +129,12 @@ int SpellMenu(void) {
           goto TargetFound;
         }
       }
-      for (pGC = g_player.next;
-           pGC != NULL && Targeted(pGC, gcTargets) == false;
-           pGC = pGC->next) {
+      for (p_gc = g_player.next;
+           p_gc != NULL && Targeted(p_gc, gcTargets) == false;
+           p_gc = p_gc->next) {
         temp++;
         if (temp == iInput) {
-          gcTargets[numTargets] = pGC;
+          gcTargets[numTargets] = p_gc;
           goto TargetFound;
         }
       }
@@ -154,20 +154,20 @@ int SpellMenu(void) {
         }
       }
     } else {  /* Not in combat mode: search through local inhabitants.*/
-      for (pGC = g_world[g_player.locationID]->inhabitants;
-           pGC != NULL;
-           pGC = pGC->next) {
-        if (pGC->status[INVISIBLE] == false &&
-            Targeted(pGC, gcTargets) == false &&
-            g_character_type_described[pGC->type] == false) {
+      for (p_gc = g_world[g_player.locationID]->inhabitants;
+           p_gc != NULL;
+           p_gc = p_gc->next) {
+        if (p_gc->status[INVISIBLE] == false &&
+            Targeted(p_gc, gcTargets) == false &&
+            g_character_type_described[p_gc->type] == false) {
           gcTargets[numTargets] = g_enemies[i];
           temp++;
           if (temp == iInput) {
-            gcTargets[numTargets] = pGC;
-            g_num_visible_of_type[pGC->type]--;  /* For counting purposes. */
+            gcTargets[numTargets] = p_gc;
+            g_num_visible_of_type[p_gc->type]--;  /* For counting purposes. */
             goto TargetFound;
           }
-          g_character_type_described[pGC->type] = true;
+          g_character_type_described[p_gc->type] = true;
         }
       }
     }
@@ -252,7 +252,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
        death = false, shield = false, counter = false, balance = false;
   int i, numTargets, spellLength, fireValue = 0, waterValue = 0, airValue = 0,
       earthValue = 0, damage = 0, backlashValue = 0;
-  game_character_t *pGC; /* To search through lists of game characters.      */
+  game_character_t *p_gc; /* To search through lists of game characters.      */
 
   for (numTargets = 0;
        numTargets < MAX_TARGETS && gcTargets[numTargets] != NULL;
@@ -468,12 +468,12 @@ int CastSpell(game_character_t *spellcaster, char *spell,
           printf("%s is dead.\n", Capitalize(GetNameDefinite(gcTargets[i])));
           FlushInput();
         }
-        for (pGC = g_world[g_player.locationID]->inhabitants;
-             pGC != NULL;
-             pGC = pGC->next) {
-          if (WillingToFight(pGC) && pGC->status[IN_COMBAT] == false) {
-            pGC->relationship = HOSTILE_ENEMY;
-            AddEnemy(pGC);
+        for (p_gc = g_world[g_player.locationID]->inhabitants;
+             p_gc != NULL;
+             p_gc = p_gc->next) {
+          if (WillingToFight(p_gc) && p_gc->status[IN_COMBAT] == false) {
+            p_gc->relationship = HOSTILE_ENEMY;
+            AddEnemy(p_gc);
           }
         }
       }
@@ -506,17 +506,17 @@ int CastSpell(game_character_t *spellcaster, char *spell,
 Description: Determines whether a given game character is contained within a
              given array of targeted game characters.
 
-     Inputs: pGC       - Pointer to the game character of interest.
+     Inputs: p_gc       - Pointer to the game character of interest.
              gcTargets - Array of pointers to targeted game characters (assumed
                          to be of length MAX_TARGETS).
 
     Outputs: true or false.
 ******************************************************************************/
-int Targeted(game_character_t *pGC, game_character_t *gcTargets[]) {
+int Targeted(game_character_t *p_gc, game_character_t *gcTargets[]) {
   int i;
 
   for (i = 0; i < MAX_TARGETS && gcTargets[i] != NULL; i++) {
-    if (gcTargets[i] == pGC) {
+    if (gcTargets[i] == p_gc) {
       return true;
     }
   }
@@ -531,26 +531,26 @@ Description: Determines whether a given game character is capable of casting
              beneficial spells (i.e., spells that might reasonably target
              oneself).
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
-    Outputs: true if "pGC" is being targeted, otherwise false.
+    Outputs: true if "p_gc" is being targeted, otherwise false.
 ******************************************************************************/
-bool CanCastBeneficialSpells(game_character_t *pGC) {
-  return pGC->words[WORD_OF_BODY]      == KNOWN ||
-         pGC->words[WORD_OF_MIND]      == KNOWN ||
-         pGC->words[WORD_OF_FLORA]     == KNOWN ||
-         pGC->words[WORD_OF_FAUNA]     == KNOWN ||
-         pGC->words[WORD_OF_LIGHT]     == KNOWN ||
-         pGC->words[WORD_OF_DARKNESS]  == KNOWN ||
-         pGC->words[WORD_OF_HEALTH]    == KNOWN ||
-         pGC->words[WORD_OF_LIFE]      == KNOWN ||
-         pGC->words[WORD_OF_HOLINESS]  == KNOWN ||
-         pGC->words[WORD_OF_EVIL]      == KNOWN ||
-         pGC->words[WORD_OF_INCREASE]  == KNOWN ||
-         pGC->words[WORD_OF_DECREASE]  == KNOWN ||
-         pGC->words[WORD_OF_SHIELDING] == KNOWN ||
-         pGC->words[WORD_OF_TIME]      == KNOWN ||
-         pGC->words[WORD_OF_VOID]      == KNOWN;
+bool CanCastBeneficialSpells(game_character_t *p_gc) {
+  return p_gc->words[WORD_OF_BODY]      == KNOWN ||
+         p_gc->words[WORD_OF_MIND]      == KNOWN ||
+         p_gc->words[WORD_OF_FLORA]     == KNOWN ||
+         p_gc->words[WORD_OF_FAUNA]     == KNOWN ||
+         p_gc->words[WORD_OF_LIGHT]     == KNOWN ||
+         p_gc->words[WORD_OF_DARKNESS]  == KNOWN ||
+         p_gc->words[WORD_OF_HEALTH]    == KNOWN ||
+         p_gc->words[WORD_OF_LIFE]      == KNOWN ||
+         p_gc->words[WORD_OF_HOLINESS]  == KNOWN ||
+         p_gc->words[WORD_OF_EVIL]      == KNOWN ||
+         p_gc->words[WORD_OF_INCREASE]  == KNOWN ||
+         p_gc->words[WORD_OF_DECREASE]  == KNOWN ||
+         p_gc->words[WORD_OF_SHIELDING] == KNOWN ||
+         p_gc->words[WORD_OF_TIME]      == KNOWN ||
+         p_gc->words[WORD_OF_VOID]      == KNOWN;
 }
 
 /******************************************************************************
@@ -807,15 +807,15 @@ int GetWordTypeFromChar(char firstLetter) {
 
 Description: Determines whether a given game character can cast spells.
 
-     Inputs: pGC - The game character of interest.
+     Inputs: p_gc - The game character of interest.
 
     Outputs: true if the GC knows at least one Word, otherwise false.
 ******************************************************************************/
-bool IsSpellcaster(game_character_t *pGC) {
+bool IsSpellcaster(game_character_t *p_gc) {
   int i;
 
   for (i = 0; i < NUM_WORD_TYPES; i++) {
-    if (pGC->words[i] == KNOWN) {
+    if (p_gc->words[i] == KNOWN) {
       return true;
     }
   }

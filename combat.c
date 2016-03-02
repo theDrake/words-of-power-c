@@ -15,14 +15,14 @@ Description: Functions governing enemies and combat for the text-based fantasy
 Description: Given an already existing game character, adds a pointer to it in
              the global "g_enemies" array.
 
-     Inputs: pGC - Pointer to the game character to be added.
+     Inputs: p_gc - Pointer to the game character to be added.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddEnemy(game_character_t *pGC) {
+int AddEnemy(game_character_t *p_gc) {
   int i;
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -31,8 +31,8 @@ int AddEnemy(game_character_t *pGC) {
 
   for (i = 0; i < MAX_ENEMIES; i++) {
     if (g_enemies[i] == NULL) {
-      g_enemies[i] = pGC;
-      pGC->status[IN_COMBAT] = true;
+      g_enemies[i] = p_gc;
+      p_gc->status[IN_COMBAT] = true;
 
       return SUCCESS;
     }
@@ -287,25 +287,25 @@ Description: Removes a pointer to a given enemy from the global "g_enemies"
              array (does NOT remove the enemy from the "world" or deallocate
              its associated memory).
 
-     Inputs: pGC - Pointer to the game character to be removed.
+     Inputs: p_gc - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int RemoveEnemy(game_character_t *pGC) {
+int RemoveEnemy(game_character_t *p_gc) {
   int i, j;
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  pGC->status[IN_COMBAT] = false;
+  p_gc->status[IN_COMBAT] = false;
   for (i = 0; i < MAX_ENEMIES; i++) {
-    if (g_enemies[i] == pGC) {
+    if (g_enemies[i] == p_gc) {
       g_enemies[i] = NULL;
-      // If any active pointers existed past "pGC", shift them left:
+      // If any active pointers existed past "p_gc", shift them left:
       for (j = i + 1;
            j < MAX_ENEMIES && g_enemies[j] != NULL;
            j++, i++) {
@@ -316,7 +316,7 @@ int RemoveEnemy(game_character_t *pGC) {
     }
   }
 
-  // If we reach this point, "pGC" was not found.
+  // If we reach this point, "p_gc" was not found.
 #if DEBUG
   PRINT_ERROR_MESSAGE;
 #endif
@@ -330,13 +330,13 @@ Description: Removes a pointer to a given enemy from the global "g_enemies"
              array, then removes the enemy from the "world" and deallocates its
              associated memory.
 
-     Inputs: pGC - Pointer to the game character to be removed.
+     Inputs: p_gc - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DeleteEnemy(game_character_t *pGC) {
-  if (RemoveEnemy(pGC) == SUCCESS) {
-    DeleteInhabitant(g_world[pGC->locationID], pGC);
+int DeleteEnemy(game_character_t *p_gc) {
+  if (RemoveEnemy(p_gc) == SUCCESS) {
+    DeleteInhabitant(g_world[p_gc->locationID], p_gc);
   } else {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -408,7 +408,7 @@ int Combat(void) {
   int i, round = 1;
   char cInput;
   bool repeatOptions, playerFirst;
-  game_character_t *pGC;
+  game_character_t *p_gc;
 
   if (NumberOfEnemies() == 0) {
 #if DEBUG
@@ -437,8 +437,8 @@ int Combat(void) {
     printf("  ____________\n"
            "_/PLAYER STATS\\__________________________________________________"
            "______________\n");
-    for (pGC = &g_player; pGC != NULL; pGC = pGC->next) {
-      PrintCombatStatus(pGC);
+    for (p_gc = &g_player; p_gc != NULL; p_gc = p_gc->next) {
+      PrintCombatStatus(p_gc);
     }
     if (g_player.summonedCreature != NULL) {
       PrintCombatStatus(g_player.summonedCreature);
@@ -535,19 +535,19 @@ int Combat(void) {
 Description: Prints some basic, combat-relevant information about a given game
              character.
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: None.
 ******************************************************************************/
-void PrintCombatStatus(game_character_t *pGC) {
-  if (pGC == NULL) {
+void PrintCombatStatus(game_character_t *p_gc) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return;
   }
 
-  printf("%s (%d/%d", pGC->name, pGC->currentHP, pGC->maxHP);
+  printf("%s (%d/%d", p_gc->name, p_gc->currentHP, p_gc->maxHP);
   // Code for printing status will go here.
   printf(")\n");
 }
@@ -822,30 +822,30 @@ int Attack(game_character_t *attacker, game_character_t *defender) {
 Description: Determines whether a given NPC will fight the player if the player
              is openly hostile to another NPC in the area.
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: true or false.
 ******************************************************************************/
-bool WillingToFight(game_character_t *pGC) {
-  if (pGC->type == SOLDIER || pGC->type == KNIGHT || pGC->type == WIZARD ||
-      pGC->type == INNKEEPER || pGC->type == FISHERMAN || pGC->type == SAILOR ||
-      pGC->type == FARMER || pGC->type == ILLARUM_PRIEST ||
-      pGC->type == ILLARUM_HIGH_PRIEST || pGC->type == ARCHWIZARD_OF_ELEMENTS ||
-      pGC->type == COURT_WIZARD || pGC->type == WIZARD_OF_ELEMENTS ||
-      pGC->type == WIZARD_OF_MIND || pGC->type == ARCHWIZARD_OF_MIND ||
-      pGC->type == VENTARRIS_PRIEST || pGC->type == BARBARIAN_WARRIOR ||
-      pGC->type == VENTARRIS_HIGH_PRIEST || pGC->type == BARBARIAN ||
-      pGC->type == BARBARIAN_SHAMAN || pGC->type == BARBARIAN_CHIEFTAIN ||
-      pGC->type == ELF || pGC->type == DWARF_MERCHANT || pGC->type == DWARF_PRIEST ||
-      pGC->type == ELF_LOREMASTER || pGC->type == DWARF || pGC->type == DWARF_KING ||
-      pGC->type == DWARF_MINER || pGC->type == DWARF_GUARDIAN ||
-      pGC->type == DWARF_LOREMASTER || pGC->type == DWARF_HIGH_PRIEST ||
-      pGC->type == GNOME || pGC->type == GNOME_MINER || pGC->type == DRUID ||
-      pGC->type == ARCHDRUID || pGC->type == MERFOLK_SOLDIER ||
-      pGC->type == MERFOLK_PRIESTESS || pGC->type == MERFOLK_HIGH_PRIESTESS ||
-      pGC->type == MERFOLK_QUEEN || pGC->type == VENTARRIS_KING ||
-      pGC->type == ILLARUM_KING || pGC->type == LICH || pGC->type == NECROMANCER ||
-      pGC->type == ARCHNECROMANCER || pGC->type == SKELETAL_KNIGHT) {
+bool WillingToFight(game_character_t *p_gc) {
+  if (p_gc->type == SOLDIER || p_gc->type == KNIGHT || p_gc->type == WIZARD ||
+      p_gc->type == INNKEEPER || p_gc->type == FISHERMAN || p_gc->type == SAILOR ||
+      p_gc->type == FARMER || p_gc->type == ILLARUM_PRIEST ||
+      p_gc->type == ILLARUM_HIGH_PRIEST || p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
+      p_gc->type == COURT_WIZARD || p_gc->type == WIZARD_OF_ELEMENTS ||
+      p_gc->type == WIZARD_OF_MIND || p_gc->type == ARCHWIZARD_OF_MIND ||
+      p_gc->type == VENTARRIS_PRIEST || p_gc->type == BARBARIAN_WARRIOR ||
+      p_gc->type == VENTARRIS_HIGH_PRIEST || p_gc->type == BARBARIAN ||
+      p_gc->type == BARBARIAN_SHAMAN || p_gc->type == BARBARIAN_CHIEFTAIN ||
+      p_gc->type == ELF || p_gc->type == DWARF_MERCHANT || p_gc->type == DWARF_PRIEST ||
+      p_gc->type == ELF_LOREMASTER || p_gc->type == DWARF || p_gc->type == DWARF_KING ||
+      p_gc->type == DWARF_MINER || p_gc->type == DWARF_GUARDIAN ||
+      p_gc->type == DWARF_LOREMASTER || p_gc->type == DWARF_HIGH_PRIEST ||
+      p_gc->type == GNOME || p_gc->type == GNOME_MINER || p_gc->type == DRUID ||
+      p_gc->type == ARCHDRUID || p_gc->type == MERFOLK_SOLDIER ||
+      p_gc->type == MERFOLK_PRIESTESS || p_gc->type == MERFOLK_HIGH_PRIESTESS ||
+      p_gc->type == MERFOLK_QUEEN || p_gc->type == VENTARRIS_KING ||
+      p_gc->type == ILLARUM_KING || p_gc->type == LICH || p_gc->type == NECROMANCER ||
+      p_gc->type == ARCHNECROMANCER || p_gc->type == SKELETAL_KNIGHT) {
     return true;
   }
 
@@ -857,38 +857,38 @@ bool WillingToFight(game_character_t *pGC) {
 
 Description: Determines whether a given NPC will flee when losing a fight.
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: true or false.
 ******************************************************************************/
-bool WillingToFlee(game_character_t *pGC) {
-  return pGC->type == PEASANT ||
-         pGC->type == SOLDIER ||
-         pGC->type == WIZARD ||
-         pGC->type == INNKEEPER ||
-         pGC->type == FISHERMAN ||
-         pGC->type == SAILOR ||
-         pGC->type == FARMER ||
-         pGC->type == ILLARUM_PRIEST ||
-         pGC->type == ILLARUM_HIGH_PRIEST ||
-         pGC->type == ARCHWIZARD_OF_ELEMENTS ||
-         pGC->type == COURT_WIZARD ||
-         pGC->type == WIZARD_OF_ELEMENTS ||
-         pGC->type == WIZARD_OF_MIND ||
-         pGC->type == ARCHWIZARD_OF_MIND ||
-         pGC->type == VENTARRIS_PRIEST ||
-         pGC->type == VENTARRIS_HIGH_PRIEST ||
-         pGC->type == ELF ||
-         pGC->type == DWARF_MERCHANT ||
-         pGC->type == DWARF_PRIEST ||
-         pGC->type == ELF_LOREMASTER ||
-         pGC->type == GNOME ||
-         pGC->type == GNOME_MINER ||
-         pGC->type == DRUID ||
-         pGC->type == ARCHDRUID ||
-         pGC->type == VENTARRIS_KING ||
-         pGC->type == NECROMANCER ||
-         pGC->type == ARCHNECROMANCER;
+bool WillingToFlee(game_character_t *p_gc) {
+  return p_gc->type == PEASANT ||
+         p_gc->type == SOLDIER ||
+         p_gc->type == WIZARD ||
+         p_gc->type == INNKEEPER ||
+         p_gc->type == FISHERMAN ||
+         p_gc->type == SAILOR ||
+         p_gc->type == FARMER ||
+         p_gc->type == ILLARUM_PRIEST ||
+         p_gc->type == ILLARUM_HIGH_PRIEST ||
+         p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
+         p_gc->type == COURT_WIZARD ||
+         p_gc->type == WIZARD_OF_ELEMENTS ||
+         p_gc->type == WIZARD_OF_MIND ||
+         p_gc->type == ARCHWIZARD_OF_MIND ||
+         p_gc->type == VENTARRIS_PRIEST ||
+         p_gc->type == VENTARRIS_HIGH_PRIEST ||
+         p_gc->type == ELF ||
+         p_gc->type == DWARF_MERCHANT ||
+         p_gc->type == DWARF_PRIEST ||
+         p_gc->type == ELF_LOREMASTER ||
+         p_gc->type == GNOME ||
+         p_gc->type == GNOME_MINER ||
+         p_gc->type == DRUID ||
+         p_gc->type == ARCHDRUID ||
+         p_gc->type == VENTARRIS_KING ||
+         p_gc->type == NECROMANCER ||
+         p_gc->type == ARCHNECROMANCER;
 }
 
 /******************************************************************************
@@ -897,29 +897,29 @@ bool WillingToFlee(game_character_t *pGC) {
 Description: Determines whether a given NPC will assist allies during combat
              (by healing them, for example).
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: true or false.
 ******************************************************************************/
-bool WillingToHelp(game_character_t *pGC) {
-  if (pGC->type == SOLDIER || pGC->type == KNIGHT || pGC->type == WIZARD ||
-      pGC->type == INNKEEPER || pGC->type == FISHERMAN || pGC->type == SAILOR ||
-      pGC->type == FARMER || pGC->type == ILLARUM_PRIEST ||
-      pGC->type == ILLARUM_HIGH_PRIEST || pGC->type == ARCHWIZARD_OF_ELEMENTS ||
-      pGC->type == COURT_WIZARD || pGC->type == WIZARD_OF_ELEMENTS ||
-      pGC->type == WIZARD_OF_MIND || pGC->type == ARCHWIZARD_OF_MIND ||
-      pGC->type == VENTARRIS_PRIEST || pGC->type == BARBARIAN_WARRIOR ||
-      pGC->type == VENTARRIS_HIGH_PRIEST || pGC->type == BARBARIAN ||
-      pGC->type == BARBARIAN_SHAMAN || pGC->type == BARBARIAN_CHIEFTAIN ||
-      pGC->type == ELF || pGC->type == DWARF_MERCHANT || pGC->type == DWARF_PRIEST ||
-      pGC->type == ELF_LOREMASTER || pGC->type == DWARF || pGC->type == DWARF_KING ||
-      pGC->type == DWARF_MINER || pGC->type == DWARF_GUARDIAN ||
-      pGC->type == DWARF_LOREMASTER || pGC->type == DWARF_HIGH_PRIEST ||
-      pGC->type == GNOME || pGC->type == GNOME_MINER || pGC->type == DRUID ||
-      pGC->type == ARCHDRUID || pGC->type == MERFOLK_SOLDIER ||
-      pGC->type == MERFOLK_PRIESTESS || pGC->type == MERFOLK_HIGH_PRIESTESS ||
-      pGC->type == MERFOLK_QUEEN || pGC->type == VENTARRIS_KING ||
-      pGC->type == ILLARUM_KING) {
+bool WillingToHelp(game_character_t *p_gc) {
+  if (p_gc->type == SOLDIER || p_gc->type == KNIGHT || p_gc->type == WIZARD ||
+      p_gc->type == INNKEEPER || p_gc->type == FISHERMAN || p_gc->type == SAILOR ||
+      p_gc->type == FARMER || p_gc->type == ILLARUM_PRIEST ||
+      p_gc->type == ILLARUM_HIGH_PRIEST || p_gc->type == ARCHWIZARD_OF_ELEMENTS ||
+      p_gc->type == COURT_WIZARD || p_gc->type == WIZARD_OF_ELEMENTS ||
+      p_gc->type == WIZARD_OF_MIND || p_gc->type == ARCHWIZARD_OF_MIND ||
+      p_gc->type == VENTARRIS_PRIEST || p_gc->type == BARBARIAN_WARRIOR ||
+      p_gc->type == VENTARRIS_HIGH_PRIEST || p_gc->type == BARBARIAN ||
+      p_gc->type == BARBARIAN_SHAMAN || p_gc->type == BARBARIAN_CHIEFTAIN ||
+      p_gc->type == ELF || p_gc->type == DWARF_MERCHANT || p_gc->type == DWARF_PRIEST ||
+      p_gc->type == ELF_LOREMASTER || p_gc->type == DWARF || p_gc->type == DWARF_KING ||
+      p_gc->type == DWARF_MINER || p_gc->type == DWARF_GUARDIAN ||
+      p_gc->type == DWARF_LOREMASTER || p_gc->type == DWARF_HIGH_PRIEST ||
+      p_gc->type == GNOME || p_gc->type == GNOME_MINER || p_gc->type == DRUID ||
+      p_gc->type == ARCHDRUID || p_gc->type == MERFOLK_SOLDIER ||
+      p_gc->type == MERFOLK_PRIESTESS || p_gc->type == MERFOLK_HIGH_PRIESTESS ||
+      p_gc->type == MERFOLK_QUEEN || p_gc->type == VENTARRIS_KING ||
+      p_gc->type == ILLARUM_KING) {
     return true;
   }
 

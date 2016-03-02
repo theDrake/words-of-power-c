@@ -521,55 +521,55 @@ int SearchLocation(location_t *location);
 void DescribeSituation(void);
 
 // Function prototypes for "characters.c":
-int InitializeCharacter(game_character_t *pGC, int type,
+int InitializeCharacter(game_character_t *p_gc, int type,
                         location_t *location);
 int AddCompanion(game_character_t *companion);
 int RemoveCompanion(game_character_t *companion);
 int DeleteCompanion(game_character_t *companion);
 game_character_t *AddSummonedCreature(game_character_t *summoner, int type);
 int DeleteCreatureSummonedBy(game_character_t *summoner);
-int DisplayCharacterData(game_character_t *pGC);
-int PrintSoulDescription(game_character_t *pGC);
-bool IsGood(game_character_t *pGC);
-bool IsEvil(game_character_t *pGC);
-bool IsNeutral(game_character_t *pGC);
-int NumberOfLanguagesKnown(game_character_t *pGC);
-int NumberOfWordsKnown(game_character_t *pGC);
-char *GetNameDefinite(game_character_t *pGC);
-char *GetNameIndefinite(game_character_t *pGC);
-char *GetNamePlural(game_character_t *pGC);
+int DisplayCharacterData(game_character_t *p_gc);
+int PrintSoulDescription(game_character_t *p_gc);
+bool IsGood(game_character_t *p_gc);
+bool IsEvil(game_character_t *p_gc);
+bool IsNeutral(game_character_t *p_gc);
+int NumberOfLanguagesKnown(game_character_t *p_gc);
+int NumberOfWordsKnown(game_character_t *p_gc);
+char *GetNameDefinite(game_character_t *p_gc);
+char *GetNameIndefinite(game_character_t *p_gc);
+char *GetNamePlural(game_character_t *p_gc);
 void CheckStatus(void);
 void UpdateVisibleGameCharCounter(void);
 game_character_t *GetTarget(void);
-bool IsTargeted(game_character_t *pGC, game_character_t *targets[]);
-int HealGameCharacter(game_character_t *pGC, int amount);
-int DamageGameCharacter(game_character_t *pGC, int amount);
+bool IsTargeted(game_character_t *p_gc, game_character_t *targets[]);
+int HealGameCharacter(game_character_t *p_gc, int amount);
+int DamageGameCharacter(game_character_t *p_gc, int amount);
 int GainExperience(int amount);
 void LevelUp(void);
 void LearnLanguage(int language);
 void LearnWord(int word);
 
 // Function prototypes for "combat.c":
-int AddEnemy(game_character_t *pGC);
+int AddEnemy(game_character_t *p_gc);
 int AddRandomEnemy(location_t *location);
-int RemoveEnemy(game_character_t *pGC);
-int DeleteEnemy(game_character_t *pGC);
+int RemoveEnemy(game_character_t *p_gc);
+int DeleteEnemy(game_character_t *p_gc);
 int NumberOfEnemies(void);
 int VisibleEnemies(void);
 int Combat(void);
-void PrintCombatStatus(game_character_t *pGC);
+void PrintCombatStatus(game_character_t *p_gc);
 int EnemyAI(int index);
 int AttackMenu(void);
 int Attack(game_character_t *attacker, game_character_t *defender);
-bool WillingToFight(game_character_t *pGC);
-bool WillingToFlee(game_character_t *pGC);
-bool WillingToHelp(game_character_t *pGC);
+bool WillingToFight(game_character_t *p_gc);
+bool WillingToFlee(game_character_t *p_gc);
+bool WillingToHelp(game_character_t *p_gc);
 
 // Function prototypes for "dialogue.c":
 int TalkMenu(void);
-int Dialogue(game_character_t *pGC);
-int LanguageLearningDialogue(game_character_t *pGC);
-int WordLearningDialogue(game_character_t *pGC);
+int Dialogue(game_character_t *p_gc);
+int LanguageLearningDialogue(game_character_t *p_gc);
+int WordLearningDialogue(game_character_t *p_gc);
 double GetPriceModifier(game_character_t *merchant);
 int Transaction(game_character_t *merchant, int price);
 char *LanguageName(int type);
@@ -578,19 +578,19 @@ char *LanguageName(int type);
 int SpellMenu(void);
 int CastSpell(game_character_t *spellcaster, char *spell,
               game_character_t *gcTargets[]);
-int Targeted(game_character_t *pGC, game_character_t *gcTargets[]);
-bool CanCastBeneficialSpells(game_character_t *pGC);
+int Targeted(game_character_t *p_gc, game_character_t *gcTargets[]);
+bool CanCastBeneficialSpells(game_character_t *p_gc);
 int PrintKnownWords(void);
 char *GetWord(int type);
 char *GetWordStartingWith(char firstLetter);
 char *GetWordName(int type);
 int GetWordTypeFromChar(char firstLetter);
-bool IsSpellcaster(game_character_t *pGC);
+bool IsSpellcaster(game_character_t *p_gc);
 
 // Function prototypes for "item.c":
 int ItemMenu(void);
-int UseItem(game_character_t *pGC, int type);
-int PrintInventory(game_character_t *pGC);
+int UseItem(game_character_t *p_gc, int type);
+int PrintInventory(game_character_t *p_gc);
 char *GetItemName(int type);
 char *GetItemNamePlural(int type);
 int GiveGold(game_character_t *giver, game_character_t *receiver, int amount);

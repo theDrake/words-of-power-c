@@ -113,7 +113,7 @@ void PrintStandardOptions(void) {
   int i, iInput, temp;
   char cInput;
   bool repeatOptions;
-  game_character_t *pGC;  // To scan linked lists of game characters.
+  game_character_t *p_gc;  // To scan linked lists of game characters.
 
   do {
     repeatOptions = false;

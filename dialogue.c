@@ -94,17 +94,17 @@ int TalkMenu(void) {
 Description: Presents dialogue text and options when the player interacts with
              a particular NPC.
 
-     Inputs: pGC - A pointer to the game character struct of the NPC the player
+     Inputs: p_gc - A pointer to the game character struct of the NPC the player
                    is speaking with (or, in group dialogue, the main NPC).
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int Dialogue(game_character_t *pGC) {
+int Dialogue(game_character_t *p_gc) {
   int i, iInput;
   bool repeatOptions, canCommunicate;
   char output[LONG_STR_LEN + 1] = "";
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -114,7 +114,7 @@ int Dialogue(game_character_t *pGC) {
     /* Check for language compatibility. */
   canCommunicate = false;
   for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
-    if (g_player.languages[i] == KNOWN && pGC->languages[i] == KNOWN) {
+    if (g_player.languages[i] == KNOWN && p_gc->languages[i] == KNOWN) {
       canCommunicate = true;
       break;
     }
@@ -123,22 +123,22 @@ int Dialogue(game_character_t *pGC) {
     sprintf(output,
             "All your attempts at communication have failed. It appears that "
             "you and %s do not share a common language.",
-            GetNameDefinite(pGC));
+            GetNameDefinite(p_gc));
     PrintString(output);
     FlushInput();
     return SUCCESS; /* Although they can't talk, no error has occurred. */
   }
 
-  pGC->conversations++;
-  if (pGC->type == MERCHANT || pGC->type == DWARF_MERCHANT) {
-    MerchantDialogue(pGC);
+  p_gc->conversations++;
+  if (p_gc->type == MERCHANT || p_gc->type == DWARF_MERCHANT) {
+    MerchantDialogue(p_gc);
   }
-  switch (pGC->type) {
+  switch (p_gc->type) {
     case ARCHWIZARD_OF_ELEMENTS:
-      if (pGC->conversations == 1) {  /* Indicates new game: offer tutorial. */
+      if (p_gc->conversations == 1) {  /* Indicates new game: offer tutorial. */
         sprintf(output,
                 "%s: \"Good morning, %s, and congratulations!\"",
-                AllCaps(pGC->name),
+                AllCaps(p_gc->name),
                 g_player.name);
         PrintString(output);
         FlushInput();
@@ -147,7 +147,7 @@ int Dialogue(game_character_t *pGC) {
                 "through the four elemental Words of Power -- the Words of "
                 "Air, Water, Earth, and Fire -- and demonstrated great "
                 "potential as a mage.\"",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
         PrintString(output);
         FlushInput();
         sprintf(output,
@@ -158,7 +158,7 @@ int Dialogue(game_character_t *pGC) {
                 "discussing the details, however, would you like an "
                 "opportunity to demonstrate your skills once again for the "
                 "newer students?\"\n",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
         g_allegiances[ELEMENTS_GUILD] = GOOD_FRIEND;
         PrintString(output);
         printf("[1] \"Of course!\"  (Enter tutorial.)\n"
@@ -169,7 +169,7 @@ int Dialogue(game_character_t *pGC) {
             sprintf(output,
                     "%s: \"Excellent! Destroy this stuffed dummy with a "
                     "simple, one-Word spell.\"",
-                    AllCaps(pGC->name));
+                    AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
             AddEnemy(AddInhabitant(g_world[g_player.locationID], DUMMY));
@@ -180,7 +180,7 @@ int Dialogue(game_character_t *pGC) {
                     " be harmful to the spellcaster, so be cautious! We will "
                     "heal you if necessary while you are practicing in our "
                     "school, but elsewhere you'll have no such protection.\"",
-                    AllCaps(pGC->name));
+                    AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
             AddEnemy(AddInhabitant(g_world[g_player.locationID], DUMMY));
@@ -189,7 +189,7 @@ int Dialogue(game_character_t *pGC) {
                     "%s: \"Fantastic! It's gratifying to see the progress "
                     "you've made. But now, let us discuss the work I have in "
                     "mind for you...\"",
-                    AllCaps(pGC->name));
+                    AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
             /*while (FindInhabitant(DUMMY) != NULL) {
@@ -205,7 +205,7 @@ int Dialogue(game_character_t *pGC) {
                     "need them for one of my research projects. You may "
                     "encounter wild beasts while snooping around, but you "
                     "should be more than a match for them!\"",
-                    AllCaps(pGC->name));
+                    AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
             g_missions[ELEMENTS1] = OPEN;
@@ -216,7 +216,7 @@ int Dialogue(game_character_t *pGC) {
                 "%s: \"Do you have those mushroom samples I asked for?\"\n"
                 "[1] \"Yes.\"\n"
                 "[2] \"No.\"",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
         PrintString(output);
         GetIntInput(&iInput, 1, 2);
         switch (iInput) {
@@ -225,28 +225,28 @@ int Dialogue(game_character_t *pGC) {
               sprintf(output,
                       "%s: \"Excellent! I knew I could count on you. Here's 20"
                       " gold to compensate you for your time.\"",
-                      AllCaps(pGC->name));
+                      AllCaps(p_gc->name));
               PrintString(output);
               FlushInput();
               g_missions[ELEMENTS1] = COMPLETED;
               g_player.inventory[GLOWING_MUSHROOM] -= 10;
-              GiveGold(pGC, &g_player, 20);
-              pGC->relationship++;
+              GiveGold(p_gc, &g_player, 20);
+              p_gc->relationship++;
               GainExperience(STD_MISSION_EXP);
             } else {
               sprintf(output,
                       "%s: \"No you don't. If this is a joke, it isn't funny. "
                       "Return when you have those ten samples!\"",
-                      AllCaps(pGC->name));
-              if (pGC->relationship > INDIFFERENT) {
-                pGC->relationship--;
+                      AllCaps(p_gc->name));
+              if (p_gc->relationship > INDIFFERENT) {
+                p_gc->relationship--;
               }
             }
             break;
           default:
             sprintf(output,
                     "%s: \"Please collect them for me as soon as possible.\"",
-                    AllCaps(pGC->name));
+                    AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
             break;
@@ -256,7 +256,7 @@ int Dialogue(game_character_t *pGC) {
                 "%s: \"Why haven't you delivered those goods to the druids "
                 "yet, %s? Please hurry or I will not trust you with any more "
                 "errands.\"",
-                AllCaps(pGC->name),
+                AllCaps(p_gc->name),
                 g_player.name);
         PrintString(output);
         FlushInput();
@@ -264,14 +264,14 @@ int Dialogue(game_character_t *pGC) {
         sprintf(output,
                 "%s: \"Thank you for delivering those goods to the druids, %s!"
                 "Our relationship with them is crucial to Illarum's future.\"",
-                AllCaps(pGC->name),
+                AllCaps(p_gc->name),
                 g_player.name);
         PrintString(output);
         FlushInput();
       } else {
         sprintf(output,
                 "%s: \"Welcome back, %s! Tell me of your travels...\"\n",
-                AllCaps(pGC->name),
+                AllCaps(p_gc->name),
                 g_player.name);
         PrintString(output);
         FlushInput();
@@ -283,13 +283,13 @@ int Dialogue(game_character_t *pGC) {
               "[1] \"Nature's blessings upon you as well.\"\n"
               "[2] \"Can you teach me a new language?\"\n"
               "[3] \"Can you teach me a new Word of Power?\"",
-              AllCaps(pGC->name));
+              AllCaps(p_gc->name));
       PrintString(output);
       GetIntInput(&iInput, 1, 3);
       if (iInput == 2) {
-        LanguageLearningDialogue(pGC);
+        LanguageLearningDialogue(p_gc);
       } else if (iInput == 3) {
-        WordLearningDialogue(pGC);
+        WordLearningDialogue(p_gc);
       }
       break;
     case ARCHDRUID:
@@ -299,7 +299,7 @@ int Dialogue(game_character_t *pGC) {
                 " Elements. Do you bear goods from the Archwizard?\"\n"
                 "[1] \"Yes, he asked me to bring this food to you.\"\n"
                 "[2] \"No, I'm afraid I don't.\"",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
         PrintString(output);
         GetIntInput(&iInput, 1, 2);
         switch (iInput) {
@@ -310,19 +310,19 @@ int Dialogue(game_character_t *pGC) {
                         "%s: \"Hm. This is less than we were promised, but we "
                         "will get by. Be sure to thank the Archwizard for me, "
                         "will you?\"",
-                        AllCaps(pGC->name));
+                        AllCaps(p_gc->name));
                 PrintString(output);
                 FlushInput();
-                pGC->inventory[FOOD] += g_player.inventory[FOOD];
+                p_gc->inventory[FOOD] += g_player.inventory[FOOD];
                 g_player.inventory[FOOD] = 0;
               } else {
                 sprintf(output,
                         "%s: \"Wonderful! It is just as we were promised. Be "
                         "sure to thank the Archwizard for me, will you?\"",
-                        AllCaps(pGC->name));
+                        AllCaps(p_gc->name));
                 PrintString(output);
                 FlushInput();
-                pGC->inventory[FOOD] += 5;
+                p_gc->inventory[FOOD] += 5;
                 g_player.inventory[FOOD] -= 5;
               }
               g_missions[ELEMENTS1] = COMPLETED;
@@ -330,7 +330,7 @@ int Dialogue(game_character_t *pGC) {
               printf(output,
                      "%s: \"Yet you bring us no food. Please return once you "
                      "have the promised supplies.\"",
-                     AllCaps(pGC->name));
+                     AllCaps(p_gc->name));
               PrintString(output);
               FlushInput();
             }
@@ -342,7 +342,7 @@ int Dialogue(game_character_t *pGC) {
                     "this year has proven extraordinarily difficult. If you "
                     "get a chance, please remind the Archwizard of our "
                     "predicament.\"",
-                    AllCaps(pGC->name));
+                    AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
             break;
@@ -350,7 +350,7 @@ int Dialogue(game_character_t *pGC) {
       } else {
         sprintf(output,
                 "%s: \"Greetings, friend.\"\n",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
         PrintString(output);
         FlushInput();
       }
@@ -364,7 +364,7 @@ int Dialogue(game_character_t *pGC) {
                   "just fishing and staring at the sea. You wouldn't know it "
                   "to look at him, but he's one of the most powerful wizards "
                   "in the world!\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 2:
           sprintf(output,
@@ -373,7 +373,7 @@ int Dialogue(game_character_t *pGC) {
                   "only is it a known refuge for necromancers and other evil "
                   "wizards, but deep within the swamp lies the dark citadel of"
                   " a powerful lich and his undead minions.\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 3:
           sprintf(output,
@@ -381,14 +381,14 @@ int Dialogue(game_character_t *pGC) {
                   " in the western woodlands. He doesn't usually take kindly "
                   "to strangers, but if you're a friend of the druids he may "
                   "be willing to teach you a thing or two.\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 4:
           sprintf(output,
                   "%s: \"They say a wise and powerful monk has been wandering "
                   "the northern mountains in recent years. I wonder what he's "
                   "doing there...\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 5:
           sprintf(output,
@@ -397,7 +397,7 @@ int Dialogue(game_character_t *pGC) {
                   "folks think he's deaf or mute. I don't know anything about "
                   "that, but I do know this: he's considered by some to be the"
                   " most powerful wizard in the world!\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 6:
           sprintf(output,
@@ -405,13 +405,13 @@ int Dialogue(game_character_t *pGC) {
                   "within the western woods. Don't bother trying to find it, "
                   "though: their magic will prevent you from ever getting "
                   "close!\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 7:
           sprintf(output,
                   "%s: \"I hear the gnomes in the northern mountains are being"
                   " harassed by a dragon.\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 8:
           sprintf(output,
@@ -419,7 +419,7 @@ int Dialogue(game_character_t *pGC) {
                   "in the northern mountains. Their chieftain is said to have "
                   "such a frightening battle cry that orcs and goblins fall "
                   "dead at his feet when they hear it!\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 9:
           sprintf(output,
@@ -428,7 +428,7 @@ int Dialogue(game_character_t *pGC) {
                   "have hidden several rare tomes of arcane knowledge there "
                   "in a secret vault. I bet a wizard like you would love to "
                   "get your hands on some of those books!\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 10:
           sprintf(output,
@@ -436,7 +436,7 @@ int Dialogue(game_character_t *pGC) {
                   "tell tall tales about mermaids and such. They even claim "
                   "the merfolk live in a great city deep within the ocean to "
                   "the east of here. Ha!\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 11:
           sprintf(output,
@@ -445,7 +445,7 @@ int Dialogue(game_character_t *pGC) {
                   " would make for a very benevelont ruler. My advice? Don't "
                   "get involved, or if you do, make sure you're on the winning"
                   " side.\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         case 12:
           sprintf(output,
@@ -454,12 +454,12 @@ int Dialogue(game_character_t *pGC) {
                   "region. But did you know the lich of the southern swamp was"
                   " himself once a king of Ventarris? He also hopes to "
                   "dominate the region and reign once again as king.\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
         default:
           sprintf(output,
                   "%s: \"Sorry, I'm too busy to talk right now.\"",
-                  AllCaps(pGC->name));
+                  AllCaps(p_gc->name));
           break;
       }
       PrintString(output);
@@ -475,15 +475,15 @@ int Dialogue(game_character_t *pGC) {
 
 Description: Presents dialogue and options relevant to learning a language.
 
-     Inputs: pGC - A pointer to the game character the player is speaking with.
+     Inputs: p_gc - A pointer to the game character the player is speaking with.
 
     Outputs: SUCCESS if a language is learned, otherwise FAILURE.
 ******************************************************************************/
-int LanguageLearningDialogue(game_character_t *pGC) {
+int LanguageLearningDialogue(game_character_t *p_gc) {
   int i, iInput, count = 0;  /* Number of languages available to be learned. */
   char output[LONG_STR_LEN + 1] = "";
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -491,12 +491,12 @@ int LanguageLearningDialogue(game_character_t *pGC) {
   }
 
   for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
-    if (pGC->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
+    if (p_gc->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
       count++;
       if (count == 1) {
         sprintf(output,
                 "%s: \"What language do you want to learn?\"",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
       }
       sprintf(output + strlen(output),
               "\n[%d] %s",
@@ -513,11 +513,11 @@ int LanguageLearningDialogue(game_character_t *pGC) {
     GetIntInput(&iInput, 1, count);
     count = 0;
     for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
-      if (pGC->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
+      if (p_gc->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
         count++;
         if (iInput == count) {
-          if (Transaction(pGC,
-                          STD_LANG_FEE * GetPriceModifier(pGC)) == SUCCESS) {
+          if (Transaction(p_gc,
+                          STD_LANG_FEE * GetPriceModifier(p_gc)) == SUCCESS) {
             LearnLanguage(i);
             return SUCCESS;
           } else {
@@ -529,7 +529,7 @@ int LanguageLearningDialogue(game_character_t *pGC) {
   } else {
     sprintf(output,
             "%s: \"You already know all the languages I can teach you.\"",
-            AllCaps(pGC->name));
+            AllCaps(p_gc->name));
     PrintString(output);
     FlushInput();
   }
@@ -543,15 +543,15 @@ int LanguageLearningDialogue(game_character_t *pGC) {
 Description: Presents dialogue and options relevant to learning a Word of
              Power.
 
-     Inputs: pGC - A pointer to the game character the player is speaking with.
+     Inputs: p_gc - A pointer to the game character the player is speaking with.
 
     Outputs: SUCCESS if a Word is learned, otherwise FAILURE.
 ******************************************************************************/
-int WordLearningDialogue(game_character_t *pGC) {
+int WordLearningDialogue(game_character_t *p_gc) {
   int i, iInput, count = 0;  /* Number of Words available to be learned. */
   char output[LONG_STR_LEN + 1] = "";
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -559,13 +559,13 @@ int WordLearningDialogue(game_character_t *pGC) {
   }
 
   for (i = 0; i < NUM_WORD_TYPES; i++) {
-    if (pGC->words[i] == KNOWN && g_player.words[i] != KNOWN) {
+    if (p_gc->words[i] == KNOWN && g_player.words[i] != KNOWN) {
       count++;
       if (count == 1) {
         sprintf(output,
                 "%s: \"I am willing to teach the following Words. Which one "
                 "interests you?\"",
-                AllCaps(pGC->name));
+                AllCaps(p_gc->name));
       }
       sprintf(output + strlen(output),
               "[%d] Word of %s\n",
@@ -582,11 +582,11 @@ int WordLearningDialogue(game_character_t *pGC) {
     GetIntInput(&iInput, 1, count);
     count = 0;
     for (i = 0; i < NUM_WORD_TYPES; i++) {
-      if (pGC->words[i] == KNOWN && g_player.words[i] != KNOWN) {
+      if (p_gc->words[i] == KNOWN && g_player.words[i] != KNOWN) {
         count++;
         if (iInput == count) {
-          if (Transaction(pGC,
-                          STD_WORD_FEE * GetPriceModifier(pGC)) == SUCCESS) {
+          if (Transaction(p_gc,
+                          STD_WORD_FEE * GetPriceModifier(p_gc)) == SUCCESS) {
             LearnWord(i);
             return SUCCESS;
           } else {
@@ -598,7 +598,7 @@ int WordLearningDialogue(game_character_t *pGC) {
   } else {
     sprintf(output,
             "%s: \"You already know all the Words I'm willing to teach you.\"",
-            AllCaps(pGC->name));
+            AllCaps(p_gc->name));
     PrintString(output);
     FlushInput();
   }

@@ -16,1390 +16,1390 @@ Description: Functions governing the creation, initialization, and basic
 Description: Initializes a given game character struct to its default starting
              values.
 
-     Inputs: pGC      - Pointer to the game characer struct to be initialized.
+     Inputs: p_gc      - Pointer to the game characer struct to be initialized.
              type     - Integer representing desired game character type.
              location - The game character's starting location.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeCharacter(game_character_t *pGC, int type,
+int InitializeCharacter(game_character_t *p_gc, int type,
                         location_t *location) {
   int i;
   char cInput;
   bool repeatOptions;
 
   // Default stats, representative of an average adult human:
-  pGC->type = type;
-  strcpy(pGC->name, "");
-  strcpy(pGC->descriptor, "");
-  pGC->unique = false;
-  pGC->maxHP = DEFAULT_HP;
-  pGC->currentHP = DEFAULT_HP;
-  pGC->physicalPower = DEFAULT_PHYSICAL_POWER;
-  pGC->physicalDefense = DEFAULT_PHYSICAL_DEFENSE;
-  pGC->mentalPower = DEFAULT_MENTAL_POWER;
-  pGC->mentalDefense = DEFAULT_MENTAL_DEFENSE;
-  pGC->speed = DEFAULT_SPEED;
-  pGC->soul = NEUTRAL;
-  pGC->level = 1;
-  pGC->experience = DEFAULT_EXP;
-  pGC->knowsPlayer = false;
-  pGC->knownToPlayer = false;
-  pGC->relationship = INDIFFERENT;
-  pGC->conversations = 0;
+  p_gc->type = type;
+  strcpy(p_gc->name, "");
+  strcpy(p_gc->descriptor, "");
+  p_gc->unique = false;
+  p_gc->maxHP = DEFAULT_HP;
+  p_gc->currentHP = DEFAULT_HP;
+  p_gc->physicalPower = DEFAULT_PHYSICAL_POWER;
+  p_gc->physicalDefense = DEFAULT_PHYSICAL_DEFENSE;
+  p_gc->mentalPower = DEFAULT_MENTAL_POWER;
+  p_gc->mentalDefense = DEFAULT_MENTAL_DEFENSE;
+  p_gc->speed = DEFAULT_SPEED;
+  p_gc->soul = NEUTRAL;
+  p_gc->level = 1;
+  p_gc->experience = DEFAULT_EXP;
+  p_gc->knowsPlayer = false;
+  p_gc->knownToPlayer = false;
+  p_gc->relationship = INDIFFERENT;
+  p_gc->conversations = 0;
   for (i = 0; i < NUM_STATUS_TYPES; i++) {
-    pGC->status[i] = false;
+    p_gc->status[i] = false;
   }
-  pGC->gold = 0;
+  p_gc->gold = 0;
   for (i = 0; i < NUM_ITEM_TYPES; i++) {
-    pGC->inventory[i] = 0;
-    pGC->equippedItems[i] = 0;
+    p_gc->inventory[i] = 0;
+    p_gc->equippedItems[i] = 0;
   }
   for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
-    pGC->languages[i] = UNKNOWN;
+    p_gc->languages[i] = UNKNOWN;
   }
   for (i = 0; i < NUM_WORD_TYPES; i++) {
-    pGC->words[i] = UNKNOWN;
+    p_gc->words[i] = UNKNOWN;
   }
-  pGC->locationID = location->type;
-  pGC->summonedCreature = NULL;
-  pGC->next = NULL;
+  p_gc->locationID = location->type;
+  p_gc->summonedCreature = NULL;
+  p_gc->next = NULL;
 
   // Character-specific stats:
-  switch (pGC->type) {
+  switch (p_gc->type) {
     case PLAYER:
-      pGC->unique = true;
-      pGC->experience = 0;
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2;
-      pGC->knowsPlayer = true;
-      pGC->knownToPlayer = true;
-      pGC->relationship = GREAT_FRIEND;
-      pGC->gold = 10;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->inventory[HEALING_POTION] = 3;
-      pGC->locationID = ILLARUM_SCHOOL;
+      p_gc->unique = true;
+      p_gc->experience = 0;
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2;
+      p_gc->knowsPlayer = true;
+      p_gc->knownToPlayer = true;
+      p_gc->relationship = GREAT_FRIEND;
+      p_gc->gold = 10;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->inventory[HEALING_POTION] = 3;
+      p_gc->locationID = ILLARUM_SCHOOL;
       PrintString("You are a human wizard who has been studying at the "
                   "prestigious School of the Elements in the city of Illarum "
                   "for the past five years.\0");
       FlushInput();
       do {
         printf("Choose your name: ");
-        GetStrInput(pGC->name, SHORT_STR_LEN + 1);
-        repeatOptions = strlen(pGC->name) < 1;
+        GetStrInput(p_gc->name, SHORT_STR_LEN + 1);
+        repeatOptions = strlen(p_gc->name) < 1;
       }while (repeatOptions);
       break;
     case ARCHWIZARD_OF_ELEMENTS:
-      strcpy(pGC->name, "Archememnon");
-      strcpy(pGC->descriptor, "archwizard");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->mentalPower *= 10;
-      pGC->mentalDefense *= 10;
-      pGC->soul = EVIL;
-      pGC->relationship = GOOD_FRIEND;
-      pGC->knowsPlayer = true;
-      pGC->knownToPlayer = true;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(100, 200);
+      strcpy(p_gc->name, "Archememnon");
+      strcpy(p_gc->descriptor, "archwizard");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->mentalPower *= 10;
+      p_gc->mentalDefense *= 10;
+      p_gc->soul = EVIL;
+      p_gc->relationship = GOOD_FRIEND;
+      p_gc->knowsPlayer = true;
+      p_gc->knownToPlayer = true;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(100, 200);
       break;
     case WIZARD_OF_ELEMENTS:
-      strcpy(pGC->name, "Wizard of the Elements");
-      strcpy(pGC->descriptor, "wizard");
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2;
-      pGC->relationship = GOOD_FRIEND;
-      pGC->knowsPlayer = true;
-      pGC->knownToPlayer = true;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->level = 2;
-      pGC->experience *= 3;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Wizard of the Elements");
+      strcpy(p_gc->descriptor, "wizard");
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2;
+      p_gc->relationship = GOOD_FRIEND;
+      p_gc->knowsPlayer = true;
+      p_gc->knownToPlayer = true;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->level = 2;
+      p_gc->experience *= 3;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case ILLARUM_PRIEST:
-      strcpy(pGC->name, "Priest");
-      strcpy(pGC->descriptor, "priest");
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 2.5;
-      pGC->soul = EXTREMELY_GOOD;
-      pGC->relationship = FRIEND;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[GESH] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->level = 2;
-      pGC->experience *= 3;
+      strcpy(p_gc->name, "Priest");
+      strcpy(p_gc->descriptor, "priest");
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 2.5;
+      p_gc->soul = EXTREMELY_GOOD;
+      p_gc->relationship = FRIEND;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->level = 2;
+      p_gc->experience *= 3;
       break;
     case ILLARUM_HIGH_PRIEST:
-      strcpy(pGC->name, "Yemmul");
-      strcpy(pGC->descriptor, "high priest");
-      pGC->unique = true;
-      pGC->maxHP *= 2.5;
-      pGC->currentHP *= 2.5;
-      pGC->mentalPower *= 5;
-      pGC->mentalDefense *= 15;
-      pGC->soul = EXTREMELY_GOOD;
-      pGC->relationship = FRIEND;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[GESH] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Yemmul");
+      strcpy(p_gc->descriptor, "high priest");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2.5;
+      p_gc->currentHP *= 2.5;
+      p_gc->mentalPower *= 5;
+      p_gc->mentalDefense *= 15;
+      p_gc->soul = EXTREMELY_GOOD;
+      p_gc->relationship = FRIEND;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case DUMMY:
-      strcpy(pGC->name, "Dummy");
-      strcpy(pGC->descriptor, "stuffed dummy");
-      pGC->maxHP = 1;
-      pGC->currentHP = 1;
-      pGC->physicalPower = 0;
-      pGC->physicalDefense = 1;
-      pGC->mentalPower = 0;
-      pGC->mentalDefense = 0;
-      pGC->experience = 1;
-      pGC->status[INANIMATE] = true;
+      strcpy(p_gc->name, "Dummy");
+      strcpy(p_gc->descriptor, "stuffed dummy");
+      p_gc->maxHP = 1;
+      p_gc->currentHP = 1;
+      p_gc->physicalPower = 0;
+      p_gc->physicalDefense = 1;
+      p_gc->mentalPower = 0;
+      p_gc->mentalDefense = 0;
+      p_gc->experience = 1;
+      p_gc->status[INANIMATE] = true;
       break;
     case HUMAN:
-      strcpy(pGC->name, "Peasant");
-      strcpy(pGC->descriptor, "peasant");
+      strcpy(p_gc->name, "Peasant");
+      strcpy(p_gc->descriptor, "peasant");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->gold = RandomInt(0, 5);
+      p_gc->gold = RandomInt(0, 5);
       break;
     case THIEF:
-      strcpy(pGC->name, "Thief");
-      strcpy(pGC->descriptor, "thief");
+      strcpy(p_gc->name, "Thief");
+      strcpy(p_gc->descriptor, "thief");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->gold = RandomInt(5, 10);
+      p_gc->gold = RandomInt(5, 10);
       break;
     case SOLDIER:
-      strcpy(pGC->name, "Soldier");
-      strcpy(pGC->descriptor, "soldier");
+      strcpy(p_gc->name, "Soldier");
+      strcpy(p_gc->descriptor, "soldier");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->gold = RandomInt(1, 5);
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->gold = RandomInt(1, 5);
       break;
     case MERCHANT:
-      strcpy(pGC->name, "Merchant");
-      strcpy(pGC->descriptor, "merchant");
+      strcpy(p_gc->name, "Merchant");
+      strcpy(p_gc->descriptor, "merchant");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->gold = RandomInt(25, 50);
+      p_gc->gold = RandomInt(25, 50);
       break;
     case INNKEEPER:
-      strcpy(pGC->name, "Innkeeper");
-      strcpy(pGC->descriptor, "innkeeper");
+      strcpy(p_gc->name, "Innkeeper");
+      strcpy(p_gc->descriptor, "innkeeper");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->gold = RandomInt(10, 30);
+      p_gc->gold = RandomInt(10, 30);
       break;
     case ILLARUM_KING:
-      strcpy(pGC->name, "King of Illarum");
-      strcpy(pGC->descriptor, "king");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2;
-      pGC->soul = GOOD;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(100, 500);
+      strcpy(p_gc->name, "King of Illarum");
+      strcpy(p_gc->descriptor, "king");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2;
+      p_gc->soul = GOOD;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(100, 500);
       break;
     case COURT_WIZARD:
-      strcpy(pGC->name, "Court Wizard");
-      strcpy(pGC->descriptor, "wizard");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->mentalPower *= 3;
-      pGC->mentalDefense *= 3;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
+      strcpy(p_gc->name, "Court Wizard");
+      strcpy(p_gc->descriptor, "wizard");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->mentalPower *= 3;
+      p_gc->mentalDefense *= 3;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
       for (i = 0; i < NUM_WORD_TYPES; i++) {
-        pGC->words[i] = KNOWN;
+        p_gc->words[i] = KNOWN;
       }
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(50, 100);
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(50, 100);
       break;
     case NOBLEMAN:
-      strcpy(pGC->name, "Nobleman");
-      strcpy(pGC->descriptor, "nobleman");
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->gold = RandomInt(50, 100);
+      strcpy(p_gc->name, "Nobleman");
+      strcpy(p_gc->descriptor, "nobleman");
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->gold = RandomInt(50, 100);
       break;
     case KNIGHT:
-      strcpy(pGC->name, "Knight");
-      strcpy(pGC->descriptor, "knight");
-      pGC->maxHP *= 3;
-      pGC->currentHP *= 3;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 3;
+      strcpy(p_gc->name, "Knight");
+      strcpy(p_gc->descriptor, "knight");
+      p_gc->maxHP *= 3;
+      p_gc->currentHP *= 3;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 3;
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->level = 10;
-      pGC->experience *= 5;
-      pGC->gold = RandomInt(10, 30);
+      p_gc->level = 10;
+      p_gc->experience *= 5;
+      p_gc->gold = RandomInt(10, 30);
       break;
     case SERVANT:
-      strcpy(pGC->name, "Servant");
-      strcpy(pGC->descriptor, "servant");
+      strcpy(p_gc->name, "Servant");
+      strcpy(p_gc->descriptor, "servant");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
       break;
     case PRISONER:
-      strcpy(pGC->name, "Prisoner");
-      strcpy(pGC->descriptor, "prisoner");
-      pGC->maxHP /= 2;
-      pGC->currentHP /= 2;
-      pGC->physicalPower /= 2;
-      pGC->physicalDefense /= 2;
-      pGC->mentalPower /= 2;
-      pGC->mentalDefense /= 2;
+      strcpy(p_gc->name, "Prisoner");
+      strcpy(p_gc->descriptor, "prisoner");
+      p_gc->maxHP /= 2;
+      p_gc->currentHP /= 2;
+      p_gc->physicalPower /= 2;
+      p_gc->physicalDefense /= 2;
+      p_gc->mentalPower /= 2;
+      p_gc->mentalDefense /= 2;
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->experience /= 2;
+      p_gc->experience /= 2;
       break;
     case SLAVE:
-      strcpy(pGC->name, "Slave");
-      strcpy(pGC->descriptor, "slave");
-      pGC->maxHP /= 1.5;
-      pGC->currentHP /= 1.5;
-      pGC->physicalPower /= 1.5;
-      pGC->physicalDefense /= 1.5;
-      pGC->mentalPower /= 1.5;
-      pGC->mentalDefense /= 1.5;
+      strcpy(p_gc->name, "Slave");
+      strcpy(p_gc->descriptor, "slave");
+      p_gc->maxHP /= 1.5;
+      p_gc->currentHP /= 1.5;
+      p_gc->physicalPower /= 1.5;
+      p_gc->physicalDefense /= 1.5;
+      p_gc->mentalPower /= 1.5;
+      p_gc->mentalDefense /= 1.5;
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->experience /= 1.5;
+      p_gc->experience /= 1.5;
       break;
     case SAILOR:
-      strcpy(pGC->name, "Sailor");
-      strcpy(pGC->descriptor, "sailor");
+      strcpy(p_gc->name, "Sailor");
+      strcpy(p_gc->descriptor, "sailor");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
       break;
     case ARCHWIZARD_OF_MIND:
-      strcpy(pGC->name, "Kaeloss");
-      strcpy(pGC->descriptor, "archwizard");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->mentalPower *= 10;
-      pGC->mentalDefense *= 10;
-      pGC->soul = VERY_EVIL;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(200, 300);
+      strcpy(p_gc->name, "Kaeloss");
+      strcpy(p_gc->descriptor, "archwizard");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->mentalPower *= 10;
+      p_gc->mentalDefense *= 10;
+      p_gc->soul = VERY_EVIL;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(200, 300);
       break;
     case WIZARD_OF_MIND:
-      strcpy(pGC->name, "Wizard of Mind");
-      strcpy(pGC->descriptor, "wizard");
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2;
-      pGC->soul = EVIL;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->level = 2;
-      pGC->experience *= 3;
-      pGC->gold = RandomInt(20, 30);
+      strcpy(p_gc->name, "Wizard of Mind");
+      strcpy(p_gc->descriptor, "wizard");
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2;
+      p_gc->soul = EVIL;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->level = 2;
+      p_gc->experience *= 3;
+      p_gc->gold = RandomInt(20, 30);
       break;
     case VENTARRIS_PRIEST:
-      strcpy(pGC->name, "Priest");
-      strcpy(pGC->descriptor, "priest");
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 2.5;
-      pGC->soul = GOOD;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->level = 2;
-      pGC->experience *= 3;
+      strcpy(p_gc->name, "Priest");
+      strcpy(p_gc->descriptor, "priest");
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 2.5;
+      p_gc->soul = GOOD;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->level = 2;
+      p_gc->experience *= 3;
       break;
     case VENTARRIS_HIGH_PRIEST:
-      strcpy(pGC->name, "Graelmach");
-      strcpy(pGC->descriptor, "high priest");
-      pGC->unique = true;
-      pGC->maxHP *= 2.5;
-      pGC->currentHP *= 2.5;
-      pGC->mentalPower *= 5;
-      pGC->mentalDefense *= 15;
-      pGC->soul = VERY_GOOD;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Graelmach");
+      strcpy(p_gc->descriptor, "high priest");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2.5;
+      p_gc->currentHP *= 2.5;
+      p_gc->mentalPower *= 5;
+      p_gc->mentalDefense *= 15;
+      p_gc->soul = VERY_GOOD;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case VENTARRIS_KING:
-      strcpy(pGC->name, "King Estvann");
-      strcpy(pGC->descriptor, "king");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2;
-      pGC->soul = VERY_EVIL;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(250, 500);
+      strcpy(p_gc->name, "King Estvann");
+      strcpy(p_gc->descriptor, "king");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2;
+      p_gc->soul = VERY_EVIL;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(250, 500);
       break;
     case FARMER:
-      strcpy(pGC->name, "Farmer");
-      strcpy(pGC->descriptor, "farmer");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->soul = GOOD;
+      strcpy(p_gc->name, "Farmer");
+      strcpy(p_gc->descriptor, "farmer");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->soul = GOOD;
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->gold = RandomInt(0, 5);
+      p_gc->gold = RandomInt(0, 5);
       break;
     case FISHERMAN:
-      strcpy(pGC->name, "Fisherman");
-      strcpy(pGC->descriptor, "fisherman");
+      strcpy(p_gc->name, "Fisherman");
+      strcpy(p_gc->descriptor, "fisherman");
       if (InVentarrisTerritory(location)) {
-        pGC->languages[VENTARRI] = KNOWN;
+        p_gc->languages[VENTARRI] = KNOWN;
       } else {
-        pGC->languages[IMPERIAL] = KNOWN;
+        p_gc->languages[IMPERIAL] = KNOWN;
       }
-      pGC->gold = RandomInt(0, 5);
+      p_gc->gold = RandomInt(0, 5);
       break;
     case DRUID:
-      strcpy(pGC->name, "Druid");
-      strcpy(pGC->descriptor, "druid");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2.5;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[GESH] = KNOWN;
-      pGC->languages[ELVISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 3;
+      strcpy(p_gc->name, "Druid");
+      strcpy(p_gc->descriptor, "druid");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2.5;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->languages[ELVISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 3;
       break;
     case ARCHDRUID:
-      strcpy(pGC->name, "Pann");
-      strcpy(pGC->descriptor, "archdruid");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->mentalPower *= 10;
-      pGC->mentalDefense *= 10;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[GESH] = KNOWN;
-      pGC->languages[ELVISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Pann");
+      strcpy(p_gc->descriptor, "archdruid");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->mentalPower *= 10;
+      p_gc->mentalDefense *= 10;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->languages[ELVISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case ELF:
-      strcpy(pGC->name, "Elf");
-      strcpy(pGC->descriptor, "elf");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 3;
-      pGC->mentalDefense *= 3;
-      pGC->soul = GOOD;
-      pGC->languages[ELVISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->experience *= 3.5;
+      strcpy(p_gc->name, "Elf");
+      strcpy(p_gc->descriptor, "elf");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 3;
+      p_gc->mentalDefense *= 3;
+      p_gc->soul = GOOD;
+      p_gc->languages[ELVISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->experience *= 3.5;
       break;
     case ELF_LOREMASTER:
-      strcpy(pGC->name, "Elven Loremaster");
-      strcpy(pGC->descriptor, "elven loremaster");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 5;
-      pGC->mentalDefense *= 5;
-      pGC->soul = GOOD;
-      pGC->languages[ELVISH] = KNOWN;
-      pGC->languages[ANCIENT_ELVISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_BALANCE] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Elven Loremaster");
+      strcpy(p_gc->descriptor, "elven loremaster");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 5;
+      p_gc->mentalDefense *= 5;
+      p_gc->soul = GOOD;
+      p_gc->languages[ELVISH] = KNOWN;
+      p_gc->languages[ANCIENT_ELVISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_BALANCE] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case BARBARIAN:
-      strcpy(pGC->name, "Babarian");
-      strcpy(pGC->descriptor, "barbarian");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->languages[GESH] = KNOWN;
-      pGC->experience *= 1.2;
+      strcpy(p_gc->name, "Babarian");
+      strcpy(p_gc->descriptor, "barbarian");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->experience *= 1.2;
       break;
     case BARBARIAN_WARRIOR:
-      strcpy(pGC->name, "Barbarian Warrior");
-      strcpy(pGC->descriptor, "barbarian warrior");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 3;
-      pGC->languages[GESH] = KNOWN;
-      pGC->level = 8;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Barbarian Warrior");
+      strcpy(p_gc->descriptor, "barbarian warrior");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 3;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->level = 8;
+      p_gc->experience *= 2.5;
       break;
     case BARBARIAN_SHAMAN:
-      strcpy(pGC->name, "Barbarian Shaman");
-      strcpy(pGC->descriptor, "barbarian shaman");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 2;
-      pGC->mentalDefense *= 2;
-      pGC->languages[GESH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 3;
+      strcpy(p_gc->name, "Barbarian Shaman");
+      strcpy(p_gc->descriptor, "barbarian shaman");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 2;
+      p_gc->mentalDefense *= 2;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 3;
       break;
     case BARBARIAN_CHIEFTAIN:
-      strcpy(pGC->name, "Telth");
-      strcpy(pGC->descriptor, "barbarian chieftain");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 5;
-      pGC->physicalDefense *= 5;
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 1.5;
-      pGC->languages[GESH] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Telth");
+      strcpy(p_gc->descriptor, "barbarian chieftain");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 5;
+      p_gc->physicalDefense *= 5;
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 1.5;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case DWARF:
-      strcpy(pGC->name, "Dwarf");
-      strcpy(pGC->descriptor, "dwarf");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->experience *= 1.2;
-      pGC->gold = RandomInt(5, 10);
+      strcpy(p_gc->name, "Dwarf");
+      strcpy(p_gc->descriptor, "dwarf");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->experience *= 1.2;
+      p_gc->gold = RandomInt(5, 10);
       break;
     case DWARF_GUARDIAN:
-      strcpy(pGC->name, "Dwarven Guardian");
-      strcpy(pGC->descriptor, "dwarven guardian");
-      pGC->maxHP *= 3;
-      pGC->currentHP *= 3;
-      pGC->physicalPower *= 4;
-      pGC->physicalDefense *= 4;
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 1.5;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 5;
-      pGC->gold = RandomInt(10, 30);
+      strcpy(p_gc->name, "Dwarven Guardian");
+      strcpy(p_gc->descriptor, "dwarven guardian");
+      p_gc->maxHP *= 3;
+      p_gc->currentHP *= 3;
+      p_gc->physicalPower *= 4;
+      p_gc->physicalDefense *= 4;
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 1.5;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 5;
+      p_gc->gold = RandomInt(10, 30);
       break;
     case DWARF_MERCHANT:
-      strcpy(pGC->name, "Dwarven Merchant");
-      strcpy(pGC->descriptor, "dwarven merchant");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->experience *= 1.2;
-      pGC->gold = RandomInt(50, 100);
+      strcpy(p_gc->name, "Dwarven Merchant");
+      strcpy(p_gc->descriptor, "dwarven merchant");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->experience *= 1.2;
+      p_gc->gold = RandomInt(50, 100);
       break;
     case DWARF_LOREMASTER:
-      strcpy(pGC->name, "Dwarven Loremaster");
-      strcpy(pGC->descriptor, "dwarven loremaster");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 5;
-      pGC->mentalDefense *= 5;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->languages[ANCIENT_DWARVISH] = KNOWN;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_FOCUS] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Dwarven Loremaster");
+      strcpy(p_gc->descriptor, "dwarven loremaster");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 5;
+      p_gc->mentalDefense *= 5;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_FOCUS] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case DWARF_PRIEST:
-      strcpy(pGC->name, "Dwarven Priest");
-      strcpy(pGC->descriptor, "dwarven priest");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 3;
-      pGC->mentalDefense *= 3;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->languages[ANCIENT_DWARVISH] = KNOWN;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_FOCUS] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 3;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Dwarven Priest");
+      strcpy(p_gc->descriptor, "dwarven priest");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 3;
+      p_gc->mentalDefense *= 3;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_FOCUS] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 3;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case DWARF_HIGH_PRIEST:
-      strcpy(pGC->name, "Dwarven High Priest");
-      strcpy(pGC->descriptor, "dwarven high priest");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 5;
-      pGC->mentalDefense *= 5;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->languages[ANCIENT_DWARVISH] = KNOWN;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_FOCUS] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Dwarven High Priest");
+      strcpy(p_gc->descriptor, "dwarven high priest");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 5;
+      p_gc->mentalDefense *= 5;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_FOCUS] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case DWARF_KING:
-      strcpy(pGC->name, "King Beoklast");
-      strcpy(pGC->descriptor, "dwarven king");
-      pGC->maxHP *= 4;
-      pGC->currentHP *= 4;
-      pGC->physicalPower *= 5;
-      pGC->physicalDefense *= 5;
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 2;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->languages[ANCIENT_DWARVISH] = KNOWN;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 12;
-      pGC->gold = RandomInt(500, 1000);
+      strcpy(p_gc->name, "King Beoklast");
+      strcpy(p_gc->descriptor, "dwarven king");
+      p_gc->maxHP *= 4;
+      p_gc->currentHP *= 4;
+      p_gc->physicalPower *= 5;
+      p_gc->physicalDefense *= 5;
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 2;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 12;
+      p_gc->gold = RandomInt(500, 1000);
       break;
     case DWARF_MINER:
-      strcpy(pGC->name, "Dwarven Miner");
-      strcpy(pGC->descriptor, "dwarven miner");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 1.5;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->experience *= 1.5;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Dwarven Miner");
+      strcpy(p_gc->descriptor, "dwarven miner");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 1.5;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->experience *= 1.5;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case DRAGON:
-      strcpy(pGC->name, "Dragon");
-      strcpy(pGC->descriptor, "dragon");
-      pGC->maxHP *= 50;
-      pGC->currentHP *= 50;
-      pGC->physicalPower *= 50;
-      pGC->physicalDefense *= 50;
-      pGC->mentalPower *= 10;
-      pGC->mentalDefense *= 5;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->languages[ANCIENT_DWARVISH] = KNOWN;
-      pGC->languages[ANCIENT_GNOMISH] = KNOWN;
-      pGC->languages[ANCIENT_ELVISH] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->level = 30;
-      pGC->experience *= 100;
+      strcpy(p_gc->name, "Dragon");
+      strcpy(p_gc->descriptor, "dragon");
+      p_gc->maxHP *= 50;
+      p_gc->currentHP *= 50;
+      p_gc->physicalPower *= 50;
+      p_gc->physicalDefense *= 50;
+      p_gc->mentalPower *= 10;
+      p_gc->mentalDefense *= 5;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
+      p_gc->languages[ANCIENT_GNOMISH] = KNOWN;
+      p_gc->languages[ANCIENT_ELVISH] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->level = 30;
+      p_gc->experience *= 100;
       break;
     case GNOME:
-      strcpy(pGC->name, "Gnome");
-      strcpy(pGC->descriptor, "gnome");
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 1.5;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Gnome");
+      strcpy(p_gc->descriptor, "gnome");
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 1.5;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case GNOME_MINER:
-      strcpy(pGC->name, "Gnomish Miner");
-      strcpy(pGC->descriptor, "gnomish miner");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 1.5;
-      pGC->mentalDefense *= 1.5;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->experience *= 1.2;
-      pGC->gold = RandomInt(10, 20);
+      strcpy(p_gc->name, "Gnomish Miner");
+      strcpy(p_gc->descriptor, "gnomish miner");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 1.5;
+      p_gc->mentalDefense *= 1.5;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->experience *= 1.2;
+      p_gc->gold = RandomInt(10, 20);
       break;
     case NECROMANCER:
-      strcpy(pGC->name, "Necromancer");
-      strcpy(pGC->descriptor, "necromancer");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->mentalPower *= 3;
-      pGC->mentalDefense *= 2;
-      pGC->relationship = ENEMY;
-      pGC->soul = EXTREMELY_EVIL;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 3.5;
-      pGC->gold = RandomInt(25, 50);
+      strcpy(p_gc->name, "Necromancer");
+      strcpy(p_gc->descriptor, "necromancer");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->mentalPower *= 3;
+      p_gc->mentalDefense *= 2;
+      p_gc->relationship = ENEMY;
+      p_gc->soul = EXTREMELY_EVIL;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 3.5;
+      p_gc->gold = RandomInt(25, 50);
       break;
     case ARCHNECROMANCER:
-      strcpy(pGC->name, "Kraathmot");
-      strcpy(pGC->descriptor, "archnecromancer");
-      pGC->maxHP *= 3;
-      pGC->currentHP *= 3;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 5;
-      pGC->mentalDefense *= 4;
-      pGC->relationship = ENEMY;
-      pGC->soul = EXTREMELY_EVIL;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
-      pGC->gold = RandomInt(50, 100);
+      strcpy(p_gc->name, "Kraathmot");
+      strcpy(p_gc->descriptor, "archnecromancer");
+      p_gc->maxHP *= 3;
+      p_gc->currentHP *= 3;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 5;
+      p_gc->mentalDefense *= 4;
+      p_gc->relationship = ENEMY;
+      p_gc->soul = EXTREMELY_EVIL;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
+      p_gc->gold = RandomInt(50, 100);
       break;
     case LICH:
-      strcpy(pGC->name, "Velroth");
-      strcpy(pGC->descriptor, "lich");
-      pGC->unique = true;
-      pGC->maxHP *= 5;
-      pGC->currentHP *= 5;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 3;
-      pGC->mentalPower *= 15;
-      pGC->mentalDefense *= 15;
-      pGC->soul = EXTREMELY_EVIL;
-      pGC->relationship = ENEMY;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->level = 30;
-      pGC->experience *= 30;
-      pGC->gold = RandomInt(1000, 2000);
+      strcpy(p_gc->name, "Velroth");
+      strcpy(p_gc->descriptor, "lich");
+      p_gc->unique = true;
+      p_gc->maxHP *= 5;
+      p_gc->currentHP *= 5;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 3;
+      p_gc->mentalPower *= 15;
+      p_gc->mentalDefense *= 15;
+      p_gc->soul = EXTREMELY_EVIL;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->level = 30;
+      p_gc->experience *= 30;
+      p_gc->gold = RandomInt(1000, 2000);
       break;
     case ZOMBIE:
-      strcpy(pGC->name, "Zombie");
-      strcpy(pGC->descriptor, "zombie");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 2;
-      pGC->mentalPower = 0;
-      pGC->mentalDefense = 0;
-      pGC->soul = EVIL;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->experience *= 2;
+      strcpy(p_gc->name, "Zombie");
+      strcpy(p_gc->descriptor, "zombie");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 2;
+      p_gc->mentalPower = 0;
+      p_gc->mentalDefense = 0;
+      p_gc->soul = EVIL;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->experience *= 2;
       break;
     case SKELETAL_KNIGHT:
-      strcpy(pGC->name, "Skeletal Knight");
-      strcpy(pGC->descriptor, "skeletal knight");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower = 0;
-      pGC->mentalDefense = 0;
-      pGC->soul = EVIL;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 5;
+      strcpy(p_gc->name, "Skeletal Knight");
+      strcpy(p_gc->descriptor, "skeletal knight");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower = 0;
+      p_gc->mentalDefense = 0;
+      p_gc->soul = EVIL;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 5;
       break;
     case RAT:
-      strcpy(pGC->name, "Rat");
-      strcpy(pGC->descriptor, "large rat");
-      pGC->maxHP /= 2;
-      pGC->currentHP /= 2;
-      pGC->physicalPower /= 5;
-      pGC->physicalDefense /= 5;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = ENEMY;
-      pGC->experience /= 10;
+      strcpy(p_gc->name, "Rat");
+      strcpy(p_gc->descriptor, "large rat");
+      p_gc->maxHP /= 2;
+      p_gc->currentHP /= 2;
+      p_gc->physicalPower /= 5;
+      p_gc->physicalDefense /= 5;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = ENEMY;
+      p_gc->experience /= 10;
       break;
     case SHARK:
-      strcpy(pGC->name, "Shark");
-      strcpy(pGC->descriptor, "shark");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Shark");
+      strcpy(p_gc->descriptor, "shark");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->experience *= 2.5;
       break;
     case WOLF:
-      strcpy(pGC->name, "Wolf");
-      strcpy(pGC->descriptor, "wolf");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Wolf");
+      strcpy(p_gc->descriptor, "wolf");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->experience *= 2.5;
       break;
     case BEAR:
-      strcpy(pGC->name, "Bear");
-      strcpy(pGC->descriptor, "bear");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Bear");
+      strcpy(p_gc->descriptor, "bear");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->experience *= 2.5;
       break;
     case GOBLIN:
-      strcpy(pGC->name, "Goblin");
-      strcpy(pGC->descriptor, "goblin");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Goblin");
+      strcpy(p_gc->descriptor, "goblin");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->experience *= 2.5;
       break;
     case ORC:
-      strcpy(pGC->name, "Orc");
-      strcpy(pGC->descriptor, "orc");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Orc");
+      strcpy(p_gc->descriptor, "orc");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->experience *= 2.5;
       break;
     case GIANT_SQUID:
-      strcpy(pGC->name, "Giant Squid");
-      strcpy(pGC->descriptor, "giant squid");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower /= 10;
-      pGC->mentalDefense /= 10;
-      pGC->relationship = HOSTILE_ENEMY;
-      pGC->experience *= 2.5;
+      strcpy(p_gc->name, "Giant Squid");
+      strcpy(p_gc->descriptor, "giant squid");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower /= 10;
+      p_gc->mentalDefense /= 10;
+      p_gc->relationship = HOSTILE_ENEMY;
+      p_gc->experience *= 2.5;
       break;
     case MERFOLK:
-      strcpy(pGC->name, "Merfolk");
-      strcpy(pGC->descriptor, "merfolk");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalDefense *= 2;
-      pGC->relationship = ENEMY;
-      pGC->languages[MER] = KNOWN;
-      pGC->experience *= 1.2;
+      strcpy(p_gc->name, "Merfolk");
+      strcpy(p_gc->descriptor, "merfolk");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalDefense *= 2;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[MER] = KNOWN;
+      p_gc->experience *= 1.2;
       break;
     case MERFOLK_SOLDIER:
-      strcpy(pGC->name, "Merman Soldier");
-      strcpy(pGC->descriptor, "merman soldier");
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 3;
-      pGC->mentalDefense *= 3;
-      pGC->level = 2;
-      pGC->relationship = ENEMY;
-      pGC->languages[MER] = KNOWN;
-      pGC->experience *= 2;
+      strcpy(p_gc->name, "Merman Soldier");
+      strcpy(p_gc->descriptor, "merman soldier");
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 3;
+      p_gc->mentalDefense *= 3;
+      p_gc->level = 2;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[MER] = KNOWN;
+      p_gc->experience *= 2;
       break;
     case MERFOLK_HIGH_PRIESTESS:
-      strcpy(pGC->name, "Quaelos");
-      strcpy(pGC->descriptor, "mermaid high priestess");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 12;
-      pGC->mentalDefense *= 12;
-      pGC->relationship = ENEMY;
-      pGC->languages[MER] = KNOWN;
-      pGC->languages[ANCIENT_MER] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_WAVES] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Quaelos");
+      strcpy(p_gc->descriptor, "mermaid high priestess");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 12;
+      p_gc->mentalDefense *= 12;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[MER] = KNOWN;
+      p_gc->languages[ANCIENT_MER] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_WAVES] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case MERFOLK_PRIESTESS:
-      strcpy(pGC->name, "Mermaid Priestess");
-      strcpy(pGC->descriptor, "mermaid priestess");
-      pGC->maxHP *= 1.5;
-      pGC->currentHP *= 1.5;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 3;
-      pGC->mentalDefense *= 3;
-      pGC->relationship = ENEMY;
-      pGC->languages[MER] = KNOWN;
-      pGC->languages[ANCIENT_MER] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_WAVES] = KNOWN;
-      pGC->level = 10;
-      pGC->experience *= 3;
+      strcpy(p_gc->name, "Mermaid Priestess");
+      strcpy(p_gc->descriptor, "mermaid priestess");
+      p_gc->maxHP *= 1.5;
+      p_gc->currentHP *= 1.5;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 3;
+      p_gc->mentalDefense *= 3;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[MER] = KNOWN;
+      p_gc->languages[ANCIENT_MER] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_WAVES] = KNOWN;
+      p_gc->level = 10;
+      p_gc->experience *= 3;
       break;
     case MERFOLK_QUEEN:
-      strcpy(pGC->name, "Queen Serashnul");
-      strcpy(pGC->descriptor, "mermaid queen");
-      pGC->unique = true;
-      pGC->maxHP *= 2;
-      pGC->currentHP *= 2;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 3;
-      pGC->mentalDefense *= 3;
-      pGC->relationship = ENEMY;
-      pGC->languages[MER] = KNOWN;
-      pGC->languages[ANCIENT_MER] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->level = 20;
-      pGC->experience *= 10;
+      strcpy(p_gc->name, "Queen Serashnul");
+      strcpy(p_gc->descriptor, "mermaid queen");
+      p_gc->unique = true;
+      p_gc->maxHP *= 2;
+      p_gc->currentHP *= 2;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 3;
+      p_gc->mentalDefense *= 3;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[MER] = KNOWN;
+      p_gc->languages[ANCIENT_MER] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->level = 20;
+      p_gc->experience *= 10;
       break;
     case THE_DARK_RECLUSE:
-      strcpy(pGC->name, "The Dark Recluse");
-      strcpy(pGC->descriptor, "black-robed wizard");
-      pGC->unique = true;
-      pGC->maxHP *= 4;
-      pGC->currentHP *= 4;
-      pGC->physicalPower *= 1.5;
-      pGC->physicalDefense *= 1.5;
-      pGC->mentalPower *= 15;
-      pGC->mentalDefense *= 15;
-      pGC->soul = VERY_EVIL;
-      pGC->relationship = ENEMY;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->level = 40;
-      pGC->experience *= 40;
+      strcpy(p_gc->name, "The Dark Recluse");
+      strcpy(p_gc->descriptor, "black-robed wizard");
+      p_gc->unique = true;
+      p_gc->maxHP *= 4;
+      p_gc->currentHP *= 4;
+      p_gc->physicalPower *= 1.5;
+      p_gc->physicalDefense *= 1.5;
+      p_gc->mentalPower *= 15;
+      p_gc->mentalDefense *= 15;
+      p_gc->soul = VERY_EVIL;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->level = 40;
+      p_gc->experience *= 40;
       break;
     case THE_HERMIT:
-      strcpy(pGC->name, "The Hermit");
-      strcpy(pGC->descriptor, "old, green-robed man");
-      pGC->unique = true;
-      pGC->maxHP *= 4;
-      pGC->currentHP *= 4;
-      pGC->physicalPower *= 2;
-      pGC->physicalDefense *= 2;
-      pGC->mentalPower *= 15;
-      pGC->mentalDefense *= 15;
-      pGC->relationship = ENEMY;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ELVISH] = KNOWN;
-      pGC->languages[ANCIENT_ELVISH] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_BALANCE] = KNOWN;
-      pGC->words[WORD_OF_TIME] = KNOWN;
-      pGC->level = 40;
-      pGC->experience *= 40;
+      strcpy(p_gc->name, "The Hermit");
+      strcpy(p_gc->descriptor, "old, green-robed man");
+      p_gc->unique = true;
+      p_gc->maxHP *= 4;
+      p_gc->currentHP *= 4;
+      p_gc->physicalPower *= 2;
+      p_gc->physicalDefense *= 2;
+      p_gc->mentalPower *= 15;
+      p_gc->mentalDefense *= 15;
+      p_gc->relationship = ENEMY;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ELVISH] = KNOWN;
+      p_gc->languages[ANCIENT_ELVISH] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_BALANCE] = KNOWN;
+      p_gc->words[WORD_OF_TIME] = KNOWN;
+      p_gc->level = 40;
+      p_gc->experience *= 40;
       break;
     case THE_ANGLER:
-      strcpy(pGC->name, "The Angler");
-      strcpy(pGC->descriptor, "old, blue-robed fisherman");
-      pGC->unique = true;
-      pGC->maxHP *= 3;
-      pGC->currentHP *= 3;
-      pGC->mentalPower *= 15;
-      pGC->mentalDefense *= 15;
-      pGC->soul = GOOD;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->languages[MER] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->level = 40;
-      pGC->experience *= 40;
-      pGC->gold = RandomInt(1, 10);
+      strcpy(p_gc->name, "The Angler");
+      strcpy(p_gc->descriptor, "old, blue-robed fisherman");
+      p_gc->unique = true;
+      p_gc->maxHP *= 3;
+      p_gc->currentHP *= 3;
+      p_gc->mentalPower *= 15;
+      p_gc->mentalDefense *= 15;
+      p_gc->soul = GOOD;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->languages[MER] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->level = 40;
+      p_gc->experience *= 40;
+      p_gc->gold = RandomInt(1, 10);
       break;
     case THE_WANDERING_MONK:
-      strcpy(pGC->name, "The Wandering Monk");
-      strcpy(pGC->descriptor, "red-robed monk");
-      pGC->unique = true;
-      pGC->maxHP *= 4;
-      pGC->currentHP *= 4;
-      pGC->physicalPower *= 3;
-      pGC->physicalDefense *= 3;
-      pGC->mentalPower *= 15;
-      pGC->mentalDefense *= 15;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->languages[GESH] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_VOID] = KNOWN;
-      pGC->level = 40;
-      pGC->experience *= 40;
-      pGC->gold = RandomInt(0, 5);
+      strcpy(p_gc->name, "The Wandering Monk");
+      strcpy(p_gc->descriptor, "red-robed monk");
+      p_gc->unique = true;
+      p_gc->maxHP *= 4;
+      p_gc->currentHP *= 4;
+      p_gc->physicalPower *= 3;
+      p_gc->physicalDefense *= 3;
+      p_gc->mentalPower *= 15;
+      p_gc->mentalDefense *= 15;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->languages[GESH] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_VOID] = KNOWN;
+      p_gc->level = 40;
+      p_gc->experience *= 40;
+      p_gc->gold = RandomInt(0, 5);
       break;
     case THE_SILENT_SAGE:
-      strcpy(pGC->name, "The Silent Sage");
-      strcpy(pGC->descriptor, "old, white-robed man");
-      pGC->unique = true;
-      pGC->maxHP *= 3;
-      pGC->currentHP *= 3;
-      pGC->mentalPower *= 20;
-      pGC->mentalDefense *= 20;
-      pGC->soul = VERY_GOOD;
-      pGC->languages[IMPERIAL] = KNOWN;
-      pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
-      pGC->languages[VENTARRI] = KNOWN;
-      pGC->languages[ANCIENT_VENTARRI] = KNOWN;
-      pGC->languages[ELVISH] = KNOWN;
-      pGC->languages[ANCIENT_ELVISH] = KNOWN;
-      pGC->languages[DWARVISH] = KNOWN;
-      pGC->languages[ANCIENT_DWARVISH] = KNOWN;
-      pGC->languages[GNOMISH] = KNOWN;
-      pGC->languages[ANCIENT_GNOMISH] = KNOWN;
-      pGC->words[WORD_OF_FIRE] = KNOWN;
-      pGC->words[WORD_OF_EARTH] = KNOWN;
-      pGC->words[WORD_OF_WATER] = KNOWN;
-      pGC->words[WORD_OF_AIR] = KNOWN;
-      pGC->words[WORD_OF_BODY] = KNOWN;
-      pGC->words[WORD_OF_MIND] = KNOWN;
-      pGC->words[WORD_OF_FLORA] = KNOWN;
-      pGC->words[WORD_OF_FAUNA] = KNOWN;
-      pGC->words[WORD_OF_LIGHT] = KNOWN;
-      pGC->words[WORD_OF_DARKNESS] = KNOWN;
-      pGC->words[WORD_OF_HEALTH] = KNOWN;
-      pGC->words[WORD_OF_SICKNESS] = KNOWN;
-      pGC->words[WORD_OF_LIFE] = KNOWN;
-      pGC->words[WORD_OF_DEATH] = KNOWN;
-      pGC->words[WORD_OF_GIVING] = KNOWN;
-      pGC->words[WORD_OF_TAKING] = KNOWN;
-      pGC->words[WORD_OF_INCREASE] = KNOWN;
-      pGC->words[WORD_OF_DECREASE] = KNOWN;
-      pGC->words[WORD_OF_HOLINESS] = KNOWN;
-      pGC->words[WORD_OF_EVIL] = KNOWN;
-      pGC->words[WORD_OF_SHIELDING] = KNOWN;
-      pGC->words[WORD_OF_TIME] = KNOWN;
-      pGC->level = 50;
-      pGC->experience *= 50;
-      pGC->gold = RandomInt(1, 10);
+      strcpy(p_gc->name, "The Silent Sage");
+      strcpy(p_gc->descriptor, "old, white-robed man");
+      p_gc->unique = true;
+      p_gc->maxHP *= 3;
+      p_gc->currentHP *= 3;
+      p_gc->mentalPower *= 20;
+      p_gc->mentalDefense *= 20;
+      p_gc->soul = VERY_GOOD;
+      p_gc->languages[IMPERIAL] = KNOWN;
+      p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
+      p_gc->languages[VENTARRI] = KNOWN;
+      p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
+      p_gc->languages[ELVISH] = KNOWN;
+      p_gc->languages[ANCIENT_ELVISH] = KNOWN;
+      p_gc->languages[DWARVISH] = KNOWN;
+      p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
+      p_gc->languages[GNOMISH] = KNOWN;
+      p_gc->languages[ANCIENT_GNOMISH] = KNOWN;
+      p_gc->words[WORD_OF_FIRE] = KNOWN;
+      p_gc->words[WORD_OF_EARTH] = KNOWN;
+      p_gc->words[WORD_OF_WATER] = KNOWN;
+      p_gc->words[WORD_OF_AIR] = KNOWN;
+      p_gc->words[WORD_OF_BODY] = KNOWN;
+      p_gc->words[WORD_OF_MIND] = KNOWN;
+      p_gc->words[WORD_OF_FLORA] = KNOWN;
+      p_gc->words[WORD_OF_FAUNA] = KNOWN;
+      p_gc->words[WORD_OF_LIGHT] = KNOWN;
+      p_gc->words[WORD_OF_DARKNESS] = KNOWN;
+      p_gc->words[WORD_OF_HEALTH] = KNOWN;
+      p_gc->words[WORD_OF_SICKNESS] = KNOWN;
+      p_gc->words[WORD_OF_LIFE] = KNOWN;
+      p_gc->words[WORD_OF_DEATH] = KNOWN;
+      p_gc->words[WORD_OF_GIVING] = KNOWN;
+      p_gc->words[WORD_OF_TAKING] = KNOWN;
+      p_gc->words[WORD_OF_INCREASE] = KNOWN;
+      p_gc->words[WORD_OF_DECREASE] = KNOWN;
+      p_gc->words[WORD_OF_HOLINESS] = KNOWN;
+      p_gc->words[WORD_OF_EVIL] = KNOWN;
+      p_gc->words[WORD_OF_SHIELDING] = KNOWN;
+      p_gc->words[WORD_OF_TIME] = KNOWN;
+      p_gc->level = 50;
+      p_gc->experience *= 50;
+      p_gc->gold = RandomInt(1, 10);
       break;
     default:
 #if DEBUG
@@ -1423,7 +1423,7 @@ Description: Removes a game character from the current location's list of
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int AddCompanion(game_character_t *companion) {
-  game_character_t *pGC1, *pGC2;
+  game_character_t *p_gc1, *p_gc2;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1436,22 +1436,22 @@ int AddCompanion(game_character_t *companion) {
   if (g_player.next == NULL) {
     g_player.next = companion;
   } else {
-    for (pGC1 = g_player.next;
-         pGC1->next != NULL;
-         pGC1 = pGC1->next)
+    for (p_gc1 = g_player.next;
+         p_gc1->next != NULL;
+         p_gc1 = p_gc1->next)
       ;
-    pGC1->next = companion;
+    p_gc1->next = companion;
   }
 
   // Remove "companion" from current location's list of inhabitants:
-  for (pGC1 = g_world[g_player.locationID]->inhabitants;
-       pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next) {
-    if (pGC1 == companion) {
-      if (pGC1->next == NULL) {
-        pGC2->next = NULL;
+  for (p_gc1 = g_world[g_player.locationID]->inhabitants;
+       p_gc1 != NULL;
+       p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
+    if (p_gc1 == companion) {
+      if (p_gc1->next == NULL) {
+        p_gc2->next = NULL;
       } else {
-        pGC2->next = pGC1->next;
+        p_gc2->next = p_gc1->next;
       }
       break;
     }
@@ -1459,7 +1459,7 @@ int AddCompanion(game_character_t *companion) {
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) {  // If true, "companion" wasn't at current location.
+  if (p_gc1 == NULL) {  // If true, "companion" wasn't at current location.
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1480,7 +1480,7 @@ Description: Removes a game character from the player's list of companions and
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int RemoveCompanion(game_character_t *companion) {
-  game_character_t *pGC1, *pGC2;
+  game_character_t *p_gc1, *p_gc2;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1493,22 +1493,22 @@ int RemoveCompanion(game_character_t *companion) {
   if (g_world[g_player.locationID]->inhabitants == NULL) {
     g_world[g_player.locationID]->inhabitants = companion;
   } else {
-    for (pGC1 = g_world[g_player.locationID]->inhabitants;
-         pGC1->next != NULL;
-         pGC1 = pGC1->next)
+    for (p_gc1 = g_world[g_player.locationID]->inhabitants;
+         p_gc1->next != NULL;
+         p_gc1 = p_gc1->next)
       ;
-    pGC1->next = companion;
+    p_gc1->next = companion;
   }
 
   // Remove "companion" from player's list of companions:
-  for (pGC1 = g_player.next;
-       pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next) {
-    if (pGC1 == companion) {
-      if (pGC1->next == NULL) {
-        pGC2->next = NULL;
+  for (p_gc1 = g_player.next;
+       p_gc1 != NULL;
+       p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
+    if (p_gc1 == companion) {
+      if (p_gc1->next == NULL) {
+        p_gc2->next = NULL;
       } else {
-        pGC2->next = pGC1->next;
+        p_gc2->next = p_gc1->next;
       }
       break;
     }
@@ -1516,7 +1516,7 @@ int RemoveCompanion(game_character_t *companion) {
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) {  // If true, "companion" wasn't player's companion.
+  if (p_gc1 == NULL) {  // If true, "companion" wasn't player's companion.
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1537,7 +1537,7 @@ Description: Removes a game character from the player's list of companions and
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int DeleteCompanion(game_character_t *companion) {
-  game_character_t *pGC1, *pGC2;
+  game_character_t *p_gc1, *p_gc2;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1547,19 +1547,19 @@ int DeleteCompanion(game_character_t *companion) {
   }
 
   // Remove "companion" from player's list of companions:
-  for (pGC1 = g_player.next;
-       pGC1 != NULL;
-       pGC2 = pGC1, pGC1 = pGC1->next) {
-    if (pGC1 == companion) {
-      if (pGC1->next == NULL) {
-        pGC2->next = NULL;
+  for (p_gc1 = g_player.next;
+       p_gc1 != NULL;
+       p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
+    if (p_gc1 == companion) {
+      if (p_gc1->next == NULL) {
+        p_gc2->next = NULL;
       } else {
-        pGC2->next = pGC1->next;
+        p_gc2->next = p_gc1->next;
       }
       break;
     }
   }
-  if (pGC1 == NULL) {  // If true, "companion" wasn't player's companion.
+  if (p_gc1 == NULL) {  // If true, "companion" wasn't player's companion.
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1646,43 +1646,43 @@ int DeleteCreatureSummonedBy(game_character_t *summoner) {
 Description: Displays detailed information about a given game character (and
              the game character's summoned creature and/or companions, if any).
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int DisplayCharacterData(game_character_t *pGC) {
-  if (pGC == NULL) {
+int DisplayCharacterData(game_character_t *p_gc) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  printf("Name: %s\n", pGC->name);
-  printf("Level: %d\n", pGC->level);
-  printf("Experience: %d\n", pGC->experience);
-  printf("HP: %d/%d\n", pGC->currentHP, pGC->maxHP);
-  printf("Physical power: %d\n", pGC->physicalPower);
-  printf("Physical defense: %d\n", pGC->physicalDefense);
-  printf("Speed: %d\n", pGC->speed);
-  printf("Mental power: %d\n", pGC->mentalPower);
-  printf("Mental defense: %d\n", pGC->mentalDefense);
+  printf("Name: %s\n", p_gc->name);
+  printf("Level: %d\n", p_gc->level);
+  printf("Experience: %d\n", p_gc->experience);
+  printf("HP: %d/%d\n", p_gc->currentHP, p_gc->maxHP);
+  printf("Physical power: %d\n", p_gc->physicalPower);
+  printf("Physical defense: %d\n", p_gc->physicalDefense);
+  printf("Speed: %d\n", p_gc->speed);
+  printf("Mental power: %d\n", p_gc->mentalPower);
+  printf("Mental defense: %d\n", p_gc->mentalDefense);
   printf("Soul: ");
-  PrintSoulDescription(pGC);
+  PrintSoulDescription(p_gc);
   printf("\n");
-  printf("Languages learned: %d\n", NumberOfLanguagesKnown(pGC));
-  printf("Words of Power acquired: %d\n", NumberOfWordsKnown(pGC));
-  printf("Gold: %d\n", pGC->gold);
-  PrintInventory(pGC);
+  printf("Languages learned: %d\n", NumberOfLanguagesKnown(p_gc));
+  printf("Words of Power acquired: %d\n", NumberOfWordsKnown(p_gc));
+  printf("Gold: %d\n", p_gc->gold);
+  PrintInventory(p_gc);
   printf("\n");
-  //PrintStatus(pGC);
+  //PrintStatus(p_gc);
   printf("\n");
-  if (pGC->summonedCreature != NULL) {
+  if (p_gc->summonedCreature != NULL) {
     printf("Summoned creature: %s (%d/%d, ",
-           pGC->summonedCreature->name,
-           pGC->summonedCreature->currentHP,
-           pGC->summonedCreature->maxHP);
-    //PrintStatus(pGC->summonedCreature);
+           p_gc->summonedCreature->name,
+           p_gc->summonedCreature->currentHP,
+           p_gc->summonedCreature->maxHP);
+    //PrintStatus(p_gc->summonedCreature);
     printf(")\n");
   }
   FlushInput();
@@ -1696,27 +1696,27 @@ int DisplayCharacterData(game_character_t *pGC) {
 Description: Prints one or two words describing the general state of a given
              game character's soul (e.g., "good", "evil", etc.).
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int PrintSoulDescription(game_character_t *pGC) {
-  if (pGC == NULL) {
+int PrintSoulDescription(game_character_t *p_gc) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
-  } else if (pGC->soul <= EXTREMELY_EVIL) {
+  } else if (p_gc->soul <= EXTREMELY_EVIL) {
     printf("Extremely Evil");
-  } else if (pGC->soul <= VERY_EVIL) {
+  } else if (p_gc->soul <= VERY_EVIL) {
     printf("Very Evil");
-  } else if (pGC->soul <= EVIL) {
+  } else if (p_gc->soul <= EVIL) {
     printf("Evil");
-  } else if (pGC->soul >= EXTREMELY_GOOD) {
+  } else if (p_gc->soul >= EXTREMELY_GOOD) {
     printf("Extremely Good");
-  } else if (pGC->soul >= VERY_GOOD) {
+  } else if (p_gc->soul >= VERY_GOOD) {
     printf("Very Good");
-  } else if (pGC->soul >= GOOD) {
+  } else if (p_gc->soul >= GOOD) {
     printf("Good");
   } else {
     printf("Neutral");
@@ -1730,12 +1730,12 @@ int PrintSoulDescription(game_character_t *pGC) {
 
 Description: Returns true if a given game character has a good soul.
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: true or false.
 ******************************************************************************/
-bool IsGood(game_character_t *pGC) {
-  return pGC != NULL && pGC->soul >= GOOD;
+bool IsGood(game_character_t *p_gc) {
+  return p_gc != NULL && p_gc->soul >= GOOD;
 }
 
 /******************************************************************************
@@ -1743,12 +1743,12 @@ bool IsGood(game_character_t *pGC) {
 
 Description: Returns true if a given game character has an evil soul.
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: true or false.
 ******************************************************************************/
-bool IsEvil(game_character_t *pGC) {
-  return pGC != NULL && pGC->soul <= EVIL;
+bool IsEvil(game_character_t *p_gc) {
+  return p_gc != NULL && p_gc->soul <= EVIL;
 }
 
 /******************************************************************************
@@ -1757,12 +1757,12 @@ bool IsEvil(game_character_t *pGC) {
 Description: Returns true if a given game character has a neutral soul (neither
              good nor evil).
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: true or false.
 ******************************************************************************/
-bool IsNeutral(game_character_t *pGC) {
-  return pGC != NULL && pGC->soul > EVIL && pGC->soul < GOOD;
+bool IsNeutral(game_character_t *p_gc) {
+  return p_gc != NULL && p_gc->soul > EVIL && p_gc->soul < GOOD;
 }
 
 /******************************************************************************
@@ -1770,15 +1770,15 @@ bool IsNeutral(game_character_t *pGC) {
 
 Description: Returns the number of languages a given game character knows.
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: Number of languages the game character knows (or -1 if an error is
              encountered).
 ******************************************************************************/
-int NumberOfLanguagesKnown(game_character_t *pGC) {
+int NumberOfLanguagesKnown(game_character_t *p_gc) {
   int i, numLanguages = 0;
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1786,7 +1786,7 @@ int NumberOfLanguagesKnown(game_character_t *pGC) {
   }
 
   for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
-    if (pGC->languages[i] == KNOWN) {
+    if (p_gc->languages[i] == KNOWN) {
       numLanguages++;
     }
   }
@@ -1799,15 +1799,15 @@ int NumberOfLanguagesKnown(game_character_t *pGC) {
 
 Description: Returns the number of Words of Power a given game character knows.
 
-     Inputs: pGC - Game character of interest.
+     Inputs: p_gc - Game character of interest.
 
     Outputs: Number of Words the game character knows (or -1 if an error is
              encountered).
 ******************************************************************************/
-int NumberOfWordsKnown(game_character_t *pGC) {
+int NumberOfWordsKnown(game_character_t *p_gc) {
   int i, numWords = 0;
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1815,7 +1815,7 @@ int NumberOfWordsKnown(game_character_t *pGC) {
   }
 
   for (i = 0; i < NUM_WORD_TYPES; i++) {
-    if (pGC->words[i] == KNOWN) {
+    if (p_gc->words[i] == KNOWN) {
       numWords++;
     }
   }
@@ -1829,26 +1829,26 @@ int NumberOfWordsKnown(game_character_t *pGC) {
 Description: Returns either a name or a generic descriptor preceded by "the"
              for a given game character.
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: The game character's definite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameDefinite(game_character_t *pGC) {
+char *GetNameDefinite(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return NULL;
   }
 
-  if (pGC->unique && pGC->knownToPlayer) {
-    return pGC->name;
+  if (p_gc->unique && p_gc->knownToPlayer) {
+    return p_gc->name;
   }
   strcpy(name, "the ");
-  strcat(name, pGC->descriptor);
+  strcat(name, p_gc->descriptor);
 
   return name;
 }
@@ -1859,38 +1859,38 @@ char *GetNameDefinite(game_character_t *pGC) {
 Description: Returns either a name or a generic descriptor preceded by "a" or
              "an" for a given game character.
 
-     Inputs: pGC - Pointer to the game character of interest.
+     Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: The game character's indefinite name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNameIndefinite(game_character_t *pGC) {
+char *GetNameIndefinite(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return NULL;
   }
 
-  if (pGC->unique && pGC->knownToPlayer) {
-    return pGC->name;
-  } else if (pGC->descriptor[0] == 'a' ||
-             pGC->descriptor[0] == 'e' ||
-             pGC->descriptor[0] == 'i' ||
-             pGC->descriptor[0] == 'o' ||
-             pGC->descriptor[0] == 'u' ||
-             pGC->descriptor[0] == 'A' ||
-             pGC->descriptor[0] == 'E' ||
-             pGC->descriptor[0] == 'I' ||
-             pGC->descriptor[0] == 'O' ||
-             pGC->descriptor[0] == 'U') {
+  if (p_gc->unique && p_gc->knownToPlayer) {
+    return p_gc->name;
+  } else if (p_gc->descriptor[0] == 'a' ||
+             p_gc->descriptor[0] == 'e' ||
+             p_gc->descriptor[0] == 'i' ||
+             p_gc->descriptor[0] == 'o' ||
+             p_gc->descriptor[0] == 'u' ||
+             p_gc->descriptor[0] == 'A' ||
+             p_gc->descriptor[0] == 'E' ||
+             p_gc->descriptor[0] == 'I' ||
+             p_gc->descriptor[0] == 'O' ||
+             p_gc->descriptor[0] == 'U') {
     strcpy(name, "an ");
   } else {
     strcpy(name, "a ");
   }
-  strcat(name, pGC->descriptor);
+  strcat(name, p_gc->descriptor);
 
   return name;
 }
@@ -1901,24 +1901,24 @@ char *GetNameIndefinite(game_character_t *pGC) {
 Description: Returns the plural form of a given game character's generic
              descriptor.
 
-     Inputs: pGC - Pointer to the game character whose name/description is to
+     Inputs: p_gc - Pointer to the game character whose name/description is to
                    be made plural.
 
     Outputs: The game character's plural name/descriptor as a pointer to an
              array of characters.
 ******************************************************************************/
-char *GetNamePlural(game_character_t *pGC) {
+char *GetNamePlural(game_character_t *p_gc) {
   int name_length;
   static char name[SHORT_STR_LEN + 1];
 
-  if (pGC == NULL) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  switch (pGC->type) {
+  switch (p_gc->type) {
     case HUMAN:
       strcpy(name, "common folk");
       break;
@@ -1947,7 +1947,7 @@ char *GetNamePlural(game_character_t *pGC) {
       strcpy(name, "stuffed dummies");
       break;
     default:  // Add 's' to the end of the descriptor.
-      strcpy(name, pGC->descriptor);
+      strcpy(name, p_gc->descriptor);
       name_length = strlen(name);
       if (name_length >= SHORT_STR_LEN - 1) {  // Ensure there's room for 's'.
 #if DEBUG
@@ -2029,7 +2029,7 @@ Description: Updates the game character counter to accurately reflect the
 ******************************************************************************/
 void UpdateVisibleGameCharCounter(void) {
   int i;
-  game_character_t *pGC;
+  game_character_t *p_gc;
 
   for (i = 0; i < NUM_GC_TYPES; i++) {  // Clear the visible GC counter.
     g_num_visible_of_type[i] = 0;
@@ -2042,13 +2042,13 @@ void UpdateVisibleGameCharCounter(void) {
       }
     }
   } else {  // Not in combat mode: count all local inhabitants.
-    for (pGC = g_world[g_player.locationID]->inhabitants;
-         pGC != NULL;
-         pGC = pGC->next) {
-      if (pGC->status[INVISIBLE] == false) {
-        g_num_visible_of_type[pGC->type]++;
-        if (pGC->summonedCreature != NULL) {
-          g_num_visible_of_type[pGC->summonedCreature->type]++;
+    for (p_gc = g_world[g_player.locationID]->inhabitants;
+         p_gc != NULL;
+         p_gc = p_gc->next) {
+      if (p_gc->status[INVISIBLE] == false) {
+        g_num_visible_of_type[p_gc->type]++;
+        if (p_gc->summonedCreature != NULL) {
+          g_num_visible_of_type[p_gc->summonedCreature->type]++;
         }
       }
     }
@@ -2077,16 +2077,16 @@ Description: Determines whether a given game character is currently being
              targeted (i.e., being pointed to by an array of pointers to
              targets).
 
-     Inputs: pGC     - Pointer to the game character of interest.
+     Inputs: p_gc     - Pointer to the game character of interest.
              targets - Array of pointers to targeted game characters.
 
-    Outputs: true if "pGC" is being targeted, otherwise false.
+    Outputs: true if "p_gc" is being targeted, otherwise false.
 ******************************************************************************/
-bool IsTargeted(game_character_t *pGC, game_character_t *targets[]) {
+bool IsTargeted(game_character_t *p_gc, game_character_t *targets[]) {
   int i;
 
   for (i = 0; i < MAX_TARGETS; i++) {
-    if (targets[i] == pGC) {
+    if (targets[i] == p_gc) {
       return true;
     }
   }
@@ -2101,14 +2101,14 @@ Description: Causes a given game character to regain a certain number of hit
              points (always at least 1). Will not allow current HP to exceed
              maximum HP.
 
-     Inputs: pGC    - Pointer to the game character to be healed.
+     Inputs: p_gc    - Pointer to the game character to be healed.
              amount - Number of hit points to be recovered. If zero or
                       negative, it will be converted to 1.
 
     Outputs: Number of hit points regained (or -1 if an error is encountered).
 ******************************************************************************/
-int HealGameCharacter(game_character_t *pGC, int amount) {
-  if (pGC == NULL) {
+int HealGameCharacter(game_character_t *p_gc, int amount) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -2118,9 +2118,9 @@ int HealGameCharacter(game_character_t *pGC, int amount) {
   if (amount <= 0) {
     amount = 1;  // At least 1 HP should be restored.
   }
-  pGC->currentHP += amount;
-  if (pGC->currentHP > pGC->maxHP) {
-    pGC->currentHP = pGC->maxHP;
+  p_gc->currentHP += amount;
+  if (p_gc->currentHP > p_gc->maxHP) {
+    p_gc->currentHP = p_gc->maxHP;
   }
 
   return amount;
@@ -2132,14 +2132,14 @@ int HealGameCharacter(game_character_t *pGC, int amount) {
 Description: Causes a given game character to lose a certain number of hit
              points.
 
-     Inputs: pGC    - Pointer to the game character to be damaged.
+     Inputs: p_gc    - Pointer to the game character to be damaged.
              amount - Number of hit points to be lost. If zero or negative, it
                       will be converted to 1.
 
     Outputs: Number of hit points lost (or -1 if an error is encountered).
 ******************************************************************************/
-int DamageGameCharacter(game_character_t *pGC, int amount) {
-  if (pGC == NULL) {
+int DamageGameCharacter(game_character_t *p_gc, int amount) {
+  if (p_gc == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -2149,9 +2149,9 @@ int DamageGameCharacter(game_character_t *pGC, int amount) {
   if (amount <= 0) {
     amount = 1;  // At least 1 HP should be lost.
   }
-  pGC->currentHP -= amount;
-  if (pGC->currentHP < 0) {
-    pGC->currentHP = 0;  // Game characters may not have negative HP.
+  p_gc->currentHP -= amount;
+  if (p_gc->currentHP < 0) {
+    p_gc->currentHP = 0;  // Game characters may not have negative HP.
   }
 
   return amount;
