@@ -24,7 +24,7 @@ int SpellMenu(void) {
   int i, iInput, temp, spellLength, numTargets = 0;
   bool repeatOptions;
   char spell[MAX_SPELL_LEN + 1];
-  game_character_t *p_gc, *gcTargets[MAX_TARGETS];
+  game_character_t *p_gc, *targets[MAX_TARGETS];
 
     /* --STATUS CHECK-- */
 
@@ -40,7 +40,7 @@ int SpellMenu(void) {
   printf("Select a target:\n");
   UpdateVisibleGameCharCounter();
   for (i = 0; i < MAX_TARGETS; i++) {
-    gcTargets[i] = NULL;
+    targets[i] = NULL;
   }
   do {
     temp = 0;
@@ -48,17 +48,17 @@ int SpellMenu(void) {
       g_character_type_described[i] = false;
     }
     if (CanCastBeneficialSpells(&g_player)) {
-      if (Targeted(&g_player, gcTargets) == false) {
+      if (Targeted(&g_player, targets) == false) {
         temp++;
         printf("[%d] Myself\n", temp);
       }
       if (g_player.summoned_creature != NULL &&
-          Targeted(g_player.summoned_creature, gcTargets) == false) {
+          IsTargeted(g_player.summoned_creature, targets) == false) {
         temp++;
         printf("[%d] My summoned %s\n", temp, p_gc->descriptor);
       }
       for (p_gc = g_player.next;
-           p_gc != NULL && Targeted(p_gc, gcTargets) == false;
+           p_gc != NULL && IsTargeted(p_gc, targets) == false;
            p_gc = p_gc->next) {
         temp++;
         printf("[%d] My companion, %s\n", GetNameDefinite(p_gc));
@@ -67,7 +67,7 @@ int SpellMenu(void) {
     if (g_player.status[IN_COMBAT]) {  /* Combat mode: display enemies. */
       for (i = 0; i < NumberOfEnemies(); i++) {
         if (g_enemies[i]->status[INVISIBLE] == false &&
-            Targeted(g_enemies[i], gcTargets) == false &&
+            IsTargeted(g_enemies[i], targets) == false &&
             g_character_type_described[g_enemies[i]->type] == false) {
           temp++;
           if (g_num_visible_of_type[g_enemies[i]->type] > 1) {
@@ -85,7 +85,7 @@ int SpellMenu(void) {
            p_gc != NULL;
            p_gc = p_gc->next) {
         if (p_gc->status[INVISIBLE] == false &&
-            Targeted(p_gc, gcTargets) == false &&
+            IsTargeted(p_gc, targets) == false &&
             g_character_type_described[p_gc->type] == false) {
           temp++;
           if (g_num_visible_of_type[p_gc->type] > 1) {
@@ -114,27 +114,27 @@ int SpellMenu(void) {
       g_character_type_described[i] = false;
     }
     if (CanCastBeneficialSpells(&g_player)) {
-      if (Targeted(&g_player, gcTargets) == false) {
+      if (Targeted(&g_player, targets) == false) {
         temp++;
         if (temp == iInput) {
-          gcTargets[numTargets] = &g_player;
+          targets[numTargets] = &g_player;
           goto TargetFound;
         }
       }
       if (g_player.summoned_creature != NULL &&
-          Targeted(g_player.summoned_creature, gcTargets) == false) {
+          IsTargeted(g_player.summoned_creature, targets) == false) {
         temp++;
         if (temp == iInput) {
-          gcTargets[numTargets] = g_player.summoned_creature;
+          targets[numTargets] = g_player.summoned_creature;
           goto TargetFound;
         }
       }
       for (p_gc = g_player.next;
-           p_gc != NULL && Targeted(p_gc, gcTargets) == false;
+           p_gc != NULL && IsTargeted(p_gc, targets) == false;
            p_gc = p_gc->next) {
         temp++;
         if (temp == iInput) {
-          gcTargets[numTargets] = p_gc;
+          targets[numTargets] = p_gc;
           goto TargetFound;
         }
       }
@@ -142,11 +142,11 @@ int SpellMenu(void) {
     if (g_player.status[IN_COMBAT]) {  /* Combat mode: search through enemies. */
       for (i = 0; i < NumberOfEnemies(); i++) {
         if (g_enemies[i]->status[INVISIBLE] == false &&
-            Targeted(g_enemies[i], gcTargets) == false &&
+            IsTargeted(g_enemies[i], targets) == false &&
             g_character_type_described[g_enemies[i]->type] == false) {
           temp++;
           if (temp == iInput) {
-            gcTargets[numTargets] = g_enemies[i];
+            targets[numTargets] = g_enemies[i];
             g_num_visible_of_type[g_enemies[i]->type]--;  /* For counting. */
             goto TargetFound;
           }
@@ -158,12 +158,12 @@ int SpellMenu(void) {
            p_gc != NULL;
            p_gc = p_gc->next) {
         if (p_gc->status[INVISIBLE] == false &&
-            Targeted(p_gc, gcTargets) == false &&
+            IsTargeted(p_gc, targets) == false &&
             g_character_type_described[p_gc->type] == false) {
-          gcTargets[numTargets] = g_enemies[i];
+          targets[numTargets] = g_enemies[i];
           temp++;
           if (temp == iInput) {
-            gcTargets[numTargets] = p_gc;
+            targets[numTargets] = p_gc;
             g_num_visible_of_type[p_gc->type]--;  /* For counting purposes. */
             goto TargetFound;
           }
@@ -227,7 +227,7 @@ int SpellMenu(void) {
 
     /* --CASTING OF SPELL-- */
 
-  CastSpell(&g_player, spell, gcTargets);
+  CastSpell(&g_player, spell, targets);
 
   return SUCCESS;
 }
@@ -241,12 +241,12 @@ Description: Carries out a spell's effects (if any) and reports them to the
      Inputs: spellcaster - Pointer to the caster of the spell.
              spell       - String of letters, each representing a Word of
                            Power.
-             gcTargets   - Array of pointers to targeted game characters.
+             targets     - Array of pointers to targeted game characters.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int CastSpell(game_character_t *spellcaster, char *spell,
-              game_character_t *gcTargets[]) {
+              game_character_t *targets[]) {
   bool light = false, dark = false, holy = false, evil = false, giving = false,
        taking = false, increase = false, decrease = false, life = false,
        death = false, shield = false, counter = false, balance = false;
@@ -255,7 +255,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
   game_character_t *p_gc; /* To search through lists of game characters.      */
 
   for (numTargets = 0;
-       numTargets < MAX_TARGETS && gcTargets[numTargets] != NULL;
+       numTargets < MAX_TARGETS && targets[numTargets] != NULL;
        numTargets++)
     ;
   spellLength = strlen(spell);
@@ -452,20 +452,20 @@ int CastSpell(game_character_t *spellcaster, char *spell,
     FlushInput();
     return SUCCESS;
   }
-  for (i = 0; i < numTargets && gcTargets[i] != NULL; i++) {
+  for (i = 0; i < numTargets && targets[i] != NULL; i++) {
     damage = fireValue + waterValue + earthValue + airValue;
-    damage -= RandomInt(0, gcTargets[i]->physical_defense / 10);
+    damage -= RandomInt(0, targets[i]->physical_defense / 10);
     if (damage <= 0) {
-      printf("%s resists all damage.\n", gcTargets[i]->name);
+      printf("%s resists all damage.\n", targets[i]->name);
     } else {
-      printf("%s takes %d points of damage.\n", gcTargets[i]->name, damage);
-      gcTargets[i]->hp -= damage;
+      printf("%s takes %d points of damage.\n", targets[i]->name, damage);
+      targets[i]->hp -= damage;
       if (spellcaster == &g_player && g_player.status[IN_COMBAT] == false) {
-        if (gcTargets[i]->hp > 0) {
-          gcTargets[i]->relationship = HOSTILE_ENEMY;
-          AddEnemy(gcTargets[i]);
+        if (targets[i]->hp > 0) {
+          targets[i]->relationship = HOSTILE_ENEMY;
+          AddEnemy(targets[i]);
         } else {
-          printf("%s is dead.\n", Capitalize(GetNameDefinite(gcTargets[i])));
+          printf("%s is dead.\n", Capitalize(GetNameDefinite(targets[i])));
           FlushInput();
         }
         for (p_gc = g_world[g_player.locationID]->inhabitants;
@@ -498,30 +498,6 @@ int CastSpell(game_character_t *spellcaster, char *spell,
   }
 
   return SUCCESS;
-}
-
-/******************************************************************************
-   Function: Targeted
-
-Description: Determines whether a given game character is contained within a
-             given array of targeted game characters.
-
-     Inputs: p_gc      - Pointer to the game character of interest.
-             gcTargets - Array of pointers to targeted game characters (assumed
-                         to be of length MAX_TARGETS).
-
-    Outputs: true or false.
-******************************************************************************/
-int Targeted(game_character_t *p_gc, game_character_t *gcTargets[]) {
-  int i;
-
-  for (i = 0; i < MAX_TARGETS && gcTargets[i] != NULL; i++) {
-    if (gcTargets[i] == p_gc) {
-      return true;
-    }
-  }
-
-  return false;
 }
 
 /******************************************************************************
@@ -690,12 +666,12 @@ char *GetWord(int type) {
 Description: Given the first letter of a Word of Power, returns the entire Word
              as a string.
 
-     Inputs: firstLetter - First letter of the desired Word.
+     Inputs: first_letter - First letter of the desired Word.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *GetWordStartingWith(char firstLetter) {
-  return GetWord(GetWordTypeFromChar(firstLetter));
+char *GetWordStartingWith(char first_letter) {
+  return GetWord(GetWordTypeFromChar(first_letter));
 }
 
 /******************************************************************************
@@ -779,19 +755,19 @@ Description: Given the first letter of a Word of Power, returns the ID number
              corresponding to that Word. (Requires that no two Words share the
              same first letter.)
 
-     Inputs: firstLetter - First letter of a Word of Power.
+     Inputs: first_letter - First letter of a Word of Power.
 
     Outputs: ID number for the Word associated with the given letter (or -1 if
              a corresponding ID is not found).
 ******************************************************************************/
-int GetWordTypeFromChar(char firstLetter) {
+int GetWordTypeFromChar(char first_letter) {
   int i;
   char *temp; /* To check the first letter of each Word. */
 
-  firstLetter = toupper(firstLetter);
+  first_letter = toupper(first_letter);
   for (i = 0; i < NUM_WORD_TYPES; i++) {
     temp = GetWord(i);
-    if (temp[0] == firstLetter) {
+    if (temp[0] == first_letter) {
       return i;
     }
   }

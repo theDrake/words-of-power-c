@@ -577,14 +577,13 @@ char *LanguageName(int type);
 // Function prototypes for "magic.c":
 int SpellMenu(void);
 int CastSpell(game_character_t *spellcaster, char *spell,
-              game_character_t *gcTargets[]);
-int Targeted(game_character_t *p_gc, game_character_t *gcTargets[]);
+              game_character_t *targets[]);
 bool CanCastBeneficialSpells(game_character_t *p_gc);
 int PrintKnownWords(void);
 char *GetWord(int type);
-char *GetWordStartingWith(char firstLetter);
+char *GetWordStartingWith(char first_letter);
 char *GetWordName(int type);
-int GetWordTypeFromChar(char firstLetter);
+int GetWordTypeFromChar(char first_letter);
 bool IsSpellcaster(game_character_t *p_gc);
 
 // Function prototypes for "item.c":

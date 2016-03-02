@@ -565,7 +565,7 @@ Description: Handles enemy NPC decision-making during combat.
 int EnemyAI(int index) {
   int i;
   bool actionPerformed = false;
-  game_character_t *gcTargets[MAX_TARGETS] = {NULL};
+  game_character_t *targets[MAX_TARGETS] = {NULL};
 
   if (g_enemies[index] == NULL) {
 #if DEBUG
@@ -581,8 +581,8 @@ int EnemyAI(int index) {
       for (i = 0; i < NumberOfEnemies(); i++) {
         if (g_enemies[i]->hp <= (g_enemies[i]->max_hp / 4) &&
             g_enemies[i]->words[WORD_OF_HEALTH] == KNOWN) {
-          gcTargets[0] = g_enemies[i];
-          CastSpell(g_enemies[index], "Y", gcTargets);  // Healing spell.
+          targets[0] = g_enemies[i];
+          CastSpell(g_enemies[index], "Y", targets);  // Healing spell.
           actionPerformed = true;
         }
       }
@@ -594,29 +594,29 @@ int EnemyAI(int index) {
         switch (RandomInt(1, 4)) {
           case 1:
             if (g_enemies[i]->words[WORD_OF_AIR] == KNOWN) {
-              gcTargets[0] = &g_player;
-              CastSpell(g_enemies[index], "E", gcTargets);  // Wind spell.
+              targets[0] = &g_player;
+              CastSpell(g_enemies[index], "E", targets);  // Wind spell.
               actionPerformed = true;
             }
             break;
           case 2:
             if (g_enemies[i]->words[WORD_OF_WATER] == KNOWN) {
-              gcTargets[0] = &g_player;
-              CastSpell(g_enemies[index], "S", gcTargets);  // Water spell.
+              targets[0] = &g_player;
+              CastSpell(g_enemies[index], "S", targets);  // Water spell.
               actionPerformed = true;
             }
             break;
           case 3:
             if (g_enemies[i]->words[WORD_OF_EARTH] == KNOWN) {
-              gcTargets[0] = &g_player;
-              CastSpell(g_enemies[index], "P", gcTargets);  // Earth spell.
+              targets[0] = &g_player;
+              CastSpell(g_enemies[index], "P", targets);  // Earth spell.
               actionPerformed = true;
             }
             break;
           default:
             if (g_enemies[i]->words[WORD_OF_FIRE] == KNOWN) {
-              gcTargets[0] = &g_player;
-              CastSpell(g_enemies[index], "B", gcTargets);  // Fire spell.
+              targets[0] = &g_player;
+              CastSpell(g_enemies[index], "B", targets);  // Fire spell.
               actionPerformed = true;
             }
             break;

@@ -2085,7 +2085,7 @@ Description: Determines whether a given game character is currently being
 bool IsTargeted(game_character_t *p_gc, game_character_t *targets[]) {
   int i;
 
-  for (i = 0; i < MAX_TARGETS; i++) {
+  for (i = 0; i < MAX_TARGETS && targets[i] != NULL; i++) {
     if (targets[i] == p_gc) {
       return true;
     }
