@@ -16,7 +16,7 @@ Description: Functions governing the creation, initialization, and basic
 Description: Initializes a given game character struct to its default starting
              values.
 
-     Inputs: p_gc      - Pointer to the game characer struct to be initialized.
+     Inputs: p_gc     - Pointer to the game characer struct to be initialized.
              type     - Integer representing desired game character type.
              location - The game character's starting location.
 
@@ -2077,7 +2077,7 @@ Description: Determines whether a given game character is currently being
              targeted (i.e., being pointed to by an array of pointers to
              targets).
 
-     Inputs: p_gc     - Pointer to the game character of interest.
+     Inputs: p_gc    - Pointer to the game character of interest.
              targets - Array of pointers to targeted game characters.
 
     Outputs: true if "p_gc" is being targeted, otherwise false.
@@ -2101,7 +2101,7 @@ Description: Causes a given game character to regain a certain number of hit
              points (always at least 1). Will not allow current HP to exceed
              maximum HP.
 
-     Inputs: p_gc    - Pointer to the game character to be healed.
+     Inputs: p_gc   - Pointer to the game character to be healed.
              amount - Number of hit points to be recovered. If zero or
                       negative, it will be converted to 1.
 
@@ -2132,7 +2132,7 @@ int HealGameCharacter(game_character_t *p_gc, int amount) {
 Description: Causes a given game character to lose a certain number of hit
              points.
 
-     Inputs: p_gc    - Pointer to the game character to be damaged.
+     Inputs: p_gc   - Pointer to the game character to be damaged.
              amount - Number of hit points to be lost. If zero or negative, it
                       will be converted to 1.
 

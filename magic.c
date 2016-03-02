@@ -506,7 +506,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
 Description: Determines whether a given game character is contained within a
              given array of targeted game characters.
 
-     Inputs: p_gc       - Pointer to the game character of interest.
+     Inputs: p_gc      - Pointer to the game character of interest.
              gcTargets - Array of pointers to targeted game characters (assumed
                          to be of length MAX_TARGETS).
 

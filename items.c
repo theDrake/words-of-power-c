@@ -57,7 +57,7 @@ int ItemMenu(void) {
 Description: Executes the use of an item by a given game character (the player
              or an NPC).
 
-     Inputs: p_gc  - Pointer to the user of the item.
+     Inputs: p_gc - Pointer to the user of the item.
              item - Integer representing the type of item to be used.
 
     Outputs: SUCCESS or FAILURE.
