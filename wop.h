@@ -434,26 +434,26 @@ typedef struct GameCharacter {
   char descriptor[SHORT_STR_LEN + 1];  // Brief generic description.
   int level;
   int experience;  // "Total exp." for player, "exp. obtainable" for NPCs.
-  int maxHP;
-  int currentHP;
-  int physicalPower;
-  int physicalDefense;
+  int max_hp;
+  int hp;
+  int physical_power;
+  int physical_defense;
   int speed;
-  int mentalPower;
-  int mentalDefense;
+  int mental_power;
+  int mental_defense;
   int soul;  // Ranges from EXTREMELY_EVIL to EXTREMELY_GOOD.
   enum Knowledge words[NUM_WORD_TYPES];  // Records known Words of Power.
   enum Knowledge languages[NUM_LANGUAGE_TYPES];
   int conversations;  // Number of conversations held with player.
-  bool knowsPlayer;
-  bool knownToPlayer;
+  bool knows_player;
+  bool known_to_player;
   int relationship;  // Relative to player: FRIEND, ENEMY, INDIFFERENT, etc.
   int status[NUM_STATUS_TYPES];
   int gold;
   int inventory[NUM_ITEM_TYPES];  // Includes equipped items.
-  int equippedItems[NUM_ITEM_TYPES];
+  int equipped_items[NUM_ITEM_TYPES];
   int location_type;
-  struct GameCharacter *summonedCreature;  // Only one allowed at a time.
+  struct GameCharacter *summoned_creature;  // Only one allowed at a time.
   struct GameCharacter *next;  // For forming linked lists.
 } game_character_t;
 

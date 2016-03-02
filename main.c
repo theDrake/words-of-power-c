@@ -282,7 +282,7 @@ int DestroyWorld(void) {
       errors++;
     }
   }
-  if (g_player.summonedCreature != NULL) {
+  if (g_player.summoned_creature != NULL) {
     if (DeleteCreatureSummonedBy(&g_player) == FAILURE) {
       errors++;
     }

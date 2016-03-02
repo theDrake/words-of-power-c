@@ -52,8 +52,8 @@ int SpellMenu(void) {
         temp++;
         printf("[%d] Myself\n", temp);
       }
-      if (g_player.summonedCreature != NULL &&
-          Targeted(g_player.summonedCreature, gcTargets) == false) {
+      if (g_player.summoned_creature != NULL &&
+          Targeted(g_player.summoned_creature, gcTargets) == false) {
         temp++;
         printf("[%d] My summoned %s\n", temp, p_gc->descriptor);
       }
@@ -121,11 +121,11 @@ int SpellMenu(void) {
           goto TargetFound;
         }
       }
-      if (g_player.summonedCreature != NULL &&
-          Targeted(g_player.summonedCreature, gcTargets) == false) {
+      if (g_player.summoned_creature != NULL &&
+          Targeted(g_player.summoned_creature, gcTargets) == false) {
         temp++;
         if (temp == iInput) {
-          gcTargets[numTargets] = g_player.summonedCreature;
+          gcTargets[numTargets] = g_player.summoned_creature;
           goto TargetFound;
         }
       }
@@ -278,80 +278,80 @@ int CastSpell(game_character_t *spellcaster, char *spell,
 
   if (strcmp(spell, "B") == 0) {
     printf("Fire bursts forth from your outstretched hand!\n");
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
   } else if (strcmp(spell, "BB") == 0) {
     printf("Fire bursts forth from your outstretched hand!\n");
-    fireValue = RandomInt(spellcaster->mentalPower * 0.25,
-                          spellcaster->mentalPower * 0.5);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.1);
+    fireValue = RandomInt(spellcaster->mental_power * 0.25,
+                          spellcaster->mental_power * 0.5);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "BBB") == 0) {
     printf("Fire bursts forth from your outstretched hand!\n");
-    fireValue = RandomInt(spellcaster->mentalPower * 0.5,
-                          spellcaster->mentalPower * 0.75);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.2);
+    fireValue = RandomInt(spellcaster->mental_power * 0.5,
+                          spellcaster->mental_power * 0.75);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.2);
   } else if (strcmp(spell, "BBBB") == 0) {
     printf("Fire bursts forth from your outstretched hand!\n");
-    fireValue = RandomInt(1, spellcaster->mentalPower);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.3);
+    fireValue = RandomInt(1, spellcaster->mental_power);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.3);
   } else if (strcmp(spell, "S") == 0) {
     printf("An overpowering stream of water bursts forth from your "
            "outstretched hand!\n");
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
   } else if (strcmp(spell, "SS") == 0) {
     printf("An overpowering stream of water bursts forth from your "
            "outstretched hand!\n");
-    waterValue = RandomInt(spellcaster->mentalPower * 0.25,
-                           spellcaster->mentalPower * 0.5);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.1);
+    waterValue = RandomInt(spellcaster->mental_power * 0.25,
+                           spellcaster->mental_power * 0.5);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "SSS") == 0) {
     printf("An overpowering stream of water bursts forth from your "
            "outstretched hand!\n");
-    waterValue = RandomInt(spellcaster->mentalPower * 0.5,
-                           spellcaster->mentalPower * 0.75);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.2);
+    waterValue = RandomInt(spellcaster->mental_power * 0.5,
+                           spellcaster->mental_power * 0.75);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.2);
   } else if (strcmp(spell, "SSSS") == 0) {
     printf("An overpowering stream of water bursts forth from your "
            "outstretched hand!\n");
-    waterValue = RandomInt(1, spellcaster->mentalPower);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.3);
+    waterValue = RandomInt(1, spellcaster->mental_power);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.3);
   } else if (strcmp(spell, "P") == 0) {
     printf("A rain of stones bursts forth from your outstretched hand!\n");
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
   } else if (strcmp(spell, "PP") == 0) {
     printf("A rain of stones bursts forth from your outstretched hand!\n");
-    earthValue = RandomInt(spellcaster->mentalPower * 0.25,
-                           spellcaster->mentalPower * 0.5);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.1);
+    earthValue = RandomInt(spellcaster->mental_power * 0.25,
+                           spellcaster->mental_power * 0.5);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "PPP") == 0) {
     printf("A rain of stones bursts forth from your outstretched hand!\n");
-    earthValue = RandomInt(spellcaster->mentalPower * 0.5,
-                           spellcaster->mentalPower * 0.75);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.2);
+    earthValue = RandomInt(spellcaster->mental_power * 0.5,
+                           spellcaster->mental_power * 0.75);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.2);
   } else if (strcmp(spell, "PPPP") == 0) {
     printf("A rain of stones bursts forth from your outstretched hand!\n");
-    earthValue = RandomInt(8, 16) * spellcaster->mentalPower;
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.3);
+    earthValue = RandomInt(8, 16) * spellcaster->mental_power;
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.3);
   } else if (strcmp(spell, "E") == 0) {
     printf("An overpowering gust of wind bursts forth from your outstretched "
            "hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
   } else if (strcmp(spell, "EE") == 0) {
     printf("An overpowering gust of wind bursts forth from your outstretched "
            "hand!\n");
-    airValue = RandomInt(spellcaster->mentalPower * 0.25,
-                         spellcaster->mentalPower * 0.5);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.1);
+    airValue = RandomInt(spellcaster->mental_power * 0.25,
+                         spellcaster->mental_power * 0.5);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "EEE") == 0) {
     printf("An overpowering gust of wind bursts forth from your outstretched "
            "hand!\n");
-    airValue = RandomInt(spellcaster->mentalPower * 0.5,
-                         spellcaster->mentalPower * 0.75);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.2);
+    airValue = RandomInt(spellcaster->mental_power * 0.5,
+                         spellcaster->mental_power * 0.75);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.2);
   } else if (strcmp(spell, "EEEE") == 0) {
     printf("An overpowering gust of wind bursts forth from your outstretched "
            "hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower);
-    backlashValue = RandomInt(0, spellcaster->mentalPower * 0.3);
+    airValue = RandomInt(1, spellcaster->mental_power);
+    backlashValue = RandomInt(0, spellcaster->mental_power * 0.3);
   } else if (spellLength == 4 &&
              StrContains(spell, 'E') &&
              StrContains(spell, 'S') &&
@@ -359,12 +359,12 @@ int CastSpell(game_character_t *spellcaster, char *spell,
              StrContains(spell, 'B')) {
     printf("A colorful spray of elemental energies bursts forth from your "
            "outstretched hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
     for (i = 0; i < 3; i++) {
-      backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+      backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
     }
   } else if (spellLength == 3 &&
              StrContains(spell, 'S') &&
@@ -372,11 +372,11 @@ int CastSpell(game_character_t *spellcaster, char *spell,
              StrContains(spell, 'B')) {
     printf("A colorful spray of elemental energies bursts forth from your "
            "outstretched hand!\n");
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
     for (i = 0; i < 2; i++) {
-      backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+      backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
     }
   } else if (spellLength == 3 &&
              StrContains(spell, 'E') &&
@@ -384,11 +384,11 @@ int CastSpell(game_character_t *spellcaster, char *spell,
              StrContains(spell, 'B')) {
     printf("A colorful spray of elemental energies bursts forth from your "
            "outstretched hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
     for (i = 0; i < 2; i++) {
-      backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+      backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
     }
   } else if (spellLength == 3 &&
              StrContains(spell, 'E') &&
@@ -396,12 +396,12 @@ int CastSpell(game_character_t *spellcaster, char *spell,
              StrContains(spell, 'P')) {
     printf("A colorful spray of elemental energies bursts forth from your "
            "outstretched hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
     for (i = 0; i < 2; i++)
     {
-      backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+      backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
     }
   } else if (spellLength == 3 &&
              StrContains(spell, 'E') &&
@@ -409,44 +409,44 @@ int CastSpell(game_character_t *spellcaster, char *spell,
              StrContains(spell, 'B')) {
     printf("A colorful spray of elemental energies bursts forth from your "
            "outstretched hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
     for (i = 0; i < 2; i++) {
-      backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+      backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
     }
   } else if (strcmp(spell, "BS") == 0 || strcmp(spell, "SB") == 0) {
     printf("A blast of boiling water sprays forth from your outstretched "
            "hand!\n");
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "ES") == 0 || strcmp(spell, "SE") == 0) {
     printf("Shards of ice burst forth from your outstretched hand!\n");
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "BE") == 0 || strcmp(spell, "EB") == 0) {
     printf("A bolt of lightning shoots forth from your outstretched hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "BP") == 0 || strcmp(spell, "PB") == 0) {
     printf("A stream of lava sprays forth from your outstretched hand!\n");
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    fireValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    fireValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "SP") == 0 || strcmp(spell, "PS") == 0) {
     printf("A stream of acid sprays forth from your outstretched hand!\n");
-    waterValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+    waterValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
   } else if (strcmp(spell, "EP") == 0 || strcmp(spell, "PE") == 0) {
     printf("A debris-filled whirlwind bursts forth from your outstretched "
            "hand!\n");
-    airValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    earthValue = RandomInt(1, spellcaster->mentalPower * 0.25);
-    backlashValue += RandomInt(0, spellcaster->mentalPower * 0.1);
+    airValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    earthValue = RandomInt(1, spellcaster->mental_power * 0.25);
+    backlashValue += RandomInt(0, spellcaster->mental_power * 0.1);
   } else {
     printf("Nothing happens.\n");
     FlushInput();
@@ -454,14 +454,14 @@ int CastSpell(game_character_t *spellcaster, char *spell,
   }
   for (i = 0; i < numTargets && gcTargets[i] != NULL; i++) {
     damage = fireValue + waterValue + earthValue + airValue;
-    damage -= RandomInt(0, gcTargets[i]->physicalDefense / 10);
+    damage -= RandomInt(0, gcTargets[i]->physical_defense / 10);
     if (damage <= 0) {
       printf("%s resists all damage.\n", gcTargets[i]->name);
     } else {
       printf("%s takes %d points of damage.\n", gcTargets[i]->name, damage);
-      gcTargets[i]->currentHP -= damage;
+      gcTargets[i]->hp -= damage;
       if (spellcaster == &g_player && g_player.status[IN_COMBAT] == false) {
-        if (gcTargets[i]->currentHP > 0) {
+        if (gcTargets[i]->hp > 0) {
           gcTargets[i]->relationship = HOSTILE_ENEMY;
           AddEnemy(gcTargets[i]);
         } else {
@@ -479,9 +479,9 @@ int CastSpell(game_character_t *spellcaster, char *spell,
       }
     }
   }
-  backlashValue -= RandomInt(0, spellcaster->mentalDefense / 4);
+  backlashValue -= RandomInt(0, spellcaster->mental_defense / 4);
   if (backlashValue > 0) {
-    spellcaster->currentHP -= backlashValue;
+    spellcaster->hp -= backlashValue;
     printf("%s takes %d points of backlash damage.\n", spellcaster->name,
            fireValue);
   }

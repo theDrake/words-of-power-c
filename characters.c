@@ -33,18 +33,18 @@ int InitializeCharacter(game_character_t *p_gc, int type,
   strcpy(p_gc->name, "");
   strcpy(p_gc->descriptor, "");
   p_gc->unique = false;
-  p_gc->maxHP = DEFAULT_HP;
-  p_gc->currentHP = DEFAULT_HP;
-  p_gc->physicalPower = DEFAULT_PHYSICAL_POWER;
-  p_gc->physicalDefense = DEFAULT_PHYSICAL_DEFENSE;
-  p_gc->mentalPower = DEFAULT_MENTAL_POWER;
-  p_gc->mentalDefense = DEFAULT_MENTAL_DEFENSE;
+  p_gc->max_hp = DEFAULT_HP;
+  p_gc->hp = DEFAULT_HP;
+  p_gc->physical_power = DEFAULT_PHYSICAL_POWER;
+  p_gc->physical_defense = DEFAULT_PHYSICAL_DEFENSE;
+  p_gc->mental_power = DEFAULT_MENTAL_POWER;
+  p_gc->mental_defense = DEFAULT_MENTAL_DEFENSE;
   p_gc->speed = DEFAULT_SPEED;
   p_gc->soul = NEUTRAL;
   p_gc->level = 1;
   p_gc->experience = DEFAULT_EXP;
-  p_gc->knowsPlayer = false;
-  p_gc->knownToPlayer = false;
+  p_gc->knows_player = false;
+  p_gc->known_to_player = false;
   p_gc->relationship = INDIFFERENT;
   p_gc->conversations = 0;
   for (i = 0; i < NUM_STATUS_TYPES; i++) {
@@ -53,7 +53,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
   p_gc->gold = 0;
   for (i = 0; i < NUM_ITEM_TYPES; i++) {
     p_gc->inventory[i] = 0;
-    p_gc->equippedItems[i] = 0;
+    p_gc->equipped_items[i] = 0;
   }
   for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
     p_gc->languages[i] = UNKNOWN;
@@ -62,7 +62,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     p_gc->words[i] = UNKNOWN;
   }
   p_gc->locationID = location->type;
-  p_gc->summonedCreature = NULL;
+  p_gc->summoned_creature = NULL;
   p_gc->next = NULL;
 
   // Character-specific stats:
@@ -70,10 +70,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case PLAYER:
       p_gc->unique = true;
       p_gc->experience = 0;
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2;
-      p_gc->knowsPlayer = true;
-      p_gc->knownToPlayer = true;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2;
+      p_gc->knows_player = true;
+      p_gc->known_to_player = true;
       p_gc->relationship = GREAT_FRIEND;
       p_gc->gold = 10;
       p_gc->languages[IMPERIAL] = KNOWN;
@@ -97,14 +97,14 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Archememnon");
       strcpy(p_gc->descriptor, "archwizard");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->mentalPower *= 10;
-      p_gc->mentalDefense *= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->mental_power *= 10;
+      p_gc->mental_defense *= 10;
       p_gc->soul = EVIL;
       p_gc->relationship = GOOD_FRIEND;
-      p_gc->knowsPlayer = true;
-      p_gc->knownToPlayer = true;
+      p_gc->knows_player = true;
+      p_gc->known_to_player = true;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
       p_gc->languages[VENTARRI] = KNOWN;
@@ -119,11 +119,11 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case WIZARD_OF_ELEMENTS:
       strcpy(p_gc->name, "Wizard of the Elements");
       strcpy(p_gc->descriptor, "wizard");
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2;
       p_gc->relationship = GOOD_FRIEND;
-      p_gc->knowsPlayer = true;
-      p_gc->knownToPlayer = true;
+      p_gc->knows_player = true;
+      p_gc->known_to_player = true;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
       p_gc->languages[VENTARRI] = KNOWN;
@@ -138,8 +138,8 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case ILLARUM_PRIEST:
       strcpy(p_gc->name, "Priest");
       strcpy(p_gc->descriptor, "priest");
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 2.5;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 2.5;
       p_gc->soul = EXTREMELY_GOOD;
       p_gc->relationship = FRIEND;
       p_gc->languages[IMPERIAL] = KNOWN;
@@ -156,10 +156,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Yemmul");
       strcpy(p_gc->descriptor, "high priest");
       p_gc->unique = true;
-      p_gc->maxHP *= 2.5;
-      p_gc->currentHP *= 2.5;
-      p_gc->mentalPower *= 5;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 2.5;
+      p_gc->hp *= 2.5;
+      p_gc->mental_power *= 5;
+      p_gc->mental_defense *= 15;
       p_gc->soul = EXTREMELY_GOOD;
       p_gc->relationship = FRIEND;
       p_gc->languages[IMPERIAL] = KNOWN;
@@ -176,12 +176,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DUMMY:
       strcpy(p_gc->name, "Dummy");
       strcpy(p_gc->descriptor, "stuffed dummy");
-      p_gc->maxHP = 1;
-      p_gc->currentHP = 1;
-      p_gc->physicalPower = 0;
-      p_gc->physicalDefense = 1;
-      p_gc->mentalPower = 0;
-      p_gc->mentalDefense = 0;
+      p_gc->max_hp = 1;
+      p_gc->hp = 1;
+      p_gc->physical_power = 0;
+      p_gc->physical_defense = 1;
+      p_gc->mental_power = 0;
+      p_gc->mental_defense = 0;
       p_gc->experience = 1;
       p_gc->status[INANIMATE] = true;
       break;
@@ -213,8 +213,8 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       } else {
         p_gc->languages[IMPERIAL] = KNOWN;
       }
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
       p_gc->gold = RandomInt(1, 5);
       break;
     case MERCHANT:
@@ -241,12 +241,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "King of Illarum");
       strcpy(p_gc->descriptor, "king");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2;
       p_gc->soul = GOOD;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
       p_gc->languages[VENTARRI] = KNOWN;
@@ -257,10 +257,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case COURT_WIZARD:
       strcpy(p_gc->name, "Court Wizard");
       strcpy(p_gc->descriptor, "wizard");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->mentalPower *= 3;
-      p_gc->mentalDefense *= 3;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->mental_power *= 3;
+      p_gc->mental_defense *= 3;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
       p_gc->languages[VENTARRI] = KNOWN;
@@ -281,10 +281,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case KNIGHT:
       strcpy(p_gc->name, "Knight");
       strcpy(p_gc->descriptor, "knight");
-      p_gc->maxHP *= 3;
-      p_gc->currentHP *= 3;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 3;
+      p_gc->max_hp *= 3;
+      p_gc->hp *= 3;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 3;
       if (InVentarrisTerritory(location)) {
         p_gc->languages[VENTARRI] = KNOWN;
       } else {
@@ -306,12 +306,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case PRISONER:
       strcpy(p_gc->name, "Prisoner");
       strcpy(p_gc->descriptor, "prisoner");
-      p_gc->maxHP /= 2;
-      p_gc->currentHP /= 2;
-      p_gc->physicalPower /= 2;
-      p_gc->physicalDefense /= 2;
-      p_gc->mentalPower /= 2;
-      p_gc->mentalDefense /= 2;
+      p_gc->max_hp /= 2;
+      p_gc->hp /= 2;
+      p_gc->physical_power /= 2;
+      p_gc->physical_defense /= 2;
+      p_gc->mental_power /= 2;
+      p_gc->mental_defense /= 2;
       if (InVentarrisTerritory(location)) {
         p_gc->languages[VENTARRI] = KNOWN;
       } else {
@@ -322,12 +322,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case SLAVE:
       strcpy(p_gc->name, "Slave");
       strcpy(p_gc->descriptor, "slave");
-      p_gc->maxHP /= 1.5;
-      p_gc->currentHP /= 1.5;
-      p_gc->physicalPower /= 1.5;
-      p_gc->physicalDefense /= 1.5;
-      p_gc->mentalPower /= 1.5;
-      p_gc->mentalDefense /= 1.5;
+      p_gc->max_hp /= 1.5;
+      p_gc->hp /= 1.5;
+      p_gc->physical_power /= 1.5;
+      p_gc->physical_defense /= 1.5;
+      p_gc->mental_power /= 1.5;
+      p_gc->mental_defense /= 1.5;
       if (InVentarrisTerritory(location)) {
         p_gc->languages[VENTARRI] = KNOWN;
       } else {
@@ -348,10 +348,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Kaeloss");
       strcpy(p_gc->descriptor, "archwizard");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->mentalPower *= 10;
-      p_gc->mentalDefense *= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->mental_power *= 10;
+      p_gc->mental_defense *= 10;
       p_gc->soul = VERY_EVIL;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -378,8 +378,8 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case WIZARD_OF_MIND:
       strcpy(p_gc->name, "Wizard of Mind");
       strcpy(p_gc->descriptor, "wizard");
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2;
       p_gc->soul = EVIL;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -398,8 +398,8 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case VENTARRIS_PRIEST:
       strcpy(p_gc->name, "Priest");
       strcpy(p_gc->descriptor, "priest");
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 2.5;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 2.5;
       p_gc->soul = GOOD;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -418,10 +418,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Graelmach");
       strcpy(p_gc->descriptor, "high priest");
       p_gc->unique = true;
-      p_gc->maxHP *= 2.5;
-      p_gc->currentHP *= 2.5;
-      p_gc->mentalPower *= 5;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 2.5;
+      p_gc->hp *= 2.5;
+      p_gc->mental_power *= 5;
+      p_gc->mental_defense *= 15;
       p_gc->soul = VERY_GOOD;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -442,12 +442,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "King Estvann");
       strcpy(p_gc->descriptor, "king");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2;
       p_gc->soul = VERY_EVIL;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[VENTARRI] = KNOWN;
@@ -458,8 +458,8 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case FARMER:
       strcpy(p_gc->name, "Farmer");
       strcpy(p_gc->descriptor, "farmer");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
       p_gc->soul = GOOD;
       if (InVentarrisTerritory(location)) {
         p_gc->languages[VENTARRI] = KNOWN;
@@ -481,10 +481,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DRUID:
       strcpy(p_gc->name, "Druid");
       strcpy(p_gc->descriptor, "druid");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2.5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2.5;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[GESH] = KNOWN;
       p_gc->languages[ELVISH] = KNOWN;
@@ -510,10 +510,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Pann");
       strcpy(p_gc->descriptor, "archdruid");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->mentalPower *= 10;
-      p_gc->mentalDefense *= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->mental_power *= 10;
+      p_gc->mental_defense *= 10;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[GESH] = KNOWN;
       p_gc->languages[ELVISH] = KNOWN;
@@ -538,12 +538,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case ELF:
       strcpy(p_gc->name, "Elf");
       strcpy(p_gc->descriptor, "elf");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 3;
-      p_gc->mentalDefense *= 3;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 3;
+      p_gc->mental_defense *= 3;
       p_gc->soul = GOOD;
       p_gc->languages[ELVISH] = KNOWN;
       p_gc->words[WORD_OF_BODY] = KNOWN;
@@ -566,12 +566,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case ELF_LOREMASTER:
       strcpy(p_gc->name, "Elven Loremaster");
       strcpy(p_gc->descriptor, "elven loremaster");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 5;
-      p_gc->mentalDefense *= 5;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 5;
+      p_gc->mental_defense *= 5;
       p_gc->soul = GOOD;
       p_gc->languages[ELVISH] = KNOWN;
       p_gc->languages[ANCIENT_ELVISH] = KNOWN;
@@ -600,20 +600,20 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case BARBARIAN:
       strcpy(p_gc->name, "Babarian");
       strcpy(p_gc->descriptor, "barbarian");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
       p_gc->languages[GESH] = KNOWN;
       p_gc->experience *= 1.2;
       break;
     case BARBARIAN_WARRIOR:
       strcpy(p_gc->name, "Barbarian Warrior");
       strcpy(p_gc->descriptor, "barbarian warrior");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 3;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 3;
       p_gc->languages[GESH] = KNOWN;
       p_gc->level = 8;
       p_gc->experience *= 2.5;
@@ -621,12 +621,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case BARBARIAN_SHAMAN:
       strcpy(p_gc->name, "Barbarian Shaman");
       strcpy(p_gc->descriptor, "barbarian shaman");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 2;
-      p_gc->mentalDefense *= 2;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 2;
+      p_gc->mental_defense *= 2;
       p_gc->languages[GESH] = KNOWN;
       p_gc->words[WORD_OF_BODY] = KNOWN;
       p_gc->words[WORD_OF_FLORA] = KNOWN;
@@ -648,12 +648,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Telth");
       strcpy(p_gc->descriptor, "barbarian chieftain");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 5;
-      p_gc->physicalDefense *= 5;
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 1.5;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 5;
+      p_gc->physical_defense *= 5;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 1.5;
       p_gc->languages[GESH] = KNOWN;
       p_gc->words[WORD_OF_DEATH] = KNOWN;
       p_gc->level = 20;
@@ -662,10 +662,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF:
       strcpy(p_gc->name, "Dwarf");
       strcpy(p_gc->descriptor, "dwarf");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->experience *= 1.2;
       p_gc->gold = RandomInt(5, 10);
@@ -673,12 +673,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_GUARDIAN:
       strcpy(p_gc->name, "Dwarven Guardian");
       strcpy(p_gc->descriptor, "dwarven guardian");
-      p_gc->maxHP *= 3;
-      p_gc->currentHP *= 3;
-      p_gc->physicalPower *= 4;
-      p_gc->physicalDefense *= 4;
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 1.5;
+      p_gc->max_hp *= 3;
+      p_gc->hp *= 3;
+      p_gc->physical_power *= 4;
+      p_gc->physical_defense *= 4;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 1.5;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->level = 10;
       p_gc->experience *= 5;
@@ -687,10 +687,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_MERCHANT:
       strcpy(p_gc->name, "Dwarven Merchant");
       strcpy(p_gc->descriptor, "dwarven merchant");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->experience *= 1.2;
       p_gc->gold = RandomInt(50, 100);
@@ -698,12 +698,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_LOREMASTER:
       strcpy(p_gc->name, "Dwarven Loremaster");
       strcpy(p_gc->descriptor, "dwarven loremaster");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 5;
-      p_gc->mentalDefense *= 5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 5;
+      p_gc->mental_defense *= 5;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
       p_gc->languages[GNOMISH] = KNOWN;
@@ -731,12 +731,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_PRIEST:
       strcpy(p_gc->name, "Dwarven Priest");
       strcpy(p_gc->descriptor, "dwarven priest");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 3;
-      p_gc->mentalDefense *= 3;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 3;
+      p_gc->mental_defense *= 3;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
       p_gc->languages[GNOMISH] = KNOWN;
@@ -764,12 +764,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_HIGH_PRIEST:
       strcpy(p_gc->name, "Dwarven High Priest");
       strcpy(p_gc->descriptor, "dwarven high priest");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 5;
-      p_gc->mentalDefense *= 5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 5;
+      p_gc->mental_defense *= 5;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
       p_gc->languages[GNOMISH] = KNOWN;
@@ -797,12 +797,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_KING:
       strcpy(p_gc->name, "King Beoklast");
       strcpy(p_gc->descriptor, "dwarven king");
-      p_gc->maxHP *= 4;
-      p_gc->currentHP *= 4;
-      p_gc->physicalPower *= 5;
-      p_gc->physicalDefense *= 5;
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 2;
+      p_gc->max_hp *= 4;
+      p_gc->hp *= 4;
+      p_gc->physical_power *= 5;
+      p_gc->physical_defense *= 5;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 2;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
       p_gc->languages[GNOMISH] = KNOWN;
@@ -813,12 +813,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DWARF_MINER:
       strcpy(p_gc->name, "Dwarven Miner");
       strcpy(p_gc->descriptor, "dwarven miner");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 1.5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 1.5;
       p_gc->languages[DWARVISH] = KNOWN;
       p_gc->experience *= 1.5;
       p_gc->gold = RandomInt(10, 20);
@@ -826,12 +826,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case DRAGON:
       strcpy(p_gc->name, "Dragon");
       strcpy(p_gc->descriptor, "dragon");
-      p_gc->maxHP *= 50;
-      p_gc->currentHP *= 50;
-      p_gc->physicalPower *= 50;
-      p_gc->physicalDefense *= 50;
-      p_gc->mentalPower *= 10;
-      p_gc->mentalDefense *= 5;
+      p_gc->max_hp *= 50;
+      p_gc->hp *= 50;
+      p_gc->physical_power *= 50;
+      p_gc->physical_defense *= 50;
+      p_gc->mental_power *= 10;
+      p_gc->mental_defense *= 5;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->languages[ANCIENT_DWARVISH] = KNOWN;
       p_gc->languages[ANCIENT_GNOMISH] = KNOWN;
@@ -844,20 +844,20 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case GNOME:
       strcpy(p_gc->name, "Gnome");
       strcpy(p_gc->descriptor, "gnome");
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 1.5;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 1.5;
       p_gc->languages[GNOMISH] = KNOWN;
       p_gc->gold = RandomInt(10, 20);
       break;
     case GNOME_MINER:
       strcpy(p_gc->name, "Gnomish Miner");
       strcpy(p_gc->descriptor, "gnomish miner");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 1.5;
-      p_gc->mentalDefense *= 1.5;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 1.5;
+      p_gc->mental_defense *= 1.5;
       p_gc->languages[GNOMISH] = KNOWN;
       p_gc->experience *= 1.2;
       p_gc->gold = RandomInt(10, 20);
@@ -865,10 +865,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case NECROMANCER:
       strcpy(p_gc->name, "Necromancer");
       strcpy(p_gc->descriptor, "necromancer");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->mentalPower *= 3;
-      p_gc->mentalDefense *= 2;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->mental_power *= 3;
+      p_gc->mental_defense *= 2;
       p_gc->relationship = ENEMY;
       p_gc->soul = EXTREMELY_EVIL;
       p_gc->languages[IMPERIAL] = KNOWN;
@@ -902,12 +902,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case ARCHNECROMANCER:
       strcpy(p_gc->name, "Kraathmot");
       strcpy(p_gc->descriptor, "archnecromancer");
-      p_gc->maxHP *= 3;
-      p_gc->currentHP *= 3;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 5;
-      p_gc->mentalDefense *= 4;
+      p_gc->max_hp *= 3;
+      p_gc->hp *= 3;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 5;
+      p_gc->mental_defense *= 4;
       p_gc->relationship = ENEMY;
       p_gc->soul = EXTREMELY_EVIL;
       p_gc->languages[IMPERIAL] = KNOWN;
@@ -942,12 +942,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Velroth");
       strcpy(p_gc->descriptor, "lich");
       p_gc->unique = true;
-      p_gc->maxHP *= 5;
-      p_gc->currentHP *= 5;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 3;
-      p_gc->mentalPower *= 15;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 5;
+      p_gc->hp *= 5;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 3;
+      p_gc->mental_power *= 15;
+      p_gc->mental_defense *= 15;
       p_gc->soul = EXTREMELY_EVIL;
       p_gc->relationship = ENEMY;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -979,11 +979,11 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case ZOMBIE:
       strcpy(p_gc->name, "Zombie");
       strcpy(p_gc->descriptor, "zombie");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 2;
-      p_gc->mentalPower = 0;
-      p_gc->mentalDefense = 0;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 2;
+      p_gc->mental_power = 0;
+      p_gc->mental_defense = 0;
       p_gc->soul = EVIL;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
@@ -992,12 +992,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case SKELETAL_KNIGHT:
       strcpy(p_gc->name, "Skeletal Knight");
       strcpy(p_gc->descriptor, "skeletal knight");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower = 0;
-      p_gc->mentalDefense = 0;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power = 0;
+      p_gc->mental_defense = 0;
       p_gc->soul = EVIL;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->languages[ANCIENT_VENTARRI] = KNOWN;
@@ -1007,95 +1007,95 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case RAT:
       strcpy(p_gc->name, "Rat");
       strcpy(p_gc->descriptor, "large rat");
-      p_gc->maxHP /= 2;
-      p_gc->currentHP /= 2;
-      p_gc->physicalPower /= 5;
-      p_gc->physicalDefense /= 5;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp /= 2;
+      p_gc->hp /= 2;
+      p_gc->physical_power /= 5;
+      p_gc->physical_defense /= 5;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = ENEMY;
       p_gc->experience /= 10;
       break;
     case SHARK:
       strcpy(p_gc->name, "Shark");
       strcpy(p_gc->descriptor, "shark");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->experience *= 2.5;
       break;
     case WOLF:
       strcpy(p_gc->name, "Wolf");
       strcpy(p_gc->descriptor, "wolf");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->experience *= 2.5;
       break;
     case BEAR:
       strcpy(p_gc->name, "Bear");
       strcpy(p_gc->descriptor, "bear");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->experience *= 2.5;
       break;
     case GOBLIN:
       strcpy(p_gc->name, "Goblin");
       strcpy(p_gc->descriptor, "goblin");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->experience *= 2.5;
       break;
     case ORC:
       strcpy(p_gc->name, "Orc");
       strcpy(p_gc->descriptor, "orc");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->experience *= 2.5;
       break;
     case GIANT_SQUID:
       strcpy(p_gc->name, "Giant Squid");
       strcpy(p_gc->descriptor, "giant squid");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower /= 10;
-      p_gc->mentalDefense /= 10;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power /= 10;
+      p_gc->mental_defense /= 10;
       p_gc->relationship = HOSTILE_ENEMY;
       p_gc->experience *= 2.5;
       break;
     case MERFOLK:
       strcpy(p_gc->name, "Merfolk");
       strcpy(p_gc->descriptor, "merfolk");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalDefense *= 2;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_defense *= 2;
       p_gc->relationship = ENEMY;
       p_gc->languages[MER] = KNOWN;
       p_gc->experience *= 1.2;
@@ -1103,10 +1103,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case MERFOLK_SOLDIER:
       strcpy(p_gc->name, "Merman Soldier");
       strcpy(p_gc->descriptor, "merman soldier");
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 3;
-      p_gc->mentalDefense *= 3;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 3;
+      p_gc->mental_defense *= 3;
       p_gc->level = 2;
       p_gc->relationship = ENEMY;
       p_gc->languages[MER] = KNOWN;
@@ -1116,12 +1116,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Quaelos");
       strcpy(p_gc->descriptor, "mermaid high priestess");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 12;
-      p_gc->mentalDefense *= 12;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 12;
+      p_gc->mental_defense *= 12;
       p_gc->relationship = ENEMY;
       p_gc->languages[MER] = KNOWN;
       p_gc->languages[ANCIENT_MER] = KNOWN;
@@ -1149,12 +1149,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
     case MERFOLK_PRIESTESS:
       strcpy(p_gc->name, "Mermaid Priestess");
       strcpy(p_gc->descriptor, "mermaid priestess");
-      p_gc->maxHP *= 1.5;
-      p_gc->currentHP *= 1.5;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 3;
-      p_gc->mentalDefense *= 3;
+      p_gc->max_hp *= 1.5;
+      p_gc->hp *= 1.5;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 3;
+      p_gc->mental_defense *= 3;
       p_gc->relationship = ENEMY;
       p_gc->languages[MER] = KNOWN;
       p_gc->languages[ANCIENT_MER] = KNOWN;
@@ -1183,12 +1183,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "Queen Serashnul");
       strcpy(p_gc->descriptor, "mermaid queen");
       p_gc->unique = true;
-      p_gc->maxHP *= 2;
-      p_gc->currentHP *= 2;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 3;
-      p_gc->mentalDefense *= 3;
+      p_gc->max_hp *= 2;
+      p_gc->hp *= 2;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 3;
+      p_gc->mental_defense *= 3;
       p_gc->relationship = ENEMY;
       p_gc->languages[MER] = KNOWN;
       p_gc->languages[ANCIENT_MER] = KNOWN;
@@ -1203,12 +1203,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "The Dark Recluse");
       strcpy(p_gc->descriptor, "black-robed wizard");
       p_gc->unique = true;
-      p_gc->maxHP *= 4;
-      p_gc->currentHP *= 4;
-      p_gc->physicalPower *= 1.5;
-      p_gc->physicalDefense *= 1.5;
-      p_gc->mentalPower *= 15;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 4;
+      p_gc->hp *= 4;
+      p_gc->physical_power *= 1.5;
+      p_gc->physical_defense *= 1.5;
+      p_gc->mental_power *= 15;
+      p_gc->mental_defense *= 15;
       p_gc->soul = VERY_EVIL;
       p_gc->relationship = ENEMY;
       p_gc->languages[IMPERIAL] = KNOWN;
@@ -1242,12 +1242,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "The Hermit");
       strcpy(p_gc->descriptor, "old, green-robed man");
       p_gc->unique = true;
-      p_gc->maxHP *= 4;
-      p_gc->currentHP *= 4;
-      p_gc->physicalPower *= 2;
-      p_gc->physicalDefense *= 2;
-      p_gc->mentalPower *= 15;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 4;
+      p_gc->hp *= 4;
+      p_gc->physical_power *= 2;
+      p_gc->physical_defense *= 2;
+      p_gc->mental_power *= 15;
+      p_gc->mental_defense *= 15;
       p_gc->relationship = ENEMY;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ELVISH] = KNOWN;
@@ -1280,10 +1280,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "The Angler");
       strcpy(p_gc->descriptor, "old, blue-robed fisherman");
       p_gc->unique = true;
-      p_gc->maxHP *= 3;
-      p_gc->currentHP *= 3;
-      p_gc->mentalPower *= 15;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 3;
+      p_gc->hp *= 3;
+      p_gc->mental_power *= 15;
+      p_gc->mental_defense *= 15;
       p_gc->soul = GOOD;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -1317,12 +1317,12 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "The Wandering Monk");
       strcpy(p_gc->descriptor, "red-robed monk");
       p_gc->unique = true;
-      p_gc->maxHP *= 4;
-      p_gc->currentHP *= 4;
-      p_gc->physicalPower *= 3;
-      p_gc->physicalDefense *= 3;
-      p_gc->mentalPower *= 15;
-      p_gc->mentalDefense *= 15;
+      p_gc->max_hp *= 4;
+      p_gc->hp *= 4;
+      p_gc->physical_power *= 3;
+      p_gc->physical_defense *= 3;
+      p_gc->mental_power *= 15;
+      p_gc->mental_defense *= 15;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
       p_gc->languages[VENTARRI] = KNOWN;
@@ -1360,10 +1360,10 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       strcpy(p_gc->name, "The Silent Sage");
       strcpy(p_gc->descriptor, "old, white-robed man");
       p_gc->unique = true;
-      p_gc->maxHP *= 3;
-      p_gc->currentHP *= 3;
-      p_gc->mentalPower *= 20;
-      p_gc->mentalDefense *= 20;
+      p_gc->max_hp *= 3;
+      p_gc->hp *= 3;
+      p_gc->mental_power *= 20;
+      p_gc->mental_defense *= 20;
       p_gc->soul = VERY_GOOD;
       p_gc->languages[IMPERIAL] = KNOWN;
       p_gc->languages[ANCIENT_IMPERIAL] = KNOWN;
@@ -1567,7 +1567,7 @@ int DeleteCompanion(game_character_t *companion) {
   }
 
   // Deallocate associated memory:
-  if (companion->summonedCreature != NULL) {
+  if (companion->summoned_creature != NULL) {
     DeleteCreatureSummonedBy(companion);
   }
   free(companion);
@@ -1595,7 +1595,7 @@ game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
     PRINT_ERROR_MESSAGE;
 #endif
   } else {
-    if (summoner->summonedCreature != NULL) {
+    if (summoner->summoned_creature != NULL) {
       DeleteCreatureSummonedBy(summoner);
     }
     newGC = malloc(sizeof(game_character_t));
@@ -1626,15 +1626,15 @@ Description: Removes a summoned creature from its summoner's struct and
 int DeleteCreatureSummonedBy(game_character_t *summoner) {
   game_character_t *creature;
 
-  if (summoner == NULL || summoner->summonedCreature == NULL) {
+  if (summoner == NULL || summoner->summoned_creature == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  creature = summoner->summonedCreature;
-  summoner->summonedCreature = NULL;
+  creature = summoner->summoned_creature;
+  summoner->summoned_creature = NULL;
   free(creature);
 
   return SUCCESS;
@@ -1661,12 +1661,12 @@ int DisplayCharacterData(game_character_t *p_gc) {
   printf("Name: %s\n", p_gc->name);
   printf("Level: %d\n", p_gc->level);
   printf("Experience: %d\n", p_gc->experience);
-  printf("HP: %d/%d\n", p_gc->currentHP, p_gc->maxHP);
-  printf("Physical power: %d\n", p_gc->physicalPower);
-  printf("Physical defense: %d\n", p_gc->physicalDefense);
+  printf("HP: %d/%d\n", p_gc->hp, p_gc->max_hp);
+  printf("Physical power: %d\n", p_gc->physical_power);
+  printf("Physical defense: %d\n", p_gc->physical_defense);
   printf("Speed: %d\n", p_gc->speed);
-  printf("Mental power: %d\n", p_gc->mentalPower);
-  printf("Mental defense: %d\n", p_gc->mentalDefense);
+  printf("Mental power: %d\n", p_gc->mental_power);
+  printf("Mental defense: %d\n", p_gc->mental_defense);
   printf("Soul: ");
   PrintSoulDescription(p_gc);
   printf("\n");
@@ -1677,12 +1677,12 @@ int DisplayCharacterData(game_character_t *p_gc) {
   printf("\n");
   //PrintStatus(p_gc);
   printf("\n");
-  if (p_gc->summonedCreature != NULL) {
+  if (p_gc->summoned_creature != NULL) {
     printf("Summoned creature: %s (%d/%d, ",
-           p_gc->summonedCreature->name,
-           p_gc->summonedCreature->currentHP,
-           p_gc->summonedCreature->maxHP);
-    //PrintStatus(p_gc->summonedCreature);
+           p_gc->summoned_creature->name,
+           p_gc->summoned_creature->hp,
+           p_gc->summoned_creature->max_hp);
+    //PrintStatus(p_gc->summoned_creature);
     printf(")\n");
   }
   FlushInput();
@@ -1844,7 +1844,7 @@ char *GetNameDefinite(game_character_t *p_gc) {
     return NULL;
   }
 
-  if (p_gc->unique && p_gc->knownToPlayer) {
+  if (p_gc->unique && p_gc->known_to_player) {
     return p_gc->name;
   }
   strcpy(name, "the ");
@@ -1874,7 +1874,7 @@ char *GetNameIndefinite(game_character_t *p_gc) {
     return NULL;
   }
 
-  if (p_gc->unique && p_gc->knownToPlayer) {
+  if (p_gc->unique && p_gc->known_to_player) {
     return p_gc->name;
   } else if (p_gc->descriptor[0] == 'a' ||
              p_gc->descriptor[0] == 'e' ||
@@ -1979,7 +1979,7 @@ void CheckStatus(void) {
 
   if (g_player.status[IN_COMBAT] == true) {
     for (i = 0; i < NumberOfEnemies(); i++) {
-      if (g_enemies[i]->currentHP <= 0) {
+      if (g_enemies[i]->hp <= 0) {
         strcat(output, Capitalize(GetNameDefinite(g_enemies[i])));
         if (g_enemies[i]->status[INANIMATE]) {
           strcat(output, " has been destroyed.\n");
@@ -1994,7 +1994,7 @@ void CheckStatus(void) {
     PrintString(output);
     FlushInput();
   }
-  if (g_player.currentHP <= 0) {
+  if (g_player.hp <= 0) {
     if (g_enemies[0] != NULL && g_enemies[0]->type == DUMMY) {  // In tutorial.
       sprintf(output,
               "%s: \"You have fallen due to severe backlash from your spell! "
@@ -2003,7 +2003,7 @@ void CheckStatus(void) {
               "single spell. We will bring you back to full health for now, "
               "but you must be more cautious in the future.\"",
               FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
-      g_player.currentHP = g_player.maxHP;
+      g_player.hp = g_player.max_hp;
     } else {  // Not in tutorial mode: death is permanent.
       sprintf(output, "Alas, %s has perished!\n", g_player.name);
       //MainMenu();
@@ -2037,8 +2037,8 @@ void UpdateVisibleGameCharCounter(void) {
   if (g_player.status[IN_COMBAT]) {  // Combat mode: only count enemies.
     for (i = 0; i < NumberOfEnemies(); i++) {
       g_num_visible_of_type[g_enemies[i]->type]++;
-      if (g_enemies[i]->summonedCreature != NULL) {
-        g_num_visible_of_type[g_enemies[i]->summonedCreature->type]++;
+      if (g_enemies[i]->summoned_creature != NULL) {
+        g_num_visible_of_type[g_enemies[i]->summoned_creature->type]++;
       }
     }
   } else {  // Not in combat mode: count all local inhabitants.
@@ -2047,8 +2047,8 @@ void UpdateVisibleGameCharCounter(void) {
          p_gc = p_gc->next) {
       if (p_gc->status[INVISIBLE] == false) {
         g_num_visible_of_type[p_gc->type]++;
-        if (p_gc->summonedCreature != NULL) {
-          g_num_visible_of_type[p_gc->summonedCreature->type]++;
+        if (p_gc->summoned_creature != NULL) {
+          g_num_visible_of_type[p_gc->summoned_creature->type]++;
         }
       }
     }
@@ -2118,9 +2118,9 @@ int HealGameCharacter(game_character_t *p_gc, int amount) {
   if (amount <= 0) {
     amount = 1;  // At least 1 HP should be restored.
   }
-  p_gc->currentHP += amount;
-  if (p_gc->currentHP > p_gc->maxHP) {
-    p_gc->currentHP = p_gc->maxHP;
+  p_gc->hp += amount;
+  if (p_gc->hp > p_gc->max_hp) {
+    p_gc->hp = p_gc->max_hp;
   }
 
   return amount;
@@ -2149,9 +2149,9 @@ int DamageGameCharacter(game_character_t *p_gc, int amount) {
   if (amount <= 0) {
     amount = 1;  // At least 1 HP should be lost.
   }
-  p_gc->currentHP -= amount;
-  if (p_gc->currentHP < 0) {
-    p_gc->currentHP = 0;  // Game characters may not have negative HP.
+  p_gc->hp -= amount;
+  if (p_gc->hp < 0) {
+    p_gc->hp = 0;  // Game characters may not have negative HP.
   }
 
   return amount;
@@ -2200,18 +2200,18 @@ void LevelUp(void) {
   FlushInput();
   temp = HP_LEVEL_UP_VALUE;
   if (temp > 0) {
-    g_player.maxHP += temp;
+    g_player.max_hp += temp;
     HealGameCharacter(&g_player, temp);
     printf("Maximum hit points increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    g_player.physicalPower += temp;
+    g_player.physical_power += temp;
     printf("Physical power increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    g_player.physicalDefense += temp;
+    g_player.physical_defense += temp;
     printf("Physical defense increased by %d.\n", temp);
   }
   temp = PHYSICAL_LEVEL_UP_VALUE;
@@ -2221,12 +2221,12 @@ void LevelUp(void) {
   }
   temp = MENTAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    g_player.mentalPower += temp;
+    g_player.mental_power += temp;
     printf("Mental power increased by %d.\n", temp);
   }
   temp = MENTAL_LEVEL_UP_VALUE;
   if (temp > 0) {
-    g_player.mentalDefense += temp;
+    g_player.mental_defense += temp;
     printf("Mental defense increased by %d.\n", temp);
   }
   FlushInput();

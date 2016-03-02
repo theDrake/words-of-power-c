@@ -429,9 +429,9 @@ int Combat(void) {
         break;
       }
       PrintCombatStatus(g_enemies[i]);
-      if (g_enemies[i]->summonedCreature != NULL) {
+      if (g_enemies[i]->summoned_creature != NULL) {
         printf("%s's summoned creature: ", g_enemies[i]->name);
-        PrintCombatStatus(g_enemies[i]->summonedCreature);
+        PrintCombatStatus(g_enemies[i]->summoned_creature);
       }
     }
     printf("  ____________\n"
@@ -440,8 +440,8 @@ int Combat(void) {
     for (p_gc = &g_player; p_gc != NULL; p_gc = p_gc->next) {
       PrintCombatStatus(p_gc);
     }
-    if (g_player.summonedCreature != NULL) {
-      PrintCombatStatus(g_player.summonedCreature);
+    if (g_player.summoned_creature != NULL) {
+      PrintCombatStatus(g_player.summoned_creature);
     }
     printf("\n");
 
@@ -523,7 +523,7 @@ int Combat(void) {
     if (playerFirst) {
       round++;
     }
-  }while (g_player.currentHP > 0 && NumberOfEnemies() > 0);
+  }while (g_player.hp > 0 && NumberOfEnemies() > 0);
   g_player.status[IN_COMBAT] = false;
 
   return NumberOfEnemies();
@@ -547,7 +547,7 @@ void PrintCombatStatus(game_character_t *p_gc) {
     return;
   }
 
-  printf("%s (%d/%d", p_gc->name, p_gc->currentHP, p_gc->maxHP);
+  printf("%s (%d/%d", p_gc->name, p_gc->hp, p_gc->max_hp);
   // Code for printing status will go here.
   printf(")\n");
 }
@@ -579,7 +579,7 @@ int EnemyAI(int index) {
   } else if (IsSpellcaster(g_enemies[index])) {
     if (RandomInt(1, 10) > 1) {  // 90% chance of casting a spell.
       for (i = 0; i < NumberOfEnemies(); i++) {
-        if (g_enemies[i]->currentHP <= (g_enemies[i]->maxHP / 4) &&
+        if (g_enemies[i]->hp <= (g_enemies[i]->max_hp / 4) &&
             g_enemies[i]->words[WORD_OF_HEALTH] == KNOWN) {
           gcTargets[0] = g_enemies[i];
           CastSpell(g_enemies[index], "Y", gcTargets);  // Healing spell.
@@ -745,7 +745,7 @@ int AttackMenu(void) {
         if (temp == iInput) {
           Attack(&g_player, target);
           if (g_player.status[IN_COMBAT] == false) {
-            if (target->currentHP > 0) {
+            if (target->hp > 0) {
               target->relationship = HOSTILE_ENEMY;
               AddEnemy(target);
             } else {
@@ -802,12 +802,12 @@ int Attack(game_character_t *attacker, game_character_t *defender) {
 
   printf("%s attacks %s", attacker->name, defender->name);
   if (RandomInt(1, 10) > 2) {  // 80% chance of a successful hit.
-    damage = RandomInt(1, attacker->physicalPower);
-    damage -= RandomInt(0, defender->physicalDefense);
+    damage = RandomInt(1, attacker->physical_power);
+    damage -= RandomInt(0, defender->physical_defense);
     if (damage <= 0) {
       damage = 1;
     }
-    defender->currentHP -= damage;
+    defender->hp -= damage;
     printf(" for %d damage.", damage);
   } else {
     printf(", but misses.");

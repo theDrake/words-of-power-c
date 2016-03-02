@@ -521,8 +521,8 @@ int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
     /* Update other relevant variables. */
   inhabitant->locationID = destinationID;
   inhabitant->next = NULL;
-  if (inhabitant->summonedCreature != NULL) {
-    inhabitant->summonedCreature->locationID = destinationID;
+  if (inhabitant->summoned_creature != NULL) {
+    inhabitant->summoned_creature->locationID = destinationID;
   }
 
   return SUCCESS;
@@ -608,7 +608,7 @@ int DeleteInhabitant(location_t *location, game_character_t *inhabitant) {
           p_gc2->next = p_gc1;
         }
       }
-      if (inhabitant->summonedCreature != NULL) {
+      if (inhabitant->summoned_creature != NULL) {
         DeleteCreatureSummonedBy(inhabitant);
       }
       free(inhabitant);
@@ -1143,8 +1143,8 @@ int MovePlayer(int destinationID) {
   }
 
   g_player.locationID = destinationID;
-  if (g_player.summonedCreature != NULL) {
-    g_player.summonedCreature->locationID = destinationID;
+  if (g_player.summoned_creature != NULL) {
+    g_player.summoned_creature->locationID = destinationID;
   }
   if (g_player.next != NULL) {
     for (companion = g_player.next;

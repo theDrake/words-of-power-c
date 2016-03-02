@@ -128,11 +128,11 @@ int PrintInventory(game_character_t *p_gc) {
       } else {
         printf("%d %s", p_gc->inventory[i], GetItemNamePlural(i));
       }
-      if (p_gc->equippedItems[i] > 0) {
+      if (p_gc->equipped_items[i] > 0) {
         if (p_gc->inventory[i] == 1) {
           printf("(equipped)");
         } else {
-          printf("(%d equipped)", p_gc->equippedItems[i]);
+          printf("(%d equipped)", p_gc->equipped_items[i]);
         }
       }
       itemTypesDescribed++;
@@ -272,8 +272,8 @@ int GiveItem(game_character_t *giver, game_character_t *receiver, int item) {
   }
 
   giver->inventory[item]--;
-  if (giver->equippedItems[item] > giver->inventory[item]) {
-    giver->equippedItems[item]--;
+  if (giver->equipped_items[item] > giver->inventory[item]) {
+    giver->equipped_items[item]--;
   }
   receiver->inventory[item]++;
   printf("%s gives %s to %s\n",
@@ -308,8 +308,8 @@ int GiveItems(game_character_t *giver, game_character_t *receiver, int item,
   }
 
   giver->inventory[item] -= amount;
-  if (giver->equippedItems[item] > giver->inventory[item]) {
-    giver->equippedItems[item] = giver->inventory[item];
+  if (giver->equipped_items[item] > giver->inventory[item]) {
+    giver->equipped_items[item] = giver->inventory[item];
   }
   receiver->inventory[item] += amount;
   printf("%s gives %d %s to %s.\n",
