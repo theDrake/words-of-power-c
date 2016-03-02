@@ -44,7 +44,7 @@ int SpellMenu(void) {
   }
   do {
     temp = 0;
-    for (i = 0; i < NUM_GC_IDS; i++) {
+    for (i = 0; i < NUM_GC_TYPES; i++) {
       g_character_type_described[i] = false;
     }
     if (CanCastBeneficialSpells(&g_player)) {
@@ -68,16 +68,16 @@ int SpellMenu(void) {
       for (i = 0; i < NumberOfEnemies(); i++) {
         if (g_enemies[i]->status[INVISIBLE] == false &&
             Targeted(g_enemies[i], gcTargets) == false &&
-            g_character_type_described[g_enemies[i]->ID] == false) {
+            g_character_type_described[g_enemies[i]->type] == false) {
           temp++;
-          if (g_num_visible_of_type[g_enemies[i]->ID] > 1) {
+          if (g_num_visible_of_type[g_enemies[i]->type] > 1) {
             printf("[%d] %s (%d available)\n", temp,
                    g_enemies[i]->name,
-                   g_num_visible_of_type[g_enemies[i]->ID]);
+                   g_num_visible_of_type[g_enemies[i]->type]);
           } else {
             printf("[%d] %s\n", temp, g_enemies[i]->name);
           }
-          g_character_type_described[g_enemies[i]->ID] = true;
+          g_character_type_described[g_enemies[i]->type] = true;
         }
       }
     } else {  /* Not in combat mode: display local inhabitants. */
@@ -86,16 +86,16 @@ int SpellMenu(void) {
            pGC = pGC->next) {
         if (pGC->status[INVISIBLE] == false &&
             Targeted(pGC, gcTargets) == false &&
-            g_character_type_described[pGC->ID] == false) {
+            g_character_type_described[pGC->type] == false) {
           temp++;
-          if (g_num_visible_of_type[pGC->ID] > 1) {
+          if (g_num_visible_of_type[pGC->type] > 1) {
             printf("[%d] %s (%d available)\n", temp,
                    pGC->name,
-                   g_num_visible_of_type[pGC->ID]);
+                   g_num_visible_of_type[pGC->type]);
           } else {
             printf("[%d] %s\n", temp, pGC->name);
           }
-          g_character_type_described[pGC->ID] = true;
+          g_character_type_described[pGC->type] = true;
         }
       }
     }
@@ -110,7 +110,7 @@ int SpellMenu(void) {
 
       /* The target is now found by matching it with the input. */
     temp = 0;
-    for (i = 0; i < NUM_GC_IDS; i++) {
+    for (i = 0; i < NUM_GC_TYPES; i++) {
       g_character_type_described[i] = false;
     }
     if (CanCastBeneficialSpells(&g_player)) {
@@ -143,14 +143,14 @@ int SpellMenu(void) {
       for (i = 0; i < NumberOfEnemies(); i++) {
         if (g_enemies[i]->status[INVISIBLE] == false &&
             Targeted(g_enemies[i], gcTargets) == false &&
-            g_character_type_described[g_enemies[i]->ID] == false) {
+            g_character_type_described[g_enemies[i]->type] == false) {
           temp++;
           if (temp == iInput) {
             gcTargets[numTargets] = g_enemies[i];
-            g_num_visible_of_type[g_enemies[i]->ID]--;  /* For counting. */
+            g_num_visible_of_type[g_enemies[i]->type]--;  /* For counting. */
             goto TargetFound;
           }
-          g_character_type_described[g_enemies[i]->ID] = true;
+          g_character_type_described[g_enemies[i]->type] = true;
         }
       }
     } else {  /* Not in combat mode: search through local inhabitants.*/
@@ -159,15 +159,15 @@ int SpellMenu(void) {
            pGC = pGC->next) {
         if (pGC->status[INVISIBLE] == false &&
             Targeted(pGC, gcTargets) == false &&
-            g_character_type_described[pGC->ID] == false) {
+            g_character_type_described[pGC->type] == false) {
           gcTargets[numTargets] = g_enemies[i];
           temp++;
           if (temp == iInput) {
             gcTargets[numTargets] = pGC;
-            g_num_visible_of_type[pGC->ID]--;  /* For counting purposes. */
+            g_num_visible_of_type[pGC->type]--;  /* For counting purposes. */
             goto TargetFound;
           }
-          g_character_type_described[pGC->ID] = true;
+          g_character_type_described[pGC->type] = true;
         }
       }
     }
@@ -183,7 +183,7 @@ int SpellMenu(void) {
 
       /* Check for remaining legal targets. */
     /*temp = 0;
-    for (i = 0; i < NUM_GC_IDS; i++) {
+    for (i = 0; i < NUM_GC_TYPES; i++) {
       temp += g_num_visible_of_type[i];
     }
     if (temp == 0) {
@@ -216,8 +216,8 @@ int SpellMenu(void) {
     spellLength = strlen(spell);
     for (i = 0; i < spellLength; i++) {
       spell[i] = toupper(spell[i]);
-      if (WordID(spell[i]) < 0 ||
-          g_player.words[WordID(spell[i])] == UNKNOWN) {
+      if (GetWordTypeFromChar(spell[i]) < 0 ||
+          g_player.words[GetWordTypeFromChar(spell[i])] == UNKNOWN) {
         printf("Invalid spell sequence. Please try again: ");
         repeatOptions = true;
         i = spellLength;
@@ -268,7 +268,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
 
   printf("%s: \"", spellcaster->name);
   for (i = 0; i < spellLength; i++) {
-    printf("%s", WordStartingWith(spell[i]));
+    printf("%s", GetWordStartingWith(spell[i]));
     if (i < spellLength - 1) {
       printf("-");
     } else {
@@ -567,9 +567,9 @@ int PrintKnownWords(void) {
   int i, j, wordLength, wordsDisplayed = 0;
   char word[SHORT_STR_LEN + 1];  /* To store, format, and print each Word. */
 
-  for (i = 0; i < NUM_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_TYPES; i++) {
     if (g_player.words[i] != UNKNOWN) {
-      strcpy(word, Word(i));
+      strcpy(word, GetWord(i));
       wordLength = strlen(word);
 
         /* The word must have room for 2 more characters: '(' and ')'. */
@@ -599,7 +599,7 @@ int PrintKnownWords(void) {
         }
       }
       if (g_player.words[i] == KNOWN) {
-        printf("%s (%s)\n", word, WordName(i));
+        printf("%s (%s)\n", word, GetWordName(i));
       } else {  /* g_player.words[i] == PARTIALLY_KNOWN */
         printf("%s (\?\?\?)\n", word);
       }
@@ -611,17 +611,17 @@ int PrintKnownWords(void) {
 }
 
 /******************************************************************************
-   Function: Word
+   Function: GetWord
 
 Description: Given the ID number of a Word of Power, returns that Word as a
              string.
 
-     Inputs: idNum - ID of the desired Word.
+     Inputs: type - ID of the desired Word.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *Word(int idNum) {
-  switch (idNum) {
+char *GetWord(int type) {
+  switch (type) {
     case WORD_OF_AIR:
       return "Ethraem";
     case WORD_OF_WATER:
@@ -685,7 +685,7 @@ char *Word(int idNum) {
 }
 
 /******************************************************************************
-   Function: WordStartingWith
+   Function: GetWordStartingWith
 
 Description: Given the first letter of a Word of Power, returns the entire Word
              as a string.
@@ -694,22 +694,22 @@ Description: Given the first letter of a Word of Power, returns the entire Word
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *WordStartingWith(char firstLetter) {
-  return Word(WordID(firstLetter));
+char *GetWordStartingWith(char firstLetter) {
+  return GetWord(GetWordTypeFromChar(firstLetter));
 }
 
 /******************************************************************************
-   Function: WordName
+   Function: GetWordName
 
 Description: Returns the English name of a given Word of Power as a string
              (such as "Fire", "Water", etc.).
 
-     Inputs: idNum - ID of the desired Word.
+     Inputs: type - ID of the desired Word.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *WordName(int idNum) {
-  switch (idNum) {
+char *GetWordName(int type) {
+  switch (type) {
     case WORD_OF_AIR:
       return "Air";
     case WORD_OF_WATER:
@@ -773,7 +773,7 @@ char *WordName(int idNum) {
 }
 
 /******************************************************************************
-   Function: WordID
+   Function: GetWordTypeFromChar
 
 Description: Given the first letter of a Word of Power, returns the ID number
              corresponding to that Word. (Requires that no two Words share the
@@ -784,13 +784,13 @@ Description: Given the first letter of a Word of Power, returns the ID number
     Outputs: ID number for the Word associated with the given letter (or -1 if
              a corresponding ID is not found).
 ******************************************************************************/
-int WordID(char firstLetter) {
+int GetWordTypeFromChar(char firstLetter) {
   int i;
   char *temp; /* To check the first letter of each Word. */
 
   firstLetter = toupper(firstLetter);
-  for (i = 0; i < NUM_WORD_IDS; i++) {
-    temp = Word(i);
+  for (i = 0; i < NUM_WORD_TYPES; i++) {
+    temp = GetWord(i);
     if (temp[0] == firstLetter) {
       return i;
     }
@@ -814,7 +814,7 @@ Description: Determines whether a given game character can cast spells.
 bool IsSpellcaster(game_character_t *pGC) {
   int i;
 
-  for (i = 0; i < NUM_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_TYPES; i++) {
     if (pGC->words[i] == KNOWN) {
       return true;
     }

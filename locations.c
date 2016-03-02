@@ -17,20 +17,20 @@ Description: Initializes a given location struct, along with all of its
              default starting values.
 
      Inputs: location - Pointer to the location struct to be initialized.
-             idNum    - ID number of the desired location.
+             type    - ID number of the desired location.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeLocation(location_t *location, int idNum) {
+int InitializeLocation(location_t *location, int type) {
   int i;
 
-  location->ID = idNum;
+  location->type = type;
   location->hidden = false;
   location->visits = 0;
   location->searches = 0;
   location->inhabitants = NULL;
 
-  switch (idNum) {
+  switch (type) {
     case ILLARUM_ENTRANCE:
       strcpy(location->name, "Illarum, City Gate");
       AddInhabitants(location, HUMAN, RandomInt(15, 25));
@@ -360,24 +360,24 @@ Description: Determines whether a given location is within the territory
     Outputs: true or false.
 ******************************************************************************/
 bool InVentarrisTerritory(location_t *location) {
-  return location->ID == VENTARRIS_ENTRANCE    ||
-         location->ID == VENTARRIS_MARKET      ||
-         location->ID == VENTARRIS_INN         ||
-         location->ID == VENTARRIS_SCHOOL      ||
-         location->ID == VENTARRIS_TEMPLE      ||
-         location->ID == VENTARRIS_PALACE      ||
-         location->ID == VENTARRIS_PRISON      ||
-         location->ID == VENTARRIS_DOCKS       ||
-         location->ID == PLAINS_SOUTH          ||
-         location->ID == SOUTHERN_FARMS        ||
-         location->ID == SWAMP                 ||
-         location->ID == NECROMANCERS_CIRCLE   ||
-         location->ID == ISHTARR_ENTRANCE      ||
-         location->ID == ISHTARR_EAST_WING     ||
-         location->ID == ISHTARR_WEST_WING     ||
-         location->ID == ISHTARR_CENTRAL_TOWER ||
-         location->ID == ISHTARR_DUNGEON       ||
-         location->ID == SHORE_SE;
+  return location->type == VENTARRIS_ENTRANCE    ||
+         location->type == VENTARRIS_MARKET      ||
+         location->type == VENTARRIS_INN         ||
+         location->type == VENTARRIS_SCHOOL      ||
+         location->type == VENTARRIS_TEMPLE      ||
+         location->type == VENTARRIS_PALACE      ||
+         location->type == VENTARRIS_PRISON      ||
+         location->type == VENTARRIS_DOCKS       ||
+         location->type == PLAINS_SOUTH          ||
+         location->type == SOUTHERN_FARMS        ||
+         location->type == SWAMP                 ||
+         location->type == NECROMANCERS_CIRCLE   ||
+         location->type == ISHTARR_ENTRANCE      ||
+         location->type == ISHTARR_EAST_WING     ||
+         location->type == ISHTARR_WEST_WING     ||
+         location->type == ISHTARR_CENTRAL_TOWER ||
+         location->type == ISHTARR_DUNGEON       ||
+         location->type == SHORE_SE;
 }
 
 /******************************************************************************
@@ -387,11 +387,11 @@ Description: Creates a new game character and adds it to a given location's list
              of inhabitants.
 
      Inputs: location - Location into which the new character will be added.
-             idNum    - ID of the desired game character.
+             type    - ID of the desired game character.
 
     Outputs: Pointer to the new game character (or NULL if it failed).
 ******************************************************************************/
-game_character_t *AddInhabitant(location_t *location, int idNum) {
+game_character_t *AddInhabitant(location_t *location, int type) {
   game_character_t *newGC = NULL, *temp;
 
   if (location == NULL) {
@@ -401,8 +401,8 @@ game_character_t *AddInhabitant(location_t *location, int idNum) {
   } else {
     newGC = malloc(sizeof(game_character_t));
     if (newGC != NULL) {
-      InitializeCharacter(newGC, idNum, location);
-      newGC->locationID = location->ID;
+      InitializeCharacter(newGC, type, location);
+      newGC->locationID = location->type;
       if (location->inhabitants == NULL) {
         location->inhabitants = newGC;  /* New inhabitant successfully added. */
       } else {
@@ -430,16 +430,16 @@ Description: Creates multiple game characters of a single type and adds them to
              a given location's list of inhabitants.
 
      Inputs: location - Location into which the new characters will be added.
-             idNum    - Designates the desired game character type.
+             type    - Designates the desired game character type.
              amount   - Number of game characters to add.
 
     Outputs: Number of game characters successfully added.
 ******************************************************************************/
-int AddInhabitants(location_t *location, int idNum, int amount) {
+int AddInhabitants(location_t *location, int type, int amount) {
   int count;
 
   while (amount-- > 0) {
-    if(AddInhabitant(location, idNum) != NULL) {
+    if(AddInhabitant(location, type) != NULL) {
       count++;
     }
   }
@@ -453,17 +453,17 @@ int AddInhabitants(location_t *location, int idNum, int amount) {
 Description: Returns a pointer to the first inhabitant found (if any) bearing a
              given ID value.
 
-     Inputs: idNum - ID of the desired character or character type.
+     Inputs: type - ID of the desired character or character type.
 
     Outputs: Pointer to an appropriate inhabitant, or NULL if none is found.
 ******************************************************************************/
-game_character_t *FindInhabitant(int idNum) {
+game_character_t *FindInhabitant(int type) {
   game_character_t *pGC;
 
   for (pGC = g_world[g_player.locationID]->inhabitants;
        pGC != NULL;
        pGC = pGC->next) {
-    if (pGC->ID == idNum) {
+    if (pGC->type == type) {
       return pGC;
     }
   }
@@ -486,7 +486,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
 
   if (inhabitant == NULL ||
       destinationID < 0 ||
-      destinationID >= NUM_LOCATION_IDS) {
+      destinationID >= NUM_LOCATION_TYPES) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1119,7 +1119,7 @@ int MovementMenu(void) {
   }
   GetIntInput(&iInput, 1, i);
 
-  return MovePlayer(destinations[iInput - 1]->ID);
+  return MovePlayer(destinations[iInput - 1]->type);
 }
 
 /******************************************************************************
@@ -1135,7 +1135,7 @@ Description: Handles the movement of the player character from one location to
 int MovePlayer(int destinationID) {
   game_character_t *companion;
 
-  if (destinationID < 0 || destinationID >= NUM_LOCATION_IDS) {
+  if (destinationID < 0 || destinationID >= NUM_LOCATION_TYPES) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1178,7 +1178,7 @@ int SearchLocation(location_t *location) {
   }
 
   location->searches++;
-  switch (location->ID) {
+  switch (location->type) {
     case FOREST:
       temp = RandomInt(1, 5);
       if (temp == 1) {
@@ -1463,7 +1463,7 @@ void DescribeSituation(void) {
     /* Describe local inhabitants (NPCs).                                    */
   UpdateVisibleGameCharCounter();
   gcTypesDescribed = 0;
-  for (i = 0; i < NUM_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
   temp = VisibleInhabitants(g_world[g_player.locationID]);
@@ -1472,9 +1472,9 @@ void DescribeSituation(void) {
     for (pGC = g_world[g_player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
-      if (pGC->status[INVISIBLE] == false && g_character_type_described[pGC->ID] == false) {
+      if (pGC->status[INVISIBLE] == false && g_character_type_described[pGC->type] == false) {
         if (temp < VisibleInhabitants(g_world[g_player.locationID])) {
-          if (temp <= g_num_visible_of_type[pGC->ID]) {
+          if (temp <= g_num_visible_of_type[pGC->type]) {
             if (gcTypesDescribed > 1) {
               strcat(output, ",");
             }
@@ -1483,17 +1483,17 @@ void DescribeSituation(void) {
             strcat(output, ", ");
           }
         }
-        if (g_num_visible_of_type[pGC->ID] == 1) {
+        if (g_num_visible_of_type[pGC->type] == 1) {
           strcat(output, GetNameIndefinite(pGC));
         } else {
           sprintf(output + strlen(output),
                   "%d %s",
-                  g_num_visible_of_type[pGC->ID],
+                  g_num_visible_of_type[pGC->type],
                   GetNamePlural(pGC));
         }
         gcTypesDescribed++;
-        g_character_type_described[pGC->ID] = true;
-        temp -= g_num_visible_of_type[pGC->ID];
+        g_character_type_described[pGC->type] = true;
+        temp -= g_num_visible_of_type[pGC->type];
         if (temp <= 0) {
           strcat(output, ". ");
         }

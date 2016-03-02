@@ -22,7 +22,7 @@ Description: Displays the player's inventory and prompts the player to choose
 int ItemMenu(void) {
   int i, iInput, temp = 0;
 
-  for (i = 0; i < NUM_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (g_player.inventory[i] > 0) {
       temp++;
       printf("[%d] %s (%d)\n", temp, GetItemName(i), g_player.inventory[i]);
@@ -37,7 +37,7 @@ int ItemMenu(void) {
     printf("[%d] Cancel (return to previous menu)\n", temp);
     GetIntInput(&iInput, 1, temp);
     temp = 0;
-    for (i = 0; i < NUM_ITEM_IDS; i++) {
+    for (i = 0; i < NUM_ITEM_TYPES; i++) {
       if (g_player.inventory[i] > 0) {
         temp++;
         if (temp == iInput) {
@@ -57,20 +57,20 @@ int ItemMenu(void) {
 Description: Executes the use of an item by a given game character (the player
              or an NPC).
 
-     Inputs: pGC   - Pointer to the user of the item.
-             idNum - ID number of the item to be used.
+     Inputs: pGC  - Pointer to the user of the item.
+             item - Integer representing the type of item to be used.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int UseItem(game_character_t *pGC, int idNum) {
-  if (pGC->inventory[idNum] < 1) {
+int UseItem(game_character_t *pGC, int item) {
+  if (pGC->inventory[item] < 1) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  switch(idNum) {
+  switch(item) {
     case HEALING_POTION:
       printf("%s drinks a healing potion and regains %d hit points.\n",
              Capitalize(GetNameDefinite(pGC)),
@@ -88,7 +88,7 @@ int UseItem(game_character_t *pGC, int idNum) {
 #endif
       return FAILURE;
   }
-  pGC->inventory[idNum]--;
+  pGC->inventory[item]--;
   FlushInput();
 
   return SUCCESS;
@@ -115,7 +115,7 @@ int PrintInventory(game_character_t *pGC) {
   }
 
   printf("Inventory: ");
-  for (i = 0; i < NUM_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (pGC->inventory[i] > 0) {
       if (itemTypesDescribed > 0) {
         printf(", ");
@@ -146,16 +146,16 @@ int PrintInventory(game_character_t *pGC) {
 /******************************************************************************
    Function: GetItemName
 
-Description: Given an item ID, returns the name of that item.
+Description: Given an item type, returns the name of that item.
 
-     Inputs: idNum - ID number of the item of interest.
+     Inputs: item - Integer representing the item of interest.
 
     Outputs: The item's name as a pointer to an array of characters.
 ******************************************************************************/
-char *GetItemName(int idNum) {
+char *GetItemName(int item) {
   static char itemName[SHORT_STR_LEN + 1];
 
-  switch (idNum) {
+  switch (item) {
     case FOOD:
       strcpy(itemName, "Food");
       break;
@@ -178,17 +178,17 @@ char *GetItemName(int idNum) {
 /******************************************************************************
    Function: GetItemNamePlural
 
-Description: Given an item ID, returns the plural name of that item.
+Description: Given an item type, returns the plural name of that item.
 
-     Inputs: idNum - ID number of the item of interest.
+     Inputs: item - Integer representing the item of interest.
 
     Outputs: The item's plural name as a pointer to an array of characters.
 ******************************************************************************/
-char *GetItemNamePlural(int idNum) {
+char *GetItemNamePlural(int item) {
   static char itemName[SHORT_STR_LEN + 1];
 
-  strcpy(itemName, GetItemName(idNum));
-  if (idNum != FOOD) {
+  strcpy(itemName, GetItemName(item));
+  if (item != FOOD) {
     strcat(itemName, "s");
   }
 
@@ -231,11 +231,11 @@ int GiveGold(game_character_t *giver, game_character_t *receiver, int amount) {
 Description: Adds a given item to a given game character's inventory.
 
      Inputs: receiver - Pointer to the GC receiving the item.
-             itemID   - ID of the item to be added.
+             item     - Integer representing the type of item to be added.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AddItem(game_character_t *receiver, int itemID) {
+int AddItem(game_character_t *receiver, int item) {
   if (receiver == NULL) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -243,9 +243,9 @@ int AddItem(game_character_t *receiver, int itemID) {
     return FAILURE;
   }
 
-  receiver->inventory[itemID]++;
-  if (receiver->ID == PLAYER) {
-    printf("You discover: %s\n", GetItemName(itemID));
+  receiver->inventory[item]++;
+  if (receiver->item == PLAYER) {
+    printf("You discover: %s\n", GetItemName(item));
     FlushInput();
   }
 
@@ -259,26 +259,26 @@ Description: Transfers an item from one game character to another.
 
      Inputs: giver    - Pointer to the GC giving the item.
              receiver - Pointer to the GC receiving the item.
-             itemID   - ID of the item to be transferred.
+             item     - Integer representing the type of item to be given.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int GiveItem(game_character_t *giver, game_character_t *receiver, int itemID) {
-  if (giver == NULL || receiver == NULL || giver->inventory[itemID] <= 0) {
+int GiveItem(game_character_t *giver, game_character_t *receiver, int item) {
+  if (giver == NULL || receiver == NULL || giver->inventory[item] <= 0) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  giver->inventory[itemID]--;
-  if (giver->equippedItems[itemID] > giver->inventory[itemID]) {
-    giver->equippedItems[itemID]--;
+  giver->inventory[item]--;
+  if (giver->equippedItems[item] > giver->inventory[item]) {
+    giver->equippedItems[item]--;
   }
-  receiver->inventory[itemID]++;
+  receiver->inventory[item]++;
   printf("%s gives %s to %s\n",
          giver->name,
-         GetItemName(itemID),
+         GetItemName(item),
          receiver->name);
   FlushInput();
 
@@ -293,29 +293,29 @@ Description: Transfers a specified amount of a given item from one game
 
      Inputs: giver    - Pointer to the GC giving the item.
              receiver - Pointer to the GC receiving the item.
-             itemID   - ID of the item to be transferred.
+             item     - Integer representing the type of item to be given.
              amount   - Quantity of the item to be transferred.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int GiveItems(game_character_t *giver, game_character_t *receiver, int itemID,
+int GiveItems(game_character_t *giver, game_character_t *receiver, int item,
               int amount) {
-  if (giver == NULL || receiver == NULL || giver->inventory[itemID] < amount) {
+  if (giver == NULL || receiver == NULL || giver->inventory[item] < amount) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-  giver->inventory[itemID] -= amount;
-  if (giver->equippedItems[itemID] > giver->inventory[itemID]) {
-    giver->equippedItems[itemID] = giver->inventory[itemID];
+  giver->inventory[item] -= amount;
+  if (giver->equippedItems[item] > giver->inventory[item]) {
+    giver->equippedItems[item] = giver->inventory[item];
   }
-  receiver->inventory[itemID] += amount;
+  receiver->inventory[item] += amount;
   printf("%s gives %d %s to %s.\n",
          giver->name,
          amount,
-         GetItemNamePlural(itemID),
+         GetItemNamePlural(item),
          receiver->name);
   FlushInput();
 
@@ -323,17 +323,17 @@ int GiveItems(game_character_t *giver, game_character_t *receiver, int itemID,
 }
 
 /******************************************************************************
-   Function: ItemValue
+   Function: GetItemValue
 
 Description: Returns the standard market value of a given item.
 
-     Inputs: idNum - ID number of the item of interest.
+     Inputs: item - Integer representing the item of interest.
 
     Outputs: The standard market value of the item of interest (or -1 if an
              error is encountered).
 ******************************************************************************/
-int ItemValue(int idNum) {
-  switch (idNum) {
+int GetItemValue(int item) {
+  switch (item) {
     case FOOD:
       return 1;
     case HEALING_POTION:

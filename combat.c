@@ -67,7 +67,7 @@ int AddRandomEnemy(location_t *location) {
     return FAILURE;
   }
 
-  switch (location->ID) {
+  switch (location->type) {
     case ILLARUM_ENTRANCE:
       newEnemy = AddInhabitant(location, THIEF);
       break;
@@ -473,7 +473,7 @@ int Combat(void) {
             }
             break;
           case 'F':  // Flee
-            if (g_enemies[0]->ID == DUMMY) {  // Indicates tutorial mode.
+            if (g_enemies[0]->type == DUMMY) {  // Indicates tutorial mode.
               printf("%s: \"Come on, destroy the dummy already!\"\n",
                      FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
               FlushInput();
@@ -647,7 +647,7 @@ int AttackMenu(void) {
   bool repeatOptions;
   game_character_t *target;
 
-  if (g_enemies[0] != NULL && g_enemies[0]->ID == DUMMY) {
+  if (g_enemies[0] != NULL && g_enemies[0]->type == DUMMY) {
     printf("%s: \"You're a wizard, not a warrior. Cast a spell!\"\n",
            FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
     FlushInput();
@@ -656,7 +656,7 @@ int AttackMenu(void) {
 
   UpdateVisibleGameCharCounter();
   temp = 0;
-  for (i = 0; i < NUM_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
 
@@ -669,15 +669,15 @@ int AttackMenu(void) {
       printf("Select a target:\n");
       for (i = 0; i < NumberOfEnemies(); i++) {
         if (g_enemies[i]->status[INVISIBLE] == false &&
-            g_character_type_described[g_enemies[i]->ID] == false) {
+            g_character_type_described[g_enemies[i]->type] == false) {
           temp++;
           printf("[%d] %s", temp, g_enemies[i]->name);
-          if (g_num_visible_of_type[g_enemies[i]->ID] > 1) {
+          if (g_num_visible_of_type[g_enemies[i]->type] > 1) {
             printf(" (%d available)",
-                   g_num_visible_of_type[g_enemies[i]->ID]);
+                   g_num_visible_of_type[g_enemies[i]->type]);
           }
           printf("\n");
-          g_character_type_described[g_enemies[i]->ID] = true;
+          g_character_type_described[g_enemies[i]->type] = true;
         }
       }
     }
@@ -702,14 +702,14 @@ int AttackMenu(void) {
            target != NULL;
            target = target->next) {
         if (target->status[INVISIBLE] == false &&
-            g_character_type_described[target->ID] == false) {
+            g_character_type_described[target->type] == false) {
           temp++;
           printf("[%d] %s", temp, target->name);
-          if (g_num_visible_of_type[target->ID] > 1) {
-            printf(" (%d available)", g_num_visible_of_type[target->ID]);
+          if (g_num_visible_of_type[target->type] > 1) {
+            printf(" (%d available)", g_num_visible_of_type[target->type]);
           }
           printf("\n");
-          g_character_type_described[target->ID] = true;
+          g_character_type_described[target->type] = true;
         }
       }
     }
@@ -720,19 +720,19 @@ int AttackMenu(void) {
 
   // Target is now found, and attacked, by matching it with the input:
   temp = 0;
-  for (i = 0; i < NUM_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
   if (g_player.status[IN_COMBAT]) {
     for (i = 0; i < NumberOfEnemies(); i++) {
       if (g_enemies[i]->status[INVISIBLE] == false &&
-          g_character_type_described[g_enemies[i]->ID] == false) {
+          g_character_type_described[g_enemies[i]->type] == false) {
         temp++;
         if (temp == iInput) {
           Attack(&g_player, g_enemies[i]);
           return SUCCESS;
         }
-        g_character_type_described[g_enemies[i]->ID] = true;
+        g_character_type_described[g_enemies[i]->type] = true;
       }
     }
   } else {  // Not in combat mode: player attacks a local inhabitant.
@@ -740,7 +740,7 @@ int AttackMenu(void) {
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false &&
-          g_character_type_described[target->ID] == false) {
+          g_character_type_described[target->type] == false) {
         temp++;
         if (temp == iInput) {
           Attack(&g_player, target);
@@ -768,7 +768,7 @@ int AttackMenu(void) {
           }
           return SUCCESS;
         }
-        g_character_type_described[target->ID] = true;
+        g_character_type_described[target->type] = true;
       }
     }
   }
@@ -827,25 +827,25 @@ Description: Determines whether a given NPC will fight the player if the player
     Outputs: true or false.
 ******************************************************************************/
 bool WillingToFight(game_character_t *pGC) {
-  if (pGC->ID == SOLDIER || pGC->ID == KNIGHT || pGC->ID == WIZARD ||
-      pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
-      pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||
-      pGC->ID == ILLARUM_HIGH_PRIEST || pGC->ID == ARCHWIZARD_OF_ELEMENTS ||
-      pGC->ID == COURT_WIZARD || pGC->ID == WIZARD_OF_ELEMENTS ||
-      pGC->ID == WIZARD_OF_MIND || pGC->ID == ARCHWIZARD_OF_MIND ||
-      pGC->ID == VENTARRIS_PRIEST || pGC->ID == BARBARIAN_WARRIOR ||
-      pGC->ID == VENTARRIS_HIGH_PRIEST || pGC->ID == BARBARIAN ||
-      pGC->ID == BARBARIAN_SHAMAN || pGC->ID == BARBARIAN_CHIEFTAIN ||
-      pGC->ID == ELF || pGC->ID == DWARF_MERCHANT || pGC->ID == DWARF_PRIEST ||
-      pGC->ID == ELF_LOREMASTER || pGC->ID == DWARF || pGC->ID == DWARF_KING ||
-      pGC->ID == DWARF_MINER || pGC->ID == DWARF_GUARDIAN ||
-      pGC->ID == DWARF_LOREMASTER || pGC->ID == DWARF_HIGH_PRIEST ||
-      pGC->ID == GNOME || pGC->ID == GNOME_MINER || pGC->ID == DRUID ||
-      pGC->ID == ARCHDRUID || pGC->ID == MERFOLK_SOLDIER ||
-      pGC->ID == MERFOLK_PRIESTESS || pGC->ID == MERFOLK_HIGH_PRIESTESS ||
-      pGC->ID == MERFOLK_QUEEN || pGC->ID == VENTARRIS_KING ||
-      pGC->ID == ILLARUM_KING || pGC->ID == LICH || pGC->ID == NECROMANCER ||
-      pGC->ID == ARCHNECROMANCER || pGC->ID == SKELETAL_KNIGHT) {
+  if (pGC->type == SOLDIER || pGC->type == KNIGHT || pGC->type == WIZARD ||
+      pGC->type == INNKEEPER || pGC->type == FISHERMAN || pGC->type == SAILOR ||
+      pGC->type == FARMER || pGC->type == ILLARUM_PRIEST ||
+      pGC->type == ILLARUM_HIGH_PRIEST || pGC->type == ARCHWIZARD_OF_ELEMENTS ||
+      pGC->type == COURT_WIZARD || pGC->type == WIZARD_OF_ELEMENTS ||
+      pGC->type == WIZARD_OF_MIND || pGC->type == ARCHWIZARD_OF_MIND ||
+      pGC->type == VENTARRIS_PRIEST || pGC->type == BARBARIAN_WARRIOR ||
+      pGC->type == VENTARRIS_HIGH_PRIEST || pGC->type == BARBARIAN ||
+      pGC->type == BARBARIAN_SHAMAN || pGC->type == BARBARIAN_CHIEFTAIN ||
+      pGC->type == ELF || pGC->type == DWARF_MERCHANT || pGC->type == DWARF_PRIEST ||
+      pGC->type == ELF_LOREMASTER || pGC->type == DWARF || pGC->type == DWARF_KING ||
+      pGC->type == DWARF_MINER || pGC->type == DWARF_GUARDIAN ||
+      pGC->type == DWARF_LOREMASTER || pGC->type == DWARF_HIGH_PRIEST ||
+      pGC->type == GNOME || pGC->type == GNOME_MINER || pGC->type == DRUID ||
+      pGC->type == ARCHDRUID || pGC->type == MERFOLK_SOLDIER ||
+      pGC->type == MERFOLK_PRIESTESS || pGC->type == MERFOLK_HIGH_PRIESTESS ||
+      pGC->type == MERFOLK_QUEEN || pGC->type == VENTARRIS_KING ||
+      pGC->type == ILLARUM_KING || pGC->type == LICH || pGC->type == NECROMANCER ||
+      pGC->type == ARCHNECROMANCER || pGC->type == SKELETAL_KNIGHT) {
     return true;
   }
 
@@ -862,33 +862,33 @@ Description: Determines whether a given NPC will flee when losing a fight.
     Outputs: true or false.
 ******************************************************************************/
 bool WillingToFlee(game_character_t *pGC) {
-  return pGC->ID == PEASANT ||
-         pGC->ID == SOLDIER ||
-         pGC->ID == WIZARD ||
-         pGC->ID == INNKEEPER ||
-         pGC->ID == FISHERMAN ||
-         pGC->ID == SAILOR ||
-         pGC->ID == FARMER ||
-         pGC->ID == ILLARUM_PRIEST ||
-         pGC->ID == ILLARUM_HIGH_PRIEST ||
-         pGC->ID == ARCHWIZARD_OF_ELEMENTS ||
-         pGC->ID == COURT_WIZARD ||
-         pGC->ID == WIZARD_OF_ELEMENTS ||
-         pGC->ID == WIZARD_OF_MIND ||
-         pGC->ID == ARCHWIZARD_OF_MIND ||
-         pGC->ID == VENTARRIS_PRIEST ||
-         pGC->ID == VENTARRIS_HIGH_PRIEST ||
-         pGC->ID == ELF ||
-         pGC->ID == DWARF_MERCHANT ||
-         pGC->ID == DWARF_PRIEST ||
-         pGC->ID == ELF_LOREMASTER ||
-         pGC->ID == GNOME ||
-         pGC->ID == GNOME_MINER ||
-         pGC->ID == DRUID ||
-         pGC->ID == ARCHDRUID ||
-         pGC->ID == VENTARRIS_KING ||
-         pGC->ID == NECROMANCER ||
-         pGC->ID == ARCHNECROMANCER;
+  return pGC->type == PEASANT ||
+         pGC->type == SOLDIER ||
+         pGC->type == WIZARD ||
+         pGC->type == INNKEEPER ||
+         pGC->type == FISHERMAN ||
+         pGC->type == SAILOR ||
+         pGC->type == FARMER ||
+         pGC->type == ILLARUM_PRIEST ||
+         pGC->type == ILLARUM_HIGH_PRIEST ||
+         pGC->type == ARCHWIZARD_OF_ELEMENTS ||
+         pGC->type == COURT_WIZARD ||
+         pGC->type == WIZARD_OF_ELEMENTS ||
+         pGC->type == WIZARD_OF_MIND ||
+         pGC->type == ARCHWIZARD_OF_MIND ||
+         pGC->type == VENTARRIS_PRIEST ||
+         pGC->type == VENTARRIS_HIGH_PRIEST ||
+         pGC->type == ELF ||
+         pGC->type == DWARF_MERCHANT ||
+         pGC->type == DWARF_PRIEST ||
+         pGC->type == ELF_LOREMASTER ||
+         pGC->type == GNOME ||
+         pGC->type == GNOME_MINER ||
+         pGC->type == DRUID ||
+         pGC->type == ARCHDRUID ||
+         pGC->type == VENTARRIS_KING ||
+         pGC->type == NECROMANCER ||
+         pGC->type == ARCHNECROMANCER;
 }
 
 /******************************************************************************
@@ -902,24 +902,24 @@ Description: Determines whether a given NPC will assist allies during combat
     Outputs: true or false.
 ******************************************************************************/
 bool WillingToHelp(game_character_t *pGC) {
-  if (pGC->ID == SOLDIER || pGC->ID == KNIGHT || pGC->ID == WIZARD ||
-      pGC->ID == INNKEEPER || pGC->ID == FISHERMAN || pGC->ID == SAILOR ||
-      pGC->ID == FARMER || pGC->ID == ILLARUM_PRIEST ||
-      pGC->ID == ILLARUM_HIGH_PRIEST || pGC->ID == ARCHWIZARD_OF_ELEMENTS ||
-      pGC->ID == COURT_WIZARD || pGC->ID == WIZARD_OF_ELEMENTS ||
-      pGC->ID == WIZARD_OF_MIND || pGC->ID == ARCHWIZARD_OF_MIND ||
-      pGC->ID == VENTARRIS_PRIEST || pGC->ID == BARBARIAN_WARRIOR ||
-      pGC->ID == VENTARRIS_HIGH_PRIEST || pGC->ID == BARBARIAN ||
-      pGC->ID == BARBARIAN_SHAMAN || pGC->ID == BARBARIAN_CHIEFTAIN ||
-      pGC->ID == ELF || pGC->ID == DWARF_MERCHANT || pGC->ID == DWARF_PRIEST ||
-      pGC->ID == ELF_LOREMASTER || pGC->ID == DWARF || pGC->ID == DWARF_KING ||
-      pGC->ID == DWARF_MINER || pGC->ID == DWARF_GUARDIAN ||
-      pGC->ID == DWARF_LOREMASTER || pGC->ID == DWARF_HIGH_PRIEST ||
-      pGC->ID == GNOME || pGC->ID == GNOME_MINER || pGC->ID == DRUID ||
-      pGC->ID == ARCHDRUID || pGC->ID == MERFOLK_SOLDIER ||
-      pGC->ID == MERFOLK_PRIESTESS || pGC->ID == MERFOLK_HIGH_PRIESTESS ||
-      pGC->ID == MERFOLK_QUEEN || pGC->ID == VENTARRIS_KING ||
-      pGC->ID == ILLARUM_KING) {
+  if (pGC->type == SOLDIER || pGC->type == KNIGHT || pGC->type == WIZARD ||
+      pGC->type == INNKEEPER || pGC->type == FISHERMAN || pGC->type == SAILOR ||
+      pGC->type == FARMER || pGC->type == ILLARUM_PRIEST ||
+      pGC->type == ILLARUM_HIGH_PRIEST || pGC->type == ARCHWIZARD_OF_ELEMENTS ||
+      pGC->type == COURT_WIZARD || pGC->type == WIZARD_OF_ELEMENTS ||
+      pGC->type == WIZARD_OF_MIND || pGC->type == ARCHWIZARD_OF_MIND ||
+      pGC->type == VENTARRIS_PRIEST || pGC->type == BARBARIAN_WARRIOR ||
+      pGC->type == VENTARRIS_HIGH_PRIEST || pGC->type == BARBARIAN ||
+      pGC->type == BARBARIAN_SHAMAN || pGC->type == BARBARIAN_CHIEFTAIN ||
+      pGC->type == ELF || pGC->type == DWARF_MERCHANT || pGC->type == DWARF_PRIEST ||
+      pGC->type == ELF_LOREMASTER || pGC->type == DWARF || pGC->type == DWARF_KING ||
+      pGC->type == DWARF_MINER || pGC->type == DWARF_GUARDIAN ||
+      pGC->type == DWARF_LOREMASTER || pGC->type == DWARF_HIGH_PRIEST ||
+      pGC->type == GNOME || pGC->type == GNOME_MINER || pGC->type == DRUID ||
+      pGC->type == ARCHDRUID || pGC->type == MERFOLK_SOLDIER ||
+      pGC->type == MERFOLK_PRIESTESS || pGC->type == MERFOLK_HIGH_PRIESTESS ||
+      pGC->type == MERFOLK_QUEEN || pGC->type == VENTARRIS_KING ||
+      pGC->type == ILLARUM_KING) {
     return true;
   }
 

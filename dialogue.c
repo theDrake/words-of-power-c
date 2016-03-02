@@ -25,7 +25,7 @@ int TalkMenu(void) {
   game_character_t *target;
 
   UpdateVisibleGameCharCounter();
-  for (i = 0; i < NUM_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
 
@@ -48,14 +48,14 @@ int TalkMenu(void) {
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false &&
-          g_character_type_described[target->ID] == false) {
+          g_character_type_described[target->type] == false) {
         temp++;
         printf("[%d] %s", temp, Capitalize(GetNameIndefinite(target)));
-        if (g_num_visible_of_type[target->ID] > 1) {
-          printf(" (%d available)", g_num_visible_of_type[target->ID]);
+        if (g_num_visible_of_type[target->type] > 1) {
+          printf(" (%d available)", g_num_visible_of_type[target->type]);
         }
         printf("\n");
-        g_character_type_described[target->ID] = true;
+        g_character_type_described[target->type] = true;
       }
     }
   }
@@ -65,7 +65,7 @@ int TalkMenu(void) {
 
     /* The target is now found by matching it with the input. */
   temp = 0;
-  for (i = 0; i < NUM_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
 
@@ -73,12 +73,12 @@ int TalkMenu(void) {
        target != NULL;
        target = target->next) {
     if (target->status[INVISIBLE] == false &&
-        g_character_type_described[target->ID] == false) {
+        g_character_type_described[target->type] == false) {
       temp++;
       if (temp == iInput) {
         return Dialogue(target);
       }
-      g_character_type_described[target->ID] = true;
+      g_character_type_described[target->type] = true;
     }
   }
 
@@ -113,7 +113,7 @@ int Dialogue(game_character_t *pGC) {
 
     /* Check for language compatibility. */
   canCommunicate = false;
-  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
     if (g_player.languages[i] == KNOWN && pGC->languages[i] == KNOWN) {
       canCommunicate = true;
       break;
@@ -130,10 +130,10 @@ int Dialogue(game_character_t *pGC) {
   }
 
   pGC->conversations++;
-  if (pGC->ID == MERCHANT || pGC->ID == DWARF_MERCHANT) {
+  if (pGC->type == MERCHANT || pGC->type == DWARF_MERCHANT) {
     MerchantDialogue(pGC);
   }
-  switch (pGC->ID) {
+  switch (pGC->type) {
     case ARCHWIZARD_OF_ELEMENTS:
       if (pGC->conversations == 1) {  /* Indicates new game: offer tutorial. */
         sprintf(output,
@@ -490,7 +490,7 @@ int LanguageLearningDialogue(game_character_t *pGC) {
     return FAILURE;
   }
 
-  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
     if (pGC->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
       count++;
       if (count == 1) {
@@ -512,7 +512,7 @@ int LanguageLearningDialogue(game_character_t *pGC) {
     PrintString(output);
     GetIntInput(&iInput, 1, count);
     count = 0;
-    for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
+    for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
       if (pGC->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
         count++;
         if (iInput == count) {
@@ -558,7 +558,7 @@ int WordLearningDialogue(game_character_t *pGC) {
     return FAILURE;
   }
 
-  for (i = 0; i < NUM_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_TYPES; i++) {
     if (pGC->words[i] == KNOWN && g_player.words[i] != KNOWN) {
       count++;
       if (count == 1) {
@@ -570,7 +570,7 @@ int WordLearningDialogue(game_character_t *pGC) {
       sprintf(output + strlen(output),
               "[%d] Word of %s\n",
               count,
-              WordName(i));
+              GetWordName(i));
     }
   }
 
@@ -581,7 +581,7 @@ int WordLearningDialogue(game_character_t *pGC) {
     PrintString(output);
     GetIntInput(&iInput, 1, count);
     count = 0;
-    for (i = 0; i < NUM_WORD_IDS; i++) {
+    for (i = 0; i < NUM_WORD_TYPES; i++) {
       if (pGC->words[i] == KNOWN && g_player.words[i] != KNOWN) {
         count++;
         if (iInput == count) {
@@ -631,21 +631,21 @@ int MerchantDialogue(game_character_t *merchant)
   sprintf(output,
           "%s: \"What would you like to buy?\"\n",
           merchant->name);
-  for (i = 0; i < NUM_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (merchant->inventory[i] > 0) {
       count++;
       sprintf(output + strlen(output),
               "[%d] %s (%d gold)\n",
               count,
               GetItemName(i),
-              ItemValue(i) * GetPriceModifier(merchant));
+              GetItemValue(i) * GetPriceModifier(merchant));
       if (merchant->inventory[i] >= 10) {
         count++;
         sprintf(output + strlen(output),
                 "[%d] 10 %s (%d gold)",
                 count,
                 GetItemNamePlural(i),
-                10 * (ItemValue(i) * GetPriceModifier(merchant)));
+                10 * (GetItemValue(i) * GetPriceModifier(merchant)));
       }
     }
   }
@@ -657,12 +657,12 @@ int MerchantDialogue(game_character_t *merchant)
 
     /* Get input and determine what selection the player made. */
   GetIntInput(&iInput, 1, count);
-  for (i = 0; i < NUM_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (merchant->inventory[i] > 0) {
       count++;
       if (count == iInput) {
         if (Transaction(merchant,
-                        ItemValue(i) * GetPriceModifier(merchant)) == SUCCESS) {
+                        GetItemValue(i) * GetPriceModifier(merchant)) == SUCCESS) {
           GiveItem(merchant, &g_player, i);
           merchant->inventory[i]++;  /* Merchant's supply is infinite. */
           return SUCCESS;
@@ -672,7 +672,7 @@ int MerchantDialogue(game_character_t *merchant)
         count++;
         if (count == iInput) {
           if (Transaction(merchant,
-                          10 * (ItemValue(i) *
+                          10 * (GetItemValue(i) *
                                 GetPriceModifier(merchant))) == SUCCESS) {
             GiveItems(merchant, &g_player, i, 10);
             merchant->inventory[i] += 10;  /* Merchant's supply is infinite. */
@@ -758,12 +758,12 @@ int Transaction(game_character_t *merchant, int price) {
 
 Description: Returns the name of a given language as a string (e.g., "Elvish").
 
-     Inputs: idNum - ID of the desired language.
+     Inputs: type - ID of the desired language.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *LanguageName(int idNum) {
-  switch (idNum) {
+char *LanguageName(int type) {
+  switch (type) {
     case IMPERIAL:
       return "Imperial";
     case ANCIENT_IMPERIAL:

@@ -85,7 +85,7 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
   Enumerations
 ******************************************************************************/
 
-enum WordID {
+enum WordType {
   WORD_OF_AIR,
   WORD_OF_WATER,
   WORD_OF_EARTH,
@@ -112,10 +112,10 @@ enum WordID {
   WORD_OF_FOCUS,
   WORD_OF_TIME,
   WORD_OF_VOID,
-  NUM_WORD_IDS
+  NUM_WORD_TYPES
 };
 
-enum LanguageID {
+enum LanguageType {
   IMPERIAL,
   ANCIENT_IMPERIAL,
   ELVISH,
@@ -129,10 +129,10 @@ enum LanguageID {
   GESH,
   VENTARRI,
   ANCIENT_VENTARRI,
-  NUM_LANGUAGE_IDS
+  NUM_LANGUAGE_TYPES
 };
 
-enum LocationID {
+enum LocationType {
   ILLARUM_ENTRANCE,
   ILLARUM_MARKET,
   ILLARUM_INN,
@@ -193,10 +193,10 @@ enum LocationID {
   QUELACENTUS_PLAZA,
   QUELACENTUS_TEMPLE,
   QUELACENTUS_PALACE,
-  NUM_LOCATION_IDS
+  NUM_LOCATION_TYPES
 };
 
-enum GameCharID {
+enum GameCharType {
   PLAYER,
   HUMAN,
   SOLDIER,
@@ -280,10 +280,10 @@ enum GameCharID {
   THE_ANGLER,
   THE_WANDERING_MONK,
   THE_SILENT_SAGE,
-  NUM_GC_IDS
+  NUM_GC_TYPES
 };
 
-enum GameCharStatusID {
+enum GameCharStatusType {
   INVISIBLE,
   FLYING,
   WATER_BREATHING,
@@ -298,17 +298,17 @@ enum GameCharStatusID {
   IN_COMBAT,
   SUMMONED,
   INANIMATE,
-  NUM_STATUS_IDS
+  NUM_STATUS_TYPES
 };
 
-enum ItemID {
+enum ItemType {
   FOOD,
   HEALING_POTION,
   GLOWING_MUSHROOM,
-  NUM_ITEM_IDS
+  NUM_ITEM_TYPES
 };
 
-enum MissionID {
+enum MissionType {
   ELEMENTS1,
   ELEMENTS2,
   ELEMENTS3,
@@ -389,7 +389,7 @@ enum MissionID {
   VENTARRIS_KING3,
   VENTARRIS_KING4,
   VENTARRIS_KING5,
-  NUM_MISSION_IDS
+  NUM_MISSION_TYPES
 };
 
 enum MissionStatus {
@@ -400,7 +400,7 @@ enum MissionStatus {
   FAILED
 };
 
-enum GroupID {
+enum GroupType {
   ELEMENTS_GUILD,
   MIND_GUILD,
   THE_DRUIDS,
@@ -414,7 +414,7 @@ enum GroupID {
   PRIESTS_OF_TORR,
   THE_NECROMANCERS,
   THE_FARMERS,
-  NUM_GROUP_IDS
+  NUM_GROUP_TYPES
 };
 
 enum Knowledge {
@@ -428,7 +428,7 @@ enum Knowledge {
 ******************************************************************************/
 
 typedef struct GameCharacter {
-  int ID;
+  int type;
   bool unique;  // False for generic NPCs.
   char name[SHORT_STR_LEN + 1];  // Capitalized, even for generic NPCs.
   char descriptor[SHORT_STR_LEN + 1];  // Brief generic description.
@@ -442,23 +442,23 @@ typedef struct GameCharacter {
   int mentalPower;
   int mentalDefense;
   int soul;  // Ranges from EXTREMELY_EVIL to EXTREMELY_GOOD.
-  enum Knowledge words[NUM_WORD_IDS];  // Records known Words of Power.
-  enum Knowledge languages[NUM_LANGUAGE_IDS];
+  enum Knowledge words[NUM_WORD_TYPES];  // Records known Words of Power.
+  enum Knowledge languages[NUM_LANGUAGE_TYPES];
   int conversations;  // Number of conversations held with player.
   bool knowsPlayer;
   bool knownToPlayer;
   int relationship;  // Relative to player: FRIEND, ENEMY, INDIFFERENT, etc.
-  int status[NUM_STATUS_IDS];
+  int status[NUM_STATUS_TYPES];
   int gold;
-  int inventory[NUM_ITEM_IDS];  // Includes equipped items.
-  int equippedItems[NUM_ITEM_IDS];
-  int locationID;
+  int inventory[NUM_ITEM_TYPES];  // Includes equipped items.
+  int equippedItems[NUM_ITEM_TYPES];
+  int location_type;
   struct GameCharacter *summonedCreature;  // Only one allowed at a time.
   struct GameCharacter *next;  // For forming linked lists.
 } game_character_t;
 
 typedef struct Location {
-  int ID;
+  int type;
   char name[SHORT_STR_LEN + 1];
   bool hidden;  // If true, special effort is required to find the location.
   int visits;  // Number of times player has visited the location.
@@ -470,17 +470,17 @@ typedef struct Location {
   Global Variables
 ******************************************************************************/
 
-location_t *g_world[NUM_LOCATION_IDS];  // Pointers to all game locations.
+location_t *g_world[NUM_LOCATION_TYPES];  // Pointers to all game locations.
 bool g_world_exists;  // Indicates whether game world exists in memory.
 bool g_player_has_quit;  // Indicates player's desire to quit the game.
 int g_num_secrets_found;  // Number of "secrets" discovered by the player.
 game_character_t g_player;
 game_character_t *g_enemies[MAX_ENEMIES];
-int g_missions[NUM_MISSION_IDS];  // To track player progress.
-int g_allegiances[NUM_GROUP_IDS];  // Player's relationships with groups.
-int g_num_kills[NUM_GC_IDS];  // Number of each GC type killed.
-int g_num_visible_of_type[NUM_GC_IDS];  // Number of each GC type visible.
-bool g_character_type_described[NUM_GC_IDS];  // Helps when describing NPCs.
+int g_missions[NUM_MISSION_TYPES];  // To track player progress.
+int g_allegiances[NUM_GROUP_TYPES];  // Player's relationships with groups.
+int g_num_kills[NUM_GC_TYPES];  // Number of each GC type killed.
+int g_num_visible_of_type[NUM_GC_TYPES];  // Number of each GC type visible.
+bool g_character_type_described[NUM_GC_TYPES];  // Helps when describing NPCs.
 
 /******************************************************************************
   Function Prototypes
@@ -506,27 +506,27 @@ bool StrContains(char *str, char c);
 void FlushInput(void);
 
 // Function prototypes for "locations.c":
-int InitializeLocation(location_t *location, int idNum);
+int InitializeLocation(location_t *location, int type);
 bool InVentarrisTerritory(location_t *location);
-game_character_t *AddInhabitant(location_t *location, int idNum);
-int AddInhabitants(location_t *location, int idNum, int amount);
-game_character_t *FindInhabitant(int idNum);
-int MoveInhabitant(game_character_t *inhabitant, int destinationID);
+game_character_t *AddInhabitant(location_t *location, int type);
+int AddInhabitants(location_t *location, int type, int amount);
+game_character_t *FindInhabitant(int type);
+int MoveInhabitant(game_character_t *inhabitant, int destination);
 int RemoveInhabitant(location_t *location, game_character_t *inhabitant);
 int DeleteInhabitant(location_t *location, game_character_t *inhabitant);
 int VisibleInhabitants(location_t *location);
 int MovementMenu(void);
-int MovePlayer(int destinationID);
+int MovePlayer(int destination);
 int SearchLocation(location_t *location);
 void DescribeSituation(void);
 
 // Function prototypes for "characters.c":
-int InitializeCharacter(game_character_t *pGC, int idNum,
+int InitializeCharacter(game_character_t *pGC, int type,
                         location_t *location);
 int AddCompanion(game_character_t *companion);
 int RemoveCompanion(game_character_t *companion);
 int DeleteCompanion(game_character_t *companion);
-game_character_t *AddSummonedCreature(game_character_t *summoner, int idNum);
+game_character_t *AddSummonedCreature(game_character_t *summoner, int type);
 int DeleteCreatureSummonedBy(game_character_t *summoner);
 int DisplayCharacterData(game_character_t *pGC);
 int PrintSoulDescription(game_character_t *pGC);
@@ -546,8 +546,8 @@ int HealGameCharacter(game_character_t *pGC, int amount);
 int DamageGameCharacter(game_character_t *pGC, int amount);
 int GainExperience(int amount);
 void LevelUp(void);
-void LearnLanguage(int langID);
-void LearnWord(int wordID);
+void LearnLanguage(int language);
+void LearnWord(int word);
 
 // Function prototypes for "combat.c":
 int AddEnemy(game_character_t *pGC);
@@ -572,7 +572,7 @@ int LanguageLearningDialogue(game_character_t *pGC);
 int WordLearningDialogue(game_character_t *pGC);
 double GetPriceModifier(game_character_t *merchant);
 int Transaction(game_character_t *merchant, int price);
-char *LanguageName(int idNum);
+char *LanguageName(int type);
 
 // Function prototypes for "magic.c":
 int SpellMenu(void);
@@ -581,22 +581,22 @@ int CastSpell(game_character_t *spellcaster, char *spell,
 int Targeted(game_character_t *pGC, game_character_t *gcTargets[]);
 bool CanCastBeneficialSpells(game_character_t *pGC);
 int PrintKnownWords(void);
-char *Word(int idNum);
-char *WordStartingWith(char firstLetter);
-char *WordName(int idNum);
-int WordID(char firstLetter);
+char *GetWord(int type);
+char *GetWordStartingWith(char firstLetter);
+char *GetWordName(int type);
+int GetWordTypeFromChar(char firstLetter);
 bool IsSpellcaster(game_character_t *pGC);
 
 // Function prototypes for "item.c":
 int ItemMenu(void);
-int UseItem(game_character_t *pGC, int idNum);
+int UseItem(game_character_t *pGC, int type);
 int PrintInventory(game_character_t *pGC);
-char *GetItemName(int idNum);
-char *GetItemNamePlural(int idNum);
+char *GetItemName(int type);
+char *GetItemNamePlural(int type);
 int GiveGold(game_character_t *giver, game_character_t *receiver, int amount);
-int GiveItem(game_character_t *giver, game_character_t *receiver, int itemID);
-int GiveItems(game_character_t *giver, game_character_t *receiver, int itemID,
+int GiveItem(game_character_t *giver, game_character_t *receiver, int item);
+int GiveItems(game_character_t *giver, game_character_t *receiver, int item,
               int amount);
-int ItemValue(int idNum);
+int GetItemValue(int type);
 
 #endif  // WOP_H_

@@ -203,7 +203,7 @@ int CreateWorld(void) {
   }
 
   // Initialize each location (including its inhabitants):
-  for (i = 0; i < NUM_LOCATION_IDS; i++) {
+  for (i = 0; i < NUM_LOCATION_TYPES; i++) {
     g_world[i] = malloc(sizeof(location_t));
     if (g_world[i] != NULL) {
       errors += InitializeLocation(g_world[i], i);
@@ -216,17 +216,17 @@ int CreateWorld(void) {
   }
 
   // Set status of all missions to CLOSED:
-  for (i = 0; i < NUM_MISSION_IDS; i++) {
+  for (i = 0; i < NUM_MISSION_TYPES; i++) {
     g_missions[i] = CLOSED;
   }
 
   // Initialize player allegiances:
-  for (i = 0; i < NUM_GROUP_IDS; i++) {
+  for (i = 0; i < NUM_GROUP_TYPES; i++) {
     g_allegiances[i] = INDIFFERENT;
   }
 
   // Initialize player's "kill" history:
-  for (i = 0; i < NUM_GC_IDS; i++) {
+  for (i = 0; i < NUM_GC_TYPES; i++) {
     g_num_kills[i] = 0;
   }
 
@@ -262,7 +262,7 @@ int DestroyWorld(void) {
   printf("Destroying world...\n\n");
 #endif
 
-  for (i = 0; i < NUM_LOCATION_IDS; i++) {
+  for (i = 0; i < NUM_LOCATION_TYPES; i++) {
     if (g_world[i] != NULL) {
       while (g_world[i]->inhabitants != NULL) {
         if (DeleteInhabitant(g_world[i], g_world[i]->inhabitants) == FAILURE) {

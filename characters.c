@@ -16,20 +16,20 @@ Description: Functions governing the creation, initialization, and basic
 Description: Initializes a given game character struct to its default starting
              values.
 
-     Inputs: pGC      - Pointer to the GameCharacer struct to be initialized.
-             idNum    - ID number of the desired game character.
+     Inputs: pGC      - Pointer to the game characer struct to be initialized.
+             type     - Integer representing desired game character type.
              location - The game character's starting location.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeCharacter(game_character_t *pGC, int idNum,
+int InitializeCharacter(game_character_t *pGC, int type,
                         location_t *location) {
   int i;
   char cInput;
   bool repeatOptions;
 
-    /* Default stats, representative of an average adult human. */
-  pGC->ID = idNum;
+  // Default stats, representative of an average adult human:
+  pGC->type = type;
   strcpy(pGC->name, "");
   strcpy(pGC->descriptor, "");
   pGC->unique = false;
@@ -47,26 +47,26 @@ int InitializeCharacter(game_character_t *pGC, int idNum,
   pGC->knownToPlayer = false;
   pGC->relationship = INDIFFERENT;
   pGC->conversations = 0;
-  for (i = 0; i < NUM_STATUS_IDS; i++) {
+  for (i = 0; i < NUM_STATUS_TYPES; i++) {
     pGC->status[i] = false;
   }
   pGC->gold = 0;
-  for (i = 0; i < NUM_ITEM_IDS; i++) {
+  for (i = 0; i < NUM_ITEM_TYPES; i++) {
     pGC->inventory[i] = 0;
     pGC->equippedItems[i] = 0;
   }
-  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
     pGC->languages[i] = UNKNOWN;
   }
-  for (i = 0; i < NUM_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_TYPES; i++) {
     pGC->words[i] = UNKNOWN;
   }
-  pGC->locationID = location->ID;
+  pGC->locationID = location->type;
   pGC->summonedCreature = NULL;
   pGC->next = NULL;
 
-    /* Character-specific stats.                                             */
-  switch (pGC->ID) {
+  // Character-specific stats:
+  switch (pGC->type) {
     case PLAYER:
       pGC->unique = true;
       pGC->experience = 0;
@@ -264,7 +264,7 @@ int InitializeCharacter(game_character_t *pGC, int idNum,
       pGC->languages[IMPERIAL] = KNOWN;
       pGC->languages[ANCIENT_IMPERIAL] = KNOWN;
       pGC->languages[VENTARRI] = KNOWN;
-      for (i = 0; i < NUM_WORD_IDS; i++) {
+      for (i = 0; i < NUM_WORD_TYPES; i++) {
         pGC->words[i] = KNOWN;
       }
       pGC->level = 20;
@@ -1432,7 +1432,7 @@ int AddCompanion(game_character_t *companion) {
     return FAILURE;
   }
 
-    /* Add "companion" to the player's list of companions. */
+  // Add "companion" to player's list of companions:
   if (g_player.next == NULL) {
     g_player.next = companion;
   } else {
@@ -1443,7 +1443,7 @@ int AddCompanion(game_character_t *companion) {
     pGC1->next = companion;
   }
 
-    /* Remove "companion" from the current location's list of inhabitants. */
+  // Remove "companion" from current location's list of inhabitants:
   for (pGC1 = g_world[g_player.locationID]->inhabitants;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
@@ -1459,7 +1459,7 @@ int AddCompanion(game_character_t *companion) {
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) {  /* If true, "companion" wasn't at current location. */
+  if (pGC1 == NULL) {  // If true, "companion" wasn't at current location.
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1489,7 +1489,7 @@ int RemoveCompanion(game_character_t *companion) {
     return FAILURE;
   }
 
-    /* Add "companion" to the current location's list of inhabitants. */
+  // Add "companion" to current location's list of inhabitants:
   if (g_world[g_player.locationID]->inhabitants == NULL) {
     g_world[g_player.locationID]->inhabitants = companion;
   } else {
@@ -1500,7 +1500,7 @@ int RemoveCompanion(game_character_t *companion) {
     pGC1->next = companion;
   }
 
-    /* Remove "companion" from the player's list of companions.              */
+  // Remove "companion" from player's list of companions:
   for (pGC1 = g_player.next;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
@@ -1516,7 +1516,7 @@ int RemoveCompanion(game_character_t *companion) {
 
   companion->next = NULL;
 
-  if (pGC1 == NULL) {  /* If true, "companion" wasn't player's companion. */
+  if (pGC1 == NULL) {  // If true, "companion" wasn't player's companion.
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1546,7 +1546,7 @@ int DeleteCompanion(game_character_t *companion) {
     return FAILURE;
   }
 
-    /* Remove "companion" from the player's list of companions. */
+  // Remove "companion" from player's list of companions:
   for (pGC1 = g_player.next;
        pGC1 != NULL;
        pGC2 = pGC1, pGC1 = pGC1->next) {
@@ -1559,14 +1559,14 @@ int DeleteCompanion(game_character_t *companion) {
       break;
     }
   }
-  if (pGC1 == NULL) {  /* If true, "companion" wasn't player's companion. */
+  if (pGC1 == NULL) {  // If true, "companion" wasn't player's companion.
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
     return FAILURE;
   }
 
-    /* Deallocate associated memory. */
+  // Deallocate associated memory:
   if (companion->summonedCreature != NULL) {
     DeleteCreatureSummonedBy(companion);
   }
@@ -1583,11 +1583,11 @@ Description: Creates a new, summoned game character and associates it with its
              creature is deleted.)
 
      Inputs: summoner - Pointer to the character that summoned the creature.
-             idNum    - ID of the summoned creature.
+             type     - Integer representing the summoned creature's type.
 
     Outputs: Pointer to the summoned creature.
 ******************************************************************************/
-game_character_t *AddSummonedCreature(game_character_t *summoner, int idNum) {
+game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
   game_character_t *newGC = NULL, *temp;
 
   if (summoner == NULL) {
@@ -1600,7 +1600,7 @@ game_character_t *AddSummonedCreature(game_character_t *summoner, int idNum) {
     }
     newGC = malloc(sizeof(game_character_t));
     if (newGC != NULL) {
-      InitializeCharacter(newGC, idNum, g_world[summoner->locationID]);
+      InitializeCharacter(newGC, type, g_world[summoner->locationID]);
     } else {
 #if DEBUG
       PRINT_ERROR_MESSAGE;
@@ -1675,14 +1675,14 @@ int DisplayCharacterData(game_character_t *pGC) {
   printf("Gold: %d\n", pGC->gold);
   PrintInventory(pGC);
   printf("\n");
-  /* PrintStatus(pGC); */
+  //PrintStatus(pGC);
   printf("\n");
   if (pGC->summonedCreature != NULL) {
     printf("Summoned creature: %s (%d/%d, ",
            pGC->summonedCreature->name,
            pGC->summonedCreature->currentHP,
            pGC->summonedCreature->maxHP);
-    /* PrintStatus(pGC->summonedCreature); */
+    //PrintStatus(pGC->summonedCreature);
     printf(")\n");
   }
   FlushInput();
@@ -1785,7 +1785,7 @@ int NumberOfLanguagesKnown(game_character_t *pGC) {
     return -1;
   }
 
-  for (i = 0; i < NUM_LANGUAGE_IDS; i++) {
+  for (i = 0; i < NUM_LANGUAGE_TYPES; i++) {
     if (pGC->languages[i] == KNOWN) {
       numLanguages++;
     }
@@ -1814,7 +1814,7 @@ int NumberOfWordsKnown(game_character_t *pGC) {
     return -1;
   }
 
-  for (i = 0; i < NUM_WORD_IDS; i++) {
+  for (i = 0; i < NUM_WORD_TYPES; i++) {
     if (pGC->words[i] == KNOWN) {
       numWords++;
     }
@@ -1835,7 +1835,7 @@ Description: Returns either a name or a generic descriptor preceded by "the"
              array of characters.
 ******************************************************************************/
 char *GetNameDefinite(game_character_t *pGC) {
-  static char gcName[SHORT_STR_LEN + 1];
+  static char name[SHORT_STR_LEN + 1];
 
   if (pGC == NULL) {
 #if DEBUG
@@ -1847,10 +1847,10 @@ char *GetNameDefinite(game_character_t *pGC) {
   if (pGC->unique && pGC->knownToPlayer) {
     return pGC->name;
   }
-  strcpy(gcName, "the ");
-  strcat(gcName, pGC->descriptor);
+  strcpy(name, "the ");
+  strcat(name, pGC->descriptor);
 
-  return gcName;
+  return name;
 }
 
 /******************************************************************************
@@ -1865,7 +1865,7 @@ Description: Returns either a name or a generic descriptor preceded by "a" or
              array of characters.
 ******************************************************************************/
 char *GetNameIndefinite(game_character_t *pGC) {
-  static char gcName[SHORT_STR_LEN + 1];
+  static char name[SHORT_STR_LEN + 1];
 
   if (pGC == NULL) {
 #if DEBUG
@@ -1886,13 +1886,13 @@ char *GetNameIndefinite(game_character_t *pGC) {
              pGC->descriptor[0] == 'I' ||
              pGC->descriptor[0] == 'O' ||
              pGC->descriptor[0] == 'U') {
-    strcpy(gcName, "an ");
+    strcpy(name, "an ");
   } else {
-    strcpy(gcName, "a ");
+    strcpy(name, "a ");
   }
-  strcat(gcName, pGC->descriptor);
+  strcat(name, pGC->descriptor);
 
-  return gcName;
+  return name;
 }
 
 /******************************************************************************
@@ -1908,8 +1908,8 @@ Description: Returns the plural form of a given game character's generic
              array of characters.
 ******************************************************************************/
 char *GetNamePlural(game_character_t *pGC) {
-  int nameLength;
-  static char gcName[SHORT_STR_LEN + 1];
+  int name_length;
+  static char name[SHORT_STR_LEN + 1];
 
   if (pGC == NULL) {
 #if DEBUG
@@ -1918,49 +1918,49 @@ char *GetNamePlural(game_character_t *pGC) {
     return FAILURE;
   }
 
-  switch (pGC->ID) {
+  switch (pGC->type) {
     case HUMAN:
-      strcpy(gcName, "common folk");
+      strcpy(name, "common folk");
       break;
     case ELF:
-      strcpy(gcName, "elves");
+      strcpy(name, "elves");
       break;
     case DWARF:
-      strcpy(gcName, "dwarves");
+      strcpy(name, "dwarves");
       break;
     case THIEF:
-      strcpy(gcName, "thieves");
+      strcpy(name, "thieves");
       break;
     case FISHERMAN:
-      strcpy(gcName, "fishermen");
+      strcpy(name, "fishermen");
       break;
     case NOBLEMAN:
-      strcpy(gcName, "noblemen");
+      strcpy(name, "noblemen");
       break;
     case MERFOLK:
-      strcpy(gcName, "common merfolk");
+      strcpy(name, "common merfolk");
       break;
     case MERFOLK_PRIESTESS:
-      strcpy(gcName, "mermaid priestesses");
+      strcpy(name, "mermaid priestesses");
       break;
     case DUMMY:
-      strcpy(gcName, "stuffed dummies");
+      strcpy(name, "stuffed dummies");
       break;
-    default:  /* Simply add "s" to the end of the descriptor. */
-      strcpy(gcName, pGC->descriptor);
-      nameLength = strlen(gcName);
-      if (nameLength >= SHORT_STR_LEN - 1) {  /* Must have room for 's'. */
+    default:  // Add 's' to the end of the descriptor.
+      strcpy(name, pGC->descriptor);
+      name_length = strlen(name);
+      if (name_length >= SHORT_STR_LEN - 1) {  // Ensure there's room for 's'.
 #if DEBUG
         PRINT_ERROR_MESSAGE;
 #endif
         return NULL;
       }
-      gcName[nameLength] = 's';
-      gcName[nameLength + 1] = '\0';
+      name[name_length] = 's';
+      name[name_length + 1] = '\0';
       break;
   }
 
-  return gcName;
+  return name;
 }
 
 /******************************************************************************
@@ -1986,16 +1986,16 @@ void CheckStatus(void) {
         } else {
           strcat(output, " is dead.\n");
         }
-        g_num_kills[g_enemies[i]->ID]++;
+        g_num_kills[g_enemies[i]->type]++;
         DeleteEnemy(g_enemies[i]);
-        i--;  /* Because the "g_enemies" array has now been left-shifted. */
+        i--;  // Because the "g_enemies" array has now been left-shifted.
       }
     }
     PrintString(output);
     FlushInput();
   }
   if (g_player.currentHP <= 0) {
-    if (g_enemies[0] != NULL && g_enemies[0]->ID == DUMMY) {  /* Tutorial. */
+    if (g_enemies[0] != NULL && g_enemies[0]->type == DUMMY) {  // In tutorial.
       sprintf(output,
               "%s: \"You have fallen due to severe backlash from your spell! "
               "This is often caused by speaking the same elemental Word more "
@@ -2004,7 +2004,7 @@ void CheckStatus(void) {
               "but you must be more cautious in the future.\"",
               FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
       g_player.currentHP = g_player.maxHP;
-    } else {  /* Not in tutorial mode: death is permanent. */
+    } else {  // Not in tutorial mode: death is permanent.
       sprintf(output, "Alas, %s has perished!\n", g_player.name);
       //MainMenu();
     }
@@ -2031,24 +2031,24 @@ void UpdateVisibleGameCharCounter(void) {
   int i;
   game_character_t *pGC;
 
-  for (i = 0; i < NUM_GC_IDS; i++) {  /* Clear the visible GC counter. */
+  for (i = 0; i < NUM_GC_TYPES; i++) {  // Clear the visible GC counter.
     g_num_visible_of_type[i] = 0;
   }
-  if (g_player.status[IN_COMBAT]) {  /* Combat mode: only count enemies. */
+  if (g_player.status[IN_COMBAT]) {  // Combat mode: only count enemies.
     for (i = 0; i < NumberOfEnemies(); i++) {
-      g_num_visible_of_type[g_enemies[i]->ID]++;
+      g_num_visible_of_type[g_enemies[i]->type]++;
       if (g_enemies[i]->summonedCreature != NULL) {
-        g_num_visible_of_type[g_enemies[i]->summonedCreature->ID]++;
+        g_num_visible_of_type[g_enemies[i]->summonedCreature->type]++;
       }
     }
-  } else {  /* Not in combat mode: count all local inhabitants. */
+  } else {  // Not in combat mode: count all local inhabitants.
     for (pGC = g_world[g_player.locationID]->inhabitants;
          pGC != NULL;
          pGC = pGC->next) {
       if (pGC->status[INVISIBLE] == false) {
-        g_num_visible_of_type[pGC->ID]++;
+        g_num_visible_of_type[pGC->type]++;
         if (pGC->summonedCreature != NULL) {
-          g_num_visible_of_type[pGC->summonedCreature->ID]++;
+          g_num_visible_of_type[pGC->summonedCreature->type]++;
         }
       }
     }
@@ -2116,7 +2116,7 @@ int HealGameCharacter(game_character_t *pGC, int amount) {
   }
 
   if (amount <= 0) {
-    amount = 1;  /* At least 1 HP should be restored. */
+    amount = 1;  // At least 1 HP should be restored.
   }
   pGC->currentHP += amount;
   if (pGC->currentHP > pGC->maxHP) {
@@ -2147,11 +2147,11 @@ int DamageGameCharacter(game_character_t *pGC, int amount) {
   }
 
   if (amount <= 0) {
-    amount = 1;  /* At least 1 HP should be lost. */
+    amount = 1;  // At least 1 HP should be lost.
   }
   pGC->currentHP -= amount;
   if (pGC->currentHP < 0) {
-    pGC->currentHP = 0;  /* Game characters may not have negative HP. */
+    pGC->currentHP = 0;  // Game characters may not have negative HP.
   }
 
   return amount;
@@ -2168,7 +2168,7 @@ Description: Increases the player's experience by a specified amount and checks
     Outputs: Number of level-ups.
 ******************************************************************************/
 int GainExperience(int amount) {
-  int i, levelUpCounter = 0;
+  int i, level_up_counter = 0;
 
   printf("%d experience points earned!\n", amount);
   FlushInput();
@@ -2176,11 +2176,11 @@ int GainExperience(int amount) {
     g_player.experience++;
     if (g_player.experience % EXP_PER_LEVEL == 0) {
       LevelUp();
-      levelUpCounter++;
+      level_up_counter++;
     }
   }
 
-  return levelUpCounter;
+  return level_up_counter;
 }
 
 /******************************************************************************
@@ -2237,15 +2237,14 @@ void LevelUp(void) {
 
 Description: Sets one of the player's languages to KNOWN.
 
-     Inputs: langID - ID number of the language learned.
+     Inputs: language - Integer representing the language learned.
 
     Outputs: None.
 ******************************************************************************/
-void LearnLanguage(int langID) {
-  g_player.languages[langID] = KNOWN;
-  printf("%s has learned the %s  language!\n",
-         g_player.name,
-         LanguageName(langID));
+void LearnLanguage(int language) {
+  g_player.languages[language] = KNOWN;
+  printf("%s has learned the %s  language!\n", g_player.name,
+         LanguageName(language));
   FlushInput();
 }
 
@@ -2254,15 +2253,13 @@ void LearnLanguage(int langID) {
 
 Description: Sets one of the player's Words of Power to KNOWN.
 
-     Inputs: wordID - ID number of the language learned.
+     Inputs: word - Integer representing the Word learned.
 
     Outputs: None.
 ******************************************************************************/
-void LearnWord(int wordID) {
-  g_player.words[wordID] = KNOWN;
-  printf("%s has learned %s, the Word of %s!\n",
-         g_player.name,
-         Word(wordID),
-         WordName(wordID));
+void LearnWord(int word) {
+  g_player.words[word] = KNOWN;
+  printf("%s has learned %s, the Word of %s!\n", g_player.name, GetWord(word),
+         GetWordName(word));
   FlushInput();
 }
