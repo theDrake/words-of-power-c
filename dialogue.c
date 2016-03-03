@@ -10,7 +10,7 @@ Description: Functions governing dialogue for the text-based fantasy RPG "Words
 #include "wop.h"
 
 /******************************************************************************
-   Function: TalkMenu
+   Function: HandleTalkMenuInput
 
 Description: Takes the player through the process of selecting a game character
              with whom to speak.
@@ -19,7 +19,7 @@ Description: Takes the player through the process of selecting a game character
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int TalkMenu(void) {
+int HandleTalkMenuInput(void) {
   int i, input, temp = 0;
   bool repeatOptions;
   game_character_t *target;

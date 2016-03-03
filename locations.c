@@ -657,7 +657,7 @@ int VisibleInhabitants(location_t *location) {
 }
 
 /******************************************************************************
-   Function: MovementMenu
+   Function: HandleMovementMenuInput
 
 Description: Displays movement options to the player.
 
@@ -665,7 +665,7 @@ Description: Displays movement options to the player.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int MovementMenu(void) {
+int HandleMovementMenuInput(void) {
   int i, iInput, numDestinations = 0;
   location_t *destinations[MAX_DESTINATIONS] = {NULL};
 

@@ -10,7 +10,7 @@ Description: Functions governing magic for the text-based fantasy RPG "Words of
 #include "wop.h"
 
 /******************************************************************************
-   Function: SpellMenu
+   Function: HandleSpellMenuInput
 
 Description: Takes the player through the process of selecting targets and
              creating a spell sequence. (The spell's effects are then processed
@@ -20,7 +20,7 @@ Description: Takes the player through the process of selecting targets and
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int SpellMenu(void) {
+int HandleSpellMenuInput(void) {
   int i, iInput, temp, spellLength, numTargets = 0;
   bool repeatOptions;
   char spell[MAX_SPELL_LEN + 1];

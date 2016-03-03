@@ -10,7 +10,7 @@ Description: Functions governing items for the text-based fantasy RPG "Words of
 #include "wop.h"
 
 /******************************************************************************
-   Function: ItemMenu
+   Function: HandleItemMenuInput
 
 Description: Displays the player's inventory and prompts the player to choose
              which item to use.
@@ -19,7 +19,7 @@ Description: Displays the player's inventory and prompts the player to choose
 
     Outputs: SUCCESS if an item is used, FAILURE otherwise.
 ******************************************************************************/
-int ItemMenu(void) {
+int HandleItemMenuInput(void) {
   int i, iInput, temp = 0;
 
   for (i = 0; i < NUM_ITEM_TYPES; i++) {

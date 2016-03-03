@@ -2006,7 +2006,7 @@ void CheckStatus(void) {
       g_player.hp = g_player.max_hp;
     } else {  // Not in tutorial mode: death is permanent.
       sprintf(output, "Alas, %s has perished!\n", g_player.name);
-      //MainMenu();
+      //HandleMainMenuInput();
     }
   }
   if (strlen(output) > 0) {

@@ -488,12 +488,11 @@ bool g_character_type_described[NUM_GC_TYPES];  // Helps when describing NPCs.
 
 // Function prototypes for "main.c":
 int main(void);
-void MainMenu(void);
-void PrintStandardOptions(void);
+void HandleMainMenuInput(void);
+void HandleStandardOptionsInput(void);
 int CreateWorld(void);
 int DestroyWorld(void);
 bool GetExitConfirmation(void);
-void HelpMenu(void);
 int RandomInt(int low, int high);
 int RandomBool(void);
 char GetCharInput(char *c);
@@ -515,7 +514,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destination);
 int RemoveInhabitant(location_t *location, game_character_t *inhabitant);
 int DeleteInhabitant(location_t *location, game_character_t *inhabitant);
 int VisibleInhabitants(location_t *location);
-int MovementMenu(void);
+int HandleMovementMenuInput(void);
 int MovePlayer(int destination);
 int SearchLocation(location_t *location);
 void DescribeSituation(void);
@@ -559,14 +558,14 @@ int VisibleEnemies(void);
 int Combat(void);
 void PrintCombatStatus(game_character_t *p_gc);
 int EnemyAI(int index);
-int AttackMenu(void);
+int HandleAttackMenuInput(void);
 int Attack(game_character_t *attacker, game_character_t *defender);
 bool WillingToFight(game_character_t *p_gc);
 bool WillingToFlee(game_character_t *p_gc);
 bool WillingToHelp(game_character_t *p_gc);
 
 // Function prototypes for "dialogue.c":
-int TalkMenu(void);
+int HandleTalkMenuInput(void);
 int Dialogue(game_character_t *p_gc);
 int LanguageLearningDialogue(game_character_t *p_gc);
 int WordLearningDialogue(game_character_t *p_gc);
@@ -575,7 +574,7 @@ int Transaction(game_character_t *merchant, int price);
 char *LanguageName(int type);
 
 // Function prototypes for "magic.c":
-int SpellMenu(void);
+int HandleSpellMenuInput(void);
 int CastSpell(game_character_t *spellcaster, char *spell,
               game_character_t *targets[]);
 bool CanCastBeneficialSpells(game_character_t *p_gc);
@@ -587,7 +586,7 @@ int GetWordTypeFromChar(char first_letter);
 bool IsSpellcaster(game_character_t *p_gc);
 
 // Function prototypes for "item.c":
-int ItemMenu(void);
+int HandleItemMenuInput(void);
 int UseItem(game_character_t *p_gc, int type);
 int PrintInventory(game_character_t *p_gc);
 char *GetItemName(int type);

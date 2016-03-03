@@ -5,10 +5,6 @@
 
 Description: Main C file for "Words of Power": a text-based fantasy RPG
              emphasizing verbal spell-casting through the use of magic words.
-
-  Functions: main, PrintString, MainMenu, PrintStandardOptions, CreateWorld,
-             DestroyWorld, GetExitConfirmation, RandomInt, RandomBool,
-             GetCharInput, GetIntInput, GetStrInput, StrContains, FlushInput
 ******************************************************************************/
 
 #include "wop.h"
@@ -32,11 +28,11 @@ int main(void) {
 
   while (!g_player_has_quit) {
     if (!g_world_exists) {
-      MainMenu();
+      HandleMainMenuInput();
     } else {
       CheckStatus();
       DescribeSituation();
-      PrintStandardOptions();
+      HandleStandardOptionsInput();
     }
   }
   if (g_world_exists) {
@@ -51,7 +47,7 @@ int main(void) {
 }
 
 /******************************************************************************
-   Function: MainMenu
+   Function: HandleMainMenuInput
 
 Description: Displays main menu options and does some handling of input.
 
@@ -59,7 +55,7 @@ Description: Displays main menu options and does some handling of input.
 
     Outputs: None.
 ******************************************************************************/
-void MainMenu(void) {
+void HandleMainMenuInput(void) {
   char cInput;
   bool repeatOptions;
 
@@ -82,7 +78,7 @@ void MainMenu(void) {
         if (g_world_exists) {
           DestroyWorld();
         }
-        /*LoadGame();*/
+        //LoadGame();
         printf("Sorry, no save files found.\n\n");
         break;
       case 'Q':  // Quit
@@ -100,7 +96,7 @@ void MainMenu(void) {
 }
 
 /******************************************************************************
-   Function: PrintStandardOptions
+   Function: HandleStandardOptionsInput
 
 Description: Prints the standard (i.e., non-combat) player options and
              processes corresponding player input.
@@ -109,7 +105,7 @@ Description: Prints the standard (i.e., non-combat) player options and
 
     Outputs: None.
 ******************************************************************************/
-void PrintStandardOptions(void) {
+void HandleStandardOptionsInput(void) {
   int i, iInput, temp;
   char cInput;
   bool repeatOptions;
@@ -129,7 +125,7 @@ void PrintStandardOptions(void) {
     GetCharInput(&cInput);
     switch (cInput) {
       case 'T':  // Talk
-        if (TalkMenu() == FAILURE) {
+        if (HandleTalkMenuInput() == FAILURE) {
           repeatOptions = true;
         }
         break;
@@ -139,22 +135,22 @@ void PrintStandardOptions(void) {
         }
         break;
       case 'U':  // Use an Item
-        if (ItemMenu() == FAILURE) {
+        if (HandleItemMenuInput() == FAILURE) {
           repeatOptions = true;
         }
         break;
       case 'C':  // Cast a Spell
-        if (SpellMenu() == FAILURE) {
+        if (HandleSpellMenuInput() == FAILURE) {
           repeatOptions = true;
         }
         break;
       case 'A':  // Attack
-        if (AttackMenu() == FAILURE) {
+        if (HandleAttackMenuInput() == FAILURE) {
           repeatOptions = true;
         }
         break;
       case 'M':  // Move to Another Location
-        if (MovementMenu() == FAILURE) {
+        if (HandleMovementMenuInput() == FAILURE) {
           repeatOptions = true;
         }
         break;

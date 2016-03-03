@@ -458,17 +458,17 @@ int Combat(void) {
         GetCharInput(&cInput);
         switch (cInput) {
           case 'A':  // Attack
-            if (AttackMenu() == FAILURE) {
+            if (HandleAttackMenuInput() == FAILURE) {
               repeatOptions = true;
             }
             break;
           case 'C':  // Cast a Spell
-            if (SpellMenu() == FAILURE) {
+            if (HandleSpellMenuInput() == FAILURE) {
               repeatOptions = true;
             }
             break;
           case 'U':  // Use an Item
-            if (ItemMenu() == FAILURE) {
+            if (HandleItemMenuInput() == FAILURE) {
               repeatOptions = true;
             }
             break;
@@ -485,7 +485,7 @@ int Combat(void) {
                 RemoveEnemy(g_enemies[0]);
               }
               g_player.status[IN_COMBAT] = false;
-              MovementMenu();
+              HandleMovementMenuInput();
             } else {
               printf("Your attempt to escape has failed.\n");
               FlushInput();
@@ -633,7 +633,7 @@ int EnemyAI(int index) {
 }
 
 /******************************************************************************
-   Function: AttackMenu
+   Function: HandleAttackMenuInput
 
 Description: Takes the player through the process of selecting a game character
              to attack.
@@ -642,7 +642,7 @@ Description: Takes the player through the process of selecting a game character
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int AttackMenu(void) {
+int HandleAttackMenuInput(void) {
   int i, iInput, temp;
   bool repeatOptions;
   game_character_t *target;
