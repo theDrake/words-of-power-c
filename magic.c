@@ -546,7 +546,7 @@ int PrintKnownWords(void) {
   char word[SHORT_STR_LEN + 1];  // To store, format, and print each Word.
 
   for (i = 0; i < NUM_WORD_TYPES; i++) {
-3    if (g_player.words[i] != UNKNOWN) {
+    if (g_player.words[i] != UNKNOWN) {
       strcpy(word, GetWord(i));
       wordLength = strlen(word);
 

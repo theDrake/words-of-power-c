@@ -244,7 +244,7 @@ int AddItem(game_character_t *receiver, int item) {
   }
 
   receiver->inventory[item]++;
-  if (receiver->item == PLAYER) {
+  if (receiver == PLAYER) {
     printf("You discover: %s\n", GetItemName(item));
     FlushInput();
   }
