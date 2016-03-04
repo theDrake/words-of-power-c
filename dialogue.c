@@ -30,12 +30,12 @@ int HandleTalkMenuInput(void) {
   }
 
   // Display potential targets (unless only one is available):
-  if (VisibleInhabitants(g_world[g_player.locationID]) == 0) {
+  if (VisibleInhabitants(g_world[g_player.location]) == 0) {
     PrintString("There is no one to speak with here.");
     FlushInput();
     return FAILURE;
-  } else if (VisibleInhabitants(g_world[g_player.locationID]) == 1) {
-    for (target = g_world[g_player.locationID]->inhabitants;
+  } else if (VisibleInhabitants(g_world[g_player.location]) == 1) {
+    for (target = g_world[g_player.location]->inhabitants;
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false) {
@@ -44,7 +44,7 @@ int HandleTalkMenuInput(void) {
     }
   } else {  // Multiple visible inhabitants to choose from.
     PrintString("With whom do you wish to speak?");
-    for (target = g_world[g_player.locationID]->inhabitants;
+    for (target = g_world[g_player.location]->inhabitants;
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false &&
@@ -68,7 +68,7 @@ int HandleTalkMenuInput(void) {
   for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
-  for (target = g_world[g_player.locationID]->inhabitants;
+  for (target = g_world[g_player.location]->inhabitants;
        target != NULL;
        target = target->next) {
     if (target->status[INVISIBLE] == false &&
@@ -172,7 +172,7 @@ int Dialogue(game_character_t *p_gc) {
                     AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
-            AddEnemy(AddInhabitant(g_world[g_player.locationID], DUMMY));
+            AddEnemy(AddInhabitant(g_world[g_player.location], DUMMY));
             Combat();
             sprintf(output,
                     "%s: \"Well done! We'll set up another dummy. This time, "
@@ -183,7 +183,7 @@ int Dialogue(game_character_t *p_gc) {
                     AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();
-            AddEnemy(AddInhabitant(g_world[g_player.locationID], DUMMY));
+            AddEnemy(AddInhabitant(g_world[g_player.location], DUMMY));
             Combat();
             sprintf(output,
                     "%s: \"Fantastic! It's gratifying to see the progress "
@@ -193,7 +193,7 @@ int Dialogue(game_character_t *p_gc) {
             PrintString(output);
             FlushInput();
             /*while (FindInhabitant(DUMMY) != NULL) {
-              DeleteInhabitant(g_world[g_player.locationID],
+              DeleteInhabitant(g_world[g_player.location],
                                FindInhabitant(DUMMY));
             }*/
             g_player.hp = g_player.max_hp;

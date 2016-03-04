@@ -452,7 +452,7 @@ typedef struct GameCharacter {
   int gold;
   int inventory[NUM_ITEM_TYPES];  // Includes equipped items.
   int equipped_items[NUM_ITEM_TYPES];
-  int location_type;
+  int location;
   struct GameCharacter *summoned_creature;  // Only one allowed at a time.
   struct GameCharacter *next;  // For forming linked lists.
 } game_character_t;

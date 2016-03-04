@@ -81,7 +81,7 @@ int HandleSpellMenuInput(void) {
         }
       }
     } else {  // Not in combat mode: display local inhabitants.
-      for (p_gc = g_world[g_player.locationID]->inhabitants;
+      for (p_gc = g_world[g_player.location]->inhabitants;
            p_gc != NULL;
            p_gc = p_gc->next) {
         if (p_gc->status[INVISIBLE] == false &&
@@ -154,7 +154,7 @@ int HandleSpellMenuInput(void) {
         }
       }
     } else {  // Not in combat mode: search through local inhabitants.
-      for (p_gc = g_world[g_player.locationID]->inhabitants;
+      for (p_gc = g_world[g_player.location]->inhabitants;
            p_gc != NULL;
            p_gc = p_gc->next) {
         if (p_gc->status[INVISIBLE] == false &&
@@ -470,7 +470,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
           printf("%s is dead.\n", Capitalize(GetNameDefinite(targets[i])));
           FlushInput();
         }
-        for (p_gc = g_world[g_player.locationID]->inhabitants;
+        for (p_gc = g_world[g_player.location]->inhabitants;
              p_gc != NULL;
              p_gc = p_gc->next) {
           if (WillingToFight(p_gc) && p_gc->status[IN_COMBAT] == false) {

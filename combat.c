@@ -336,7 +336,7 @@ Description: Removes a pointer to a given enemy from the global "g_enemies"
 ******************************************************************************/
 int DeleteEnemy(game_character_t *p_gc) {
   if (RemoveEnemy(p_gc) == SUCCESS) {
-    DeleteInhabitant(g_world[p_gc->locationID], p_gc);
+    DeleteInhabitant(g_world[p_gc->location], p_gc);
   } else {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
@@ -682,13 +682,13 @@ int HandleAttackMenuInput(void) {
       }
     }
   } else {  // Not in combat mode: player attacks a local inhabitant.
-    if (VisibleInhabitants(g_world[g_player.locationID]) == 0) {
+    if (VisibleInhabitants(g_world[g_player.location]) == 0) {
       printf("There is nobody here to attack.\n");
       FlushInput();
       return FAILURE;
     }
-    if (VisibleInhabitants(g_world[g_player.locationID]) == 1) {
-      for (target = g_world[g_player.locationID]->inhabitants;
+    if (VisibleInhabitants(g_world[g_player.location]) == 1) {
+      for (target = g_world[g_player.location]->inhabitants;
            target != NULL;
            target = target->next) {
         if (target->status[INVISIBLE] == false) {
@@ -698,7 +698,7 @@ int HandleAttackMenuInput(void) {
       }
     } else {  // Multiple visible inhabitants to choose from.
       printf("Select a target:\n");
-      for (target = g_world[g_player.locationID]->inhabitants;
+      for (target = g_world[g_player.location]->inhabitants;
            target != NULL;
            target = target->next) {
         if (target->status[INVISIBLE] == false &&
@@ -736,7 +736,7 @@ int HandleAttackMenuInput(void) {
       }
     }
   } else {  // Not in combat mode: player attacks a local inhabitant.
-    for (target = g_world[g_player.locationID]->inhabitants;
+    for (target = g_world[g_player.location]->inhabitants;
          target != NULL;
          target = target->next) {
       if (target->status[INVISIBLE] == false &&
@@ -752,7 +752,7 @@ int HandleAttackMenuInput(void) {
               printf("%s is dead.\n", Capitalize(GetNameDefinite(target)));
               FlushInput();
             }
-            for (target = g_world[g_player.locationID]->inhabitants;
+            for (target = g_world[g_player.location]->inhabitants;
                  target != NULL;
                  target = target->next) {
               if (WillingToFight(target) &&

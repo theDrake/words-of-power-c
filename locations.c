@@ -402,7 +402,7 @@ game_character_t *AddInhabitant(location_t *location, int type) {
     newGC = malloc(sizeof(game_character_t));
     if (newGC != NULL) {
       InitializeCharacter(newGC, type, location);
-      newGC->locationID = location->type;
+      newGC->location = location->type;
       if (location->inhabitants == NULL) {
         location->inhabitants = newGC;  /* New inhabitant successfully added. */
       } else {
@@ -460,7 +460,7 @@ Description: Returns a pointer to the first inhabitant found (if any) bearing a
 game_character_t *FindInhabitant(int type) {
   game_character_t *p_gc;
 
-  for (p_gc = g_world[g_player.locationID]->inhabitants;
+  for (p_gc = g_world[g_player.location]->inhabitants;
        p_gc != NULL;
        p_gc = p_gc->next) {
     if (p_gc->type == type) {
@@ -505,7 +505,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
   }
 
     /* Remove "inhabitant" from the old location's list of inhabitants. */
-  for (p_gc1 = g_world[inhabitant->locationID]->inhabitants;
+  for (p_gc1 = g_world[inhabitant->location]->inhabitants;
        p_gc1 != NULL;
        p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
     if (p_gc1 == inhabitant) {
@@ -519,10 +519,10 @@ int MoveInhabitant(game_character_t *inhabitant, int destinationID) {
   }
 
     /* Update other relevant variables. */
-  inhabitant->locationID = destinationID;
+  inhabitant->location = destinationID;
   inhabitant->next = NULL;
   if (inhabitant->summoned_creature != NULL) {
-    inhabitant->summoned_creature->locationID = destinationID;
+    inhabitant->summoned_creature->location = destinationID;
   }
 
   return SUCCESS;
@@ -670,7 +670,7 @@ int HandleMovementMenuInput(void) {
   location_t *destinations[MAX_DESTINATIONS] = {NULL};
 
     /* Determine available destinations and describe their orientation. */
-  switch (g_player.locationID) {
+  switch (g_player.location) {
     case ILLARUM_ENTRANCE:
       destinations[0] = g_world[ILLARUM_MARKET];
       destinations[1] = g_world[ILLARUM_INN];
@@ -1142,15 +1142,15 @@ int MovePlayer(int destinationID) {
     return FAILURE;
   }
 
-  g_player.locationID = destinationID;
+  g_player.location = destinationID;
   if (g_player.summoned_creature != NULL) {
-    g_player.summoned_creature->locationID = destinationID;
+    g_player.summoned_creature->location = destinationID;
   }
   if (g_player.next != NULL) {
     for (companion = g_player.next;
          companion != NULL;
          companion = companion->next) {
-      companion->locationID = destinationID;
+      companion->location = destinationID;
     }
   }
 
@@ -1206,7 +1206,7 @@ int SearchLocation(location_t *location) {
           g_player.inventory[HEALING_POTION]++;
           break;
         case 3:
-          if (AddRandomEnemy(g_world[g_player.locationID]) == SUCCESS) {
+          if (AddRandomEnemy(g_world[g_player.location]) == SUCCESS) {
             sprintf(output,
                     "While searching, you're attacked by %s!",
                     GetNameIndefinite(g_enemies[0]));
@@ -1244,7 +1244,7 @@ void DescribeSituation(void) {
   game_character_t *p_gc;
 
     /* Describue the current location. */
-  switch (g_player.locationID)
+  switch (g_player.location)
   {
     case ILLARUM_SCHOOL:
       if (g_world[ILLARUM_SCHOOL]->visits == 0) {  /* Indicates a new game. */
@@ -1466,14 +1466,14 @@ void DescribeSituation(void) {
   for (i = 0; i < NUM_GC_TYPES; i++) {
     g_character_type_described[i] = false;
   }
-  temp = VisibleInhabitants(g_world[g_player.locationID]);
+  temp = VisibleInhabitants(g_world[g_player.location]);
   if (temp > 0) {
     strcat(output, "You see ");
-    for (p_gc = g_world[g_player.locationID]->inhabitants;
+    for (p_gc = g_world[g_player.location]->inhabitants;
          p_gc != NULL;
          p_gc = p_gc->next) {
       if (p_gc->status[INVISIBLE] == false && g_character_type_described[p_gc->type] == false) {
-        if (temp < VisibleInhabitants(g_world[g_player.locationID])) {
+        if (temp < VisibleInhabitants(g_world[g_player.location])) {
           if (temp <= g_num_visible_of_type[p_gc->type]) {
             if (gcTypesDescribed > 1) {
               strcat(output, ",");
@@ -1504,7 +1504,7 @@ void DescribeSituation(void) {
   FlushInput();
 
     /* Check for hostile enemies. If any exist, they immediately attack.     */
-  for (p_gc = g_world[g_player.locationID]->inhabitants;
+  for (p_gc = g_world[g_player.location]->inhabitants;
        p_gc != NULL;
        p_gc = p_gc->next) {
     if (p_gc->relationship <= HOSTILE_ENEMY) {

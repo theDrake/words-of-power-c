@@ -130,7 +130,7 @@ void HandleStandardOptionsInput(void) {
         }
         break;
       case 'S':  // Search
-        if (SearchLocation(g_world[g_player.locationID]) == FAILURE) {
+        if (SearchLocation(g_world[g_player.location]) == FAILURE) {
           repeat_options = true;
         }
         break;
