@@ -407,7 +407,7 @@ Description: Handles combat situations between the player and NPCs by
 int Combat(void) {
   int i, round = 1;
   char cInput;
-  bool repeatOptions, playerFirst;
+  bool repeat_options, playerFirst;
   game_character_t *p_gc;
 
   if (NumberOfEnemies() == 0) {
@@ -448,7 +448,7 @@ int Combat(void) {
     if (round > 1 || playerFirst) {  // Check initiative only on 1st round.
         /* --PLAYER'S TURN-- */
       do {
-        repeatOptions = false;
+        repeat_options = false;
         printf("Choose an action:\n"
                "[A]ttack\n"
                "[C]ast a Spell\n"
@@ -459,17 +459,17 @@ int Combat(void) {
         switch (cInput) {
           case 'A':  // Attack
             if (HandleAttackMenuInput() == FAILURE) {
-              repeatOptions = true;
+              repeat_options = true;
             }
             break;
           case 'C':  // Cast a Spell
             if (HandleSpellMenuInput() == FAILURE) {
-              repeatOptions = true;
+              repeat_options = true;
             }
             break;
           case 'U':  // Use an Item
             if (HandleItemMenuInput() == FAILURE) {
-              repeatOptions = true;
+              repeat_options = true;
             }
             break;
           case 'F':  // Flee
@@ -477,7 +477,7 @@ int Combat(void) {
               printf("%s: \"Come on, destroy the dummy already!\"\n",
                      FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
               FlushInput();
-              repeatOptions = true;
+              repeat_options = true;
             } else if (RandomInt(1, 3) == 1) {
               printf("You have successfully fled.\n");
               FlushInput();
@@ -495,15 +495,15 @@ int Combat(void) {
             if (GetExitConfirmation()) {
               return 0;
             } else {
-              repeatOptions = true;
+              repeat_options = true;
             }
             break;
           default:
             printf("Invalid response.\n\n");
-            repeatOptions = true;
+            repeat_options = true;
             break;
         }
-      }while (repeatOptions);
+      }while (repeat_options);
       CheckStatus();
 
       // Increment "round" here if the NPCs had the initiative:
@@ -644,7 +644,7 @@ Description: Takes the player through the process of selecting a game character
 ******************************************************************************/
 int HandleAttackMenuInput(void) {
   int i, iInput, temp;
-  bool repeatOptions;
+  bool repeat_options;
   game_character_t *target;
 
   if (g_enemies[0] != NULL && g_enemies[0]->type == DUMMY) {

@@ -21,7 +21,7 @@ Description: Takes the player through the process of selecting a game character
 ******************************************************************************/
 int HandleTalkMenuInput(void) {
   int i, input, temp = 0;
-  bool repeatOptions;
+  bool repeat_options;
   game_character_t *target;
 
   UpdateVisibleGameCharCounter();
@@ -100,7 +100,7 @@ Description: Presents dialogue text and options when the player interacts with
 ******************************************************************************/
 int Dialogue(game_character_t *p_gc) {
   int i, input;
-  bool repeatOptions, canCommunicate;
+  bool repeat_options, canCommunicate;
   char output[LONG_STR_LEN + 1] = "";
 
   if (p_gc == NULL) {

@@ -26,7 +26,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
                         location_t *location) {
   int i;
   char cInput;
-  bool repeatOptions;
+  bool repeat_options;
 
   // Default stats, representative of an average adult human:
   p_gc->type = type;
@@ -90,8 +90,8 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       do {
         printf("Choose your name: ");
         GetStrInput(p_gc->name, SHORT_STR_LEN + 1);
-        repeatOptions = strlen(p_gc->name) < 1;
-      }while (repeatOptions);
+        repeat_options = strlen(p_gc->name) < 1;
+      }while (repeat_options);
       break;
     case ARCHWIZARD_OF_ELEMENTS:
       strcpy(p_gc->name, "Archememnon");

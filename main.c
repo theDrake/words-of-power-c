@@ -57,10 +57,10 @@ Description: Displays main menu options and does some handling of input.
 ******************************************************************************/
 void HandleMainMenuInput(void) {
   char cInput;
-  bool repeatOptions;
+  bool repeat_options;
 
   do {
-    repeatOptions = false;
+    repeat_options = false;
     printf("Main Menu:\n"
            "[N]ew Game\n"
            "[L]oad Game\n"
@@ -89,10 +89,10 @@ void HandleMainMenuInput(void) {
         break;
       default:
         printf("Invalid response.\n\n");
-        repeatOptions = true;
+        repeat_options = true;
         break;
     }
-  }while (repeatOptions);
+  }while (repeat_options);
 }
 
 /******************************************************************************
@@ -108,11 +108,11 @@ Description: Prints the standard (i.e., non-combat) player options and
 void HandleStandardOptionsInput(void) {
   int i, iInput, temp;
   char cInput;
-  bool repeatOptions;
+  bool repeat_options;
   game_character_t *p_gc;  // To scan linked lists of game characters.
 
   do {
-    repeatOptions = false;
+    repeat_options = false;
     printf("What do you want to do?\n"
            "[T]alk\n"
            "[S]earch\n"
@@ -126,49 +126,49 @@ void HandleStandardOptionsInput(void) {
     switch (cInput) {
       case 'T':  // Talk
         if (HandleTalkMenuInput() == FAILURE) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       case 'S':  // Search
         if (SearchLocation(g_world[g_player.locationID]) == FAILURE) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       case 'U':  // Use an Item
         if (HandleItemMenuInput() == FAILURE) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       case 'C':  // Cast a Spell
         if (HandleSpellMenuInput() == FAILURE) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       case 'A':  // Attack
         if (HandleAttackMenuInput() == FAILURE) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       case 'M':  // Move to Another Location
         if (HandleMovementMenuInput() == FAILURE) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       case 'V':  // View Inventory and Status
         DisplayCharacterData(&g_player);
-        repeatOptions = true;
+        repeat_options = true;
         break;
       case 'Q':  // Quit
         if (GetExitConfirmation() == false) {
-          repeatOptions = true;
+          repeat_options = true;
         }
         break;
       default:
         printf("Invalid response.\n\n");
-        repeatOptions = true;
+        repeat_options = true;
         break;
     }
-  }while (repeatOptions);
+  }while (repeat_options);
 }
 
 /******************************************************************************
