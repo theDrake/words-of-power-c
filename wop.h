@@ -587,10 +587,10 @@ bool IsSpellcaster(game_character_t *p_gc);
 
 // Function prototypes for "item.c":
 int HandleItemMenuInput(void);
-int UseItem(game_character_t *p_gc, int type);
+int UseItem(game_character_t *p_gc, int item);
 int PrintInventory(game_character_t *p_gc);
-char *GetItemName(int type);
-char *GetItemNamePlural(int type);
+char *GetItemName(int item);
+char *GetItemNamePlural(int item);
 int GiveGold(game_character_t *giver, game_character_t *receiver, int amount);
 int GiveItem(game_character_t *giver, game_character_t *receiver, int item);
 int GiveItems(game_character_t *giver, game_character_t *receiver, int item,

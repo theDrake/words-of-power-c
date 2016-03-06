@@ -20,7 +20,7 @@ Description: Displays the player's inventory and prompts the player to choose
     Outputs: SUCCESS if an item is used, FAILURE otherwise.
 ******************************************************************************/
 int HandleItemMenuInput(void) {
-  int i, iInput, temp = 0;
+  int i, input, temp = 0;
 
   for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (g_player.inventory[i] > 0) {
@@ -35,12 +35,12 @@ int HandleItemMenuInput(void) {
   } else {
     temp++;
     printf("[%d] Cancel (return to previous menu)\n", temp);
-    GetIntInput(&iInput, 1, temp);
+    GetIntInput(&input, 1, temp);
     temp = 0;
     for (i = 0; i < NUM_ITEM_TYPES; i++) {
       if (g_player.inventory[i] > 0) {
         temp++;
-        if (temp == iInput) {
+        if (temp == input) {
           UseItem(&g_player, i);
           return SUCCESS;
         }
@@ -48,14 +48,13 @@ int HandleItemMenuInput(void) {
     }
   }
 
-  return FAILURE;  /* No item was used: the player changed his/her mind. */
+  return FAILURE;  // No item was used: player changed their mind.
 }
 
 /******************************************************************************
    Function: UseItem
 
-Description: Executes the use of an item by a given game character (the player
-             or an NPC).
+Description: Handles the use of an item by a given character (player or NPC).
 
      Inputs: p_gc - Pointer to the user of the item.
              item - Integer representing the type of item to be used.
@@ -105,7 +104,7 @@ Description: Prints the name and quantity of each item owned by a given game
     Outputs: Number of item types described (or -1 if an error is encountered).
 ******************************************************************************/
 int PrintInventory(game_character_t *p_gc) {
-  int i, itemTypesDescribed = 0;
+  int i, num_item_types_described = 0;
 
   if (p_gc == NULL) {
 #if DEBUG
@@ -117,9 +116,9 @@ int PrintInventory(game_character_t *p_gc) {
   printf("Inventory: ");
   for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (p_gc->inventory[i] > 0) {
-      if (itemTypesDescribed > 0) {
+      if (num_item_types_described > 0) {
         printf(", ");
-        if (itemTypesDescribed % 3 == 0) {
+        if (num_item_types_described % 3 == 0) {
           printf("\n\t");
         }
       }
@@ -135,12 +134,12 @@ int PrintInventory(game_character_t *p_gc) {
           printf("(%d equipped)", p_gc->equipped_items[i]);
         }
       }
-      itemTypesDescribed++;
+      num_item_types_described++;
     }
   }
   printf(".\n");
 
-  return itemTypesDescribed;
+  return num_item_types_described;
 }
 
 /******************************************************************************

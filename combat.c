@@ -406,7 +406,7 @@ Description: Handles combat situations between the player and NPCs by
 ******************************************************************************/
 int Combat(void) {
   int i, round = 1;
-  char cInput;
+  char input;
   bool repeat_options, playerFirst;
   game_character_t *p_gc;
 
@@ -455,8 +455,8 @@ int Combat(void) {
                "[U]se an Item\n"
                "[F]lee\n"
                "[Q]uit (Return to Main Menu)\n");
-        GetCharInput(&cInput);
-        switch (cInput) {
+        GetCharInput(&input);
+        switch (input) {
           case 'A':  // Attack
             if (HandleAttackMenuInput() == FAILURE) {
               repeat_options = true;
@@ -643,7 +643,7 @@ Description: Takes the player through the process of selecting a game character
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int HandleAttackMenuInput(void) {
-  int i, iInput, temp;
+  int i, input, temp;
   bool repeat_options;
   game_character_t *target;
 
@@ -716,7 +716,7 @@ int HandleAttackMenuInput(void) {
   }
 
   // Player chooses a target by number:
-  GetIntInput(&iInput, 1, temp);
+  GetIntInput(&input, 1, temp);
 
   // Target is now found, and attacked, by matching it with the input:
   temp = 0;
@@ -728,7 +728,7 @@ int HandleAttackMenuInput(void) {
       if (g_enemies[i]->status[INVISIBLE] == false &&
           g_character_type_described[g_enemies[i]->type] == false) {
         temp++;
-        if (temp == iInput) {
+        if (temp == input) {
           Attack(&g_player, g_enemies[i]);
           return SUCCESS;
         }
@@ -742,7 +742,7 @@ int HandleAttackMenuInput(void) {
       if (target->status[INVISIBLE] == false &&
           g_character_type_described[target->type] == false) {
         temp++;
-        if (temp == iInput) {
+        if (temp == input) {
           Attack(&g_player, target);
           if (g_player.status[IN_COMBAT] == false) {
             if (target->hp > 0) {

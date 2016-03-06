@@ -666,7 +666,7 @@ Description: Displays movement options to the player.
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int HandleMovementMenuInput(void) {
-  int i, iInput, numDestinations = 0;
+  int i, input, numDestinations = 0;
   location_t *destinations[MAX_DESTINATIONS] = {NULL};
 
     /* Determine available destinations and describe their orientation. */
@@ -1117,9 +1117,9 @@ int HandleMovementMenuInput(void) {
   for (i = 0; i < MAX_DESTINATIONS && destinations[i] != NULL; i++) {
     printf("[%d] %s\n", i + 1, destinations[i]->name);
   }
-  GetIntInput(&iInput, 1, i);
+  GetIntInput(&input, 1, i);
 
-  return MovePlayer(destinations[iInput - 1]->type);
+  return MovePlayer(destinations[input - 1]->type);
 }
 
 /******************************************************************************

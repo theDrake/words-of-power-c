@@ -56,7 +56,7 @@ Description: Displays main menu options and does some handling of input.
     Outputs: None.
 ******************************************************************************/
 void HandleMainMenuInput(void) {
-  char cInput;
+  char input;
   bool repeat_options;
 
   do {
@@ -65,8 +65,8 @@ void HandleMainMenuInput(void) {
            "[N]ew Game\n"
            "[L]oad Game\n"
            "[Q]uit\n");
-    GetCharInput(&cInput);
-    switch (cInput) {
+    GetCharInput(&input);
+    switch (input) {
       case 'N':  // New Game
         if (g_world_exists) {
           DestroyWorld();
@@ -106,8 +106,8 @@ Description: Prints the standard (i.e., non-combat) player options and
     Outputs: None.
 ******************************************************************************/
 void HandleStandardOptionsInput(void) {
-  int i, iInput, temp;
-  char cInput;
+  int i, temp;
+  char input;
   bool repeat_options;
   game_character_t *p_gc;  // To scan linked lists of game characters.
 
@@ -122,8 +122,8 @@ void HandleStandardOptionsInput(void) {
            "[V]iew Inventory and Status\n"
            "[M]ove to Another Location\n"
            "[Q]uit (Return to Main Menu)\n");
-    GetCharInput(&cInput);
-    switch (cInput) {
+    GetCharInput(&input);
+    switch (input) {
       case 'T':  // Talk
         if (HandleTalkMenuInput() == FAILURE) {
           repeat_options = true;
@@ -299,19 +299,19 @@ Description: Asks for confirmation of intent to exit to the main menu. If
     Outputs: true if the player confirms they want to exit to the main menu.
 ******************************************************************************/
 bool GetExitConfirmation(void) {
-  char cInput;
+  char input;
 
   do {
     printf("Are you sure you want to exit to the main menu (and lose any "
            "unsaved data)?\n(Y/N) ");
-    GetCharInput(&cInput);
-    if (cInput == 'Y') {
+    GetCharInput(&input);
+    if (input == 'Y') {
       DestroyWorld();
       return true;
-    } else if (cInput != 'N') {
+    } else if (input != 'N') {
       printf("Invalid response.\n\n");
     }
-  }while (cInput != 'N');
+  }while (input != 'N');
 
   return false;
 }
