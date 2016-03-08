@@ -758,12 +758,12 @@ int Transaction(game_character_t *merchant, int price) {
 
 Description: Returns the name of a given language as a string (e.g., "Elvish").
 
-     Inputs: type - ID of the desired language.
+     Inputs: language - Integer representing the language of interest.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
-char *LanguageName(int type) {
-  switch (type) {
+char *LanguageName(int language) {
+  switch (language) {
     case IMPERIAL:
       return "Imperial";
     case ANCIENT_IMPERIAL:

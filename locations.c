@@ -386,7 +386,7 @@ Description: Creates a new game character and adds it to a given location's list
              of inhabitants.
 
      Inputs: location - Location into which the new character will be added.
-             type    - ID of the desired game character.
+             type     - Integer representing the desired game character type.
 
     Outputs: Pointer to the new game character (or NULL if it failed).
 ******************************************************************************/

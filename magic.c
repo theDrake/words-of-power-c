@@ -591,10 +591,10 @@ int PrintKnownWords(void) {
 /******************************************************************************
    Function: GetWord
 
-Description: Given the ID number of a Word of Power, returns that Word as a
-             string.
+Description: Given an integer representing a Word of Power, returns that Word
+             as a string.
 
-     Inputs: type - ID of the desired Word.
+     Inputs: type - Integer representing the desired Word.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
@@ -682,7 +682,7 @@ char *GetWordStartingWith(char first_letter) {
 Description: Returns the English name of a given Word of Power as a string
              (such as "Fire", "Water", etc.).
 
-     Inputs: type - ID of the desired Word.
+     Inputs: type - Integer representing the Word of interest.
 
     Outputs: Pointer to the desired string.
 ******************************************************************************/
