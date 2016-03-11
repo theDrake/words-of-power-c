@@ -67,7 +67,7 @@ int AddRandomEnemy(location_t *location) {
     return FAILURE;
   }
 
-  switch (location->type) {
+  switch (location->id) {
     case ILLARUM_ENTRANCE:
       newEnemy = AddInhabitant(location, THIEF);
       break;

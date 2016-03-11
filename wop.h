@@ -132,7 +132,7 @@ enum LanguageType {
   NUM_LANGUAGE_TYPES
 };
 
-enum LocationType {
+enum LocationID {
   ILLARUM_ENTRANCE,
   ILLARUM_MARKET,
   ILLARUM_INN,
@@ -193,7 +193,7 @@ enum LocationType {
   QUELACENTUS_PLAZA,
   QUELACENTUS_TEMPLE,
   QUELACENTUS_PALACE,
-  NUM_LOCATION_TYPES
+  NUM_LOCATION_IDS
 };
 
 enum GameCharType {
@@ -458,7 +458,7 @@ typedef struct GameCharacter {
 } game_character_t;
 
 typedef struct Location {
-  int type;
+  int id;
   char name[SHORT_STR_LEN + 1];
   bool hidden;  // If true, special effort is required to find the location.
   int visits;  // Number of times player has visited the location.
@@ -470,7 +470,7 @@ typedef struct Location {
   Global Variables
 ******************************************************************************/
 
-location_t *g_world[NUM_LOCATION_TYPES];  // Pointers to all game locations.
+location_t *g_world[NUM_LOCATION_IDS];  // Pointers to all game locations.
 bool g_world_exists;  // Indicates whether game world exists in memory.
 bool g_player_has_quit;  // Indicates player's desire to quit the game.
 int g_num_secrets_found;  // Number of "secrets" discovered by the player.
@@ -505,7 +505,7 @@ bool StrContains(char *str, char c);
 void FlushInput(void);
 
 // Function prototypes for "locations.c":
-int InitializeLocation(location_t *location, int type);
+int InitializeLocation(location_t *location, int id);
 bool InVentarrisTerritory(location_t *location);
 game_character_t *AddInhabitant(location_t *location, int type);
 int AddInhabitants(location_t *location, int type, int amount);

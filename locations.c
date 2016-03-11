@@ -17,19 +17,19 @@ Description: Initializes a given location struct, along with all of its
              default starting values.
 
      Inputs: location - Pointer to the location struct to be initialized.
-             type     - Integer representing the desired location.
+             id       - Integer representing the desired location.
 
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
-int InitializeLocation(location_t *location, int type) {
+int InitializeLocation(location_t *location, int id) {
   int i;
 
-  location->type = type;
+  location->id = id;
   location->hidden = false;
   location->visits = 0;
   location->searches = 0;
   location->inhabitants = NULL;
-  switch (type) {
+  switch (id) {
     case ILLARUM_ENTRANCE:
       strcpy(location->name, "Illarum, City Gate");
       AddInhabitants(location, HUMAN, RandomInt(15, 25));
@@ -359,24 +359,24 @@ Description: Determines whether a given location is within the territory
     Outputs: true or false.
 ******************************************************************************/
 bool InVentarrisTerritory(location_t *location) {
-  return location->type == VENTARRIS_ENTRANCE    ||
-         location->type == VENTARRIS_MARKET      ||
-         location->type == VENTARRIS_INN         ||
-         location->type == VENTARRIS_SCHOOL      ||
-         location->type == VENTARRIS_TEMPLE      ||
-         location->type == VENTARRIS_PALACE      ||
-         location->type == VENTARRIS_PRISON      ||
-         location->type == VENTARRIS_DOCKS       ||
-         location->type == PLAINS_SOUTH          ||
-         location->type == SOUTHERN_FARMS        ||
-         location->type == SWAMP                 ||
-         location->type == NECROMANCERS_CIRCLE   ||
-         location->type == ISHTARR_ENTRANCE      ||
-         location->type == ISHTARR_EAST_WING     ||
-         location->type == ISHTARR_WEST_WING     ||
-         location->type == ISHTARR_CENTRAL_TOWER ||
-         location->type == ISHTARR_DUNGEON       ||
-         location->type == SHORE_SE;
+  return location->id == VENTARRIS_ENTRANCE    ||
+         location->id == VENTARRIS_MARKET      ||
+         location->id == VENTARRIS_INN         ||
+         location->id == VENTARRIS_SCHOOL      ||
+         location->id == VENTARRIS_TEMPLE      ||
+         location->id == VENTARRIS_PALACE      ||
+         location->id == VENTARRIS_PRISON      ||
+         location->id == VENTARRIS_DOCKS       ||
+         location->id == PLAINS_SOUTH          ||
+         location->id == SOUTHERN_FARMS        ||
+         location->id == SWAMP                 ||
+         location->id == NECROMANCERS_CIRCLE   ||
+         location->id == ISHTARR_ENTRANCE      ||
+         location->id == ISHTARR_EAST_WING     ||
+         location->id == ISHTARR_WEST_WING     ||
+         location->id == ISHTARR_CENTRAL_TOWER ||
+         location->id == ISHTARR_DUNGEON       ||
+         location->id == SHORE_SE;
 }
 
 /******************************************************************************
@@ -401,7 +401,7 @@ game_character_t *AddInhabitant(location_t *location, int type) {
     new_gc = malloc(sizeof(game_character_t));
     if (new_gc != NULL) {
       InitializeCharacter(new_gc, type, location);
-      new_gc->location = location->type;
+      new_gc->location = location->id;
       if (location->inhabitants == NULL) {
         location->inhabitants = new_gc;  // New inhabitant successfully added.
       } else {
@@ -485,7 +485,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destination) {
 
   if (inhabitant == NULL ||
       destination < 0 ||
-      destination >= NUM_LOCATION_TYPES) {
+      destination >= NUM_LOCATION_IDS) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1115,7 +1115,7 @@ int HandleMovementMenuInput(void) {
   }
   GetIntInput(&input, 1, i);
 
-  return MovePlayer(destinations[input - 1]->type);
+  return MovePlayer(destinations[input - 1]->id);
 }
 
 /******************************************************************************
@@ -1131,7 +1131,7 @@ Description: Handles the movement of the player character from one location to
 int MovePlayer(int destination) {
   game_character_t *companion;
 
-  if (destination < 0 || destination >= NUM_LOCATION_TYPES) {
+  if (destination < 0 || destination >= NUM_LOCATION_IDS) {
 #if DEBUG
     PRINT_ERROR_MESSAGE;
 #endif
@@ -1174,7 +1174,7 @@ int SearchLocation(location_t *location) {
   }
 
   location->searches++;
-  switch (location->type) {
+  switch (location->id) {
     case FOREST:
       temp = RandomInt(1, 5);
       if (temp == 1) {

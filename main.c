@@ -199,7 +199,7 @@ int CreateWorld(void) {
   }
 
   // Initialize each location (including its inhabitants):
-  for (i = 0; i < NUM_LOCATION_TYPES; i++) {
+  for (i = 0; i < NUM_LOCATION_IDS; i++) {
     g_world[i] = malloc(sizeof(location_t));
     if (g_world[i] != NULL) {
       errors += InitializeLocation(g_world[i], i);
@@ -258,7 +258,7 @@ int DestroyWorld(void) {
   printf("Destroying world...\n\n");
 #endif
 
-  for (i = 0; i < NUM_LOCATION_TYPES; i++) {
+  for (i = 0; i < NUM_LOCATION_IDS; i++) {
     if (g_world[i] != NULL) {
       while (g_world[i]->inhabitants != NULL) {
         if (DeleteInhabitant(g_world[i], g_world[i]->inhabitants) == FAILURE) {
