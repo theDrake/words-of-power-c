@@ -82,9 +82,9 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       p_gc->words[WORD_OF_AIR] = KNOWN;
       p_gc->inventory[HEALING_POTION] = 3;
       p_gc->location = ILLARUM_SCHOOL;
-      PrintString("You are a human wizard who has been studying at the "
-                  "prestigious School of the Elements in the city of Illarum "
-                  "for the past five years.\0");
+      PrintString("You are a wizard who has studied at the city of Illarum's "
+                  "prestigious School of the Elements for the past five years."
+                  "\0");
       FlushInput();
       do {
         printf("Choose your name: ");
@@ -1587,7 +1587,7 @@ Description: Creates a new, summoned game character and associates it with its
     Outputs: Pointer to the summoned creature.
 ******************************************************************************/
 game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
-  game_character_t *newGC = NULL, *temp;
+  game_character_t *newGC = NULL;
 
   if (summoner == NULL) {
 #if DEBUG
@@ -1673,16 +1673,13 @@ int DisplayCharacterData(game_character_t *p_gc) {
   printf("Words of Power acquired: %d\n", NumberOfWordsKnown(p_gc));
   printf("Gold: %d\n", p_gc->gold);
   PrintInventory(p_gc);
-  printf("\n");
   //PrintStatus(p_gc);
-  printf("\n");
   if (p_gc->summoned_creature != NULL) {
     printf("Summoned creature: %s (%d/%d, ",
            p_gc->summoned_creature->name,
            p_gc->summoned_creature->hp,
            p_gc->summoned_creature->max_hp);
     //PrintStatus(p_gc->summoned_creature);
-    printf(")\n");
   }
   FlushInput();
 

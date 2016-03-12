@@ -299,8 +299,8 @@ bool GetExitConfirmation(void) {
   char input;
 
   do {
-    printf("Are you sure you want to exit to the main menu (and lose any "
-           "unsaved data)?\n(Y/N) ");
+    printf("Are you sure you want to exit to the main menu (and lose unsaved "
+           "data)? (Y/N) ");
     GetCharInput(&input);
     if (input == 'Y') {
       DestroyWorld();
