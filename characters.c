@@ -60,7 +60,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
   for (i = 0; i < NUM_WORD_TYPES; i++) {
     p_gc->words[i] = UNKNOWN;
   }
-  p_gc->location = location->type;
+  p_gc->location = location->id;
   p_gc->summoned_creature = NULL;
   p_gc->next = NULL;
 
@@ -1422,7 +1422,7 @@ Description: Removes a game character from the current location's list of
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int AddCompanion(game_character_t *companion) {
-  game_character_t *p_gc1, *p_gc2;
+  game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1446,7 +1446,7 @@ int AddCompanion(game_character_t *companion) {
   for (p_gc1 = g_world[g_player.location]->inhabitants;
        p_gc1 != NULL;
        p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
-    if (p_gc1 == companion) {
+    if (p_gc1 == companion && p_gc2 != NULL) {
       if (p_gc1->next == NULL) {
         p_gc2->next = NULL;
       } else {
@@ -1479,7 +1479,7 @@ Description: Removes a game character from the player's list of companions and
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int RemoveCompanion(game_character_t *companion) {
-  game_character_t *p_gc1, *p_gc2;
+  game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1503,7 +1503,7 @@ int RemoveCompanion(game_character_t *companion) {
   for (p_gc1 = g_player.next;
        p_gc1 != NULL;
        p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
-    if (p_gc1 == companion) {
+    if (p_gc1 == companion && p_gc2 != NULL) {
       if (p_gc1->next == NULL) {
         p_gc2->next = NULL;
       } else {
@@ -1536,7 +1536,7 @@ Description: Removes a game character from the player's list of companions and
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int DeleteCompanion(game_character_t *companion) {
-  game_character_t *p_gc1, *p_gc2;
+  game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (companion == NULL) {
 #if DEBUG
@@ -1549,7 +1549,7 @@ int DeleteCompanion(game_character_t *companion) {
   for (p_gc1 = g_player.next;
        p_gc1 != NULL;
        p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
-    if (p_gc1 == companion) {
+    if (p_gc1 == companion && p_gc2 != NULL) {
       if (p_gc1->next == NULL) {
         p_gc2->next = NULL;
       } else {

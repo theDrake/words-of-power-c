@@ -19,7 +19,7 @@ Description: Main function for the "Words of Power" RPG.
     Outputs: Number of errors encountered.
 ******************************************************************************/
 int main(void) {
-  srand(time(0));
+  srand((int) time(0));
   g_world_exists = false;
   g_player_has_quit = false;
 
@@ -106,10 +106,8 @@ Description: Prints the standard (i.e., non-combat) player options and
     Outputs: None.
 ******************************************************************************/
 void HandleStandardOptionsInput(void) {
-  int i, temp;
   char input;
   bool repeat_options;
-  game_character_t *p_gc;  // To scan linked lists of game characters.
 
   do {
     repeat_options = false;
@@ -245,7 +243,6 @@ Description: Deallocates all memory set aside for location structs and their
 ******************************************************************************/
 int DestroyWorld(void) {
   int i, errors = 0;
-  game_character_t *temp;  // To search for and deallocate game characters.
 
   if (g_world_exists == false) {
 #if DEBUG
@@ -405,8 +402,7 @@ int GetIntInput(int *i, int low, int high) {
     scanf("%d", i);
     FlushInput();
     if (*i < low || *i > high) {
-      printf("Invalid response. Enter a number between %d and %d: ",
-             low,
+      printf("Invalid response. Enter a number between %d and %d: ", low,
              high);
       repeat = true;
     }

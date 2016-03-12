@@ -22,8 +22,6 @@ Description: Initializes a given location struct, along with all of its
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int InitializeLocation(location_t *location, int id) {
-  int i;
-
   location->id = id;
   location->hidden = false;
   location->visits = 0;
@@ -435,9 +433,9 @@ Description: Creates multiple game characters of a single type and adds them to
     Outputs: Number of game characters successfully added.
 ******************************************************************************/
 int AddInhabitants(location_t *location, int type, int amount) {
-  int count;
+  int i, count = 0;
 
-  while (amount-- > 0) {
+  for (i = 0; i < amount; i++) {
     if(AddInhabitant(location, type) != NULL) {
       count++;
     }
@@ -481,7 +479,7 @@ Description: Handles the movement of an NPC from one location to another.
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int MoveInhabitant(game_character_t *inhabitant, int destination) {
-  game_character_t *p_gc1, *p_gc2;
+  game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (inhabitant == NULL ||
       destination < 0 ||
@@ -507,7 +505,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destination) {
   for (p_gc1 = g_world[inhabitant->location]->inhabitants;
        p_gc1 != NULL;
        p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
-    if (p_gc1 == inhabitant) {
+    if (p_gc1 == inhabitant && p_gc2 != NULL) {
       if (p_gc1->next == NULL) {
         p_gc2->next = NULL;
       } else {
@@ -538,7 +536,7 @@ Description: Removes a game character from a location's list of inhabitants.
     Outputs: SUCCESS or FAILURE.
 ******************************************************************************/
 int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
-  game_character_t *p_gc1, *p_gc2;
+  game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (location == NULL || inhabitant == NULL) {
 #if DEBUG
@@ -550,7 +548,7 @@ int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
   for (p_gc1 = location->inhabitants;
        p_gc1 != NULL;
        p_gc2 = p_gc1, p_gc1 = p_gc1->next) {
-    if (p_gc1 == inhabitant) {
+    if (p_gc1 == inhabitant && p_gc2 != NULL) {
       if (p_gc1->next == NULL) {
         p_gc2->next = NULL;
       } else {
@@ -1190,15 +1188,11 @@ int SearchLocation(location_t *location) {
       switch (RandomInt(1, 5)) {
         case 1:
           temp = RandomInt(1, 20);
-          sprintf(output,
-                  "You find a small bag holding %d gold coins.",
-                  temp);
+          sprintf(output, "You find a small bag holding %d gold coins.", temp);
           g_player.gold += temp;
           break;
         case 2:
-          sprintf(output,
-                  "You find a healing potion.",
-                  temp);
+          sprintf(output, "You find a healing potion.");
           g_player.inventory[HEALING_POTION]++;
           break;
         case 3:

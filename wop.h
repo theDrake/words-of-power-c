@@ -1,13 +1,15 @@
 /******************************************************************************
-   Filename: wop.h
+Filename: wop.h
 
-     Author: David C. Drake (http://davidcdrake.com)
+Author: David C. Drake (http://davidcdrake.com)
 
 Description: Header file for the text-based fantasy RPG "Words of Power."
 ******************************************************************************/
 
 #ifndef WOP_H_
 #define WOP_H_
+
+#define _CRT_SECURE_NO_DEPRECATE
 
 #include <stdio.h>  // printf, scanf
 #include <stdlib.h>  // srand, rand
@@ -17,7 +19,7 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #include <stdbool.h>  // bool, true, false
 
 /******************************************************************************
-  Constants
+Constants
 ******************************************************************************/
 
 // Error checking:
@@ -82,7 +84,7 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #define MAX_SPELL_LEN 8
 
 /******************************************************************************
-  Enumerations
+Enumerations
 ******************************************************************************/
 
 enum WordType {
@@ -424,7 +426,7 @@ enum Knowledge {
 };
 
 /******************************************************************************
-  Structures
+Structures
 ******************************************************************************/
 
 typedef struct GameCharacter {
@@ -467,7 +469,7 @@ typedef struct Location {
 } location_t;
 
 /******************************************************************************
-  Global Variables
+Global Variables
 ******************************************************************************/
 
 location_t *g_world[NUM_LOCATION_IDS];  // Pointers to all game locations.
@@ -483,7 +485,7 @@ int g_num_visible_of_type[NUM_GC_TYPES];  // Number of each GC type visible.
 bool g_character_type_described[NUM_GC_TYPES];  // Helps when describing NPCs.
 
 /******************************************************************************
-  Function Prototypes
+Function Prototypes
 ******************************************************************************/
 
 // Function prototypes for "main.c":
@@ -592,6 +594,7 @@ int PrintInventory(game_character_t *p_gc);
 char *GetItemName(int item);
 char *GetItemNamePlural(int item);
 int GiveGold(game_character_t *giver, game_character_t *receiver, int amount);
+int AddItem(game_character_t *receiver, int item);
 int GiveItem(game_character_t *giver, game_character_t *receiver, int item);
 int GiveItems(game_character_t *giver, game_character_t *receiver, int item,
               int amount);
