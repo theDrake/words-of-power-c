@@ -15,7 +15,7 @@ OBJECTS = main.o characters.o combat.o dialogue.o items.o locations.o magic.o
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 wop: $(OBJECTS) $(HEADER)
-	$(CC) -o $@ $** $(CFLAGS)
+	$(CC) -o $@ *.o $(CFLAGS)
 
 .PHONY: clean
 
