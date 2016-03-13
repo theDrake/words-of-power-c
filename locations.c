@@ -1239,8 +1239,8 @@ void DescribeSituation(void) {
       if (g_world[ILLARUM_SCHOOL]->visits == 0) {  // Indicates a new game.
         g_world[ILLARUM_SCHOOL]->visits++;
         sprintf(output,
-                "%s, Archwizard of the School of the Elements, approaches to "
-                "speak with you.",
+                "%s, Archwizard of the School of the Elements, approaches "
+                "you.",
                 FindInhabitant(ARCHWIZARD_OF_ELEMENTS)->name);
         PrintString(output);
         FlushInput();

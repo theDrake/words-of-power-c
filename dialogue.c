@@ -150,13 +150,12 @@ int Dialogue(game_character_t *p_gc) {
         PrintString(output);
         FlushInput();
         sprintf(output,
-                "%s: \"As such, I have decided not only to declare you a "
-                "graduate of the School of the Elements, but also to offer you"
-                " employment as an agent of the Elemental Wizards' Guild. In "
-                "fact, I already have a task in mind for you. Before "
-                "discussing the details, however, would you like an "
-                "opportunity to demonstrate your skills once again for the "
-                "newer students?\"\n",
+                "%s: \"As such, I've decided not only to declare you a "
+                "graduate, but also to offer employment as an agent of the "
+                "Elemental Wizards Guild. In fact, I already have a task for "
+                "you. Before discussing the details, however, would you like "
+                "to demonstrate your skills one last time for the newer "
+                "students?\"\n",
                 AllCaps(p_gc->name));
         g_allegiances[ELEMENTS_GUILD] = GOOD_FRIEND;
         PrintString(output);
@@ -187,7 +186,7 @@ int Dialogue(game_character_t *p_gc) {
             sprintf(output,
                     "%s: \"Fantastic! It's gratifying to see the progress "
                     "you've made. But now, let us discuss the work I have in "
-                    "mind for you...\"",
+                    "mind for you.\"",
                     AllCaps(p_gc->name));
             PrintString(output);
             FlushInput();

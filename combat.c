@@ -421,9 +421,8 @@ int Combat(void) {
   playerFirst = RandomBool();  // Determine who gets the first round.
 
   do {
-    printf("  ____________\n"
-           "_/ENEMY STATS \\__________________________________________________"
-           "______________\n");
+    printf("  ___________\n_/ENEMY STATS\\____________________________________"
+           "_____________________________\n");
     for (i = 0; i < MAX_ENEMIES; i++) {
       if (g_enemies[i] == NULL) {
         break;
@@ -434,9 +433,8 @@ int Combat(void) {
         PrintCombatStatus(g_enemies[i]->summoned_creature);
       }
     }
-    printf("  ____________\n"
-           "_/PLAYER STATS\\__________________________________________________"
-           "______________\n");
+    printf("  ____________\n_/PLAYER STATS\\__________________________________"
+           "______________________________\n");
     for (p_gc = &g_player; p_gc != NULL; p_gc = p_gc->next) {
       PrintCombatStatus(p_gc);
     }

@@ -83,8 +83,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       p_gc->inventory[HEALING_POTION] = 3;
       p_gc->location = ILLARUM_SCHOOL;
       PrintString("You are a wizard who has studied at the city of Illarum's "
-                  "prestigious School of the Elements for the past five years."
-                  "\0");
+                  "School of the Elements for the past five years.\0");
       FlushInput();
       do {
         printf("Choose your name: ");

@@ -204,7 +204,7 @@ int HandleSpellMenuInput(void) {
     /* --CREATION OF SPELL SEQUENCE-- */
 
   printf("Use the letters indicated to create a spell sequence of up to %d "
-         "letters (letters may be used more than once):\n", MAX_SPELL_LEN);
+         "letters\n(letters may be used more than once):\n", MAX_SPELL_LEN);
   PrintKnownWords();
   do {
     repeat_options = false;
