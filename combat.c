@@ -23,9 +23,7 @@ int AddEnemy(game_character_t *p_gc) {
   int i;
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -39,9 +37,7 @@ int AddEnemy(game_character_t *p_gc) {
   }
 
   // If we reach this point, "g_enemies" was full and the add failed.
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return FAILURE;
 }
 
@@ -61,9 +57,7 @@ int AddRandomEnemy(location_t *location) {
   game_character_t *newEnemy = NULL;
 
   if (location == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -267,9 +261,7 @@ int AddRandomEnemy(location_t *location) {
       newEnemy = AddInhabitant(location, MERFOLK_SOLDIER);
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       break;
   }
   if (newEnemy != NULL) {
@@ -295,9 +287,7 @@ int RemoveEnemy(game_character_t *p_gc) {
   int i, j;
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -317,9 +307,7 @@ int RemoveEnemy(game_character_t *p_gc) {
   }
 
   // If we reach this point, "p_gc" was not found.
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return FAILURE;
 }
 
@@ -338,9 +326,7 @@ int DeleteEnemy(game_character_t *p_gc) {
   if (RemoveEnemy(p_gc) == SUCCESS) {
     DeleteInhabitant(g_world[p_gc->location], p_gc);
   } else {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -379,9 +365,7 @@ int VisibleEnemies(void) {
   int i, count = 0;
 
   if (g_player.status[IN_COMBAT] == false) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return count;
   } else {
     for (i = 0; i < MAX_ENEMIES && g_enemies[i] != NULL; i++) {
@@ -411,9 +395,7 @@ int Combat(void) {
   game_character_t *p_gc;
 
   if (NumberOfEnemies() == 0) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return 0;
   }
 
@@ -539,9 +521,7 @@ Description: Prints some basic, combat-relevant information about a given game
 ******************************************************************************/
 void PrintCombatStatus(game_character_t *p_gc) {
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return;
   }
 
@@ -566,9 +546,7 @@ int EnemyAI(int index) {
   game_character_t *targets[MAX_TARGETS] = {NULL};
 
   if (g_enemies[index] == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -772,9 +750,7 @@ int HandleAttackMenuInput(void) {
     }
   }
 
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return FAILURE;
 }
 
@@ -792,9 +768,7 @@ int Attack(game_character_t *attacker, game_character_t *defender) {
   int damage;
 
   if (attacker == NULL || defender == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 

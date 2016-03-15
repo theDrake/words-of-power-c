@@ -26,7 +26,11 @@ Constants
 #define DEBUG   false
 #define FAILURE false
 #define SUCCESS true
+#if DEBUG
 #define PRINT_ERROR_MESSAGE printf("ERROR: %s, line %d\n", __FILE__, __LINE__); FlushInput()
+#else
+#define PRINT_ERROR_MESSAGE FlushInput()
+#endif
 
 // String lengths and other max. values:
 #define SHORT_STR_LEN    50

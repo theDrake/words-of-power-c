@@ -80,9 +80,7 @@ int HandleTalkMenuInput(void) {
     }
   }
 
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return FAILURE;
 }
 
@@ -103,9 +101,7 @@ int Dialogue(game_character_t *p_gc) {
   char output[LONG_STR_LEN + 1] = "";
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -482,9 +478,7 @@ int LanguageLearningDialogue(game_character_t *p_gc) {
   char output[LONG_STR_LEN + 1] = "";
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -550,9 +544,7 @@ int WordLearningDialogue(game_character_t *p_gc) {
   char output[LONG_STR_LEN + 1] = "";
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -619,9 +611,7 @@ int MerchantDialogue(game_character_t *merchant)
   char output[LONG_STR_LEN + 1] = "";
 
   if (merchant == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -722,9 +712,7 @@ int Transaction(game_character_t *merchant, int price) {
   int input;
 
   if (merchant == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -792,8 +780,6 @@ char *LanguageName(int language) {
       break;
   }
 
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return NULL;
 }

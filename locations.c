@@ -337,9 +337,7 @@ int InitializeLocation(location_t *location, int id) {
       AddInhabitants(location, MERFOLK_SOLDIER, RandomInt(3, 6));
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       return FAILURE;
   }
 
@@ -392,9 +390,7 @@ game_character_t *AddInhabitant(location_t *location, int type) {
   game_character_t *new_gc = NULL, *temp;
 
   if (location == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
   } else {
     new_gc = malloc(sizeof(game_character_t));
     if (new_gc != NULL) {
@@ -410,9 +406,7 @@ game_character_t *AddInhabitant(location_t *location, int type) {
         temp->next = new_gc;  // New inhabitant successfully added.
       }
     } else {
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       exit(1);
     }
   }
@@ -484,9 +478,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destination) {
   if (inhabitant == NULL ||
       destination < 0 ||
       destination >= NUM_LOCATION_IDS) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -539,9 +531,7 @@ int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (location == NULL || inhabitant == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -558,9 +548,7 @@ int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
     }
   }
   if (p_gc1 == NULL) {  // If true, "inhabitant" was not found.
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -582,9 +570,7 @@ int DeleteInhabitant(location_t *location, game_character_t *inhabitant) {
   game_character_t *p_gc1, *p_gc2;
 
   if (location == NULL || inhabitant == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -614,9 +600,7 @@ int DeleteInhabitant(location_t *location, game_character_t *inhabitant) {
   }while (p_gc1 != NULL);
 
   // If we reach this point, "inhabitant" was not found.
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return FAILURE;
 }
 
@@ -634,9 +618,7 @@ int VisibleInhabitants(location_t *location) {
   game_character_t *p_gc;
 
   if (location == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
   } else {
     for (p_gc = location->inhabitants;
          p_gc != NULL;
@@ -1100,9 +1082,7 @@ int HandleMovementMenuInput(void) {
       destinations[2] = g_world[QUELACENTUS_TEMPLE];
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       break;
   }
 
@@ -1130,9 +1110,7 @@ int MovePlayer(int destination) {
   game_character_t *companion;
 
   if (destination < 0 || destination >= NUM_LOCATION_IDS) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1165,9 +1143,7 @@ int SearchLocation(location_t *location) {
   char output[LONG_STR_LEN + 1] = "";
 
   if (location == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1443,9 +1419,7 @@ void DescribeSituation(void) {
       sprintf(output, "You are in the palace of the Queen of Quelacentus. ");
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       break;
   }
 

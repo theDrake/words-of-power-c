@@ -1400,9 +1400,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
       p_gc->gold = RandomInt(1, 10);
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       return FAILURE;
   }
 
@@ -1424,9 +1422,7 @@ int AddCompanion(game_character_t *companion) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (companion == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1458,9 +1454,7 @@ int AddCompanion(game_character_t *companion) {
   companion->next = NULL;
 
   if (p_gc1 == NULL) {  // If true, "companion" wasn't at current location.
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1481,9 +1475,7 @@ int RemoveCompanion(game_character_t *companion) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (companion == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1515,9 +1507,7 @@ int RemoveCompanion(game_character_t *companion) {
   companion->next = NULL;
 
   if (p_gc1 == NULL) {  // If true, "companion" wasn't player's companion.
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1538,9 +1528,7 @@ int DeleteCompanion(game_character_t *companion) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
   if (companion == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1558,9 +1546,7 @@ int DeleteCompanion(game_character_t *companion) {
     }
   }
   if (p_gc1 == NULL) {  // If true, "companion" wasn't player's companion.
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1589,9 +1575,7 @@ game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
   game_character_t *newGC = NULL;
 
   if (summoner == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
   } else {
     if (summoner->summoned_creature != NULL) {
       DeleteCreatureSummonedBy(summoner);
@@ -1600,9 +1584,7 @@ game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
     if (newGC != NULL) {
       InitializeCharacter(newGC, type, g_world[summoner->location]);
     } else {
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       exit(1);
     }
   }
@@ -1625,9 +1607,7 @@ int DeleteCreatureSummonedBy(game_character_t *summoner) {
   game_character_t *creature;
 
   if (summoner == NULL || summoner->summoned_creature == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1650,9 +1630,7 @@ Description: Displays detailed information about a given game character (and
 ******************************************************************************/
 int DisplayCharacterData(game_character_t *p_gc) {
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1697,9 +1675,7 @@ Description: Prints one or two words describing the general state of a given
 ******************************************************************************/
 int PrintSoulDescription(game_character_t *p_gc) {
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   } else if (p_gc->soul <= EXTREMELY_EVIL) {
     printf("Extremely Evil");
@@ -1774,9 +1750,7 @@ int NumberOfLanguagesKnown(game_character_t *p_gc) {
   int i, numLanguages = 0;
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return -1;
   }
 
@@ -1803,9 +1777,7 @@ int NumberOfWordsKnown(game_character_t *p_gc) {
   int i, numWords = 0;
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return -1;
   }
 
@@ -1833,9 +1805,7 @@ char *GetNameDefinite(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return NULL;
   }
 
@@ -1863,9 +1833,7 @@ char *GetNameIndefinite(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return NULL;
   }
 
@@ -1897,7 +1865,7 @@ Description: Returns the plural form of a given game character's generic
              descriptor.
 
      Inputs: p_gc - Pointer to the game character whose name/description is to
-                   be made plural.
+                    be made plural.
 
     Outputs: The game character's plural name/descriptor as a pointer to an
              array of characters.
@@ -1907,9 +1875,7 @@ char *GetNamePlural(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -1945,9 +1911,7 @@ char *GetNamePlural(game_character_t *p_gc) {
       strcpy(name, p_gc->descriptor);
       name_length = strlen(name);
       if (name_length >= SHORT_STR_LEN - 1) {  // Ensure there's room for 's'.
-#if DEBUG
         PRINT_ERROR_MESSAGE;
-#endif
         return NULL;
       }
       name[name_length] = 's';
@@ -2104,9 +2068,7 @@ Description: Causes a given game character to regain a certain number of hit
 ******************************************************************************/
 int HealGameCharacter(game_character_t *p_gc, int amount) {
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return -1;
   }
 
@@ -2135,9 +2097,7 @@ Description: Causes a given game character to lose a certain number of hit
 ******************************************************************************/
 int DamageGameCharacter(game_character_t *p_gc, int amount) {
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return -1;
   }
 

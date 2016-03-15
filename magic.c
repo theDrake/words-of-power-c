@@ -167,9 +167,7 @@ int HandleSpellMenuInput(void) {
     }
 
     // If we reach this point, the target was not found.
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
 
     // If the target was found, we will have jumped to the following line. */
@@ -256,9 +254,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
     ;
   spell_length = strlen(spell);
   if (spellcaster == NULL || num_targets == 0 || spell_length == 0) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -546,9 +542,7 @@ int PrintKnownWords(void) {
 
       // The word must have room for 2 more characters: '(' and ')'.
       if (wordLength >= (SHORT_STR_LEN - 2)) {
-#if DEBUG
         PRINT_ERROR_MESSAGE;
-#endif
         return wordsDisplayed;
       }
       // Format the string, beginning at its end and working backwards:
@@ -650,9 +644,7 @@ char *GetWord(int type) {
       break;
   }
 
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return NULL;
 }
 
@@ -738,9 +730,7 @@ char *GetWordName(int type) {
       break;
   }
 
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return NULL;
 }
 
@@ -768,9 +758,7 @@ int GetWordTypeFromChar(char first_letter) {
     }
   }
 
-#if DEBUG
   PRINT_ERROR_MESSAGE;
-#endif
   return -1;
 }
 

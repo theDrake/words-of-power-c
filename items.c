@@ -63,9 +63,7 @@ Description: Handles the use of an item by a given character (player or NPC).
 ******************************************************************************/
 int UseItem(game_character_t *p_gc, int item) {
   if (p_gc->inventory[item] < 1) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -82,9 +80,7 @@ int UseItem(game_character_t *p_gc, int item) {
                                RandomInt(DEFAULT_HP / 4, DEFAULT_HP / 2)));
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       return FAILURE;
   }
   p_gc->inventory[item]--;
@@ -107,9 +103,7 @@ int PrintInventory(game_character_t *p_gc) {
   int i, num_item_types_described = 0;
 
   if (p_gc == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return -1;
   }
 
@@ -165,9 +159,7 @@ char *GetItemName(int item) {
       strcpy(itemName, "Glowing Mushroom");
       break;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       strcpy(itemName, "???");
   }
 
@@ -207,9 +199,7 @@ Description: Transfers gold from one game character to another.
 ******************************************************************************/
 int GiveGold(game_character_t *giver, game_character_t *receiver, int amount) {
   if (giver == NULL || receiver == NULL || giver->gold < amount) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -236,9 +226,7 @@ Description: Adds a given item to a given game character's inventory.
 ******************************************************************************/
 int AddItem(game_character_t *receiver, int item) {
   if (receiver == NULL) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -264,9 +252,7 @@ Description: Transfers an item from one game character to another.
 ******************************************************************************/
 int GiveItem(game_character_t *giver, game_character_t *receiver, int item) {
   if (giver == NULL || receiver == NULL || giver->inventory[item] <= 0) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -300,9 +286,7 @@ Description: Transfers a specified amount of a given item from one game
 int GiveItems(game_character_t *giver, game_character_t *receiver, int item,
               int amount) {
   if (giver == NULL || receiver == NULL || giver->inventory[item] < amount) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     return FAILURE;
   }
 
@@ -340,9 +324,7 @@ int GetItemValue(int item) {
     case GLOWING_MUSHROOM:
       return 20;
     default:
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       break;
   }
 

@@ -189,9 +189,7 @@ int CreateWorld(void) {
 #endif
 
   if (g_world_exists) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     errors++;
     DestroyWorld();
   }
@@ -202,9 +200,7 @@ int CreateWorld(void) {
     if (g_world[i] != NULL) {
       errors += InitializeLocation(g_world[i], i);
     } else {
-#if DEBUG
       PRINT_ERROR_MESSAGE;
-#endif
       exit(1);
     }
   }
@@ -245,9 +241,7 @@ int DestroyWorld(void) {
   int i, errors = 0;
 
   if (g_world_exists == false) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     errors++;
   }
 
@@ -330,9 +324,7 @@ int RandomInt(int low, int high) {
     temp = low;
     low = high;
     high = temp;
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
   }
 
   return rand() % (high - low + 1) + low;
@@ -392,9 +384,7 @@ int GetIntInput(int *i, int low, int high) {
     temp = low;
     low = high;
     high = temp;
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
   }
 
   do {
@@ -428,9 +418,7 @@ char *GetStrInput(char *str, int n)
   int length;
 
   if (n < 0 || n > (SHORT_STR_LEN + 1)) {
-#if DEBUG
     PRINT_ERROR_MESSAGE;
-#endif
     if (n > SHORT_STR_LEN) {
       n = SHORT_STR_LEN;
     }
