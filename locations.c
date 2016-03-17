@@ -1186,7 +1186,7 @@ int SearchLocation(location_t *location) {
       break;
   }
   PrintString(output);
-  FlushInput();
+  //FlushInput();
   if (g_enemies[0] != NULL) {
     Combat();
   }

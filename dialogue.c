@@ -49,7 +49,7 @@ int HandleTalkMenuInput(void) {
       if (target->status[INVISIBLE] == false &&
           g_character_type_described[target->type] == false) {
         temp++;
-        printf("[%d] %s", temp, Capitalize(GetNameDefinite(target)));
+        printf("[%d] %s", temp, target->name);
         if (g_num_visible_of_type[target->type] > 1) {
           printf(" (%d available)", g_num_visible_of_type[target->type]);
         }

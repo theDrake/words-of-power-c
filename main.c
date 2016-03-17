@@ -23,8 +23,8 @@ int main(void) {
   g_world_exists = false;
   g_player_has_quit = false;
 
-  PrintString("\nWORDS OF POWER: a text-based fantasy RPG by David C. Drake!\n"
-              "\0");
+  PrintString("\nWelcome to WORDS OF POWER: a text-based fantasy RPG by David "
+              "C. Drake!\n\0");
   while (!g_player_has_quit) {
     if (!g_world_exists) {
       HandleMainMenuInput();
