@@ -23,7 +23,7 @@ Constants
 ******************************************************************************/
 
 // Error checking:
-#define DEBUG   false
+#define DEBUG   true
 #define FAILURE false
 #define SUCCESS true
 #if DEBUG
