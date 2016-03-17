@@ -49,7 +49,7 @@ int HandleTalkMenuInput(void) {
       if (target->status[INVISIBLE] == false &&
           g_character_type_described[target->type] == false) {
         temp++;
-        printf("[%d] %s", temp, Capitalize(GetNameIndefinite(target)));
+        printf("[%d] %s", temp, Capitalize(GetNameDefinite(target)));
         if (g_num_visible_of_type[target->type] > 1) {
           printf(" (%d available)", g_num_visible_of_type[target->type]);
         }
@@ -132,17 +132,11 @@ int Dialogue(game_character_t *p_gc) {
     case ARCHWIZARD_OF_ELEMENTS:
       if (p_gc->conversations == 1) {  // Indicates new game: offer tutorial.
         sprintf(output,
-                "%s: \"Good morning, %s, and congratulations!\"",
-                AllCaps(p_gc->name),
-                g_player.name);
-        PrintString(output);
-        FlushInput();
-        sprintf(output,
-                "%s: \"You have mastered the art of projecting your will "
-                "through the four elemental Words of Power -- the Words of "
-                "Air, Water, Earth, and Fire -- and demonstrated great "
-                "potential as a mage.\"",
-                AllCaps(p_gc->name));
+                "%s: \"Congratulations, %s! You have mastered the art of "
+                "projecting your will through the four elemental Words of "
+                "Power -- the Words of Air, Water, Earth, and Fire -- and "
+                "demonstrated great potential as a mage.\"",
+                AllCaps(p_gc->name), g_player.name);
         PrintString(output);
         FlushInput();
         sprintf(output,
