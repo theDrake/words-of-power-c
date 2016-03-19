@@ -620,14 +620,14 @@ int MerchantDialogue(game_character_t *merchant)
               "[%d] %s (%d gold)\n",
               num_options,
               GetItemName(i),
-              GetItemValue(i) * GetPriceModifier(merchant));
+              (int) (GetItemValue(i) * GetPriceModifier(merchant)));
       if (merchant->inventory[i] >= 10) {
         num_options++;
         sprintf(output + strlen(output),
                 "[%d] 10 %s (%d gold)",
                 num_options,
                 GetItemNamePlural(i),
-                10 * (GetItemValue(i) * GetPriceModifier(merchant)));
+                (int) (10 * (GetItemValue(i) * GetPriceModifier(merchant))));
       }
     }
   }
