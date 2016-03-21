@@ -108,7 +108,6 @@ void HandleStandardOptionsInput(void) {
   bool repeat_options = true;
 
   while (repeat_options) {
-    repeat_options = false;
     printf("What do you want to do?\n"
            "[T]alk\n"
            "[S]earch\n"
@@ -121,46 +120,31 @@ void HandleStandardOptionsInput(void) {
     GetCharInput(&input);
     switch (input) {
       case 'T':  // Talk
-        if (HandleTalkMenuInput() == FAILURE) {
-          repeat_options = true;
-        }
+        repeat_options = !HandleTalkMenuInput();
         break;
       case 'S':  // Search
         SearchLocation(g_world[g_player.location]);
-        repeat_options = true;
         break;
       case 'U':  // Use an Item
-        if (HandleItemMenuInput() == FAILURE) {
-          repeat_options = true;
-        }
+        repeat_options = !HandleItemMenuInput();
         break;
       case 'C':  // Cast a Spell
-        if (HandleSpellMenuInput() == FAILURE) {
-          repeat_options = true;
-        }
+        repeat_options = !HandleSpellMenuInput();
         break;
       case 'A':  // Attack
-        if (HandleAttackMenuInput() == FAILURE) {
-          repeat_options = true;
-        }
+        repeat_options = !HandleAttackMenuInput();
         break;
       case 'M':  // Move to Another Location
-        if (HandleMovementMenuInput() == FAILURE) {
-          repeat_options = true;
-        }
+        repeat_options = !HandleMovementMenuInput();
         break;
       case 'V':  // View Inventory and Status
         DisplayCharacterData(&g_player);
-        repeat_options = true;
         break;
       case 'Q':  // Quit
-        if (GetExitConfirmation() == false) {
-          repeat_options = true;
-        }
+        repeat_options = !GetExitConfirmation();
         break;
       default:
         printf("Invalid response.\n\n");
-        repeat_options = true;
         break;
     }
   }
