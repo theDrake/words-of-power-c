@@ -496,6 +496,8 @@ Function Prototypes
 int main(void);
 void HandleMainMenuInput(void);
 void HandleStandardOptionsInput(void);
+bool SaveGame(const char *filename);
+bool LoadGame(const char *filename);
 int CreateWorld(void);
 int DestroyWorld(void);
 bool GetExitConfirmation(void);

@@ -151,6 +151,35 @@ void HandleStandardOptionsInput(void) {
 }
 
 /******************************************************************************
+   Function: SaveGame
+
+Description: Attempts to save game data to a file of a given name in the same
+             directory as the WoP executable. If the file doesn't exist, it is
+             created; otherwise, it is overwritten.
+
+     Inputs: filename - Name of the file to be created or overwritten.
+
+    Outputs: Returns 'true' if game data are successfully saved.
+******************************************************************************/
+bool SaveGame(const char *filename) {
+  return false;
+}
+
+/******************************************************************************
+   Function: LoadGame
+
+Description: Attempts to load game data from a file of a given name, which must
+             exist in the same directory as the WoP executable.
+
+     Inputs: filename - Name of the file to be loaded.
+
+    Outputs: Returns 'true' if game data are successfully loaded.
+******************************************************************************/
+bool LoadGame(const char *filename) {
+  return false;
+}
+
+/******************************************************************************
    Function: CreateWorld
 
 Description: Allocates memory for, and initializes, location structs for all
