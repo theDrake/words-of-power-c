@@ -543,7 +543,7 @@ int NumberOfWordsKnown(game_character_t *p_gc);
 char *GetNameDefinite(game_character_t *p_gc);
 char *GetNameIndefinite(game_character_t *p_gc);
 char *GetNamePlural(game_character_t *p_gc);
-void CheckStatus(void);
+bool CheckStatus(void);
 void UpdateVisibleGameCharCounter(void);
 game_character_t *GetTarget(void);
 bool IsTargeted(game_character_t *p_gc, game_character_t *targets[]);

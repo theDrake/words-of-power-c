@@ -484,7 +484,6 @@ int Combat(void) {
             break;
         }
       }while (repeat_options);
-      CheckStatus();
 
       // Increment "round" here if the NPCs had the initiative:
       if (!playerFirst) {
@@ -493,17 +492,18 @@ int Combat(void) {
     }
 
       /* -- ENEMY'S TURN-- */
-    for (i = 0; i < NumberOfEnemies(); i++) {
-      EnemyAI(i);
+    if (CheckStatus()) {
+      for (i = 0; i < NumberOfEnemies(); i++) {
+        EnemyAI(i);
+      }
+      printf("\n");
     }
-    printf("\n");
-    CheckStatus();
 
     // Increment "round" here if the player had the initiative:
     if (playerFirst) {
       round++;
     }
-  }while (g_player.hp > 0 && NumberOfEnemies() > 0);
+  }while (CheckStatus() && NumberOfEnemies() > 0);
   g_player.status[IN_COMBAT] = false;
 
   return NumberOfEnemies();

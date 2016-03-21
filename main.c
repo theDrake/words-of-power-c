@@ -28,8 +28,7 @@ int main(void) {
   while (!g_player_has_quit) {
     if (!g_world_exists) {
       HandleMainMenuInput();
-    } else {
-      CheckStatus();
+    } else if (CheckStatus()) {
       DescribeSituation();
       HandleStandardOptionsInput();
     }
@@ -106,9 +105,9 @@ Description: Prints the standard (i.e., non-combat) player options and
 ******************************************************************************/
 void HandleStandardOptionsInput(void) {
   char input;
-  bool repeat_options;
+  bool repeat_options = true;
 
-  do {
+  while (repeat_options) {
     repeat_options = false;
     printf("What do you want to do?\n"
            "[T]alk\n"
@@ -127,9 +126,8 @@ void HandleStandardOptionsInput(void) {
         }
         break;
       case 'S':  // Search
-        if (SearchLocation(g_world[g_player.location]) == FAILURE) {
-          repeat_options = true;
-        }
+        SearchLocation(g_world[g_player.location]);
+        repeat_options = true;
         break;
       case 'U':  // Use an Item
         if (HandleItemMenuInput() == FAILURE) {
@@ -165,7 +163,7 @@ void HandleStandardOptionsInput(void) {
         repeat_options = true;
         break;
     }
-  }while (repeat_options);
+  }
 }
 
 /******************************************************************************

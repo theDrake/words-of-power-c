@@ -1930,9 +1930,10 @@ Description: Checks player's HP and status to see if anything needs to be
 
      Inputs: None.
 
-    Outputs: None.
+    Outputs: Returns 'true' if the player is still alive.
 ******************************************************************************/
-void CheckStatus(void) {
+bool CheckStatus(void) {
+  bool player_is_alive = true;
   int i;
   char output[LONG_STR_LEN + 1] = "";
 
@@ -1947,7 +1948,7 @@ void CheckStatus(void) {
         }
         g_num_kills[g_enemies[i]->type]++;
         DeleteEnemy(g_enemies[i]);
-        i--;  // Because the "g_enemies" array has now been left-shifted.
+        i--;  // Because "g_enemies" has been left-shifted.
       }
     }
     PrintString(output);
@@ -1965,13 +1966,15 @@ void CheckStatus(void) {
       g_player.hp = g_player.max_hp;
     } else {  // Not in tutorial mode: death is permanent.
       sprintf(output, "Alas, %s has perished!\n", g_player.name);
-      //HandleMainMenuInput();
+      player_is_alive = false;
     }
   }
   if (strlen(output) > 0) {
     PrintString(output);
     FlushInput();
   }
+
+  return player_is_alive;
 }
 
 /******************************************************************************

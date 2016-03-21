@@ -1186,7 +1186,7 @@ int SearchLocation(location_t *location) {
       break;
   }
   PrintString(output);
-  //FlushInput();
+  FlushInput();
   if (g_enemies[0] != NULL) {
     Combat();
   }
@@ -1479,8 +1479,8 @@ void DescribeSituation(void) {
     printf("\nYou are being attacked!\n");
     FlushInput();
     Combat();
-    if (g_world_exists) {
+    /*if (g_world_exists) {
       DescribeSituation();
-    }
+    }*/
   }
 }
