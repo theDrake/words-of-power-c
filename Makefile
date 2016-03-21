@@ -7,7 +7,7 @@
 ###############################################################################
 
 CC = gcc
-CFLAGS = -I. -Werror -std=c99
+CFLAGS = -I. -Werror -std=gnu11
 HEADER = wop.h
 OBJECTS = main.o characters.o combat.o dialogue.o items.o locations.o magic.o
 
