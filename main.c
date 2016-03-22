@@ -162,6 +162,15 @@ Description: Attempts to save game data to a file of a given name in the same
     Outputs: Returns 'true' if game data are successfully saved.
 ******************************************************************************/
 bool SaveGame(const char *filename) {
+  FILE *outfile = fopen(filename, "wb");
+  if (outfile) {
+    fwrite(&g_player, sizeof(game_character_t), 1, outfile);
+    fclose(outfile);
+
+    return true;
+  }
+
+  PRINT_ERROR_MESSAGE;
   return false;
 }
 
@@ -176,6 +185,15 @@ Description: Attempts to load game data from a file of a given name, which must
     Outputs: Returns 'true' if game data are successfully loaded.
 ******************************************************************************/
 bool LoadGame(const char *filename) {
+  FILE *infile = fopen(filename, "rb");
+  if (infile) {
+    fread(&g_player, sizeof(game_character_t), 1, infile);
+    fclose(infile);
+
+    return true;
+  }
+
+  PRINT_ERROR_MESSAGE;
   return false;
 }
 
