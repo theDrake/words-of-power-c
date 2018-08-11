@@ -1,10 +1,10 @@
-/******************************************************************************
-Filename: wop.h
+/*******************************************************************************
+   Filename: wop.h
 
-Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
 Description: Header file for the text-based fantasy RPG "Words of Power."
-******************************************************************************/
+*******************************************************************************/
 
 #ifndef WOP_H_
 #define WOP_H_
@@ -18,12 +18,12 @@ Description: Header file for the text-based fantasy RPG "Words of Power."
 #include <string.h>  // strlen, strcpy, strcmp
 #include <stdbool.h>  // bool, true, false
 
-/******************************************************************************
-Constants
-******************************************************************************/
+/*******************************************************************************
+  Constants
+*******************************************************************************/
 
 // Error checking:
-#define DEBUG   true
+#define DEBUG   false
 #define FAILURE false
 #define SUCCESS true
 #if DEBUG
@@ -87,9 +87,9 @@ Constants
 // Maximum number of Words allowed in a single spell:
 #define MAX_SPELL_LEN 8
 
-/******************************************************************************
+/*******************************************************************************
 Enumerations
-******************************************************************************/
+*******************************************************************************/
 
 enum WordType {
   WORD_OF_AIR,
@@ -429,9 +429,9 @@ enum Knowledge {
   KNOWN
 };
 
-/******************************************************************************
+/*******************************************************************************
 Structures
-******************************************************************************/
+*******************************************************************************/
 
 typedef struct GameCharacter {
   int type;
@@ -472,9 +472,9 @@ typedef struct Location {
   game_character_t *inhabitants;  // Linked list of local NPCs.
 } location_t;
 
-/******************************************************************************
+/*******************************************************************************
 Global Variables
-******************************************************************************/
+*******************************************************************************/
 
 location_t *g_world[NUM_LOCATION_IDS];  // Pointers to all game locations.
 bool g_world_exists;  // Indicates whether game world exists in memory.
@@ -488,9 +488,9 @@ int g_num_kills[NUM_GC_TYPES];  // Number of each GC type killed.
 int g_num_visible_of_type[NUM_GC_TYPES];  // Number of each GC type visible.
 bool g_character_type_described[NUM_GC_TYPES];  // Helps when describing NPCs.
 
-/******************************************************************************
+/*******************************************************************************
 Function Prototypes
-******************************************************************************/
+*******************************************************************************/
 
 // Function prototypes for "main.c":
 int main(void);

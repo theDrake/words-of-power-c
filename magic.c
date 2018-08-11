@@ -1,15 +1,14 @@
-/******************************************************************************
+/*******************************************************************************
    Filename: magic.c
 
-     Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
-Description: Functions governing magic for the text-based fantasy RPG "Words of
-             Power."
-******************************************************************************/
+Description: Functions governing magic for the text-based RPG "Words of Power."
+*******************************************************************************/
 
 #include "wop.h"
 
-/******************************************************************************
+/*******************************************************************************
    Function: HandleSpellMenuInput
 
 Description: Takes the player through the process of selecting targets and
@@ -19,7 +18,7 @@ Description: Takes the player through the process of selecting targets and
      Inputs: None.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int HandleSpellMenuInput(void) {
   int i, input, temp, spell_length, num_targets = 0;
   bool repeat_options;
@@ -67,8 +66,7 @@ int HandleSpellMenuInput(void) {
             IsTargeted(g_enemies[i], targets) == false &&
             g_character_type_described[g_enemies[i]->type] == false) {
           if (g_num_visible_of_type[g_enemies[i]->type] > 1) {
-            printf("[%d] %s (%d available)\n", ++temp,
-                   g_enemies[i]->name,
+            printf("[%d] %s (%d available)\n", ++temp, g_enemies[i]->name,
                    g_num_visible_of_type[g_enemies[i]->type]);
           } else {
             printf("[%d] %s\n", ++temp, g_enemies[i]->name);
@@ -226,19 +224,17 @@ int HandleSpellMenuInput(void) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: CastSpell
 
-Description: Carries out a spell's effects (if any) and reports them to the
-             player.
+Description: Carries out a spell's effects (if any) and reports them.
 
      Inputs: spellcaster - Pointer to the caster of the spell.
-             spell       - String of letters, each representing a Word of
-                           Power.
+             spell       - String of letters, each representing a Word of Power.
              targets     - Array of pointers to targeted game characters.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int CastSpell(game_character_t *spellcaster, char *spell,
               game_character_t *targets[]) {
   bool light = false, dark = false, holy = false, evil = false, giving = false,
@@ -492,7 +488,7 @@ int CastSpell(game_character_t *spellcaster, char *spell,
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: CanCastBeneficialSpells
 
 Description: Determines whether a given game character is capable of casting
@@ -501,8 +497,8 @@ Description: Determines whether a given game character is capable of casting
 
      Inputs: p_gc - Pointer to the game character of interest.
 
-    Outputs: true if "p_gc" is being targeted, otherwise false.
-******************************************************************************/
+    Outputs: true if the GC knows at least one beneficial Word, otherwise false.
+*******************************************************************************/
 bool CanCastBeneficialSpells(game_character_t *p_gc) {
   return p_gc->words[WORD_OF_BODY]      == KNOWN ||
          p_gc->words[WORD_OF_MIND]      == KNOWN ||
@@ -521,7 +517,7 @@ bool CanCastBeneficialSpells(game_character_t *p_gc) {
          p_gc->words[WORD_OF_VOID]      == KNOWN;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: PrintKnownWords
 
 Description: Displays each Word of Power the player knows in the following
@@ -530,7 +526,7 @@ Description: Displays each Word of Power the player knows in the following
      Inputs: None.
 
     Outputs: Returns the number of Words displayed.
-******************************************************************************/
+*******************************************************************************/
 int PrintKnownWords(void) {
   int i, j, wordLength, wordsDisplayed = 0;
   char word[SHORT_STR_LEN + 1];  // To store, format, and print each Word.
@@ -576,16 +572,16 @@ int PrintKnownWords(void) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetWord
 
-Description: Given an integer representing a Word of Power, returns that Word
-             as a string.
+Description: Given an integer representing a Word of Power, returns that Word as
+             a string.
 
      Inputs: type - Integer representing the desired Word.
 
     Outputs: Pointer to the desired string.
-******************************************************************************/
+*******************************************************************************/
 char *GetWord(int type) {
   switch (type) {
     case WORD_OF_AIR:
@@ -648,7 +644,7 @@ char *GetWord(int type) {
   return NULL;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetWordStartingWith
 
 Description: Given the first letter of a Word of Power, returns the entire Word
@@ -657,12 +653,12 @@ Description: Given the first letter of a Word of Power, returns the entire Word
      Inputs: first_letter - First letter of the desired Word.
 
     Outputs: Pointer to the desired string.
-******************************************************************************/
+*******************************************************************************/
 char *GetWordStartingWith(char first_letter) {
   return GetWord(GetWordTypeFromChar(first_letter));
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetWordName
 
 Description: Returns the English name of a given Word of Power as a string
@@ -671,7 +667,7 @@ Description: Returns the English name of a given Word of Power as a string
      Inputs: type - Integer representing the Word of interest.
 
     Outputs: Pointer to the desired string.
-******************************************************************************/
+*******************************************************************************/
 char *GetWordName(int type) {
   switch (type) {
     case WORD_OF_AIR:
@@ -734,7 +730,7 @@ char *GetWordName(int type) {
   return NULL;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetWordTypeFromChar
 
 Description: Given the first letter of a Word of Power, returns the type value
@@ -745,7 +741,7 @@ Description: Given the first letter of a Word of Power, returns the type value
 
     Outputs: Type of the Word associated with the given letter (or -1 if no
              corresponding type is found).
-******************************************************************************/
+*******************************************************************************/
 int GetWordTypeFromChar(char first_letter) {
   int i;
   char *word;
@@ -762,7 +758,7 @@ int GetWordTypeFromChar(char first_letter) {
   return -1;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: IsSpellcaster
 
 Description: Determines whether a given game character can cast spells.
@@ -770,7 +766,7 @@ Description: Determines whether a given game character can cast spells.
      Inputs: p_gc - The game character of interest.
 
     Outputs: true if the GC knows at least one Word, otherwise false.
-******************************************************************************/
+*******************************************************************************/
 bool IsSpellcaster(game_character_t *p_gc) {
   int i;
 

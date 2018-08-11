@@ -1,15 +1,15 @@
-/******************************************************************************
+/*******************************************************************************
    Filename: main.c
 
-     Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
 Description: Main C file for "Words of Power": a text-based fantasy RPG
              emphasizing verbal spell-casting through the use of magic words.
-******************************************************************************/
+*******************************************************************************/
 
 #include "wop.h"
 
-/******************************************************************************
+/*******************************************************************************
    Function: main
 
 Description: Main function for the "Words of Power" RPG.
@@ -17,7 +17,7 @@ Description: Main function for the "Words of Power" RPG.
      Inputs: None.
 
     Outputs: Number of errors encountered.
-******************************************************************************/
+*******************************************************************************/
 int main(void) {
   srand((int) time(0));
   g_world_exists = false;
@@ -44,7 +44,7 @@ int main(void) {
   return 0;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: HandleMainMenuInput
 
 Description: Displays main menu options and does some handling of input.
@@ -52,7 +52,7 @@ Description: Displays main menu options and does some handling of input.
      Inputs: None.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void HandleMainMenuInput(void) {
   char input;
   bool repeat_options;
@@ -93,16 +93,16 @@ void HandleMainMenuInput(void) {
   }while (repeat_options);
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: HandleStandardOptionsInput
 
-Description: Prints the standard (i.e., non-combat) player options and
-             processes corresponding player input.
+Description: Prints the standard (i.e., non-combat) player options and processes
+             corresponding player input.
 
      Inputs: None.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void HandleStandardOptionsInput(void) {
   char input;
   bool repeat_options = true;
@@ -150,7 +150,7 @@ void HandleStandardOptionsInput(void) {
   }
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: SaveGame
 
 Description: Attempts to save game data to a file of a given name in the same
@@ -160,7 +160,7 @@ Description: Attempts to save game data to a file of a given name in the same
      Inputs: filename - Name of the file to be created or overwritten.
 
     Outputs: Returns 'true' if game data are successfully saved.
-******************************************************************************/
+*******************************************************************************/
 bool SaveGame(const char *filename) {
   FILE *outfile = fopen(filename, "wb");
   if (outfile) {
@@ -174,7 +174,7 @@ bool SaveGame(const char *filename) {
   return false;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: LoadGame
 
 Description: Attempts to load game data from a file of a given name, which must
@@ -183,7 +183,7 @@ Description: Attempts to load game data from a file of a given name, which must
      Inputs: filename - Name of the file to be loaded.
 
     Outputs: Returns 'true' if game data are successfully loaded.
-******************************************************************************/
+*******************************************************************************/
 bool LoadGame(const char *filename) {
   FILE *infile = fopen(filename, "rb");
   if (infile) {
@@ -197,7 +197,7 @@ bool LoadGame(const char *filename) {
   return false;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: CreateWorld
 
 Description: Allocates memory for, and initializes, location structs for all
@@ -208,7 +208,7 @@ Description: Allocates memory for, and initializes, location structs for all
      Inputs: None.
 
     Outputs: The number of failed location initializations.
-******************************************************************************/
+*******************************************************************************/
 int CreateWorld(void) {
   int i, errors = 0;
 
@@ -255,7 +255,7 @@ int CreateWorld(void) {
   return errors;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DestroyWorld
 
 Description: Deallocates all memory set aside for location structs and their
@@ -264,7 +264,7 @@ Description: Deallocates all memory set aside for location structs and their
      Inputs: None.
 
     Outputs: The number of errors detected.
-******************************************************************************/
+*******************************************************************************/
 int DestroyWorld(void) {
   int i, errors = 0;
 
@@ -307,7 +307,7 @@ int DestroyWorld(void) {
   return errors;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetExitConfirmation
 
 Description: Asks for confirmation of intent to exit to the main menu. If
@@ -316,7 +316,7 @@ Description: Asks for confirmation of intent to exit to the main menu. If
      Inputs: None.
 
     Outputs: true if the player confirms they want to exit to the main menu.
-******************************************************************************/
+*******************************************************************************/
 bool GetExitConfirmation(void) {
   char input;
 
@@ -335,7 +335,7 @@ bool GetExitConfirmation(void) {
   return false;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: RandomInt
 
 Description: Returns a random integer between specified values (inclusive).
@@ -344,7 +344,7 @@ Description: Returns a random integer between specified values (inclusive).
              high - Highest possible return value.
 
     Outputs: A randomly generated integer between "low" and "high" (inclusive).
-******************************************************************************/
+*******************************************************************************/
 int RandomInt(int low, int high) {
   int temp;
 
@@ -358,20 +358,20 @@ int RandomInt(int low, int high) {
   return rand() % (high - low + 1) + low;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: RandomBool
 
 Description: Returns a random boolean value.
 
      Inputs: None.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 int RandomBool(void) {
   return rand() % 2;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetCharInput
 
 Description: Takes in one character entered by the user, converts it to
@@ -381,7 +381,7 @@ Description: Takes in one character entered by the user, converts it to
 
     Outputs: Returns the character read in from the user, converted to
              uppercase.
-******************************************************************************/
+*******************************************************************************/
 char GetCharInput(char *c) {
   scanf(" %c", c);
   FlushInput();
@@ -391,7 +391,7 @@ char GetCharInput(char *c) {
   return *c;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetIntInput
 
 Description: Reads in one integer, then repeats until an integer within given
@@ -401,9 +401,8 @@ Description: Reads in one integer, then repeats until an integer within given
              low  - Lowest acceptable value.
              high - Highest acceptable value.
 
-
     Outputs: Returns the input value stored in "*i".
-******************************************************************************/
+*******************************************************************************/
 int GetIntInput(int *i, int low, int high) {
   int temp;
   bool repeat;
@@ -420,8 +419,7 @@ int GetIntInput(int *i, int low, int high) {
     scanf("%d", i);
     FlushInput();
     if (*i < low || *i > high) {
-      printf("Invalid response. Enter a number between %d and %d: ", low,
-             high);
+      printf("Invalid response. Enter a number between %d and %d: ", low, high);
       repeat = true;
     }
   }while (repeat);
@@ -430,7 +428,7 @@ int GetIntInput(int *i, int low, int high) {
   return *i;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetStrInput
 
 Description: Takes in a string of one or more characters entered by the user.
@@ -440,7 +438,7 @@ Description: Takes in a string of one or more characters entered by the user.
                    SHORT_STR_LEN or negative, it will be set to SHORT_STR_LEN).
 
     Outputs: Returns a pointer to the string where the input is stored.
-******************************************************************************/
+*******************************************************************************/
 char *GetStrInput(char *str, int n)
 {
   int length;
@@ -461,7 +459,7 @@ char *GetStrInput(char *str, int n)
   return str;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: PrintString
 
 Description: Prints a given string according to the maximum characters per
@@ -473,7 +471,7 @@ Description: Prints a given string according to the maximum characters per
      Inputs: str - The string to be printed, which must be NULL-terminated.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void PrintString(char *str) {
   int i, last_blank_space_index = 0, current_line_length = 0;
   static char output[LONG_STR_LEN + 1];
@@ -505,7 +503,7 @@ void PrintString(char *str) {
   printf("%s\n", output);
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: Capitalize
 
 Description: Capitalizes the first character of a given string.
@@ -513,14 +511,14 @@ Description: Capitalizes the first character of a given string.
      Inputs: str - The string to be capitalized.
 
     Outputs: Pointer to the capitalized string.
-******************************************************************************/
+*******************************************************************************/
 char *Capitalize(char *str) {
   toupper(str[0]);
 
   return str;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: AllCaps
 
 Description: Capitalizes every character in a given string (which is assumed to
@@ -529,7 +527,7 @@ Description: Capitalizes every character in a given string (which is assumed to
      Inputs: str - The string to be modified.
 
     Outputs: Pointer to the modified string.
-******************************************************************************/
+*******************************************************************************/
 char *AllCaps(char *str) {
   int i;
 
@@ -540,7 +538,7 @@ char *AllCaps(char *str) {
   return str;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: StrContains
 
 Description: Determines whether a given string contains a given character.
@@ -549,7 +547,7 @@ Description: Determines whether a given string contains a given character.
              c   - Character to search for in the string.
 
     Outputs: true if the string contains "c", otherwise false.
-******************************************************************************/
+*******************************************************************************/
 bool StrContains(char *str, char c) {
   int i;
 
@@ -562,7 +560,7 @@ bool StrContains(char *str, char c) {
   return false;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: FlushInput
 
 Description: Removes remaining input up to and including an end of line or end
@@ -572,7 +570,7 @@ Description: Removes remaining input up to and including an end of line or end
      Inputs: None.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void FlushInput(void) {
   int c;
 

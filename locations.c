@@ -1,15 +1,15 @@
-/******************************************************************************
+/*******************************************************************************
    Filename: locations.c
 
-     Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
 Description: Functions governing locations, their inhabitants, and movement
-             between locations for the text-based fantasy RPG "Words of Power."
-******************************************************************************/
+             between locations for the text-based RPG "Words of Power."
+*******************************************************************************/
 
 #include "wop.h"
 
-/******************************************************************************
+/*******************************************************************************
    Function: InitializeLocation
 
 Description: Initializes a given location struct, along with all of its
@@ -20,7 +20,7 @@ Description: Initializes a given location struct, along with all of its
              id       - Integer representing the desired location.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int InitializeLocation(location_t *location, int id) {
   location->id = id;
   location->hidden = false;
@@ -344,16 +344,16 @@ int InitializeLocation(location_t *location, int id) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: InVentarrisTerritory
 
-Description: Determines whether a given location is within the territory
-             claimed by the king of Ventarris.
+Description: Determines whether a given location is within the territory claimed
+             by the king of Ventarris.
 
      Inputs: location - The location of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool InVentarrisTerritory(location_t *location) {
   return location->id == VENTARRIS_ENTRANCE    ||
          location->id == VENTARRIS_MARKET      ||
@@ -375,7 +375,7 @@ bool InVentarrisTerritory(location_t *location) {
          location->id == SHORE_SE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: AddInhabitant
 
 Description: Creates a new game character and adds it to a given location's list
@@ -385,7 +385,7 @@ Description: Creates a new game character and adds it to a given location's list
              type     - Integer representing the desired game character type.
 
     Outputs: Pointer to the new game character (or NULL if it failed).
-******************************************************************************/
+*******************************************************************************/
 game_character_t *AddInhabitant(location_t *location, int type) {
   game_character_t *new_gc = NULL, *temp;
 
@@ -414,7 +414,7 @@ game_character_t *AddInhabitant(location_t *location, int type) {
   return new_gc;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: AddInhabitants
 
 Description: Creates multiple game characters of a single type and adds them to
@@ -425,7 +425,7 @@ Description: Creates multiple game characters of a single type and adds them to
              amount   - Number of game characters to add.
 
     Outputs: Number of game characters successfully added.
-******************************************************************************/
+*******************************************************************************/
 int AddInhabitants(location_t *location, int type, int amount) {
   int i, count = 0;
 
@@ -438,7 +438,7 @@ int AddInhabitants(location_t *location, int type, int amount) {
   return count;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: FindInhabitant
 
 Description: Returns a pointer to the first inhabitant found (if any) matching
@@ -447,7 +447,7 @@ Description: Returns a pointer to the first inhabitant found (if any) matching
      Inputs: type - Integer representing the game character type of interest.
 
     Outputs: Pointer to an appropriate inhabitant, or NULL if none is found.
-******************************************************************************/
+*******************************************************************************/
 game_character_t *FindInhabitant(int type) {
   game_character_t *p_gc;
 
@@ -462,7 +462,7 @@ game_character_t *FindInhabitant(int type) {
   return NULL;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: MoveInhabitant
 
 Description: Handles the movement of an NPC from one location to another.
@@ -471,7 +471,7 @@ Description: Handles the movement of an NPC from one location to another.
              destination - Integer representing the desired destination.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int MoveInhabitant(game_character_t *inhabitant, int destination) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
@@ -517,7 +517,7 @@ int MoveInhabitant(game_character_t *inhabitant, int destination) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: RemoveInhabitant
 
 Description: Removes a game character from a location's list of inhabitants.
@@ -526,7 +526,7 @@ Description: Removes a game character from a location's list of inhabitants.
              inhabitant - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
@@ -555,17 +555,17 @@ int RemoveInhabitant(location_t *location, game_character_t *inhabitant) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DeleteInhabitant
 
 Description: Removes a game character from a location's list of inhabitants and
-             deallocates its associated memory.
+             deallocates associated memory.
 
      Inputs: location   - Pointer to the relevant location.
              inhabitant - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int DeleteInhabitant(location_t *location, game_character_t *inhabitant) {
   game_character_t *p_gc1, *p_gc2;
 
@@ -604,7 +604,7 @@ int DeleteInhabitant(location_t *location, game_character_t *inhabitant) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: VisibleInhabitants
 
 Description: Returns the number of visible inhabitants in a given location.
@@ -612,7 +612,7 @@ Description: Returns the number of visible inhabitants in a given location.
      Inputs: location - Pointer to the location of interest.
 
     Outputs: The number of visible inhabitants in the specified location.
-******************************************************************************/
+*******************************************************************************/
 int VisibleInhabitants(location_t *location) {
   int count = 0;
   game_character_t *p_gc;
@@ -632,7 +632,7 @@ int VisibleInhabitants(location_t *location) {
   return count;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: HandleMovementMenuInput
 
 Description: Displays movement options and handles player input.
@@ -640,7 +640,7 @@ Description: Displays movement options and handles player input.
      Inputs: None.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int HandleMovementMenuInput(void) {
   int i, input, numDestinations = 0;
   location_t *destinations[MAX_DESTINATIONS] = {NULL};
@@ -1096,16 +1096,15 @@ int HandleMovementMenuInput(void) {
   return MovePlayer(destinations[input - 1]->id);
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: MovePlayer
 
-Description: Handles the movement of the player character from one location to
-             another.
+Description: Handles movement of player character from one location to another.
 
      Inputs: destination - Integer representing the desired destination.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int MovePlayer(int destination) {
   game_character_t *companion;
 
@@ -1129,7 +1128,7 @@ int MovePlayer(int destination) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: SearchLocation
 
 Description: Determines the outcome of a given search.
@@ -1137,7 +1136,7 @@ Description: Determines the outcome of a given search.
      Inputs: location - The location being searched.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int SearchLocation(location_t *location) {
   int temp;
   char output[LONG_STR_LEN + 1] = "";
@@ -1194,7 +1193,7 @@ int SearchLocation(location_t *location) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DescribeSituation
 
 Description: Describes the current location and its inhabitants to the player.
@@ -1203,7 +1202,7 @@ Description: Describes the current location and its inhabitants to the player.
      Inputs: None.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void DescribeSituation(void) {
   int i, temp, num_gc_types_described;
   char output[LONG_STR_LEN + 1] = "";
@@ -1406,8 +1405,8 @@ void DescribeSituation(void) {
       break;
     case QUELACENTUS_ENTRANCE:
       sprintf(output,
-              "You are in the deep, dark waters just above the merfolk city of"
-              " Quelacentus. ");
+              "You are in the deep, dark waters just above the merfolk city of "
+              "Quelacentus. ");
       break;
     case QUELACENTUS_PLAZA:
       sprintf(output, "You are in the central plaza of Quelacentus. ");

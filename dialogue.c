@@ -1,15 +1,14 @@
-/******************************************************************************
+/*******************************************************************************
    Filename: dialogue.c
 
-     Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
-Description: Functions governing dialogue for the text-based fantasy RPG "Words
-             of Power."
-******************************************************************************/
+Description: Functions governing dialogue for the "Words of Power" RPG.
+*******************************************************************************/
 
 #include "wop.h"
 
-/******************************************************************************
+/*******************************************************************************
    Function: HandleTalkMenuInput
 
 Description: Takes the player through the process of selecting a game character
@@ -18,7 +17,7 @@ Description: Takes the player through the process of selecting a game character
      Inputs: None.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int HandleTalkMenuInput(void) {
   int i, input, temp = 0;
   game_character_t *target;
@@ -84,17 +83,17 @@ int HandleTalkMenuInput(void) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: Dialogue
 
-Description: Presents dialogue text and options when the player interacts with
-             a particular NPC.
+Description: Presents dialogue text and options when the player interacts with a
+             particular NPC.
 
      Inputs: p_gc - Pointer to the NPC with whom the player is speaking (or, in
                     group dialogue, the main NPC).
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int Dialogue(game_character_t *p_gc) {
   int i, input;
   bool canCommunicate;
@@ -458,7 +457,7 @@ int Dialogue(game_character_t *p_gc) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: LanguageLearningDialogue
 
 Description: Presents dialogue and options relevant to learning a language.
@@ -466,7 +465,7 @@ Description: Presents dialogue and options relevant to learning a language.
      Inputs: p_gc - A pointer to the game character the player is speaking with.
 
     Outputs: SUCCESS if a language is learned, otherwise FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int LanguageLearningDialogue(game_character_t *p_gc) {
   int i, input, num_languages_available = 0;
   char output[LONG_STR_LEN + 1] = "";
@@ -480,20 +479,16 @@ int LanguageLearningDialogue(game_character_t *p_gc) {
     if (p_gc->languages[i] == KNOWN && g_player.languages[i] != KNOWN) {
       num_languages_available++;
       if (num_languages_available == 1) {
-        sprintf(output,
-                "%s: \"What language do you want to learn?\"",
+        sprintf(output, "%s: \"What language do you want to learn?\"",
                 AllCaps(p_gc->name));
       }
-      sprintf(output + strlen(output),
-              "\n[%d] %s",
-              num_languages_available,
+      sprintf(output + strlen(output), "\n[%d] %s", num_languages_available,
               LanguageName(i));
     }
   }
 
   if (num_languages_available > 0) {
-    sprintf(output + strlen(output),
-            "\n[%d] Cancel",
+    sprintf(output + strlen(output), "\n[%d] Cancel",
             ++num_languages_available);
     PrintString(output);
     GetIntInput(&input, 1, num_languages_available);
@@ -523,16 +518,15 @@ int LanguageLearningDialogue(game_character_t *p_gc) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: WordLearningDialogue
 
-Description: Presents dialogue and options relevant to learning a Word of
-             Power.
+Description: Presents dialogue and options relevant to learning a Word of Power.
 
      Inputs: p_gc - A pointer to the game character the player is speaking with.
 
     Outputs: SUCCESS if a Word is learned, otherwise FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int WordLearningDialogue(game_character_t *p_gc) {
   int i, input, num_words_available = 0;
   char output[LONG_STR_LEN + 1] = "";
@@ -551,17 +545,13 @@ int WordLearningDialogue(game_character_t *p_gc) {
                 "interests you?\"",
                 AllCaps(p_gc->name));
       }
-      sprintf(output + strlen(output),
-              "[%d] Word of %s\n",
-              num_words_available,
+      sprintf(output + strlen(output), "[%d] Word of %s\n", num_words_available,
               GetWordName(i));
     }
   }
 
   if (num_words_available > 0) {
-    sprintf(output + strlen(output),
-            "[%d] Cancel\n",
-            ++num_words_available);
+    sprintf(output + strlen(output), "[%d] Cancel\n", ++num_words_available);
     PrintString(output);
     GetIntInput(&input, 1, num_words_available);
     num_words_available = 0;
@@ -590,7 +580,7 @@ int WordLearningDialogue(game_character_t *p_gc) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: MerchantDialogue
 
 Description: Presents dialogue and options relevant to buying and selling.
@@ -598,9 +588,8 @@ Description: Presents dialogue and options relevant to buying and selling.
      Inputs: merchant - Pointer to the merchant NPC.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
-******************************************************************************/
-int MerchantDialogue(game_character_t *merchant)
-{
+*******************************************************************************/
+int MerchantDialogue(game_character_t *merchant) {
   int i, input, num_options = 0;
   char output[LONG_STR_LEN + 1] = "";
 
@@ -610,22 +599,17 @@ int MerchantDialogue(game_character_t *merchant)
   }
 
   // Present merchant's inventory and other options to the player:
-  sprintf(output,
-          "%s: \"What would you like to buy?\"\n",
+  sprintf(output, "%s: \"What would you like to buy?\"\n",
           merchant->name);
   for (i = 0; i < NUM_ITEM_TYPES; i++) {
     if (merchant->inventory[i] > 0) {
       num_options++;
-      sprintf(output + strlen(output),
-              "[%d] %s (%d gold)\n",
-              num_options,
+      sprintf(output + strlen(output), "[%d] %s (%d gold)\n", num_options,
               GetItemName(i),
               (int) (GetItemValue(i) * GetPriceModifier(merchant)));
       if (merchant->inventory[i] >= 10) {
         num_options++;
-        sprintf(output + strlen(output),
-                "[%d] 10 %s (%d gold)",
-                num_options,
+        sprintf(output + strlen(output), "[%d] 10 %s (%d gold)", num_options,
                 GetItemNamePlural(i),
                 (int) (10 * (GetItemValue(i) * GetPriceModifier(merchant))));
       }
@@ -671,7 +655,7 @@ int MerchantDialogue(game_character_t *merchant)
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetPriceModifier
 
 Description: Returns a floating point value for adjusting a price up or down
@@ -681,7 +665,7 @@ Description: Returns a floating point value for adjusting a price up or down
 
     Outputs: Floating point value that may be multiplied by a price to adjust
              the price up or down.
-******************************************************************************/
+*******************************************************************************/
 double GetPriceModifier(game_character_t *merchant) {
   if (merchant->relationship > INDIFFERENT) {
     return FRIEND_MODIFIER;
@@ -692,7 +676,7 @@ double GetPriceModifier(game_character_t *merchant) {
   return 1.0;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: Transaction
 
 Description: Presents dialogue and options relevant to completing a purchase.
@@ -701,7 +685,7 @@ Description: Presents dialogue and options relevant to completing a purchase.
              price    - Amount of gold required to complete the transaction.
 
     Outputs: SUCCESS if a transaction is completed, otherwise FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int Transaction(game_character_t *merchant, int price) {
   int input;
 
@@ -718,8 +702,7 @@ int Transaction(game_character_t *merchant, int price) {
   GetIntInput(&input, 1, 2);
   if (input == 1) {
     if (g_player.gold < price) {
-      printf("%s: \"It looks like you don't have enough gold.\"\n",
-             merchant->name);
+      printf("%s: \"It seems you don't have enough gold.\"\n", merchant->name);
       FlushInput();
       return FAILURE;
     }
@@ -733,7 +716,7 @@ int Transaction(game_character_t *merchant, int price) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: LanguageName
 
 Description: Returns the name of a given language as a string (e.g., "Elvish").
@@ -741,7 +724,7 @@ Description: Returns the name of a given language as a string (e.g., "Elvish").
      Inputs: language - Integer representing the language of interest.
 
     Outputs: Pointer to the desired string.
-******************************************************************************/
+*******************************************************************************/
 char *LanguageName(int language) {
   switch (language) {
     case IMPERIAL:

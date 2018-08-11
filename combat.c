@@ -1,15 +1,15 @@
-/******************************************************************************
+/*******************************************************************************
    Filename: combat.c
 
-     Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
-Description: Functions governing enemies and combat for the text-based fantasy
-             RPG "Words of Power."
-******************************************************************************/
+Description: Functions governing enemies and combat for the text-based RPG
+             "Words of Power."
+*******************************************************************************/
 
 #include "wop.h"
 
-/******************************************************************************
+/*******************************************************************************
    Function: AddEnemy
 
 Description: Given an already existing game character, adds a pointer to it in
@@ -18,7 +18,7 @@ Description: Given an already existing game character, adds a pointer to it in
      Inputs: p_gc - Pointer to the game character to be added.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int AddEnemy(game_character_t *p_gc) {
   int i;
 
@@ -41,7 +41,7 @@ int AddEnemy(game_character_t *p_gc) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: AddRandomEnemy
 
 Description: Creates a new game character and adds a pointer to it in the local
@@ -52,7 +52,7 @@ Description: Creates a new game character and adds a pointer to it in the local
      Inputs: location - Pointer to the location in which to add a random enemy.
 
     Outputs: SUCCESS if an enemy is added, otherwise FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int AddRandomEnemy(location_t *location) {
   game_character_t *newEnemy = NULL;
 
@@ -272,17 +272,17 @@ int AddRandomEnemy(location_t *location) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: RemoveEnemy
 
 Description: Removes a pointer to a given enemy from the global "g_enemies"
              array (does NOT remove the enemy from the "world" or deallocate
-             its associated memory).
+             associated memory).
 
      Inputs: p_gc - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int RemoveEnemy(game_character_t *p_gc) {
   int i, j;
 
@@ -311,17 +311,17 @@ int RemoveEnemy(game_character_t *p_gc) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DeleteEnemy
 
 Description: Removes a pointer to a given enemy from the global "g_enemies"
-             array, then removes the enemy from the "world" and deallocates its
+             array, then removes the enemy from the "world" and deallocates
              associated memory.
 
      Inputs: p_gc - Pointer to the game character to be removed.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int DeleteEnemy(game_character_t *p_gc) {
   if (RemoveEnemy(p_gc) == SUCCESS) {
     DeleteInhabitant(g_world[p_gc->location], p_gc);
@@ -333,16 +333,15 @@ int DeleteEnemy(game_character_t *p_gc) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: NumberOfEnemies
 
-Description: Returns the number of enemies pointed to by the global array
-             "g_enemies".
+Description: Returns the number of enemies pointed to by "g_enemies".
 
      Inputs: None.
 
     Outputs: The number of active pointers in "g_enemies".
-******************************************************************************/
+*******************************************************************************/
 int NumberOfEnemies(void) {
   int i;
 
@@ -352,7 +351,7 @@ int NumberOfEnemies(void) {
   return i;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: VisibleEnemies
 
 Description: Returns the number of visible enemies.
@@ -360,7 +359,7 @@ Description: Returns the number of visible enemies.
      Inputs: None.
 
     Outputs: The number of visible enemies.
-******************************************************************************/
+*******************************************************************************/
 int VisibleEnemies(void) {
   int i, count = 0;
 
@@ -378,16 +377,16 @@ int VisibleEnemies(void) {
   return count;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: Combat
 
-Description: Handles combat situations between the player and NPCs by
-             displaying relevant information, presenting options, etc.
+Description: Handles combat situations by displaying relevant information,
+             presenting options, etc.
 
      Inputs: None.
 
     Outputs: Returns the number of enemies remaining (usually 0).
-******************************************************************************/
+*******************************************************************************/
 int Combat(void) {
   int i, round = 1;
   char input;
@@ -403,8 +402,8 @@ int Combat(void) {
   playerFirst = RandomBool();  // Determine who gets the first round.
 
   do {
-    printf("  ___________\n_/ENEMY STATS\\____________________________________"
-           "_____________________________\n");
+    printf("  ___________\n_/ENEMY STATS\\_____________________________________"
+           "____________________________\n");
     for (i = 0; i < MAX_ENEMIES; i++) {
       if (g_enemies[i] == NULL) {
         break;
@@ -415,8 +414,8 @@ int Combat(void) {
         PrintCombatStatus(g_enemies[i]->summoned_creature);
       }
     }
-    printf("  ____________\n_/PLAYER STATS\\__________________________________"
-           "______________________________\n");
+    printf("  ____________\n_/PLAYER STATS\\___________________________________"
+           "_____________________________\n");
     for (p_gc = &g_player; p_gc != NULL; p_gc = p_gc->next) {
       PrintCombatStatus(p_gc);
     }
@@ -509,16 +508,15 @@ int Combat(void) {
   return NumberOfEnemies();
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: PrintCombatStatus
 
-Description: Prints some basic, combat-relevant information about a given game
-             character.
+Description: Prints combat-relevant information about a given game character.
 
      Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void PrintCombatStatus(game_character_t *p_gc) {
   if (p_gc == NULL) {
     PRINT_ERROR_MESSAGE;
@@ -530,16 +528,15 @@ void PrintCombatStatus(game_character_t *p_gc) {
   printf(")\n");
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: EnemyAI
 
 Description: Handles enemy NPC decision-making during combat.
 
-     Inputs: index - The index value of the active enemy in the "g_enemies"
-                     array.
+     Inputs: index - Index value of the active enemy in the "g_enemies" array.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int EnemyAI(int index) {
   int i;
   bool actionPerformed = false;
@@ -608,16 +605,15 @@ int EnemyAI(int index) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: HandleAttackMenuInput
 
-Description: Takes the player through the process of selecting a game character
-             to attack.
+Description: Takes the player through the process of selecting whom to attack.
 
      Inputs: None.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int HandleAttackMenuInput(void) {
   int i, input, temp;
   bool repeat_options;
@@ -754,7 +750,7 @@ int HandleAttackMenuInput(void) {
   return FAILURE;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: Attack
 
 Description: Handles a physical attack between two game characters.
@@ -763,7 +759,7 @@ Description: Handles a physical attack between two game characters.
              defender - The GC being attacked.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int Attack(game_character_t *attacker, game_character_t *defender) {
   int damage;
 
@@ -789,7 +785,7 @@ int Attack(game_character_t *attacker, game_character_t *defender) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: WillingToFight
 
 Description: Determines whether a given NPC will fight the player if the player
@@ -797,8 +793,8 @@ Description: Determines whether a given NPC will fight the player if the player
 
      Inputs: p_gc - Pointer to the game character of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool WillingToFight(game_character_t *p_gc) {
   if (p_gc->type == SOLDIER ||
       p_gc->type == KNIGHT ||
@@ -847,15 +843,15 @@ bool WillingToFight(game_character_t *p_gc) {
   return false;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: WillingToFlee
 
 Description: Determines whether a given NPC will flee when losing a fight.
 
      Inputs: p_gc - Pointer to the game character of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool WillingToFlee(game_character_t *p_gc) {
   return p_gc->type == PEASANT ||
          p_gc->type == SOLDIER ||
@@ -886,7 +882,7 @@ bool WillingToFlee(game_character_t *p_gc) {
          p_gc->type == ARCHNECROMANCER;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: WillingToHelp
 
 Description: Determines whether a given NPC will assist allies during combat
@@ -894,8 +890,8 @@ Description: Determines whether a given NPC will assist allies during combat
 
      Inputs: p_gc - Pointer to the game character of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool WillingToHelp(game_character_t *p_gc) {
   if (p_gc->type == SOLDIER ||
       p_gc->type == KNIGHT ||

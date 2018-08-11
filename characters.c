@@ -1,27 +1,26 @@
-/******************************************************************************
+/*******************************************************************************
    Filename: characters.c
 
-     Author: David C. Drake (http://davidcdrake.com)
+     Author: David C. Drake (https://davidcdrake.com)
 
-Description: Functions governing the creation, initialization, and basic
-             analysis of game characters for the text-based fantasy RPG "Words
-             of Power."
-******************************************************************************/
+Description: Functions governing the creation, initialization, and analysis of
+             game characters for the text-based RPG "Words of Power."
+*******************************************************************************/
 
 #include "wop.h"
 
-/******************************************************************************
+/*******************************************************************************
    Function: InitializeCharacter
 
-Description: Initializes a given game character struct to its default starting
-             values.
+Description: Initializes a given game character struct according to a given type
+             and assigns it to a given location.
 
      Inputs: p_gc     - Pointer to the game characer struct to be initialized.
              type     - Integer representing desired game character type.
              location - The game character's starting location.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int InitializeCharacter(game_character_t *p_gc, int type,
                         location_t *location) {
   int i;
@@ -1407,7 +1406,7 @@ int InitializeCharacter(game_character_t *p_gc, int type,
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: AddCompanion
 
 Description: Removes a game character from the current location's list of
@@ -1417,7 +1416,7 @@ Description: Removes a game character from the current location's list of
      Inputs: companion - Pointer to the player's new companion.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int AddCompanion(game_character_t *companion) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
@@ -1461,7 +1460,7 @@ int AddCompanion(game_character_t *companion) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: RemoveCompanion
 
 Description: Removes a game character from the player's list of companions and
@@ -1470,7 +1469,7 @@ Description: Removes a game character from the player's list of companions and
      Inputs: companion - Pointer to the companion to be removed.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int RemoveCompanion(game_character_t *companion) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
@@ -1514,16 +1513,16 @@ int RemoveCompanion(game_character_t *companion) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DeleteCompanion
 
 Description: Removes a game character from the player's list of companions and
-             deallocates its associated memory.
+             deallocates associated memory.
 
      Inputs: companion - Pointer to the companion to be removed.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int DeleteCompanion(game_character_t *companion) {
   game_character_t *p_gc1, *p_gc2 = NULL;
 
@@ -1559,7 +1558,7 @@ int DeleteCompanion(game_character_t *companion) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: AddSummonedCreature
 
 Description: Creates a new, summoned game character and associates it with its
@@ -1570,7 +1569,7 @@ Description: Creates a new, summoned game character and associates it with its
              type     - Integer representing the summoned creature's type.
 
     Outputs: Pointer to the summoned creature.
-******************************************************************************/
+*******************************************************************************/
 game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
   game_character_t *newGC = NULL;
 
@@ -1592,17 +1591,17 @@ game_character_t *AddSummonedCreature(game_character_t *summoner, int type) {
   return newGC;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DeleteCreatureSummonedBy
 
 Description: Removes a summoned creature from its summoner's struct and
-             deallocates its associated memory.
+             deallocates associated memory.
 
-     Inputs: summoner - Pointer to the character who summoned the creature to
-                        be deleted.
+     Inputs: summoner - Pointer to the character who summoned the creature to be
+                        deleted.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int DeleteCreatureSummonedBy(game_character_t *summoner) {
   game_character_t *creature;
 
@@ -1618,16 +1617,16 @@ int DeleteCreatureSummonedBy(game_character_t *summoner) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DisplayCharacterData
 
-Description: Displays detailed information about a given game character (and
-             the game character's summoned creature and/or companions, if any).
+Description: Displays detailed information about a given game character (and the
+             character's summoned creature and/or companions, if any).
 
      Inputs: p_gc - Game character of interest.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int DisplayCharacterData(game_character_t *p_gc) {
   if (p_gc == NULL) {
     PRINT_ERROR_MESSAGE;
@@ -1663,7 +1662,7 @@ int DisplayCharacterData(game_character_t *p_gc) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: PrintSoulDescription
 
 Description: Prints one or two words describing the general state of a given
@@ -1672,7 +1671,7 @@ Description: Prints one or two words describing the general state of a given
      Inputs: p_gc - Game character of interest.
 
     Outputs: SUCCESS or FAILURE.
-******************************************************************************/
+*******************************************************************************/
 int PrintSoulDescription(game_character_t *p_gc) {
   if (p_gc == NULL) {
     PRINT_ERROR_MESSAGE;
@@ -1696,33 +1695,33 @@ int PrintSoulDescription(game_character_t *p_gc) {
   return SUCCESS;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: IsGood
 
 Description: Returns true if a given game character has a good soul.
 
      Inputs: p_gc - Game character of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool IsGood(game_character_t *p_gc) {
   return p_gc != NULL && p_gc->soul >= GOOD;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: IsEvil
 
 Description: Returns true if a given game character has an evil soul.
 
      Inputs: p_gc - Game character of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool IsEvil(game_character_t *p_gc) {
   return p_gc != NULL && p_gc->soul <= EVIL;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: IsNeutral
 
 Description: Returns true if a given game character has a neutral soul (neither
@@ -1730,13 +1729,13 @@ Description: Returns true if a given game character has a neutral soul (neither
 
      Inputs: p_gc - Game character of interest.
 
-    Outputs: true or false.
-******************************************************************************/
+    Outputs: 'true' or 'false'
+*******************************************************************************/
 bool IsNeutral(game_character_t *p_gc) {
   return p_gc != NULL && p_gc->soul > EVIL && p_gc->soul < GOOD;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: NumberOfLanguagesKnown
 
 Description: Returns the number of languages a given game character knows.
@@ -1745,7 +1744,7 @@ Description: Returns the number of languages a given game character knows.
 
     Outputs: Number of languages the game character knows (or -1 if an error is
              encountered).
-******************************************************************************/
+*******************************************************************************/
 int NumberOfLanguagesKnown(game_character_t *p_gc) {
   int i, numLanguages = 0;
 
@@ -1763,7 +1762,7 @@ int NumberOfLanguagesKnown(game_character_t *p_gc) {
   return numLanguages;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: NumberOfWordsKnown
 
 Description: Returns the number of Words of Power a given game character knows.
@@ -1772,7 +1771,7 @@ Description: Returns the number of Words of Power a given game character knows.
 
     Outputs: Number of Words the game character knows (or -1 if an error is
              encountered).
-******************************************************************************/
+*******************************************************************************/
 int NumberOfWordsKnown(game_character_t *p_gc) {
   int i, numWords = 0;
 
@@ -1790,17 +1789,17 @@ int NumberOfWordsKnown(game_character_t *p_gc) {
   return numWords;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetNameDefinite
 
-Description: Returns either a name or a generic descriptor preceded by "the"
-             for a given game character.
+Description: Returns either a name or a generic descriptor preceded by "the" for
+             a given game character.
 
      Inputs: p_gc - Pointer to the game character of interest.
 
     Outputs: The game character's definite name/descriptor as a pointer to an
              array of characters.
-******************************************************************************/
+*******************************************************************************/
 char *GetNameDefinite(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
@@ -1818,7 +1817,7 @@ char *GetNameDefinite(game_character_t *p_gc) {
   return name;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetNameIndefinite
 
 Description: Returns either a name or a generic descriptor preceded by "a" or
@@ -1828,7 +1827,7 @@ Description: Returns either a name or a generic descriptor preceded by "a" or
 
     Outputs: The game character's indefinite name/descriptor as a pointer to an
              array of characters.
-******************************************************************************/
+*******************************************************************************/
 char *GetNameIndefinite(game_character_t *p_gc) {
   static char name[SHORT_STR_LEN + 1];
 
@@ -1858,7 +1857,7 @@ char *GetNameIndefinite(game_character_t *p_gc) {
   return name;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetNamePlural
 
 Description: Returns the plural form of a given game character's generic
@@ -1869,7 +1868,7 @@ Description: Returns the plural form of a given game character's generic
 
     Outputs: The game character's plural name/descriptor as a pointer to an
              array of characters.
-******************************************************************************/
+*******************************************************************************/
 char *GetNamePlural(game_character_t *p_gc) {
   int name_length;
   static char name[SHORT_STR_LEN + 1];
@@ -1922,7 +1921,7 @@ char *GetNamePlural(game_character_t *p_gc) {
   return name;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: CheckStatus
 
 Description: Checks player's HP and status to see if anything needs to be
@@ -1931,7 +1930,7 @@ Description: Checks player's HP and status to see if anything needs to be
      Inputs: None.
 
     Outputs: Returns 'true' if the player is still alive.
-******************************************************************************/
+*******************************************************************************/
 bool CheckStatus(void) {
   bool player_is_alive = true;
   int i;
@@ -1977,18 +1976,17 @@ bool CheckStatus(void) {
   return player_is_alive;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: UpdateVisibleGameCharCounter
 
-Description: Updates the game character counter to accurately reflect the
-             number of each GC type currently visible to the player. If in
-             combat mode, only enemies will be counted. Summoned creatures are
-             included in the count.
+Description: Updates the game character counter to accurately reflect the number
+             of each GC type currently visible to the player. If in combat, only
+             enemies will be counted. (Summoned creatures are counted.)
 
      Inputs: None.
 
     Outputs: None. (Modifies the global "g_num_visible_of_type" array.)
-******************************************************************************/
+*******************************************************************************/
 void UpdateVisibleGameCharCounter(void) {
   int i;
   game_character_t *p_gc;
@@ -2017,7 +2015,7 @@ void UpdateVisibleGameCharCounter(void) {
   }
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GetTarget
 
 Description: Takes the player through the process of selecting a target.
@@ -2025,14 +2023,14 @@ Description: Takes the player through the process of selecting a target.
      Inputs: None.
 
     Outputs: Pointer to the targeted game character.
-******************************************************************************/
+*******************************************************************************/
 game_character_t *GetTarget(void) {
   game_character_t *target = NULL;
 
   return target;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: IsTargeted
 
 Description: Determines whether a given game character is currently being
@@ -2043,7 +2041,7 @@ Description: Determines whether a given game character is currently being
              targets - Array of pointers to targeted game characters.
 
     Outputs: true if "p_gc" is being targeted, otherwise false.
-******************************************************************************/
+*******************************************************************************/
 bool IsTargeted(game_character_t *p_gc, game_character_t *targets[]) {
   int i;
 
@@ -2056,7 +2054,7 @@ bool IsTargeted(game_character_t *p_gc, game_character_t *targets[]) {
   return false;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: HealGameCharacter
 
 Description: Causes a given game character to regain a certain number of hit
@@ -2064,11 +2062,11 @@ Description: Causes a given game character to regain a certain number of hit
              maximum HP.
 
      Inputs: p_gc   - Pointer to the game character to be healed.
-             amount - Number of hit points to be recovered. If zero or
-                      negative, it will be converted to 1.
+             amount - Number of hit points to be recovered. If zero or negative,
+                      it will be converted to 1.
 
     Outputs: Number of hit points regained (or -1 if an error is encountered).
-******************************************************************************/
+*******************************************************************************/
 int HealGameCharacter(game_character_t *p_gc, int amount) {
   if (p_gc == NULL) {
     PRINT_ERROR_MESSAGE;
@@ -2086,18 +2084,18 @@ int HealGameCharacter(game_character_t *p_gc, int amount) {
   return amount;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: DamageGameCharacter
 
 Description: Causes a given game character to lose a certain number of hit
-             points.
+             points (always at least 1).
 
      Inputs: p_gc   - Pointer to the game character to be damaged.
              amount - Number of hit points to be lost. If zero or negative, it
                       will be converted to 1.
 
     Outputs: Number of hit points lost (or -1 if an error is encountered).
-******************************************************************************/
+*******************************************************************************/
 int DamageGameCharacter(game_character_t *p_gc, int amount) {
   if (p_gc == NULL) {
     PRINT_ERROR_MESSAGE;
@@ -2115,16 +2113,16 @@ int DamageGameCharacter(game_character_t *p_gc, int amount) {
   return amount;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: GainExperience
 
-Description: Increases the player's experience by a specified amount and checks
-             for a level-up.
+Description: Increases the player's experience by a given amount and checks for
+             level-up(s).
 
      Inputs: amount - Number of experience points to be gained.
 
     Outputs: Number of level-ups.
-******************************************************************************/
+*******************************************************************************/
 int GainExperience(int amount) {
   int i, level_up_counter = 0;
 
@@ -2141,7 +2139,7 @@ int GainExperience(int amount) {
   return level_up_counter;
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: LevelUp
 
 Description: Increases the player's level and relevant stats.
@@ -2149,7 +2147,7 @@ Description: Increases the player's level and relevant stats.
      Inputs: None.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void LevelUp(void) {
   int temp;
 
@@ -2190,7 +2188,7 @@ void LevelUp(void) {
   FlushInput();
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: LearnLanguage
 
 Description: Sets one of the player's languages to KNOWN.
@@ -2198,7 +2196,7 @@ Description: Sets one of the player's languages to KNOWN.
      Inputs: language - Integer representing the language learned.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void LearnLanguage(int language) {
   g_player.languages[language] = KNOWN;
   printf("%s has learned the %s  language!\n", g_player.name,
@@ -2206,7 +2204,7 @@ void LearnLanguage(int language) {
   FlushInput();
 }
 
-/******************************************************************************
+/*******************************************************************************
    Function: LearnWord
 
 Description: Sets one of the player's Words of Power to KNOWN.
@@ -2214,7 +2212,7 @@ Description: Sets one of the player's Words of Power to KNOWN.
      Inputs: word - Integer representing the Word learned.
 
     Outputs: None.
-******************************************************************************/
+*******************************************************************************/
 void LearnWord(int word) {
   g_player.words[word] = KNOWN;
   printf("%s has learned %s, the Word of %s!\n", g_player.name, GetWord(word),
